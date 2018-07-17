@@ -39,8 +39,6 @@ public class ParseApplication extends Application {
                 .clientBuilder(builder)
                 .server("http://fbu-goals.herokuapp.com/parse/").build());
 
-//        ParseFirebaseInstanceIdService test = new ParseFirebaseInstanceIdService();
-//        test.onTokenRefresh();
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 }
