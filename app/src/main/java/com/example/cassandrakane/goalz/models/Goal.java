@@ -103,4 +103,8 @@ public class Goal extends ParseObject {
     public void setUser(ParseUser user) {
         put("user", user);
     }
+
+    public boolean getCompleted() {
+        return getProgress() == getDuration();
+    }
 }

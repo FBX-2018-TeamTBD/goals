@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddGoalActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        app:theme="@style/AppTheme"
+        android:elevation="10dp"
+        android:layout_height="?attr/actionBarSize">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/back_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@android:drawable/ic_menu_close_clear_cancel"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:onClick="goBack" />
+            <Button
+                android:id="@+id/post_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@android:drawable/ic_menu_add"
+                android:backgroundTint="@color/black"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:onClick="postGoal" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etTitle"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="@string/title" />
+
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:lines="3"
+                android:maxLength="140"
+                android:hint="@string/description" />
+
+            <EditText
+                android:id="@+id/etDuration"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etDescription"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:inputType="number"
+                android:lines="3"
+                android:maxLength="140"
+                android:hint="@string/duration" />
+
+            <TextView
+                android:id="@+id/tvFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/etDuration"
+                android:layout_below="@+id/etDuration"
+                android:layout_marginTop="20dp"
+                android:text="Reminder Frequency" />
+
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/etDuration"
+                android:layout_below="@id/tvFrequency"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+                <RadioButton
+                    android:id="@+id/rbDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/daily"
+                    android:onClick="onRadioButtonClicked"/>
+                <RadioButton
+                    android:id="@+id/rbWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/weekly"
+                    android:onClick="onRadioButtonClicked"/>
+                <RadioButton
+                    android:id="@+id/rbMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/monthly"
+                    android:onClick="onRadioButtonClicked"/>
+            </RadioGroup>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
