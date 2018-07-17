@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.cassandrakane.goalz"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,10 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:3.3.0'
     // RecyclerView
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha3'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    // Parcelable
+    implementation 'org.parceler:parceler-api:1.1.6'
+    annotationProcessor 'org.parceler:parceler:1.1.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

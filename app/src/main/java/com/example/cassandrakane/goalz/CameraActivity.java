@@ -49,6 +49,7 @@ import java.util.UUID;
 public class CameraActivity extends AppCompatActivity {
 
     private ImageButton btnCapture;
+    private ImageButton btnSwap;
     private TextureView textureView;
     private ImageView ivFade;
 
@@ -61,7 +62,10 @@ public class CameraActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    private String cameraId;
+    public static final String CAMERA_FRONT = "1";
+    public static final String CAMERA_BACK = "0";
+
+    private String cameraId = CAMERA_BACK;
     private CameraDevice cameraDevice;
     private CameraCaptureSession cameraCaptureSessions;
     private CaptureRequest.Builder captureRequestBuilder;
@@ -74,6 +78,7 @@ public class CameraActivity extends AppCompatActivity {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    private int i = 0;
 
     CameraDevice.StateCallback stateCallBack = new CameraDevice.StateCallback() {
         @Override
@@ -109,6 +114,18 @@ public class CameraActivity extends AppCompatActivity {
             public void onClick(View view) {
                 FadeIn(ivFade, 0, 255, 150, true);
                 takePicture();
+            }
+        });
+
+        btnSwap = findViewById(R.id.btnSwap);
+        btnSwap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(CameraActivity.this, R.layout.flipping);
+//                anim.setTarget(R.id.ivFlip);
+//                anim.setDuration(3000);
+//                anim.start();
+                switchCamera();
             }
         });
 
@@ -271,7 +288,7 @@ public class CameraActivity extends AppCompatActivity {
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
-            cameraId = manager.getCameraIdList()[0];
+//            cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
@@ -317,7 +334,9 @@ public class CameraActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "You can't use camera without permission", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "You can't use the camera without permission", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -355,6 +374,29 @@ public class CameraActivity extends AppCompatActivity {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+    }
+
+    public void switchCamera() {
+        if (cameraId.equals(CAMERA_FRONT)) {
+            cameraId = CAMERA_BACK;
+            cameraDevice.close();
+            reopenCamera();
+//            switchCameraButton.setImageResource(R.drawable.ic_camera_front);
+
+        } else if (cameraId.equals(CAMERA_BACK)) {
+            cameraId = CAMERA_FRONT;
+            cameraDevice.close();
+            reopenCamera();
+//            switchCameraButton.setImageResource(R.drawable.ic_camera_back);
+        }
+    }
+
+    public void reopenCamera() {
+        if (textureView.isAvailable()) {
+            openCamera();
+        } else {
+            textureView.setSurfaceTextureListener(textureListener);
+        }
     }
 
     public void FadeIn(final ImageView v,
