@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Goal extends ParseObject implements Parcelable {
 
     private boolean isSelected = false;
-    
+
     public Goal() {
         super();
     }
