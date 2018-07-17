@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,18 @@ import java.util.List;
 import static java.lang.Integer.parseInt;
 
 public class AddGoalActivity extends AppCompatActivity {
+
+    /*enum Frequency {
+        DAILY(R.id.rbDay),
+        WEEKLY(R.id.rbWeek),
+        MONTHLY(R.id.rbMonth);
+
+        private int value;
+
+        private Frequency(int val) {
+            value = val;
+        }
+    }*/
 
     EditText etTitle;
     EditText etDescription;

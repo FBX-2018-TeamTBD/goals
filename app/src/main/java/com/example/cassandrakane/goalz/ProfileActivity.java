@@ -153,14 +153,24 @@ public class ProfileActivity extends AppCompatActivity {
             public void done(List<Goal> itemList, ParseException e) {
                 if (e == null) {
                     goals.addAll(itemList);
+                    completedGoals = 0;
+                    progressGoals = 0;
+                    for (int i = 0; i < goals.size(); i++) {
+                        Log.i("sd", ""+progressGoals);
+                        if (goals.get(i).getCompleted()) {
+                            completedGoals += 1;
+                        } else {
+                            progressGoals += 1;
+                        }
+                    }
+                    tvProgress.setText(progressGoals + " Current\nGoals");
+                    tvCompleted.setText(completedGoals + " Completed\nGoal");
                     goalAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
             }
         });
-        tvProgress.setText(progressGoals + " Current\nGoals");
-        tvCompleted.setText(completedGoals + " Completed\nGoal");
 
         /* STORY FRAGMENT EXAMPLE
         ArrayList<String> testImages = new ArrayList<String>();
