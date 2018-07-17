@@ -1,17 +1,22 @@
 package com.example.cassandrakane.goalz.models;
 
+import android.media.Image;
+import android.os.Parcelable;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
-@ParseClassName("Post")
-public class Goal extends ParseObject {
+@ParseClassName("Goal")
+public class Goal extends ParseObject implements Parcelable {
 
     public Goal() {
         super();
@@ -100,6 +105,21 @@ public class Goal extends ParseObject {
 
     public void setUser(ParseUser user) {
         put("user", user);
+    }
+
+    public boolean getCompleted() {
+        return getProgress() == getDuration();
+    }
+
+    public static class Query extends ParseQuery<Goal> {
+        public Query() {
+            super(Goal.class);
+        }
+
+        public Query getTop() {
+            orderByDescending("createdAt");
+            return this;
+        }
     }
 
 }
