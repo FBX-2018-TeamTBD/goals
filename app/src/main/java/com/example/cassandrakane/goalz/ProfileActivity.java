@@ -156,7 +156,6 @@ public class ProfileActivity extends AppCompatActivity {
                     completedGoals = 0;
                     progressGoals = 0;
                     for (int i = 0; i < goals.size(); i++) {
-                        Log.i("sd", ""+progressGoals);
                         if (goals.get(i).getCompleted()) {
                             completedGoals += 1;
                         } else {
