@@ -24,6 +24,14 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:onClick="toCamera" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:text="Goals"/>
             <Button
                 android:id="@+id/add_btn"
                 android:layout_width="60dp"
