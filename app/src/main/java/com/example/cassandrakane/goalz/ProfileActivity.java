@@ -37,8 +37,10 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -142,29 +144,21 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void populateGoals() {
-        JSONArray arr = user.getJSONArray("goals");
-        Log.i("sdf", arr.toString());
-        goals.clear();
-        /*for (int i = 0; i < arr.length(); i++) {
-            try {
-                Goal goal = (Goal) arr.get(i);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
+        ParseQuery<Goal> query = ParseQuery.getQuery(Goal.class);
+        // Define our query conditions
+        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        query.orderByDescending("createdAt");
+        // Execute the find asynchronously
+        query.findInBackground(new FindCallback<Goal>() {
+            public void done(List<Goal> itemList, ParseException e) {
+                if (e == null) {
+                    goals.addAll(itemList);
+                    goalAdapter.notifyDataSetChanged();
                 } else {
-                    progressGoals += 1;
+                    Log.d("item", "Error: " + e.getMessage());
                 }
-                goals.add(goal);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }*/
-        Goal goal1 = new Goal("Go to gym", "Go to gym at least once a day", 10, 1, 3, 0, new ArrayList<ParseFile>(), ParseUser.getCurrentUser());
-        Goal goal2 = new Goal("Cook for friends", "Invite friends over and cook for them", 20, 2, 10, 3, new ArrayList<ParseFile>(), ParseUser.getCurrentUser());
-        Goal goal3 = new Goal("Practice guitar", "Practice for at least 30 minutes a day", 40, 1, 40, 10, new ArrayList<ParseFile>(), ParseUser.getCurrentUser());
-        goals.add(goal3);
-        goals.add(goal1);
-        goals.add(goal2);
-        goalAdapter.notifyDataSetChanged();
+        });
         tvProgress.setText(progressGoals + " Current\nGoals");
         tvCompleted.setText(completedGoals + " Completed\nGoal");
 
@@ -340,8 +334,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         } else if (requestCode == ADD_GOAL_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Goal goal = Parcels.unwrap(data.getParcelableExtra(Goal.class.getSimpleName()));
-                goals.add(goal);
+                Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
+                Log.i("s", goal.getTitle());
+                goals.add(0, goal);
                 goalAdapter.notifyItemInserted(0);
                 rvGoals.scrollToPosition(0);
             }

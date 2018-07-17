@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    initalizeUser();
+                    initializeUser();
                     tvUsername.setText("");
                     tvPassword.setText("");
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
@@ -104,11 +104,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void initalizeUser() {
+    public void initializeUser() {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         currentUser.put("friends", new ArrayList<ParseUser>());
         currentUser.put("goals", new ArrayList<Goal>());
