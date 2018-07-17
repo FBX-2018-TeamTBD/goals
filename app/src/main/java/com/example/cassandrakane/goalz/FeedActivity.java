@@ -31,7 +31,6 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
-        getSupportActionBar().hide();
         svSearch = findViewById(R.id.searchView);
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
