@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+                i.putExtra("goals", (Serializable) goals);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
             }
