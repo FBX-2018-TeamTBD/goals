@@ -1,7 +1,5 @@
 package com.example.cassandrakane.goalz.models;
 
-import android.media.Image;
-
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -103,4 +101,5 @@ public class Goal extends ParseObject {
     public void setUser(ParseUser user) {
         put("user", user);
     }
+
 }
