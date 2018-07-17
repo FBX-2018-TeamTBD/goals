@@ -4,12 +4,14 @@ import android.app.Application;
 
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ParseApplication extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -36,5 +38,9 @@ public class ParseApplication extends Application {
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
                 .server("http://fbu-goals.herokuapp.com/parse/").build());
+
+//        ParseFirebaseInstanceIdService test = new ParseFirebaseInstanceIdService();
+//        test.onTokenRefresh();
+        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 }
