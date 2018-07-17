@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
         app:theme="@style/AppTheme"
+<<<<<<< HEAD
         android:elevation="10dp"
         android:layout_height="?attr/actionBarSize">
         <RelativeLayout
@@ -50,5 +51,22 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:layout_marginTop="10dp" />
+=======
+        android:elevation="4dp"
+        android:layout_height="?attr/actionBarSize">
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="15dp"
+            android:gravity="right"
+            android:queryHint="Search"
+            android:showAsAction="always|collapseActionView" />
+
+    </android.support.v7.widget.Toolbar>
+>>>>>>> cce806b5c44c319b380f953b0b966210bf1d5208
 
 </RelativeLayout>

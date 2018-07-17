@@ -12,6 +12,11 @@ import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import android.widget.SearchView;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
@@ -19,6 +24,7 @@ public class FeedActivity extends AppCompatActivity {
     List<ParseUser> friends;
     RecyclerView rvFriends;
     FriendAdapter friendAdapter;
+    SearchView svSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,26 @@ public class FeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_feed);
 
         getSupportActionBar().hide();
+        svSearch = findViewById(R.id.searchView);
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
+                query.whereStartsWith("username", s);
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> objects, ParseException e) {
+                        // add users to list of users and update adapter
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
