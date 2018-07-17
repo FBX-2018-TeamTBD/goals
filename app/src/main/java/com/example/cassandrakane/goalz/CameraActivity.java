@@ -35,11 +35,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.models.Goal;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +81,8 @@ public class CameraActivity extends AppCompatActivity {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
-    private int i = 0;
+
+    private List<Goal> goals;
 
     CameraDevice.StateCallback stateCallBack = new CameraDevice.StateCallback() {
         @Override
@@ -137,6 +141,8 @@ public class CameraActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         };
+
+        goals = (List) getIntent().getSerializableExtra("goals");
 
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
     }
@@ -526,6 +532,7 @@ public class CameraActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 Intent intent = new Intent(CameraActivity.this, DisplayActivity.class);
                 intent.putExtra("image", file);
+                intent.putExtra("goals", (Serializable) goals);
                 startActivity(intent);
             }
 
