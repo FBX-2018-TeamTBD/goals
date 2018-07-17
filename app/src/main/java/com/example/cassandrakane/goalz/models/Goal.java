@@ -111,15 +111,4 @@ public class Goal extends ParseObject implements Parcelable {
         return getProgress() == getDuration();
     }
 
-    public static class Query extends ParseQuery<Goal> {
-        public Query() {
-            super(Goal.class);
-        }
-
-        public Query getTop() {
-            orderByDescending("createdAt");
-            return this;
-        }
-    }
-
 }

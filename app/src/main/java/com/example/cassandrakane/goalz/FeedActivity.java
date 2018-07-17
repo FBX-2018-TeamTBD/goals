@@ -3,13 +3,29 @@ package com.example.cassandrakane.goalz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+
+import com.example.cassandrakane.goalz.adapters.FriendAdapter;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
+
+    List<ParseUser> friends;
+    RecyclerView rvFriends;
+    FriendAdapter friendAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+
+        getSupportActionBar().hide();
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
@@ -21,5 +37,29 @@ public class FeedActivity extends AppCompatActivity {
         };
 
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
+
+        friends = new ArrayList<>();
+        friendAdapter = new FriendAdapter(friends);
+        rvFriends = findViewById(R.id.rvFriends);
+        rvFriends.setLayoutManager(new LinearLayoutManager(this));
+        rvFriends.setAdapter(friendAdapter);
+        populateFriends();
+    }
+
+    public void populateFriends() {
+        List<ParseUser> arr = ParseUser.getCurrentUser().getList("friends");
+        Log.i("sdf", arr.toString());
+        if (arr != null) {
+            friends.addAll(arr);
+            friendAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void addFriend(View v) {
+
+    }
+
+    public void toSearch(View v) {
+
     }
 }
