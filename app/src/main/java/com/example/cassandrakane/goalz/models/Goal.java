@@ -8,10 +8,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Goal")
 public class Goal extends ParseObject implements Parcelable {
@@ -35,15 +33,11 @@ public class Goal extends ParseObject implements Parcelable {
     }
 
     public ArrayList<ParseFile> getStory() {
-        JSONArray arr = getJSONArray("images");
+        List<ParseFile> arr = getList("images");
         ArrayList<ParseFile> story = new ArrayList<>();
-        for (int i = 0; i < arr.length(); i++) {
-            try {
-                story.add((ParseFile) (arr.get(i)));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        for (int i = 0; i < arr.size(); i++) {
+            story.add(arr.get(i));
             }
-        }
         return story;
     }
 
