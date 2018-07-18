@@ -115,6 +115,7 @@ public class ProfileActivity extends AppCompatActivity {
         goalAdapter = new GoalAdapter(goals);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
+        rvGoals.setOnTouchListener(onSwipeTouchListener);
 
         tvFriends.setText(user.getList("friends").size() + "\nFriends");
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());

@@ -49,6 +49,7 @@ public class FeedActivity extends AppCompatActivity {
         friendAdapter = new FriendAdapter(friends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(friendAdapter);
+        rvFriends.setOnTouchListener(onSwipeTouchListener);
         populateFriends();
     }
 
