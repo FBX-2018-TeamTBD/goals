@@ -84,7 +84,7 @@
                 android:layout_alignTop="@id/tvStreak"
                 android:layout_marginLeft="5dp"
                 android:visibility="invisible"
-                android:foregroundTint="@color/yellow"
+                android:tint="@color/lightOrange"
                 app:srcCompat="@drawable/star" />
 
         </RelativeLayout>

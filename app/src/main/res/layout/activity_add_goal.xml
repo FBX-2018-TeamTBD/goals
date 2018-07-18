@@ -9,6 +9,7 @@
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
+        android:background="@color/orange"
         app:theme="@style/AppTheme"
         android:elevation="10dp"
         android:layout_height="?attr/actionBarSize">
@@ -22,6 +23,7 @@
                 android:background="@drawable/cancel"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:backgroundTint="@color/white"
                 android:onClick="goBack" />
 
             <TextView
@@ -31,14 +33,14 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="add goal"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
             <Button
                 android:id="@+id/post_btn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/check"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/white"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
