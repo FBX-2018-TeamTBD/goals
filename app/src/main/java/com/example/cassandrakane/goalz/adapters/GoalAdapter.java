@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -71,18 +73,28 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
-        holder.ivStory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<Image> imageList = goal.getList("images");
-                ArrayList<String> imageUrls = getImageUrls(imageList);
-                ProfileActivity activity = (ProfileActivity) context;
-                final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, 0)).commit();
-                activity.toolbar.setVisibility(View.INVISIBLE);
-            }
-        });
+        List<Image> imageList = goal.getList("images");
+        final ArrayList<String> imageUrls = getImageUrls(imageList);
+
+        if (imageUrls.size() > 0) {
+            Glide.with(context)
+                    .load(imageUrls.get(imageUrls.size() - 1))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.ivStory);
+
+            holder.ivStory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    List<Image> imageList = goal.getList("images");
+                    ArrayList<String> imageUrls = getImageUrls(imageList);
+                    ProfileActivity activity = (ProfileActivity) context;
+                    final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                    FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, 0)).commit();
+                    activity.toolbar.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
 
         if (goal.getUpdateStoryBy() != null && (goal.getUpdateStoryBy().getTime() - currentDate.getTime()) < TimeUnit.MINUTES.toMillis(1)){
             holder.ivStar.setImageResource(R.drawable.clock);

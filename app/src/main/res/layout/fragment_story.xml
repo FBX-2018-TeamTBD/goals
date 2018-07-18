@@ -37,14 +37,14 @@
 
     <ImageButton
         android:id="@+id/btnClose"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:layout_weight="1"
-        android:drawableTint="@color/white"
-        android:src="@drawable/cancel" />
+        android:backgroundTint="@color/white"
+        android:background="@drawable/cancel" />
 
 </RelativeLayout>
