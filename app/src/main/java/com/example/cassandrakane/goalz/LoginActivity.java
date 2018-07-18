@@ -30,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().hide();
+
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             Intent i = new Intent(this, ProfileActivity.class);

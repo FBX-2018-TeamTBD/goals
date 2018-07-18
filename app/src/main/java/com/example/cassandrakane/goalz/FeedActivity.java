@@ -32,27 +32,6 @@ public class FeedActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        svSearch = findViewById(R.id.searchView);
-        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
-                query.whereStartsWith("username", s);
-                query.findInBackground(new FindCallback<ParseUser>() {
-                    @Override
-                    public void done(List<ParseUser> objects, ParseException e) {
-                        // add users to list of users and update adapter
-                    }
-                });
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
             public void onSwipeRight() {
@@ -85,7 +64,4 @@ public class FeedActivity extends AppCompatActivity {
 
     }
 
-    public void toSearch(View v) {
-
-    }
 }

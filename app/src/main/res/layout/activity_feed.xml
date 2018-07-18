@@ -14,13 +14,46 @@
         android:layout_below="@+id/searchView"
         android:layout_marginTop="10dp" />
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:background="@color/orange"
+        app:theme="@style/AppTheme"
+        android:elevation="10dp"
+        android:layout_height="?attr/actionBarSize">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tvFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="friends"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+            <Button
+                android:id="@+id/add_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/add_friend"
+                android:backgroundTint="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:onClick="addFriend" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/toolbar"
         android:gravity="right"
-        android:queryHint="Search"
+        android:queryHint="Search friend username"
         android:showAsAction="always|collapseActionView" />
 
 </RelativeLayout>

@@ -8,15 +8,38 @@
     android:focusableInTouchMode="true"
     tools:context=".LoginActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:background="@color/orange"
+        app:theme="@style/AppTheme"
+        android:elevation="10dp"
+        android:layout_height="?attr/actionBarSize">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="goals"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
     <EditText
         android:id="@+id/tvUsername"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Username" />
+        android:fontFamily="@font/quicksand"
+        android:hint="Username"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/tvPassword"
@@ -26,30 +49,32 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:fontFamily="@font/quicksand"
         android:hint="Password"
         android:inputType="textPassword" />
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="125dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvUsername"
         android:layout_below="@id/tvPassword"
-        android:background="@color/transparent"
         android:layout_marginTop="20dp"
+        android:background="@drawable/button_border"
+        android:layout_centerHorizontal="true"
         android:onClick="login"
+        android:textColor="@color/orange"
         android:text="Login" />
 
     <Button
         android:id="@+id/signupBtn"
-        android:layout_width="125dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/tvUsername"
-        android:layout_below="@id/tvPassword"
+        android:background="@drawable/button_border"
         android:layout_centerHorizontal="true"
-        android:background="@color/transparent"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/loginBtn"
         android:onClick="signUp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/orange"
         android:text="Sign up" />
 
 </RelativeLayout>
