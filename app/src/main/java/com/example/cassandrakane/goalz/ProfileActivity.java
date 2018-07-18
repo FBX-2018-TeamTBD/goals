@@ -440,6 +440,7 @@ public class ProfileActivity extends AppCompatActivity {
         Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
+        finish();
     }
 
     public void addGoal(View v) {
