@@ -113,17 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-
-        Typeface typeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "font/quicksand_regular.ttf");
-        SpannableStringBuilder camera = new SpannableStringBuilder(getString(R.string.camera));
-        camera.setSpan(typeface, 0, camera.length(), 0);
-        navigationView.getMenu().findItem(R.id.nav_camera).setTitle(camera);
-        SpannableStringBuilder feed = new SpannableStringBuilder(getString(R.string.friends_feed));
-        feed.setSpan(typeface, 0, feed.length(), 0);
-        navigationView.getMenu().findItem(R.id.nav_feed).setTitle(feed);
-        SpannableStringBuilder logout = new SpannableStringBuilder(getString(R.string.logout));
-        logout.setSpan(typeface, 0, logout.length(), 0);
-        navigationView.getMenu().findItem(R.id.nav_logout).setTitle(logout);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -440,11 +429,13 @@ public class ProfileActivity extends AppCompatActivity {
         Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
     }
 
     public void addGoal(View v) {
         Intent i = new Intent(this, AddGoalActivity.class);
         startActivityForResult(i, ADD_GOAL_ACTIVITY_REQUEST_CODE);
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
     }
 
     public void openDrawer(View v) {
