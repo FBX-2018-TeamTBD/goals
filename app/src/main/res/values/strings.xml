@@ -6,4 +6,20 @@
     <string name="monthly">Monthly</string>
     <string name="weekly">Weekly</string>
     <string name="daily">Daily</string>
+    <string name="logout">Logout</string>
+    <string name="friends_feed">Friends Feed</string>
+    <string name="camera">Camera</string>
+    <string name="friends">friends</string>
+    <string name="goals">goals</string>
+    <string name="username">Username</string>
+    <string name="_0_current_ngoals">0 Current Goals</string>
+    <string name="_0_completed_ngoals">0 Completed Goals</string>
+    <string name="_0_nfriends">0 friends</string>
+    <string name="add_goal">add goal</string>
+    <string name="reminder_frequency">Reminder Frequency</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="_0_40">0/40</string>
+    <string name="_0">0</string>
 </resources>

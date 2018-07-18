@@ -32,7 +32,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/quicksand_medium"
-                android:text="add goal"
+                android:text="@string/add_goal"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
             <Button
@@ -69,7 +69,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:fontFamily="@font/quicksand"
+                android:fontFamily="@font/quicksand_regular"
                 android:hint="@string/title"
                 android:inputType="textPersonName" />
 
@@ -81,7 +81,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:fontFamily="@font/quicksand"
+                android:fontFamily="@font/quicksand_regular"
                 android:hint="@string/description"
                 android:inputType="textPersonName"
                 android:lines="3"
@@ -95,7 +95,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:fontFamily="@font/quicksand"
+                android:fontFamily="@font/quicksand_regular"
                 android:hint="@string/duration"
                 android:inputType="number"
                 android:lines="3"
@@ -109,7 +109,7 @@
                 android:layout_below="@+id/etDuration"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/quicksand_medium"
-                android:text="Reminder Frequency"
+                android:text="@string/reminder_frequency"
                 android:textSize="18sp" />
 
             <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
@@ -124,7 +124,7 @@
                     android:id="@+id/rbDay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand"
+                    android:fontFamily="@font/quicksand_regular"
                     android:onClick="onRadioButtonClicked"
                     android:text="@string/daily"
                     android:textSize="16sp" />
@@ -133,7 +133,7 @@
                     android:id="@+id/rbWeek"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand"
+                    android:fontFamily="@font/quicksand_regular"
                     android:onClick="onRadioButtonClicked"
                     android:text="@string/weekly"
                     android:textSize="16sp" />
@@ -142,7 +142,7 @@
                     android:id="@+id/rbMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand"
+                    android:fontFamily="@font/quicksand_regular"
                     android:onClick="onRadioButtonClicked"
                     android:text="@string/monthly"
                     android:textSize="16sp" />

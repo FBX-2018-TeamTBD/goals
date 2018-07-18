@@ -108,8 +108,6 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        getSupportActionBar().hide();
-
         ivFade = findViewById(R.id.ivFade);
         textureView = findViewById(R.id.textureView);
         assert textureView != null;

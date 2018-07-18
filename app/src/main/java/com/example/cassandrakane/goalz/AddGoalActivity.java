@@ -87,7 +87,6 @@ public class AddGoalActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().hide();
     }
 
     public void onRadioButtonClicked(View v) {

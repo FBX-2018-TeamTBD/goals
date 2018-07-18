@@ -35,6 +35,8 @@ public class GoalsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals_list);
 
+        getSupportActionBar().hide();
+
         ivStory = findViewById(R.id.ivStory);
         tvGoal = findViewById(R.id.tvTitle);
 

@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz;
 
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,8 +14,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +32,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_friends);
 
-        getSupportActionBar().hide();
-
         searchView = findViewById(R.id.searchView);
 
         searched = getUsers();
@@ -47,6 +42,9 @@ public class SearchFriendsActivity extends AppCompatActivity {
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvSearched.addItemDecoration(itemDecor);
 
+        TextView searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        Typeface typeface = getResources().getFont(R.font.quicksand_regular);
+        searchText.setTypeface(typeface);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

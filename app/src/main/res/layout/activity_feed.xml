@@ -23,6 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/tvFriends"
                 android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/quicksand_medium"
-                android:text="friends"
+                android:text="@string/friends"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
             <Button

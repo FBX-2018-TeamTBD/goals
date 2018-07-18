@@ -12,22 +12,31 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,16 +45,12 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.xml.sax.Parser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -84,6 +89,8 @@ public class ProfileActivity extends AppCompatActivity {
     private int completedGoals = 0;
     private int progressGoals = 0;
 
+    DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +99,47 @@ public class ProfileActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        getSupportActionBar().hide();
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        //actionbar.setDisplayHomeAsUpEnabled(true);
+        //actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "res/font/quicksand_regular.ttf");
+        SpannableStringBuilder camera = new SpannableStringBuilder(getString(R.string.camera));
+        camera.setSpan(typeface, 0, camera.length(), 0);
+        navigationView.getMenu().findItem(R.id.nav_camera).setTitle(camera);
+        SpannableStringBuilder feed = new SpannableStringBuilder(getString(R.string.friends_feed));
+        feed.setSpan(typeface, 0, feed.length(), 0);
+        navigationView.getMenu().findItem(R.id.nav_feed).setTitle(feed);
+        SpannableStringBuilder logout = new SpannableStringBuilder(getString(R.string.logout));
+        logout.setSpan(typeface, 0, logout.length(), 0);
+        navigationView.getMenu().findItem(R.id.nav_logout).setTitle(logout);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_camera:
+                                toCamera();
+                                break;
+                            case R.id.nav_feed:
+                                toFeed();
+                                break;
+                            case R.id.nav_logout:
+                                logout();
+                        }
+
+                        return true;
+                    }
+                });
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
@@ -384,14 +431,31 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void toCamera(View v) {
-        Intent i = new Intent(this, CameraActivity.class);
+    public void toCamera() {
+        Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+        i.putExtra("goals", (Serializable) goals);
+        startActivity(i);
+    }
+
+    public void toFeed() {
+        Intent i = new Intent(getApplicationContext(), FeedActivity.class);
+        startActivity(i);
+    }
+
+    public void logout() {
+        ParseUser.logOut();
+        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 
     public void addGoal(View v) {
         Intent i = new Intent(this, AddGoalActivity.class);
         startActivityForResult(i, ADD_GOAL_ACTIVITY_REQUEST_CODE);
+    }
+
+    public void openDrawer(View v) {
+        drawerLayout.openDrawer(GravityCompat.START);
     }
 
     public Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {

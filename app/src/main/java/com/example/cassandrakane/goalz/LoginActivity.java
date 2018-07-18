@@ -2,8 +2,8 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +17,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,12 +29,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportActionBar().hide();
-
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             Intent i = new Intent(this, ProfileActivity.class);
             startActivity(i);
+            finish();
         }
 
         tvUsername = findViewById(R.id.tvUsername);
@@ -69,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     // transition to home screen
                     Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(i);
+                    finish();
                     tvUsername.setText("");
                     tvPassword.setText("");
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
@@ -123,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                         // transition to home screen
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);
+                        finish();
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
