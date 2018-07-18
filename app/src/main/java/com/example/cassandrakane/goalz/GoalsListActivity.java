@@ -11,8 +11,10 @@ import android.widget.ImageView;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 import java.io.File;
@@ -62,17 +64,33 @@ public class GoalsListActivity extends AppCompatActivity {
                 }
             }
         });
-        for (Goal goal : goals){
+        for (final Goal goal : goals){
             if (goal.isSelected()){
                 text += goal.getTitle() + " ";
-                ArrayList<ParseFile> story = goal.getStory();
-                story.add(parseFile);
-                goal.setStory(story);
-                goal.saveInBackground();
+                final ArrayList<ParseObject> story = goal.getStory();
+                final Image image = new Image(parseFile, "", goal);
+                image.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        story.add(image);
+                        goal.setStory(story);
+                        goal.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                goal.setUpdateStoryBy(story);
+                                goal.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         }
-        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-        startActivity(intent);
         Log.d("GoalsListActivity", "Output : " + text);
     }
 }
