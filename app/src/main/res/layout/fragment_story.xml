@@ -45,6 +45,6 @@
         android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:backgroundTint="@color/white"
-        android:src="@drawable/cancel" />
+        android:background="@drawable/cancel" />
 
 </RelativeLayout>
