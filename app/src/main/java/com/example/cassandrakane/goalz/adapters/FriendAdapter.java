@@ -49,7 +49,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // get the data according to position
         final ParseUser friend = friends.get(position);
-        holder.tvUsername.setText(friend.getUsername());
+        try {
+            holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (friend.getParseFile("profile") != null) {
             ParseFile imageFile = friend.getParseFile("profile");
             Bitmap bitmap = null;
