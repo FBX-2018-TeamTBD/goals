@@ -429,6 +429,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
+        finish();
     }
 
     public void addGoal(View v) {
