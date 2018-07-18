@@ -7,16 +7,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-
-import com.example.cassandrakane.goalz.adapters.FriendAdapter;
-import com.parse.ParseUser;
-
-import java.util.ArrayList;
 import android.widget.SearchView;
 
+import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
@@ -30,6 +29,8 @@ public class FeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+
+        getSupportActionBar().hide();
 
         svSearch = findViewById(R.id.searchView);
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
