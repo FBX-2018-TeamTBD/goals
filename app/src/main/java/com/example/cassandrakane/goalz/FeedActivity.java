@@ -10,25 +10,27 @@ import android.view.View;
 import android.widget.SearchView;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FeedActivity extends AppCompatActivity {
 
     List<ParseUser> friends;
-    RecyclerView rvFriends;
     FriendAdapter friendAdapter;
     SearchView svSearch;
+
+    @BindView(R.id.rvFriends) RecyclerView rvFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+        ButterKnife.bind(this);
 
         getSupportActionBar().hide();
 
@@ -45,7 +47,6 @@ public class FeedActivity extends AppCompatActivity {
 
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
-        rvFriends = findViewById(R.id.rvFriends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(friendAdapter);
         populateFriends();

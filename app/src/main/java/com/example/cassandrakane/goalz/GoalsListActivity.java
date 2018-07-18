@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -20,31 +19,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class GoalsListActivity extends AppCompatActivity {
 
     List<Goal> goals;
-    RecyclerView rvGoals;
-    ImageView ivStory;
-    TextView tvGoal;
     GoalSimpleAdapter goalSimpleAdapter;
     File file;
 
+    @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.ivStory) ImageView ivStory;
+    @BindView(R.id.tvTitle) ImageView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals_list);
+        ButterKnife.bind(this);
 
         getSupportActionBar().hide();
-
-        ivStory = findViewById(R.id.ivStory);
-        tvGoal = findViewById(R.id.tvTitle);
 
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
 
         goalSimpleAdapter = new GoalSimpleAdapter(goals);
-        rvGoals = findViewById(R.id.rvGoals);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalSimpleAdapter);
 

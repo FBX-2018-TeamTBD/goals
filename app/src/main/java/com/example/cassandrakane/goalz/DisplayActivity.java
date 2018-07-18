@@ -8,7 +8,6 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.cassandrakane.goalz.models.Goal;
@@ -18,27 +17,29 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DisplayActivity extends AppCompatActivity {
 
     File file;
     Bitmap image;
-    ImageView ivImage;
-    ImageButton btnConfirm;
+    @BindView(R.id.ivImage) ImageView ivImage;
+    @BindView(R.id.btnConfirm) ImageView btnConfirm;
     List<Goal> goals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
+        ButterKnife.bind(this);
 
         file = (File) getIntent().getSerializableExtra("image");
         image = BitmapFactory.decodeFile(file.getAbsolutePath());
         image = rotateBitmapOrientation(file.getPath());
 
-        ivImage = findViewById(R.id.ivImage);
         ivImage.setImageBitmap(image);
 
-        btnConfirm = findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

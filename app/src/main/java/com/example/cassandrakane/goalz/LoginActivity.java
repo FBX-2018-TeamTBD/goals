@@ -19,15 +19,19 @@ import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText tvUsername;
-    EditText tvPassword;
+    @BindView(R.id.tvUsername) EditText tvUsername;
+    @BindView(R.id.tvPassword) EditText tvPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         getSupportActionBar().hide();
 
@@ -37,9 +41,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         }
-
-        tvUsername = findViewById(R.id.tvUsername);
-        tvPassword = findViewById(R.id.tvPassword);
 
         tvUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

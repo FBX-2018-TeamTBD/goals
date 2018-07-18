@@ -27,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -52,6 +53,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -60,15 +62,18 @@ public class ProfileActivity extends AppCompatActivity {
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
     public final static int ADD_GOAL_ACTIVITY_REQUEST_CODE = 14;
 
-    private ImageView ivProfile;
-    private TextView tvProgress;
-    private TextView tvCompleted;
-    private TextView tvFriends;
-    private TextView tvUsername;
+    @BindView(R.id.ivProfile) ImageView ivProfile;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.tvCompleted) TextView tvCompleted;
+    @BindView(R.id.tvFriends) TextView tvFriends;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+
+    @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
+
     private ParseUser user;
 
     private List<Goal> goals;
-    private RecyclerView rvGoals;
     private GoalAdapter goalAdapter;
 
     private ParseFile imageFile;
@@ -83,7 +88,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         ButterKnife.bind(this);
 
         getSupportActionBar().hide();
@@ -109,15 +113,8 @@ public class ProfileActivity extends AppCompatActivity {
         user = ParseUser.getCurrentUser();
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
-        rvGoals = findViewById(R.id.rvGoals);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
-
-        ivProfile = findViewById(R.id.ivProfile);
-        tvProgress = findViewById(R.id.tvProgress);
-        tvCompleted = findViewById(R.id.tvCompleted);
-        tvFriends = findViewById(R.id.tvFriends);
-        tvUsername = findViewById(R.id.tvUsername);
 
         tvFriends.setText(user.getList("friends").size() + "\nFriends");
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());

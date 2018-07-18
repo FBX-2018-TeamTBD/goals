@@ -3,6 +3,8 @@ package com.example.cassandrakane.goalz.adapters;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseFile;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
@@ -56,6 +65,19 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
+
+        holder.ivStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<ParseFile> imageList = goal.getList("images");
+                ArrayList<String> imageUrls = getImageUrls(imageList);
+                ProfileActivity activity = (ProfileActivity) context;
+                final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(imageUrls, 0)).commit();
+                activity.toolbar.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
@@ -75,23 +97,31 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public ArrayList<String> getImageUrls(List<ParseFile> imageList) {
+        ArrayList<ParseFile> images = new ArrayList<ParseFile>();
+        if (imageList != null) {
+            images.addAll(imageList);
+        }
+        ArrayList<String> imageUrls = new ArrayList<String>();
+        for (ParseFile f : images) {
+            imageUrls.add(f.getUrl());
+        }
+        return imageUrls;
+    }
+
     // create ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle;
-        TextView tvDescription;
-        TextView tvStreak;
-        TextView tvProgress;
-        ImageView ivStar;
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvDescription) TextView tvDescription;
+        @BindView(R.id.tvStreak) TextView tvStreak;
+        @BindView(R.id.tvProgress) TextView tvProgress;
+        @BindView(R.id.ivStory) ImageView ivStory;
+        @BindView(R.id.ivStar) ImageView ivStar;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvStreak = itemView.findViewById(R.id.tvStreak);
-            tvProgress = itemView.findViewById(R.id.tvProgress);
-            ivStar = itemView.findViewById(R.id.ivStar);
+            ButterKnife.bind(this, itemView);
         }
     }
 
