@@ -16,7 +16,8 @@ import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.ParseFile;
+import com.example.cassandrakane.goalz.models.Image;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +74,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.ivStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<ParseFile> imageList = goal.getList("images");
+                List<Image> imageList = goal.getList("images");
                 ArrayList<String> imageUrls = getImageUrls(imageList);
                 ProfileActivity activity = (ProfileActivity) context;
                 final FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -107,14 +108,18 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getImageUrls(List<ParseFile> imageList) {
-        ArrayList<ParseFile> images = new ArrayList<ParseFile>();
+    public ArrayList<String> getImageUrls(List<Image> imageList) {
+        ArrayList<Image> images = new ArrayList<Image>();
         if (imageList != null) {
             images.addAll(imageList);
         }
         ArrayList<String> imageUrls = new ArrayList<String>();
-        for (ParseFile f : images) {
-            imageUrls.add(f.getUrl());
+        for (Image i : images) {
+            try {
+                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return imageUrls;
     }
