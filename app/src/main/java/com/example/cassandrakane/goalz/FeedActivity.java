@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,19 +13,18 @@ import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import android.widget.SearchView;
-
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import java.util.List;
 
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
+
 public class FeedActivity extends AppCompatActivity {
+
+    public final static int ADD_FRIEND_ACTIVITY_REQUEST_CODE = 14;
 
     List<ParseUser> friends;
     RecyclerView rvFriends;
     FriendAdapter friendAdapter;
-    SearchView svSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,8 @@ public class FeedActivity extends AppCompatActivity {
         rvFriends = findViewById(R.id.rvFriends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(friendAdapter);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
+        rvFriends.addItemDecoration(itemDecor);
         populateFriends();
     }
 
@@ -56,13 +58,33 @@ public class FeedActivity extends AppCompatActivity {
         List<ParseUser> arr = ParseUser.getCurrentUser().getList("friends");
         Log.i("sdf", arr.toString());
         if (arr != null) {
+            try {
+                ParseUser.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             friends.addAll(arr);
             friendAdapter.notifyDataSetChanged();
         }
     }
 
     public void addFriend(View v) {
+        Intent i = new Intent(this, SearchFriendsActivity.class);
+        startActivityForResult(i, ADD_FRIEND_ACTIVITY_REQUEST_CODE);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_FRIEND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                ParseUser friend = data.getParcelableExtra(ParseUser.class.getSimpleName());
+                friends.add(0, friend);
+                friendAdapter.notifyItemInserted(0);
+                rvFriends.scrollToPosition(0);
+                ProfileActivity.numFriends += 1;
+                ProfileActivity.setFriendsCount();
+            }
+        }
     }
 
 }

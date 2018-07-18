@@ -37,7 +37,7 @@ public class Goal extends ParseObject implements Parcelable {
         ArrayList<ParseFile> story = new ArrayList<>();
         for (int i = 0; i < arr.size(); i++) {
             story.add(arr.get(i));
-            }
+        }
         return story;
     }
 

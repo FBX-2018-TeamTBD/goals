@@ -82,7 +82,7 @@
         android:layout_toRightOf="@+id/ivProfile"
         android:fontFamily="@font/quicksand"
         android:lines="2"
-        android:text="TextView"
+        android:text="0 Current\nGoals"
         android:textAlignment="center"
         android:textColor="@color/black" />
 
@@ -95,7 +95,7 @@
         android:layout_toRightOf="@id/tvProgress"
         android:fontFamily="@font/quicksand"
         android:lines="2"
-        android:text="TextView"
+        android:text="0 Completed\nGoals"
         android:textAlignment="center"
         android:textColor="@color/black" />
 

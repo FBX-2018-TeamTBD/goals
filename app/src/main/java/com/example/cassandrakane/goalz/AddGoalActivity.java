@@ -13,10 +13,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -116,16 +119,25 @@ public class AddGoalActivity extends AppCompatActivity {
 
     public void postGoal(View v) {
         final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseFile>(), ParseUser.getCurrentUser());
-        goal.saveInBackground(new SaveCallback() {
+        final ParseUser user = ParseUser.getCurrentUser();
+        List<ParseObject> goals = user.getList("goals");
+        goals.add(goal);
+        user.put("goals", goals);
+        user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Intent data  = new Intent();
-                    data.putExtra(Goal.class.getSimpleName(), goal);
-                    setResult(RESULT_OK, data);
-                    finish();
+                    try {
+                        user.fetch();
+                        Intent data  = new Intent();
+                        data.putExtra(Goal.class.getSimpleName(), goal);
+                        setResult(RESULT_OK, data);
+                        finish();
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
                 } else {
-                    e.printStackTrace();
+                    Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
                 }
             }
         });

@@ -41,10 +41,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".FeedActivity" />
-        <activity android:name=".CameraActivity"></activity>
-        <activity android:name=".DisplayActivity"></activity>
-        <activity android:name=".GoalsListActivity"></activity>
-        <activity android:name=".AddGoalActivity"></activity>
+        <activity android:name=".CameraActivity" />
+        <activity android:name=".DisplayActivity" />
+        <activity android:name=".GoalsListActivity" />
+        <activity android:name=".AddGoalActivity" />
+
         <service
             android:name="com.parse.fcm.ParseFirebaseInstanceIdService"
             android:exported="true">
@@ -52,12 +53,12 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name="com.parse.fcm.ParseFirebaseMessagingService">
+        <service android:name="com.parse.fcm.ParseFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <receiver
             android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
@@ -67,9 +68,12 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".SearchFriendsActivity"></activity>
     </application>
 
 </manifest>

@@ -37,11 +37,15 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.xml.sax.Parser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -60,10 +64,12 @@ public class ProfileActivity extends AppCompatActivity {
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
     public final static int ADD_GOAL_ACTIVITY_REQUEST_CODE = 14;
 
+    public static int numFriends;
+
     private ImageView ivProfile;
     private TextView tvProgress;
     private TextView tvCompleted;
-    private TextView tvFriends;
+    private static TextView tvFriends;
     private TextView tvUsername;
     private ParseUser user;
 
@@ -119,7 +125,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvFriends = findViewById(R.id.tvFriends);
         tvUsername = findViewById(R.id.tvUsername);
 
-        tvFriends.setText(user.getList("friends").size() + "\nFriends");
+        numFriends = user.getList("friends").size();
+        setFriendsCount();
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
 
         if (ParseUser.getCurrentUser().getParseFile("image") != null) {
@@ -130,42 +137,51 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
             roundedBitmapDrawable.setCornerRadius(80.0f);
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseACL acl = new ParseACL();
+        acl.setReadAccess(currentUser,true);
+        acl.setWriteAccess(currentUser,true);
+        currentUser.setACL(acl);
+
         populateGoals();
     }
 
+    public static void setFriendsCount() {
+        tvFriends.setText(numFriends + "\nFriends");
+    }
+
     public void populateGoals() {
-        ParseQuery<Goal> query = ParseQuery.getQuery(Goal.class);
-        // Define our query conditions
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
-        query.orderByDescending("createdAt");
-        // Execute the find asynchronously
-        query.findInBackground(new FindCallback<Goal>() {
-            public void done(List<Goal> itemList, ParseException e) {
-                if (e == null) {
-                    goals.addAll(itemList);
-                    completedGoals = 0;
-                    progressGoals = 0;
-                    for (int i = 0; i < goals.size(); i++) {
-                        if (goals.get(i).getCompleted()) {
-                            completedGoals += 1;
-                        } else {
-                            progressGoals += 1;
-                        }
-                    }
-                    tvProgress.setText(progressGoals + " Current\nGoals");
-                    tvCompleted.setText(completedGoals + " Completed\nGoal");
-                    goalAdapter.notifyDataSetChanged();
+        List<ParseObject> arr = ParseUser.getCurrentUser().getList("goals");
+        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        completedGoals = 0;
+        progressGoals = 0;
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Log.i("sdf", ""+arr.size());
+            Log.i("sdf", ""+friends.size());
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = (Goal) arr.get(i);
+                goals.add(goal);
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
                 } else {
-                    Log.d("item", "Error: " + e.getMessage());
+                    progressGoals += 1;
                 }
             }
-        });
+            goalAdapter.notifyDataSetChanged();
+            tvProgress.setText(progressGoals + " Current\nGoals");
+            tvCompleted.setText(completedGoals + " Completed\nGoal");
+        }
 
         /* STORY FRAGMENT EXAMPLE
         ArrayList<String> testImages = new ArrayList<String>();
