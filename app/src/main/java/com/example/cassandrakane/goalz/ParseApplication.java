@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz;
 import android.app.Application;
 
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -18,6 +19,7 @@ public class ParseApplication extends Application {
 
         //register the Goal class
         ParseObject.registerSubclass(Goal.class);
+        ParseObject.registerSubclass(Image.class);
 
         // Use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);

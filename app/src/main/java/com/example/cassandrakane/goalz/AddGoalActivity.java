@@ -2,32 +2,20 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
-import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Integer.parseInt;
 
 public class AddGoalActivity extends AppCompatActivity {
 
@@ -115,7 +103,7 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
-        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseFile>(), ParseUser.getCurrentUser());
+        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser());
         goal.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

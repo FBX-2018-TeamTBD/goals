@@ -13,12 +13,15 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private final List<Goal> goals;
     Context context;
+    Date currentDate;
 
     public GoalAdapter(List<Goal> goals) {
         this.goals = goals;
@@ -41,6 +44,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = goals.get(position);
+        currentDate = new Date();
 
         holder.tvTitle.setText(goal.getTitle());
         holder.tvDescription.setText(goal.getDescription());
@@ -56,6 +60,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
+        if (goal.getUpdateStoryBy() != null && (goal.getUpdateStoryBy().getTime() - currentDate.getTime()) < TimeUnit.MINUTES.toMillis(1)){
+            holder.ivStar.setImageResource(R.drawable.clock);
+        } else {
+            holder.ivStar.setImageResource(R.drawable.star);
+        }
+
     }
 
     @Override
