@@ -22,4 +22,7 @@
     <string name="sign_up">Sign up</string>
     <string name="_0_40">0/40</string>
     <string name="_0">0</string>
+    <string name="_0_friends">0 friends</string>
+    <string name="_0_completed_goals">0 completed goals</string>
+    <string name="_0_current_goals">0 current goals</string>
 </resources>

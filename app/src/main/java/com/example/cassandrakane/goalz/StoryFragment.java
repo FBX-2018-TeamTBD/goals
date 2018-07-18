@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.ivImage) ImageView ivImage;
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
+    @BindView(R.id.btnClose) ImageButton btnClose;
 
     public StoryFragment() { }
 
@@ -71,6 +73,19 @@ public class StoryFragment extends Fragment {
             public void onClick(View view) {
                 mIndex++;
                 setImage();
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Activity activity = getActivity();
+                if (activity.getClass().isAssignableFrom(ProfileActivity.class)) {
+                    ProfileActivity profileActivity = (ProfileActivity) activity;
+                    profileActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+                    profileActivity.toolbar.setVisibility(View.VISIBLE);
+                }
+                // TODO implement for other activities
             }
         });
 

@@ -49,12 +49,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CameraActivity extends AppCompatActivity {
 
-    private ImageButton btnCapture;
-    private ImageButton btnSwap;
-    private TextureView textureView;
-    private ImageView ivFade;
+    @BindView(R.id.btnCapture) ImageButton btnCapture;
+    @BindView(R.id.btnSwap) ImageButton btnSwap;
+    @BindView(R.id.textureView) TextureView textureView;
+    @BindView(R.id.ivFade) ImageView ivFade;
 
     // check state orientation of output image
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -107,11 +110,12 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        ButterKnife.bind(this);
 
         ivFade = findViewById(R.id.ivFade);
         textureView = findViewById(R.id.textureView);
+
         assert textureView != null;
-        btnCapture = findViewById(R.id.btnCapture);
         textureView.setSurfaceTextureListener(textureListener);
         btnCapture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +125,6 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        btnSwap = findViewById(R.id.btnSwap);
         btnSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

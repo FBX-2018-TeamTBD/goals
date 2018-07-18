@@ -3,6 +3,8 @@ package com.example.cassandrakane.goalz.adapters;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +12,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
+import com.parse.ParseException;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private final List<Goal> goals;
     Context context;
+    Date currentDate;
 
     public GoalAdapter(List<Goal> goals) {
         this.goals = goals;
@@ -41,6 +54,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = goals.get(position);
+        currentDate = new Date();
 
         holder.tvTitle.setText(goal.getTitle());
         holder.tvDescription.setText(goal.getDescription());
@@ -55,6 +69,25 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getCompleted()) {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+        holder.ivStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Image> imageList = goal.getList("images");
+                ArrayList<String> imageUrls = getImageUrls(imageList);
+                ProfileActivity activity = (ProfileActivity) context;
+                final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, 0)).commit();
+                activity.toolbar.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        if (goal.getUpdateStoryBy() != null && (goal.getUpdateStoryBy().getTime() - currentDate.getTime()) < TimeUnit.MINUTES.toMillis(1)){
+            holder.ivStar.setImageResource(R.drawable.clock);
+        } else {
+            holder.ivStar.setImageResource(R.drawable.star);
         }
     }
 
@@ -75,23 +108,35 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public ArrayList<String> getImageUrls(List<Image> imageList) {
+        ArrayList<Image> images = new ArrayList<Image>();
+        if (imageList != null) {
+            images.addAll(imageList);
+        }
+        ArrayList<String> imageUrls = new ArrayList<String>();
+        for (Image i : images) {
+            try {
+                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return imageUrls;
+    }
+
     // create ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle;
-        TextView tvDescription;
-        TextView tvStreak;
-        TextView tvProgress;
-        ImageView ivStar;
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvDescription) TextView tvDescription;
+        @BindView(R.id.tvStreak) TextView tvStreak;
+        @BindView(R.id.tvProgress) TextView tvProgress;
+        @BindView(R.id.ivStory) ImageView ivStory;
+        @BindView(R.id.ivStar) ImageView ivStar;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvStreak = itemView.findViewById(R.id.tvStreak);
-            tvProgress = itemView.findViewById(R.id.tvProgress);
-            ivStar = itemView.findViewById(R.id.ivStar);
+            ButterKnife.bind(this, itemView);
         }
     }
 

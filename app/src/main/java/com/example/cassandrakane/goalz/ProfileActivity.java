@@ -34,7 +34,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
-import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +60,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -71,15 +71,24 @@ public class ProfileActivity extends AppCompatActivity {
 
     public static int numFriends;
 
-    private ImageView ivProfile;
-    private TextView tvProgress;
-    private TextView tvCompleted;
-    private static TextView tvFriends;
-    private TextView tvUsername;
+    @BindView(R.id.ivProfile) ImageView ivProfile;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.tvCompleted) TextView tvCompleted;
+    @BindView(R.id.tvFriends) TextView tvFriends;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+
+    ImageView ivProfile2;
+    TextView tvProgress2;
+    TextView tvCompleted2;
+    TextView tvFriends2;
+    TextView tvUsername2;
+
+    @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
+
     private ParseUser user;
 
     private List<Goal> goals;
-    private RecyclerView rvGoals;
     private GoalAdapter goalAdapter;
 
     private ParseFile imageFile;
@@ -96,16 +105,12 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         ButterKnife.bind(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        //actionbar.setDisplayHomeAsUpEnabled(true);
-        //actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -141,6 +146,12 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        ivProfile2 = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
+        tvUsername2 = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
+        tvFriends2 = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
+        tvProgress2 = navigationView.getHeaderView(0).findViewById(R.id.tvProgress);
+        tvCompleted2 = navigationView.getHeaderView(0).findViewById(R.id.tvCompleted);
+
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
             public void onSwipeLeft() {
@@ -162,19 +173,16 @@ public class ProfileActivity extends AppCompatActivity {
         user = ParseUser.getCurrentUser();
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
-        rvGoals = findViewById(R.id.rvGoals);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
-
-        ivProfile = findViewById(R.id.ivProfile);
-        tvProgress = findViewById(R.id.tvProgress);
-        tvCompleted = findViewById(R.id.tvCompleted);
-        tvFriends = findViewById(R.id.tvFriends);
-        tvUsername = findViewById(R.id.tvUsername);
+        rvGoals.setOnTouchListener(onSwipeTouchListener);
 
         numFriends = user.getList("friends").size();
         setFriendsCount();
+        tvFriends.setText(numFriends + "\nFriends");
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        tvFriends2.setText(numFriends + " Friends");
+        tvUsername2.setText(ParseUser.getCurrentUser().getUsername());
 
         if (ParseUser.getCurrentUser().getParseFile("image") != null) {
             ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
@@ -188,6 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
             roundedBitmapDrawable.setCornerRadius(80.0f);
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
+            ivProfile2.setImageDrawable(roundedBitmapDrawable);
         }
 
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -199,7 +208,7 @@ public class ProfileActivity extends AppCompatActivity {
         populateGoals();
     }
 
-    public static void setFriendsCount() {
+    public void setFriendsCount() {
         tvFriends.setText(numFriends + "\nFriends");
     }
 
@@ -214,8 +223,6 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Log.i("sdf", ""+arr.size());
-            Log.i("sdf", ""+friends.size());
             for(int i = 0; i < arr.size(); i++) {
                 Goal goal = (Goal) arr.get(i);
                 goals.add(goal);
@@ -228,20 +235,9 @@ public class ProfileActivity extends AppCompatActivity {
             goalAdapter.notifyDataSetChanged();
             tvProgress.setText(progressGoals + " Current\nGoals");
             tvCompleted.setText(completedGoals + " Completed\nGoal");
-        }
-
-        /* STORY FRAGMENT EXAMPLE
-        ArrayList<String> testImages = new ArrayList<String>();
-        testImages.add("https://picsum.photos/500/150/?image=392");
-        testImages.add("https://picsum.photos/23/150/?image=393");
-        testImages.add("https://picsum.photos/532/150/?image=397");
-        testImages.add("https://picsum.photos/76/150/?image=395");
-        testImages.add("https://picsum.photos/700/150/?image=396");
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(testImages, 0)).commit();
-        */
+            tvProgress2.setText(progressGoals + " Current Goals");
+            tvCompleted2.setText(completedGoals + " Completed Goal");
+        };
     }
 
     public void selectImage(View v) {

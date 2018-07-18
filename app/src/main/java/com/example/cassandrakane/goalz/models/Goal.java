@@ -9,18 +9,21 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @ParseClassName("Goal")
 public class Goal extends ParseObject implements Parcelable {
 
     private boolean isSelected = false;
+//    private Date updateStoryBy;
 
     public Goal() {
         super();
     }
 
-    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseFile> story, ParseUser user) {
+    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user) {
         super();
         setTitle(title);
         setDescription(description);
@@ -32,9 +35,9 @@ public class Goal extends ParseObject implements Parcelable {
         setUser(user);
     }
 
-    public ArrayList<ParseFile> getStory() {
-        List<ParseFile> arr = getList("images");
-        ArrayList<ParseFile> story = new ArrayList<>();
+    public ArrayList<ParseObject> getStory() {
+        List<ParseObject> arr = getList("images");
+        ArrayList<ParseObject> story = new ArrayList<>();
         for (int i = 0; i < arr.size(); i++) {
             story.add(arr.get(i));
         }
@@ -69,7 +72,7 @@ public class Goal extends ParseObject implements Parcelable {
         return getParseUser("user");
     }
 
-    public void setStory(ArrayList<ParseFile> story) {
+    public void setStory(ArrayList<ParseObject> story) {
         put("images", story);
     }
 
@@ -123,5 +126,19 @@ public class Goal extends ParseObject implements Parcelable {
             orderByDescending("createdAt");
             return this;
         }
+    }
+
+    public Date getUpdateStoryBy(){
+        return getDate("updateBy");
+    }
+
+    public void setUpdateStoryBy(ArrayList<ParseObject> story){
+        Date updateStoryBy = null;
+        if (story.size() != 0){
+            Image lastUpdate = (Image) story.get(story.size() - 1);
+            long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.MINUTES.toMillis(getFrequency());
+            updateStoryBy = new Date(sum);
+        }
+        put("updateBy", updateStoryBy);
     }
 }

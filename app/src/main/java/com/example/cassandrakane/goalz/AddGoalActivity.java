@@ -2,35 +2,26 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AddGoalActivity extends AppCompatActivity {
 
@@ -46,19 +37,17 @@ public class AddGoalActivity extends AppCompatActivity {
         }
     }*/
 
-    EditText etTitle;
-    EditText etDescription;
-    EditText etDuration;
+    @BindView(R.id.etTitle) EditText etTitle;
+    @BindView(R.id.etDescription) EditText etDescription;
+    @BindView(R.id.etDuration) EditText etDuration;
+
     int frequency = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_goal);
-
-        etTitle = findViewById(R.id.etTitle);
-        etDescription = findViewById(R.id.etDescription);
-        etDuration = findViewById(R.id.etDuration);
+        ButterKnife.bind(this);
 
         etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -117,7 +106,7 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
-        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseFile>(), ParseUser.getCurrentUser());
+        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser());
         final ParseUser user = ParseUser.getCurrentUser();
         List<ParseObject> goals = user.getList("goals");
         goals.add(goal);

@@ -17,19 +17,23 @@ import com.parse.ParseException;
 import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FeedActivity extends AppCompatActivity {
 
     public final static int ADD_FRIEND_ACTIVITY_REQUEST_CODE = 14;
 
     List<ParseUser> friends;
-    RecyclerView rvFriends;
     FriendAdapter friendAdapter;
+
+    @BindView(R.id.rvFriends) RecyclerView rvFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+        ButterKnife.bind(this);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
@@ -44,11 +48,11 @@ public class FeedActivity extends AppCompatActivity {
 
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
-        rvFriends = findViewById(R.id.rvFriends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(friendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvFriends.addItemDecoration(itemDecor);
+        rvFriends.setOnTouchListener(onSwipeTouchListener);
         populateFriends();
     }
 
@@ -80,7 +84,6 @@ public class FeedActivity extends AppCompatActivity {
                 friendAdapter.notifyItemInserted(0);
                 rvFriends.scrollToPosition(0);
                 ProfileActivity.numFriends += 1;
-                ProfileActivity.setFriendsCount();
             }
         }
     }

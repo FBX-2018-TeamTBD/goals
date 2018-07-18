@@ -20,6 +20,9 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
 
     private final List<ParseUser> friends;
@@ -46,7 +49,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // get the data according to position
         final ParseUser friend = friends.get(position);
-        holder.tvUsername.setText(friend.getUsername());
+        try {
+            holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (friend.getParseFile("profile") != null) {
             ParseFile imageFile = friend.getParseFile("profile");
             Bitmap bitmap = null;
@@ -82,14 +89,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvUsername;
-        ImageView ivProfile;
+        @BindView(R.id.tvUsername) TextView tvUsername;
+        @BindView(R.id.ivProfile) ImageView ivProfile;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            ivProfile = itemView.findViewById(R.id.ivProfile);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
+            ButterKnife.bind(this, itemView);
         }
     }
 

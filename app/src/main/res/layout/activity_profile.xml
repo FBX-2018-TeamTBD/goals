@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+    android:background="@color/white"
+    tools:context=".ProfileActivity">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -149,6 +151,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/menu_drawer"
+        app:headerLayout="@layout/nav_header"
         android:fitsSystemWindows="true" />
 
 </android.support.v4.widget.DrawerLayout>
