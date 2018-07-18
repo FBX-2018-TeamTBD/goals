@@ -155,16 +155,11 @@ public class ProfileActivity extends AppCompatActivity {
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
             public void onSwipeLeft() {
-                Intent i = new Intent(getApplicationContext(), FeedActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                toFeed();
             }
             @Override
             public void onSwipeRight() {
-                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-                i.putExtra("goals", (Serializable) goals);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                toCamera();
             }
         };
 
@@ -431,11 +426,13 @@ public class ProfileActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
         i.putExtra("goals", (Serializable) goals);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
     public void toFeed() {
         Intent i = new Intent(getApplicationContext(), FeedActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
     public void logout() {
