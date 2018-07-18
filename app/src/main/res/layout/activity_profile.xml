@@ -32,23 +32,13 @@
                 android:layout_height="match_parent">
                 <Button
                     android:id="@+id/menu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/ic_menu"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/menu"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:onClick="openDrawer" />
-                <!--<Button
-                    android:id="@+id/camera_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/camera"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white"
-                    android:onClick="toCamera" />-->
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

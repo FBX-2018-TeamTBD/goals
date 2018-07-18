@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     // transition to home screen
                     Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(i);
-                    finish();
+                    overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     tvUsername.setText("");
                     tvPassword.setText("");
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                         // transition to home screen
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);
-                        finish();
+                        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }

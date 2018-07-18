@@ -186,7 +186,6 @@ public class ProfileActivity extends AppCompatActivity {
         ParseUser currentUser = ParseUser.getCurrentUser();
         ParseACL acl = new ParseACL();
         acl.setReadAccess(currentUser,true);
-        acl.setWriteAccess(currentUser,true);
         currentUser.setACL(acl);
 
         populateGoals();

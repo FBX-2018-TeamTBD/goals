@@ -7,11 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
 import com.parse.ParseException;
@@ -67,6 +70,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             roundedBitmapDrawable.setAntiAlias(true);
             holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
+        holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG);
+            }
+        });
     }
 
     @Override
@@ -91,6 +100,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivProfile) ImageView ivProfile;
+        @BindView(R.id.pokeBtn) Button pokeBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
