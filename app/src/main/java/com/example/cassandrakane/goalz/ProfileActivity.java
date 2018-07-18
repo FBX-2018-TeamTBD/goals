@@ -114,7 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "res/font/quicksand_regular.ttf");
+        Typeface typeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "font/quicksand_regular.ttf");
         SpannableStringBuilder camera = new SpannableStringBuilder(getString(R.string.camera));
         camera.setSpan(typeface, 0, camera.length(), 0);
         navigationView.getMenu().findItem(R.id.nav_camera).setTitle(camera);
