@@ -18,25 +18,27 @@
             android:layout_height="match_parent">
             <Button
                 android:id="@+id/camera_btn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@android:drawable/ic_menu_camera"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/camera"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:onClick="toCamera" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:textSize="20dp"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="goals"
                 android:textColor="@color/black"
-                android:text="Goals"/>
+                android:textSize="20sp" />
             <Button
                 android:id="@+id/add_btn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@android:drawable/ic_menu_add"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/add"
                 android:backgroundTint="@color/black"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -58,52 +60,55 @@
 
     <TextView
         android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ivProfile"
-        android:layout_below="@+id/ivProfile"
-        android:textAlignment="center"
+        android:layout_below="@id/ivProfile"
+        android:layout_alignStart="@+id/ivProfile"
+        android:fontFamily="@font/quicksand_medium"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="13dp"
-        android:textColor="@color/black"
-        android:text="Username" />
+        android:text="Username"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ivProfile"
-        android:layout_toRightOf="@+id/ivProfile"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/ivProfile"
+        android:fontFamily="@font/quicksand"
         android:lines="2"
-        android:textColor="@color/black"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvCompleted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvProgress"
-        android:layout_toRightOf="@id/tvProgress"
         android:layout_marginLeft="35dp"
-        android:textAlignment="center"
+        android:layout_toRightOf="@id/tvProgress"
+        android:fontFamily="@font/quicksand"
         android:lines="2"
-        android:textColor="@color/black"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvFriends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvProgress"
-        android:layout_toRightOf="@+id/tvCompleted"
         android:layout_marginLeft="35dp"
-        android:textAlignment="center"
+        android:layout_toRightOf="@+id/tvCompleted"
+        android:fontFamily="@font/quicksand"
         android:lines="2"
-        android:textColor="@color/black"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoals"

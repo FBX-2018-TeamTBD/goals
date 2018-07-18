@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.R;
@@ -41,17 +42,19 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         // get the data according to position
         final Goal goal = goals.get(position);
 
-        holder.title.setText(goal.getTitle());
-        holder.description.setText(goal.getDescription());
-        holder.progress.setText(goal.getProgress() + "/" + goal.getDuration());
+        holder.tvTitle.setText(goal.getTitle());
+        holder.tvDescription.setText(goal.getDescription());
+        holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
         if (goal.getStreak() > 0) {
-            holder.streak.setText(String.format("%d", goal.getStreak()));
+            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
+            holder.ivStar.setVisibility(View.VISIBLE);
         } else {
-            holder.streak.setText("");
+            holder.tvStreak.setText("");
+            holder.ivStar.setVisibility(View.INVISIBLE);
         }
         if (goal.getCompleted()) {
-            holder.title.setTextColor(context.getResources().getColor(R.color.grey));
-            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
+            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 
@@ -75,18 +78,20 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title;
-        TextView description;
-        TextView streak;
-        TextView progress;
+        TextView tvTitle;
+        TextView tvDescription;
+        TextView tvStreak;
+        TextView tvProgress;
+        ImageView ivStar;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.tvTitle);
-            description = itemView.findViewById(R.id.tvDescription);
-            streak = itemView.findViewById(R.id.tvStreak);
-            progress = itemView.findViewById(R.id.tvProgress);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvStreak = itemView.findViewById(R.id.tvStreak);
+            tvProgress = itemView.findViewById(R.id.tvProgress);
+            ivStar = itemView.findViewById(R.id.ivStar);
         }
     }
 

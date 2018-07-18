@@ -31,11 +31,13 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+        getSupportActionBar().hide();
+
         svSearch = findViewById(R.id.searchView);
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
+                ParseQuery<ParseUser> query = ParseUser.getQuery();
                 query.whereStartsWith("username", s);
                 query.findInBackground(new FindCallback<ParseUser>() {
                     @Override
@@ -84,7 +86,4 @@ public class FeedActivity extends AppCompatActivity {
 
     }
 
-    public void toSearch(View v) {
-
-    }
 }
