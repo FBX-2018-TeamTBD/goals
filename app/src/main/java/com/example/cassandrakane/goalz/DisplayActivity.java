@@ -11,8 +11,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.example.cassandrakane.goalz.models.Goal;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
 
 public class DisplayActivity extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class DisplayActivity extends AppCompatActivity {
     Bitmap image;
     ImageView ivImage;
     ImageButton btnConfirm;
+    List<Goal> goals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +44,12 @@ public class DisplayActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(DisplayActivity.this, GoalsListActivity.class);
                 intent.putExtra("image", file);
+                intent.putExtra("goals", (Serializable) goals);
                 startActivity(intent);
             }
         });
+
+        goals = (List) getIntent().getSerializableExtra("goals");
     }
 
     public Bitmap rotateBitmapOrientation(String photoFilePath) {

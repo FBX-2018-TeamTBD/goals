@@ -46,13 +46,14 @@
         <activity android:name=".GoalsListActivity"></activity>
         <activity android:name=".AddGoalActivity"></activity>
         <service
-            android:name=".ParseFirebaseInstanceIdService">
+            android:name="com.parse.fcm.ParseFirebaseInstanceIdService"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".ParseFirebaseMessagingService">
+            android:name="com.parse.fcm.ParseFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

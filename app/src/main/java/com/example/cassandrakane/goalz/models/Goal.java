@@ -1,6 +1,5 @@
 package com.example.cassandrakane.goalz.models;
 
-import android.media.Image;
 import android.os.Parcelable;
 
 import com.parse.ParseClassName;
@@ -9,14 +8,13 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.parceler.Parcel;
-
 import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Goal")
 public class Goal extends ParseObject implements Parcelable {
+
+    private boolean isSelected = false;
 
     public Goal() {
         super();
@@ -35,15 +33,11 @@ public class Goal extends ParseObject implements Parcelable {
     }
 
     public ArrayList<ParseFile> getStory() {
-        JSONArray arr = getJSONArray("images");
+        List<ParseFile> arr = getList("images");
         ArrayList<ParseFile> story = new ArrayList<>();
-        for (int i = 0; i < arr.length(); i++) {
-            try {
-                story.add((ParseFile) (arr.get(i)));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        for (int i = 0; i < arr.size(); i++) {
+            story.add(arr.get(i));
             }
-        }
         return story;
     }
 
@@ -111,4 +105,23 @@ public class Goal extends ParseObject implements Parcelable {
         return getProgress() == getDuration();
     }
 
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public static class Query extends ParseQuery<Goal> {
+        public Query() {
+            super(Goal.class);
+        }
+
+        public Query getTop() {
+            orderByDescending("createdAt");
+            return this;
+        }
+    }
 }
