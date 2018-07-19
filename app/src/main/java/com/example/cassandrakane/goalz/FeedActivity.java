@@ -86,7 +86,6 @@ public class FeedActivity extends AppCompatActivity {
                 friends.add(0, friend);
                 friendAdapter.notifyItemInserted(0);
                 rvFriends.scrollToPosition(0);
-                ProfileActivity.numFriends += 1;
             }
         }
     }

@@ -67,7 +67,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
         List<String> friendUsernames = new ArrayList<>();
         for (int i = 0; i < friends.size(); i++) {
             friendUsernames.add(friends.get(i).getUsername());
-            Log.i("Sd", friends.get(i).getUsername());
         }
         final List<String> friendNames = friendUsernames;
         final List<ParseUser> users = new ArrayList<>();

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FriendActivity">
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivProfile"
+        android:layout_alignStart="@+id/ivProfile"
+        android:fontFamily="@font/quicksand_medium"
+        android:layout_marginTop="10dp"
+        android:text="@string/username"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivProfile"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/ivProfile"
+        android:fontFamily="@font/quicksand_regular"
+        android:lines="2"
+        android:text="@string/_0_current_ngoals"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvCompleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvProgress"
+        android:layout_marginLeft="35dp"
+        android:layout_toRightOf="@id/tvProgress"
+        android:fontFamily="@font/quicksand_regular"
+        android:lines="2"
+        android:text="@string/_0_completed_ngoals"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvProgress"
+        android:layout_marginLeft="35dp"
+        android:layout_toRightOf="@+id/tvCompleted"
+        android:fontFamily="@font/quicksand_regular"
+        android:lines="2"
+        android:text="@string/_0_nfriends"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvGoals"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvUsername"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>

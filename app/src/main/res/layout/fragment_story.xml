@@ -47,4 +47,17 @@
         android:backgroundTint="@color/white"
         android:background="@drawable/cancel" />
 
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="#/#" />
+
 </RelativeLayout>

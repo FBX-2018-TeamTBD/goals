@@ -66,19 +66,11 @@ public class ProfileActivity extends AppCompatActivity {
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
     public final static int ADD_GOAL_ACTIVITY_REQUEST_CODE = 14;
 
-    public static int numFriends;
-
-    @BindView(R.id.ivProfile) ImageView ivProfile;
-    @BindView(R.id.tvProgress) TextView tvProgress;
-    @BindView(R.id.tvCompleted) TextView tvCompleted;
-    @BindView(R.id.tvFriends) TextView tvFriends;
-    @BindView(R.id.tvUsername) TextView tvUsername;
-
-    ImageView ivProfile2;
-    TextView tvProgress2;
-    TextView tvCompleted2;
-    TextView tvFriends2;
-    TextView tvUsername2;
+    ImageView ivProfile;
+    TextView tvProgress;
+    TextView tvCompleted;
+    TextView tvFriends;
+    TextView tvUsername;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.toolbar) public Toolbar toolbar;
@@ -109,6 +101,9 @@ public class ProfileActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.menu));
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -132,11 +127,11 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
-        ivProfile2 = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
-        tvUsername2 = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
-        tvFriends2 = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
-        tvProgress2 = navigationView.getHeaderView(0).findViewById(R.id.tvProgress);
-        tvCompleted2 = navigationView.getHeaderView(0).findViewById(R.id.tvCompleted);
+        ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
+        tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
+        tvFriends = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
+        tvProgress = navigationView.getHeaderView(0).findViewById(R.id.tvProgress);
+        tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.tvCompleted);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
@@ -152,20 +147,15 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         user = ParseUser.getCurrentUser();
+        ((TextView) toolbar.findViewById(R.id.title)).setText(user.getUsername() + "'s goals");
+
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
 
-        numFriends = user.getList("friends").size();
-        setFriendsCount();
-        tvFriends.setText(numFriends + "\nFriends");
-        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        tvFriends2.setText(numFriends + " Friends");
-        tvUsername2.setText(ParseUser.getCurrentUser().getUsername());
-
-        if (ParseUser.getCurrentUser().getParseFile("image") != null) {
+        if (user.getParseFile("image") != null) {
             ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
             Bitmap bitmap = null;
             try {
@@ -174,76 +164,45 @@ public class ProfileActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(80.0f);
+            roundedBitmapDrawable.setCornerRadius(40.0f);
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
-            ivProfile2.setImageDrawable(roundedBitmapDrawable);
         }
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
         ParseACL acl = new ParseACL();
-        acl.setReadAccess(currentUser,true);
-        currentUser.setACL(acl);
+        if (!acl.getReadAccess(user)) {
+            acl.setReadAccess(user, true);
+            user.setACL(acl);
+        }
 
         populateGoals();
     }
 
-    public void setFriendsCount() {
-        tvFriends.setText(numFriends + "\nFriends");
-    }
-
     public void populateGoals() {
-        final Goal.Query goalsQuery = new Goal.Query();
-        // Define our query conditions
-        goalsQuery.whereEqualTo("user", ParseUser.getCurrentUser());
-        goalsQuery.orderByDescending("createdAt");
-        // Execute the find asynchronously
-        goalsQuery.findInBackground(new FindCallback<Goal>() {
-            public void done(List<Goal> itemList, ParseException e) {
-                if (e == null) {
-                    goals.addAll(itemList);
-                    completedGoals = 0;
-                    progressGoals = 0;
-                    for (int i = 0; i < goals.size(); i++) {
-                        if (goals.get(i).getCompleted()) {
-                            completedGoals += 1;
-                        } else {
-                            progressGoals += 1;
-                        }
-                    }
-                    tvProgress.setText(progressGoals + " Current\nGoals");
-                    tvCompleted.setText(completedGoals + " Completed\nGoal");
-                    goalAdapter.notifyDataSetChanged();
-
-                    List<ParseObject> arr = ParseUser.getCurrentUser().getList("goals");
-                    List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-                    completedGoals = 0;
-                    progressGoals = 0;
-                    if (arr != null) {
-                        try {
-                            ParseObject.fetchAllIfNeeded(arr);
-                        } catch (ParseException a) {
-                            a.printStackTrace();
-                        }
-                        for (int i = 0; i < arr.size(); i++) {
-                            Goal goal = (Goal) arr.get(i);
-                            goals.add(goal);
-                            if (goal.getCompleted()) {
-                                completedGoals += 1;
-                            } else {
-                                progressGoals += 1;
-                            }
-                        }
-                        goalAdapter.notifyDataSetChanged();
-                        tvProgress.setText(progressGoals + " Current\nGoals");
-                        tvCompleted.setText(completedGoals + " Completed\nGoal");
-                        tvProgress2.setText(progressGoals + " Current Goals");
-                        tvCompleted2.setText(completedGoals + " Completed Goal");
-                    }
-                    ;
+        List<ParseObject> arr = user.getList("goals");
+        completedGoals = 0;
+        progressGoals = 0;
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = (Goal) arr.get(i);
+                goals.add(goal);
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+                } else {
+                    progressGoals += 1;
                 }
             }
-        });
+            goalAdapter.notifyDataSetChanged();
+            tvProgress.setText(progressGoals + " Current Goals");
+            tvCompleted.setText(completedGoals + " Completed Goal");
+            tvFriends.setText(user.getList("friends").size() + " Friends");
+            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        };
     }
 
     public void selectImage(View v) {
@@ -414,14 +373,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void onProfile() {
-        final ParseUser currentUser = ParseUser.getCurrentUser();
-        currentUser.put("image", imageFile);
-        currentUser.saveInBackground(new SaveCallback() {
+        user.put("image", imageFile);
+        user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     try {
-                        currentUser.fetch();
+                        user.fetch();
                         Toast.makeText(ProfileActivity.this, "Successfully updated profile image!", Toast.LENGTH_LONG);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
