@@ -32,7 +32,6 @@ public class GoalsListActivity extends AppCompatActivity {
     GoalSimpleAdapter goalSimpleAdapter;
     File file;
     Date currentDate;
-    Goal toGoal;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
 
@@ -55,7 +54,6 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
-        String text = "";
         final ParseFile parseFile = new ParseFile(file);
         parseFile.saveInBackground(new SaveCallback() {
             @Override
@@ -69,7 +67,6 @@ public class GoalsListActivity extends AppCompatActivity {
         });
         for (final Goal goal : goals){
             if (goal.isSelected()){
-                text += goal.getTitle() + " ";
                 final ArrayList<ParseObject> story = goal.getStory();
                 final Image image = new Image(parseFile, "", goal);
                 image.saveInBackground(new SaveCallback() {
@@ -94,8 +91,8 @@ public class GoalsListActivity extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-//                                    final Image lastImage = (Image) goal.getStory().get(goal.getStory().size() - 1);
                                     if (!goal.isItemAdded()) {
+                                        goal.setProgress(goal.getProgress() + 1);
                                         if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                             goal.setItemAdded(true);
                                             goal.setStreak(goal.getStreak() + 1);

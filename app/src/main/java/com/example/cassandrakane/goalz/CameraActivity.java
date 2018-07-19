@@ -140,10 +140,7 @@ public class CameraActivity extends AppCompatActivity {
         btnSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(CameraActivity.this, R.layout.flipping);
-//                anim.setTarget(R.id.ivFlip);
-//                anim.setDuration(3000);
-//                anim.start();
+                overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 switchCamera();
             }
         });

@@ -41,13 +41,13 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -91,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Profile", "created");
         setContentView(R.layout.activity_profile);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
@@ -143,7 +144,8 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         user = ParseUser.getCurrentUser();
-        ((TextView) toolbar.findViewById(R.id.tvTitle)).setText(user.getUsername() + "'s goals");
+        TextView tvToolbarTitle = (TextView) toolbar.findViewById(R.id.tvTitle);
+        tvToolbarTitle.setText(user.getUsername() + "'s goals");
 
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
@@ -151,8 +153,13 @@ public class ProfileActivity extends AppCompatActivity {
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
 
-        if (user.getParseFile("image") != null) {
-            ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
+        ParseFile imageFile = null;
+        try {
+            imageFile = user.fetchIfNeeded().getParseFile("image");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (imageFile != null) {
             Bitmap bitmap = null;
             try {
                 bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
@@ -174,15 +181,22 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.i("Profile", "resumed");
         populateGoals();
     }
 
     public void populateGoals() {
-        List<ParseObject> arr = user.getList("goals");
+        List<ParseObject> arr = new ArrayList<>();
+        try {
+            arr = user.fetch().getList("goals");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        Log.i("sdf", ""+arr.size());
         completedGoals = 0;
         progressGoals = 0;
-        goals.clear();
         if (arr != null) {
+            goals.clear();
             try {
                 ParseObject.fetchAllIfNeeded(arr);
             } catch (ParseException e) {
@@ -204,6 +218,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         } else {
             goals = new ArrayList<>();
+            goalAdapter.notifyDataSetChanged();
         }
     }
 

@@ -57,8 +57,13 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     public void onBindViewHolder(SearchFriendAdapter.ViewHolder holder, int position) {
         final ParseUser user = filteredList.get(position);
         holder.tvUsername.setText(user.getUsername());
-        if (user.getParseFile("profile") != null) {
-            ParseFile imageFile = user.getParseFile("profile");
+        ParseFile imageFile = null;
+        try {
+            imageFile = user.fetch().getParseFile("profile");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (imageFile != null) {
             Bitmap bitmap = null;
             try {
                 bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());

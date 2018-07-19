@@ -36,6 +36,9 @@ dependencies {
     // Parse Push Notifications
     implementation 'com.parse:parse-fcm-android:1.17.3'
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    // Local Push Notifications
+    //noinspection GradleCompatible
+    implementation "com.android.support:support-compat:27.1.1"
     // Butterknife
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
@@ -48,6 +51,8 @@ dependencies {
     // Parcelable
     implementation 'org.parceler:parceler-api:1.1.6'
     annotationProcessor 'org.parceler:parceler:1.1.6'
+    // PlaceholderView
+    implementation 'com.mindorks:placeholderview:0.7.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

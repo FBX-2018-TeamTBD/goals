@@ -94,7 +94,6 @@ public class DisplayActivity extends AppCompatActivity {
                                             }
                                         });
                                     } else {
-//                                    final Image lastImage = (Image) goal.getStory().get(goal.getStory().size() - 1);
                                         if (!goal.isItemAdded()) {
                                             if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                                 goal.setItemAdded(true);
