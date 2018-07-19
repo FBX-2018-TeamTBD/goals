@@ -48,6 +48,8 @@ dependencies {
     // Parcelable
     implementation 'org.parceler:parceler-api:1.1.6'
     annotationProcessor 'org.parceler:parceler:1.1.6'
+    // PlaceholderView
+    implementation 'com.mindorks:placeholderview:0.7.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

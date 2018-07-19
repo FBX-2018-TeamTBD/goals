@@ -41,13 +41,13 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -202,7 +202,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvCompleted.setText(completedGoals + " Completed Goal");
             tvFriends.setText(user.getList("friends").size() + " Friends");
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        };
+        }
     }
 
     public void selectImage(View v) {
