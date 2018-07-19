@@ -36,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     private ParseUser user;
 
@@ -95,10 +97,8 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         setSupportActionBar(toolbar);
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.menu));
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -122,6 +122,7 @@ public class ProfileActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
         tvFriends = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
@@ -195,6 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvFriends.setText(user.getList("friends").size() + " Friends");
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         }
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     public void setImageBitmap(Bitmap bitmap) {

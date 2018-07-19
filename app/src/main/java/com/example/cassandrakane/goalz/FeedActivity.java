@@ -15,20 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import com.parse.ParseException;
 import java.util.List;
 
-import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
 public class FeedActivity extends AppCompatActivity {
 
@@ -46,6 +47,7 @@ public class FeedActivity extends AppCompatActivity {
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,8 @@ public class FeedActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ButterKnife.bind(this);
+
+        progressBar.setVisibility(ProgressBar.VISIBLE);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
@@ -124,6 +128,7 @@ public class FeedActivity extends AppCompatActivity {
             friends.addAll(arr);
             friendAdapter.notifyDataSetChanged();
         }
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     public void addFriend(View v) {
