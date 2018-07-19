@@ -20,7 +20,9 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GoalsListActivity extends AppCompatActivity {
 
@@ -30,12 +32,15 @@ public class GoalsListActivity extends AppCompatActivity {
     TextView tvGoal;
     GoalSimpleAdapter goalSimpleAdapter;
     File file;
+    Date currentDate;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals_list);
+
+        currentDate = new Date();
 
         getSupportActionBar().hide();
 
@@ -78,20 +83,44 @@ public class GoalsListActivity extends AppCompatActivity {
                         goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                goal.setUpdateStoryBy(story);
-                                goal.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
+                                if (goal.getStory().size() == 1){
+                                    Image lastUpdate = (Image) story.get(story.size() - 1);
+                                    long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
+                                    Date updateStoryBy = new Date(sum);
+                                    goal.setUpdateStoryBy(updateStoryBy);
+                                    goal.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+//                                    final Image lastImage = (Image) goal.getStory().get(goal.getStory().size() - 1);
+                                    if (!goal.itemAdded) {
+                                        if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
+                                            goal.itemAdded = true;
+                                            goal.setStreak(goal.getStreak() + 1);
+                                            goal.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                        }
+                                    } else {
                                         Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
                                         startActivity(intent);
                                     }
-                                });
+                                }
                             }
                         });
                     }
                 });
             }
         }
-        Log.d("GoalsListActivity", "Output : " + text);
+        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+        startActivity(intent);
     }
 }

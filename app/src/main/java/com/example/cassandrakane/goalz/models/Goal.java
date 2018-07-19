@@ -10,13 +10,14 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @ParseClassName("Goal")
 public class Goal extends ParseObject implements Parcelable {
 
     private boolean isSelected = false;
-//    private Date updateStoryBy;
+    public boolean continueStreak;
+    public boolean showClock = false;
+    public boolean itemAdded = false;
 
     public Goal() {
         super();
@@ -127,19 +128,18 @@ public class Goal extends ParseObject implements Parcelable {
             orderByDescending("createdAt");
             return this;
         }
+
+        public Query withImages(){
+            include("images");
+            return this;
+        }
     }
 
     public Date getUpdateStoryBy(){
         return getDate("updateBy");
     }
 
-    public void setUpdateStoryBy(ArrayList<ParseObject> story){
-        Date updateStoryBy = null;
-        if (story.size() != 0){
-            Image lastUpdate = (Image) story.get(story.size() - 1);
-            long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.MINUTES.toMillis(getFrequency());
-            updateStoryBy = new Date(sum);
-        }
+    public void setUpdateStoryBy(Date updateStoryBy){
         put("updateBy", updateStoryBy);
     }
 }

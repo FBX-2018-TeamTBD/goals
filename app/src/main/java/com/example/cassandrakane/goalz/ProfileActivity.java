@@ -39,7 +39,6 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -140,12 +139,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void populateGoals() {
-        ParseQuery<Goal> query = ParseQuery.getQuery(Goal.class);
+        final Goal.Query goalsQuery = new Goal.Query();
         // Define our query conditions
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
-        query.orderByDescending("createdAt");
+        goalsQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+        goalsQuery.orderByDescending("createdAt");
         // Execute the find asynchronously
-        query.findInBackground(new FindCallback<Goal>() {
+        goalsQuery.findInBackground(new FindCallback<Goal>() {
             public void done(List<Goal> itemList, ParseException e) {
                 if (e == null) {
                     goals.addAll(itemList);
