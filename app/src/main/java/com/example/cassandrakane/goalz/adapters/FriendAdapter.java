@@ -60,8 +60,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (friend.getParseFile("profile") != null) {
-            ParseFile imageFile = friend.getParseFile("profile");
+        ParseFile imageFile = null;
+        try {
+            imageFile = friend.fetchIfNeeded().getParseFile("profile");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (imageFile != null) {
             Bitmap bitmap = null;
             try {
                 bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());

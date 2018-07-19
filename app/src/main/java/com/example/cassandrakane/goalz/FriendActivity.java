@@ -39,10 +39,12 @@ import butterknife.ButterKnife;
 public class FriendActivity extends AppCompatActivity {
 
     @BindView(R.id.ivProfile) ImageView ivProfile;
-    @BindView(R.id.tvProgress) TextView tvProgress;
-    @BindView(R.id.tvCompleted) TextView tvCompleted;
-    @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.info_layout) View relativeLayout;
+
+    TextView tvProgress;
+    TextView tvCompleted;
+    TextView tvFriends;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
 
@@ -61,6 +63,10 @@ public class FriendActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
+        tvCompleted = relativeLayout.findViewById(R.id.tvCompleted);
+        tvProgress = relativeLayout.findViewById(R.id.tvProgress);
+        tvFriends = relativeLayout.findViewById(R.id.tvFriends);
+
         user = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
 
         goals = new ArrayList<>();
@@ -68,23 +74,31 @@ public class FriendActivity extends AppCompatActivity {
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
 
-        if (user.getParseFile("image") != null) {
-            ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
+        ParseFile imageFile = null;
+        try {
+            imageFile = user.fetchIfNeeded().getParseFile("image");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (imageFile != null) {
             Bitmap bitmap = null;
             try {
                 bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(80.0f);
-            roundedBitmapDrawable.setAntiAlias(true);
+            setImageBitmap(bitmap);
         }
-
-        populateGoals();
+        populateProfile();
     }
 
-    public void populateGoals() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        populateProfile();
+    }
+
+    public void populateProfile() {
         List<ParseObject> arr = user.getList("goals");
         completedGoals = 0;
         progressGoals = 0;
@@ -104,11 +118,18 @@ public class FriendActivity extends AppCompatActivity {
                 }
             }
             goalAdapter.notifyDataSetChanged();
-            tvProgress.setText(progressGoals + " Current\nGoals");
-            tvCompleted.setText(completedGoals + " Completed\nGoal");
-            tvFriends.setText(user.getList("friends").size() + "\nFriends");
             tvUsername.setText(user.getUsername());
+            tvProgress.setText(String.valueOf(progressGoals));
+            tvCompleted.setText(String.valueOf(completedGoals));
+            tvFriends.setText(String.valueOf(user.getList("friends").size()));
         }
+    }
+
+    public void setImageBitmap(Bitmap bitmap) {
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        roundedBitmapDrawable.setCornerRadius(80.0f);
+        roundedBitmapDrawable.setAntiAlias(true);
+        ivProfile.setImageDrawable(roundedBitmapDrawable);
     }
 
 }
