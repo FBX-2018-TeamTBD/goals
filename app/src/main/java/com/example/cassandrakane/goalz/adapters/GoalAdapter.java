@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -21,6 +23,9 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.parse.ParseException;
 
+import org.parceler.Parcels;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -114,8 +119,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     activity.toolbar.setVisibility(View.INVISIBLE);
                 }
             });
+        } else {
+            holder.ivStory.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    Intent intent = new Intent(context, CameraActivity.class);
+                    intent.putExtra("goals", (Serializable) goals);
+                    intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
+                    context.startActivity(intent);
+                }
+            });
         }
-
     }
 
     @Override
