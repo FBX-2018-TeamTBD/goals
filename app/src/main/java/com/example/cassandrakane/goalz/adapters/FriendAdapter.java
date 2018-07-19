@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.FeedActivity;
+import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -70,10 +73,22 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             roundedBitmapDrawable.setAntiAlias(true);
             holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
+        holder.ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toFriendActivity(friend);
+            }
+        });
+        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toFriendActivity(friend);
+            }
+        });
         holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG);
+                Toast.makeText(context, "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG);
             }
         });
     }
@@ -93,6 +108,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public void addAll(List<ParseUser> list) {
         friends.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public void toFriendActivity(ParseUser friend) {
+        Intent i = new Intent(context, FriendActivity.class);
+        i.putExtra(ParseUser.class.getSimpleName(), friend);
+        context.startActivity(i);
     }
 
     // create ViewHolder class
