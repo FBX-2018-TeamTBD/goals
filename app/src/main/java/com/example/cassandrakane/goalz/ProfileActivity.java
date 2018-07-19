@@ -93,7 +93,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("Profile", "created");
         setContentView(R.layout.activity_profile);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
@@ -185,7 +184,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("Profile", "resumed");
         populateGoals();
     }
 
@@ -196,7 +194,6 @@ public class ProfileActivity extends AppCompatActivity {
         } catch(ParseException e) {
             e.printStackTrace();
         }
-        Log.i("sdf", ""+arr.size());
         completedGoals = 0;
         progressGoals = 0;
         if (arr != null) {
@@ -207,7 +204,12 @@ public class ProfileActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
+                Goal goal = null;
+                try {
+                    goal = arr.get(i).fetch();
+                } catch(ParseException e) {
+                    e.printStackTrace();
+                }
                 goals.add(goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
