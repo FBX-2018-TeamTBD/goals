@@ -1,10 +1,12 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +14,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -25,6 +29,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +45,6 @@ public class FriendActivity extends AppCompatActivity {
     @BindView(R.id.tvUsername) TextView tvUsername;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
-    @BindView(R.id.toolbar) public Toolbar toolbar;
 
     private ParseUser user;
 
@@ -53,7 +57,7 @@ public class FriendActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_friend);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
@@ -104,6 +108,7 @@ public class FriendActivity extends AppCompatActivity {
             tvCompleted.setText(completedGoals + " Completed\nGoal");
             tvFriends.setText(user.getList("friends").size() + "\nFriends");
             tvUsername.setText(user.getUsername());
-        };
+        }
     }
+
 }

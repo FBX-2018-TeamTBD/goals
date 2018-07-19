@@ -74,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.toolbar) public Toolbar toolbar;
+    @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
 
     private ParseUser user;
 
@@ -87,8 +88,6 @@ public class ProfileActivity extends AppCompatActivity {
     private int completedGoals = 0;
     private int progressGoals = 0;
 
-    DrawerLayout drawerLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +95,6 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -126,7 +122,6 @@ public class ProfileActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
         tvFriends = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
@@ -147,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         user = ParseUser.getCurrentUser();
-        ((TextView) toolbar.findViewById(R.id.title)).setText(user.getUsername() + "'s goals");
+        ((TextView) toolbar.findViewById(R.id.tvTitle)).setText(user.getUsername() + "'s goals");
 
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
@@ -163,10 +158,7 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(40.0f);
-            roundedBitmapDrawable.setAntiAlias(true);
-            ivProfile.setImageDrawable(roundedBitmapDrawable);
+            setImageBitmap(bitmap);
         }
 
         ParseACL acl = new ParseACL();
@@ -203,6 +195,13 @@ public class ProfileActivity extends AppCompatActivity {
             tvFriends.setText(user.getList("friends").size() + " Friends");
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         };
+    }
+
+    public void setImageBitmap(Bitmap bitmap) {
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        roundedBitmapDrawable.setCornerRadius(16.0f);
+        roundedBitmapDrawable.setAntiAlias(true);
+        ivProfile.setImageDrawable(roundedBitmapDrawable);
     }
 
     public void selectImage(View v) {
@@ -306,10 +305,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.i("asdf", "error");
                     e.printStackTrace();
                 }
-                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-                roundedBitmapDrawable.setCornerRadius(85.0f);
-                roundedBitmapDrawable.setAntiAlias(true);
-                ivProfile.setImageDrawable(roundedBitmapDrawable);
+                setImageBitmap(bitmap);
                 onProfile();
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -351,10 +347,7 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.i("asdf", "error");
                         e.printStackTrace();
                     }
-                    RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-                    roundedBitmapDrawable.setCornerRadius(85.0f);
-                    roundedBitmapDrawable.setAntiAlias(true);
-                    ivProfile.setImageDrawable(roundedBitmapDrawable);
+                    setImageBitmap(bitmap);
                     onProfile();
                 }
 
@@ -364,7 +357,6 @@ public class ProfileActivity extends AppCompatActivity {
         } else if (requestCode == ADD_GOAL_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
-                Log.i("s", goal.getTitle());
                 goals.add(0, goal);
                 goalAdapter.notifyItemInserted(0);
                 rvGoals.scrollToPosition(0);

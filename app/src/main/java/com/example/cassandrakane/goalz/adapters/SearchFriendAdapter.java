@@ -28,6 +28,10 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindDimen;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static android.app.Activity.RESULT_OK;
 
 public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapter.ViewHolder> implements Filterable {
@@ -62,7 +66,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                 e.printStackTrace();
             }
             RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(85.0f);
+            roundedBitmapDrawable.setCornerRadius(8.0f);
             roundedBitmapDrawable.setAntiAlias(true);
             holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
@@ -138,16 +142,13 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tvUsername;
-        ImageView ivProfile;
-        Button addBtn;
+        @BindView(R.id.tvUsername) TextView tvUsername;
+        @BindView(R.id.ivProfile) ImageView ivProfile;
+        @BindView(R.id.btnAdd) Button addBtn;
 
         public ViewHolder(View view) {
             super(view);
-
-            tvUsername = view.findViewById(R.id.tvUsername);
-            ivProfile = view.findViewById(R.id.ivProfile);
-            addBtn = view.findViewById(R.id.add_btn);
+            ButterKnife.bind(this, view);
         }
     }
 

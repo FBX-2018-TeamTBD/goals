@@ -69,7 +69,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 e.printStackTrace();
             }
             RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(85.0f);
+            roundedBitmapDrawable.setCornerRadius(8.0f);
             roundedBitmapDrawable.setAntiAlias(true);
             holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
