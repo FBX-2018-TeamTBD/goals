@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,30 +17,29 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.ViewHolder> {
-
+public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> {
     private List<Goal> mGoals;
     Context context;
 
-    public GoalSimpleAdapter(List<Goal> goals) {
+    public StoryAdapter(List<Goal> goals) {
         this.mGoals = goals;
     }
 
     // for each row, inflate the layout and cache references into ViewHolder
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        return new ViewHolder(
-                inflater.inflate(R.layout.item_goal_simple, parent, false)
+        return new StoryAdapter.ViewHolder(
+                inflater.inflate(R.layout.item_single_story, parent, false)
         );
     }
 
     // bind the values based on the position of the element
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final StoryAdapter.ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = mGoals.get(position);
 
@@ -68,8 +66,10 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.tvTitle) TextView tvTitle;
-        @BindView(R.id.ivStory) ImageView ivStory;
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
+        @BindView(R.id.ivStory)
+        ImageView ivStory;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,13 +78,12 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         }
 
         public void onClick(View v){
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION){
-                Goal goal = mGoals.get(position);
-                goal.setSelected(!(goal.isSelected()));
-                itemView.setBackgroundColor(goal.isSelected() ? Color.CYAN : Color.WHITE);
-            }
+//            int position = getAdapterPosition();
+//            if (position != RecyclerView.NO_POSITION){
+//                Goal goal = mGoals.get(position);
+//                goal.setSelected(!(goal.isSelected()));
+//                itemView.setBackgroundColor(goal.isSelected() ? Color.CYAN : Color.WHITE);
+//            }
         }
     }
-
 }

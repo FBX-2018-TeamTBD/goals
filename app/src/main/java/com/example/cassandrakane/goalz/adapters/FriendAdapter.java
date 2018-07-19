@@ -7,8 +7,8 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +20,12 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,6 +35,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
     private final List<ParseUser> friends;
     Context context;
+    StoryAdapter storyAdapter;
+    List<Goal> goals;
 
     public FriendAdapter(List<ParseUser> friends) {
         this.friends = friends;
@@ -60,18 +64,23 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (friend.getParseFile("profile") != null) {
-            ParseFile imageFile = friend.getParseFile("profile");
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-            } catch (ParseException e) {
-                e.printStackTrace();
+        try {
+            ParseFile profile = friend.fetchIfNeeded().getParseFile("profile");
+            if (profile != null) {
+                ParseFile imageFile = friend.getParseFile("profile");
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+                roundedBitmapDrawable.setCornerRadius(8.0f);
+                roundedBitmapDrawable.setAntiAlias(true);
+                holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
             }
-            RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(8.0f);
-            roundedBitmapDrawable.setAntiAlias(true);
-            holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         holder.ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +100,32 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 Toast.makeText(context, "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG);
             }
         });
+
+        goals = friend.getList("goals");
+        if (goals == null){
+            goals = new ArrayList<Goal>();
+        }
+        storyAdapter = new StoryAdapter(goals);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        holder.rvStory.setLayoutManager(layoutManager);
+        holder.rvStory.setAdapter(storyAdapter);
+        holder.rvStory.setVisibility(View.GONE);
+
+        final FeedActivity activity = (FeedActivity) context;
+
+        if (goals.size() != 0) {
+            holder.ivMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.rvStory.setVisibility(holder.rvStory.isShown()
+                            ? View.GONE
+                            : View.VISIBLE);
+//                    holder.ivMenu.setImageDrawable(holder.rvStory.isShown()
+//                            ? );
+                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
+                }
+            });
+        }
     }
 
     @Override
@@ -122,6 +157,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivProfile) ImageView ivProfile;
         @BindView(R.id.pokeBtn) Button pokeBtn;
+        @BindView(R.id.rvStory) RecyclerView rvStory;
+        @BindView(R.id.ivMenu) ImageView ivMenu;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -195,7 +195,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvCompleted.setText(completedGoals + " Completed Goal");
             tvFriends.setText(user.getList("friends").size() + " Friends");
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        };
+        }
     }
 
     public void setImageBitmap(Bitmap bitmap) {
