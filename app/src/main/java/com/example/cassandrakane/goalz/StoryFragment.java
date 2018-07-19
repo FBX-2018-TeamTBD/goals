@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -28,6 +29,7 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
     @BindView(R.id.btnClose) ImageButton btnClose;
+    @BindView(R.id.tvProgress) TextView tvProgress;
 
     public StoryFragment() { }
 
@@ -94,13 +96,13 @@ public class StoryFragment extends Fragment {
 
     public void setImage() {
         if (mIndex < 0) {
-            mIndex++;
+            mIndex = mImageURLs.size() - 1;
         } else if (mIndex >= mImageURLs.size()) {
-            mIndex--;
-        } else {
-            Glide.with(this)
-                    .load(mImageURLs.get(mIndex))
-                    .into(ivImage);
+            mIndex = 0;
         }
+        Glide.with(this)
+                .load(mImageURLs.get(mIndex))
+                .into(ivImage);
+        tvProgress.setText(String.format("%d/%d", mIndex + 1, mImageURLs.size()));
     }
 }
