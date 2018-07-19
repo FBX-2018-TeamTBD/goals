@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -20,7 +19,9 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,10 +31,9 @@ public class GoalsListActivity extends AppCompatActivity {
     List<Goal> goals;
     GoalSimpleAdapter goalSimpleAdapter;
     File file;
+    Date currentDate;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
-    @BindView(R.id.ivStory) ImageView ivStory;
-    @BindView(R.id.tvTitle) ImageView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,8 @@ public class GoalsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goals_list);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        currentDate = new Date();
         ButterKnife.bind(this);
-
-        getSupportActionBar().hide();
 
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
@@ -80,20 +79,45 @@ public class GoalsListActivity extends AppCompatActivity {
                         goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                goal.setUpdateStoryBy(story);
-                                goal.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
+                                if (goal.getStory().size() == 1){
+                                    Image lastUpdate = (Image) story.get(story.size() - 1);
+                                    long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
+                                    Date updateStoryBy = new Date(sum);
+                                    goal.setUpdateStoryBy(updateStoryBy);
+                                    goal.setItemAdded(false);
+                                    goal.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+//                                    final Image lastImage = (Image) goal.getStory().get(goal.getStory().size() - 1);
+                                    if (!goal.isItemAdded()) {
+                                        if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
+                                            goal.setItemAdded(true);
+                                            goal.setStreak(goal.getStreak() + 1);
+                                            goal.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                        }
+                                    } else {
                                         Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
                                         startActivity(intent);
                                     }
-                                });
+                                }
                             }
                         });
                     }
                 });
             }
         }
-        Log.d("GoalsListActivity", "Output : " + text);
+        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+        startActivity(intent);
     }
 }

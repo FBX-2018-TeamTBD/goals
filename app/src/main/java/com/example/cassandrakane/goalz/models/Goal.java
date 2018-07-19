@@ -4,7 +4,6 @@ import android.os.Parcelable;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -12,19 +11,20 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @ParseClassName("Goal")
 public class Goal extends ParseObject implements Parcelable {
 
     private boolean isSelected = false;
-//    private Date updateStoryBy;
+    public boolean continueStreak;
+    public boolean showClock = false;
+
 
     public Goal() {
         super();
     }
 
-    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user) {
+    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded) {
         super();
         setTitle(title);
         setDescription(description);
@@ -34,6 +34,7 @@ public class Goal extends ParseObject implements Parcelable {
         setStreak(streak);
         setStory(story);
         setUser(user);
+        setItemAdded(itemAdded);
     }
 
     public ArrayList<ParseObject> getStory() {
@@ -113,6 +114,24 @@ public class Goal extends ParseObject implements Parcelable {
         return null;
     }
 
+    public Date getUpdateStoryBy(){
+        try {
+            return fetchIfNeeded().getDate("updateBy");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
+    }
+
+    public boolean isItemAdded() {
+        try {
+            return fetchIfNeeded().getBoolean("itemAdded");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void setStory(ArrayList<ParseObject> story) {
         put("images", story);
     }
@@ -153,6 +172,7 @@ public class Goal extends ParseObject implements Parcelable {
         isSelected = selected;
     }
 
+    public void setItemAdded(boolean itemAdded) { put("itemAdded", itemAdded); }
 
     public boolean isSelected() {
         return isSelected;
@@ -167,24 +187,14 @@ public class Goal extends ParseObject implements Parcelable {
             orderByDescending("createdAt");
             return this;
         }
+
+        public Query withImages(){
+            include("images");
+            return this;
+        }
     }
 
-    public Date getUpdateStoryBy(){
-        try {
-            return fetchIfNeeded().getDate("updateBy");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return new Date();
-    }
-
-    public void setUpdateStoryBy(ArrayList<ParseObject> story){
-        Date updateStoryBy = null;
-        if (story.size() != 0){
-            Image lastUpdate = (Image) story.get(story.size() - 1);
-            long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.MINUTES.toMillis(getFrequency());
-            updateStoryBy = new Date(sum);
-        }
+    public void setUpdateStoryBy(Date updateStoryBy){
         put("updateBy", updateStoryBy);
     }
 }

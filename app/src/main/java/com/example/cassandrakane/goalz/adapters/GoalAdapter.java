@@ -58,6 +58,20 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         final Goal goal = goals.get(position);
         currentDate = new Date();
 
+        Date updateBy = goal.getUpdateStoryBy();
+        if (updateBy != null) {
+            if (currentDate.getTime() >= updateBy.getTime()) {
+                if (!goal.isItemAdded()) {
+                    goal.setStreak(0);
+                }
+                long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
+                Date newDate = new Date(sum);
+                goal.setUpdateStoryBy(newDate);
+                goal.setItemAdded(false);
+                goal.saveInBackground();
+            }
+        }
+
         holder.tvTitle.setText(goal.getTitle());
         holder.tvDescription.setText(goal.getDescription());
         holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
@@ -71,6 +85,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getCompleted()) {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(4) && !goal.isItemAdded()){
+            holder.ivStar.setImageResource(R.drawable.clock);
+        } else {
+            holder.ivStar.setImageResource(R.drawable.star);
         }
 
         List<Image> imageList = goal.getList("images");
@@ -96,11 +116,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         }
 
-        if (goal.getUpdateStoryBy() != null && (goal.getUpdateStoryBy().getTime() - currentDate.getTime()) < TimeUnit.MINUTES.toMillis(1)){
-            holder.ivStar.setImageResource(R.drawable.clock);
-        } else {
-            holder.ivStar.setImageResource(R.drawable.star);
-        }
     }
 
     @Override
