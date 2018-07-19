@@ -38,6 +38,8 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
 
+import org.parceler.Parcels;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -87,6 +89,7 @@ public class CameraActivity extends AppCompatActivity {
     private HandlerThread mBackgroundThread;
 
     private List<Goal> goals;
+    private Goal goal;
 
     CameraDevice.StateCallback stateCallBack = new CameraDevice.StateCallback() {
         @Override
@@ -114,6 +117,12 @@ public class CameraActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ButterKnife.bind(this);
+
+        if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
+            goal = (Goal) Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
+        } else {
+            goal = null;
+        }
 
         ivFade = findViewById(R.id.ivFade);
         textureView = findViewById(R.id.textureView);
@@ -539,6 +548,7 @@ public class CameraActivity extends AppCompatActivity {
                 Intent intent = new Intent(CameraActivity.this, DisplayActivity.class);
                 intent.putExtra("image", file);
                 intent.putExtra("goals", (Serializable) goals);
+                intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
                 startActivity(intent);
             }
 

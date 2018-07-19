@@ -32,6 +32,7 @@ public class GoalsListActivity extends AppCompatActivity {
     GoalSimpleAdapter goalSimpleAdapter;
     File file;
     Date currentDate;
+    Goal toGoal;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
 
