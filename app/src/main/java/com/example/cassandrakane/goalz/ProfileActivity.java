@@ -143,7 +143,8 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         user = ParseUser.getCurrentUser();
-        ((TextView) toolbar.findViewById(R.id.tvTitle)).setText(user.getUsername() + "'s goals");
+        TextView tvToolbarTitle = (TextView) toolbar.findViewById(R.id.tvTitle);
+        tvToolbarTitle.setText(user.getUsername() + "'s goals");
 
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
