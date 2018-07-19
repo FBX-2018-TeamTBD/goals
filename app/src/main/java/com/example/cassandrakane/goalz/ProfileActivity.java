@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,13 +26,11 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,16 +41,13 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-<<<<<<< HEAD
-=======
 import com.parse.ParseObject;
->>>>>>> 910129c0882c1a543647525ac58c4fd6300a5239
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -199,7 +193,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void populateGoals() {
-<<<<<<< HEAD
         final Goal.Query goalsQuery = new Goal.Query();
         // Define our query conditions
         goalsQuery.whereEqualTo("user", ParseUser.getCurrentUser());
@@ -221,33 +214,36 @@ public class ProfileActivity extends AppCompatActivity {
                     tvProgress.setText(progressGoals + " Current\nGoals");
                     tvCompleted.setText(completedGoals + " Completed\nGoal");
                     goalAdapter.notifyDataSetChanged();
-=======
-        List<ParseObject> arr = ParseUser.getCurrentUser().getList("goals");
-        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
-        completedGoals = 0;
-        progressGoals = 0;
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
-                goals.add(goal);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
->>>>>>> 910129c0882c1a543647525ac58c4fd6300a5239
-                } else {
-                    progressGoals += 1;
+
+                    List<ParseObject> arr = ParseUser.getCurrentUser().getList("goals");
+                    List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+                    completedGoals = 0;
+                    progressGoals = 0;
+                    if (arr != null) {
+                        try {
+                            ParseObject.fetchAllIfNeeded(arr);
+                        } catch (ParseException a) {
+                            a.printStackTrace();
+                        }
+                        for (int i = 0; i < arr.size(); i++) {
+                            Goal goal = (Goal) arr.get(i);
+                            goals.add(goal);
+                            if (goal.getCompleted()) {
+                                completedGoals += 1;
+                            } else {
+                                progressGoals += 1;
+                            }
+                        }
+                        goalAdapter.notifyDataSetChanged();
+                        tvProgress.setText(progressGoals + " Current\nGoals");
+                        tvCompleted.setText(completedGoals + " Completed\nGoal");
+                        tvProgress2.setText(progressGoals + " Current Goals");
+                        tvCompleted2.setText(completedGoals + " Completed Goal");
+                    }
+                    ;
                 }
             }
-            goalAdapter.notifyDataSetChanged();
-            tvProgress.setText(progressGoals + " Current\nGoals");
-            tvCompleted.setText(completedGoals + " Completed\nGoal");
-            tvProgress2.setText(progressGoals + " Current Goals");
-            tvCompleted2.setText(completedGoals + " Completed Goal");
-        };
+        });
     }
 
     public void selectImage(View v) {

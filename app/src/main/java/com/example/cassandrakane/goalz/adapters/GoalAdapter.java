@@ -61,13 +61,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
-                if (!goal.itemAdded) {
+                if (!goal.isItemAdded()) {
                     goal.setStreak(0);
                 }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
-                goal.itemAdded = false;
+                goal.setItemAdded(false);
                 goal.saveInBackground();
             }
         }
@@ -87,9 +87,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
-<<<<<<< HEAD
-        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(4) && !goal.itemAdded){
-=======
+        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(4) && !goal.isItemAdded()){
+            holder.ivStar.setImageResource(R.drawable.clock);
+        } else {
+            holder.ivStar.setImageResource(R.drawable.star);
+        }
+
         List<Image> imageList = goal.getList("images");
         final ArrayList<String> imageUrls = getImageUrls(imageList);
 
@@ -113,12 +116,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         }
 
-        if (goal.getUpdateStoryBy() != null && (goal.getUpdateStoryBy().getTime() - currentDate.getTime()) < TimeUnit.MINUTES.toMillis(1)){
->>>>>>> 910129c0882c1a543647525ac58c4fd6300a5239
-            holder.ivStar.setImageResource(R.drawable.clock);
-        } else {
-            holder.ivStar.setImageResource(R.drawable.star);
-        }
     }
 
     @Override

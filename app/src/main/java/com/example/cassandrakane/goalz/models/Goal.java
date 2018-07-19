@@ -3,7 +3,6 @@ package com.example.cassandrakane.goalz.models;
 import android.os.Parcelable;
 
 import com.parse.ParseClassName;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -18,13 +17,13 @@ public class Goal extends ParseObject implements Parcelable {
     private boolean isSelected = false;
     public boolean continueStreak;
     public boolean showClock = false;
-    public boolean itemAdded = false;
+
 
     public Goal() {
         super();
     }
 
-    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user) {
+    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded) {
         super();
         setTitle(title);
         setDescription(description);
@@ -34,6 +33,7 @@ public class Goal extends ParseObject implements Parcelable {
         setStreak(streak);
         setStory(story);
         setUser(user);
+        setItemAdded(itemAdded);
     }
 
     public ArrayList<ParseObject> getStory() {
@@ -113,10 +113,13 @@ public class Goal extends ParseObject implements Parcelable {
         isSelected = selected;
     }
 
+    public void setItemAdded(boolean itemAdded) { put("itemAdded", itemAdded); }
 
     public boolean isSelected() {
         return isSelected;
     }
+
+    public boolean isItemAdded() { return getBoolean("itemAdded"); }
 
     public static class Query extends ParseQuery<Goal> {
         public Query() {

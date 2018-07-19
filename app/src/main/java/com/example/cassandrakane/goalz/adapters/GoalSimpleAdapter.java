@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.R;
@@ -79,6 +80,7 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.ivStory) ImageView ivStory;
 //        @BindView(R.id.tvDescription) TextView tvDescription;
 //        @BindView(R.id.tvStreak) TextView tvStreak;
 //        @BindView(R.id.tvProgress) TextView tvProgress;

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -35,8 +34,6 @@ public class GoalsListActivity extends AppCompatActivity {
     Date currentDate;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
-    @BindView(R.id.ivStory) ImageView ivStory;
-    @BindView(R.id.tvTitle) ImageView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +41,8 @@ public class GoalsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goals_list);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-<<<<<<< HEAD
         currentDate = new Date();
-
-        getSupportActionBar().hide();
-=======
         ButterKnife.bind(this);
->>>>>>> 910129c0882c1a543647525ac58c4fd6300a5239
-
-        getSupportActionBar().hide();
 
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
@@ -94,6 +84,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                     long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                                     Date updateStoryBy = new Date(sum);
                                     goal.setUpdateStoryBy(updateStoryBy);
+                                    goal.setItemAdded(false);
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -103,9 +94,9 @@ public class GoalsListActivity extends AppCompatActivity {
                                     });
                                 } else {
 //                                    final Image lastImage = (Image) goal.getStory().get(goal.getStory().size() - 1);
-                                    if (!goal.itemAdded) {
+                                    if (!goal.isItemAdded()) {
                                         if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
-                                            goal.itemAdded = true;
+                                            goal.setItemAdded(true);
                                             goal.setStreak(goal.getStreak() + 1);
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
