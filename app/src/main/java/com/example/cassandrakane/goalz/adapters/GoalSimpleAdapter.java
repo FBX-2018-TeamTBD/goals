@@ -46,17 +46,6 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         final Goal goal = mGoals.get(position);
 
         holder.tvTitle.setText(goal.getTitle());
-//        holder.tvDescription.setText(goal.getDescription());
-//        holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
-//        if (goal.getStreak() > 0) {
-//            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
-//        } else {
-//            holder.tvStreak.setText("");
-//        }
-//        if (goal.getCompleted()) {
-//            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
-//            holder.tvTitle.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-//        }
     }
 
     @Override
@@ -81,9 +70,6 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
 
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.ivStory) ImageView ivStory;
-//        @BindView(R.id.tvDescription) TextView tvDescription;
-//        @BindView(R.id.tvStreak) TextView tvStreak;
-//        @BindView(R.id.tvProgress) TextView tvProgress;
 
         public ViewHolder(View itemView) {
             super(itemView);
