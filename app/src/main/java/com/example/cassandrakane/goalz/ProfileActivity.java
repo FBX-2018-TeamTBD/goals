@@ -12,22 +12,30 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,9 +44,13 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.FindCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+<<<<<<< HEAD
+=======
+import com.parse.ParseObject;
+>>>>>>> 910129c0882c1a543647525ac58c4fd6300a5239
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -51,6 +63,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -59,15 +72,26 @@ public class ProfileActivity extends AppCompatActivity {
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
     public final static int ADD_GOAL_ACTIVITY_REQUEST_CODE = 14;
 
-    private ImageView ivProfile;
-    private TextView tvProgress;
-    private TextView tvCompleted;
-    private TextView tvFriends;
-    private TextView tvUsername;
+    public static int numFriends;
+
+    @BindView(R.id.ivProfile) ImageView ivProfile;
+    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.tvCompleted) TextView tvCompleted;
+    @BindView(R.id.tvFriends) TextView tvFriends;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+
+    ImageView ivProfile2;
+    TextView tvProgress2;
+    TextView tvCompleted2;
+    TextView tvFriends2;
+    TextView tvUsername2;
+
+    @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
+
     private ParseUser user;
 
     private List<Goal> goals;
-    private RecyclerView rvGoals;
     private GoalAdapter goalAdapter;
 
     private ParseFile imageFile;
@@ -77,29 +101,57 @@ public class ProfileActivity extends AppCompatActivity {
     private int completedGoals = 0;
     private int progressGoals = 0;
 
+    DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         ButterKnife.bind(this);
 
-        getSupportActionBar().hide();
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // close drawer when item is tapped
+                        drawerLayout.closeDrawers();
+
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_camera:
+                                toCamera();
+                                break;
+                            case R.id.nav_feed:
+                                toFeed();
+                                break;
+                            case R.id.nav_logout:
+                                logout();
+                        }
+
+                        return true;
+                    }
+                });
+
+        ivProfile2 = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
+        tvUsername2 = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
+        tvFriends2 = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
+        tvProgress2 = navigationView.getHeaderView(0).findViewById(R.id.tvProgress);
+        tvCompleted2 = navigationView.getHeaderView(0).findViewById(R.id.tvCompleted);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
             public void onSwipeLeft() {
-                Intent i = new Intent(getApplicationContext(), FeedActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                toFeed();
             }
             @Override
             public void onSwipeRight() {
-                Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-                i.putExtra("goals", (Serializable) goals);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                toCamera();
             }
         };
 
@@ -108,18 +160,16 @@ public class ProfileActivity extends AppCompatActivity {
         user = ParseUser.getCurrentUser();
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
-        rvGoals = findViewById(R.id.rvGoals);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
+        rvGoals.setOnTouchListener(onSwipeTouchListener);
 
-        ivProfile = findViewById(R.id.ivProfile);
-        tvProgress = findViewById(R.id.tvProgress);
-        tvCompleted = findViewById(R.id.tvCompleted);
-        tvFriends = findViewById(R.id.tvFriends);
-        tvUsername = findViewById(R.id.tvUsername);
-
-        tvFriends.setText(user.getList("friends").size() + "\nFriends");
+        numFriends = user.getList("friends").size();
+        setFriendsCount();
+        tvFriends.setText(numFriends + "\nFriends");
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        tvFriends2.setText(numFriends + " Friends");
+        tvUsername2.setText(ParseUser.getCurrentUser().getUsername());
 
         if (ParseUser.getCurrentUser().getParseFile("image") != null) {
             ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
@@ -129,16 +179,27 @@ public class ProfileActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
             roundedBitmapDrawable.setCornerRadius(80.0f);
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
+            ivProfile2.setImageDrawable(roundedBitmapDrawable);
         }
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseACL acl = new ParseACL();
+        acl.setReadAccess(currentUser,true);
+        currentUser.setACL(acl);
 
         populateGoals();
     }
 
+    public void setFriendsCount() {
+        tvFriends.setText(numFriends + "\nFriends");
+    }
+
     public void populateGoals() {
+<<<<<<< HEAD
         final Goal.Query goalsQuery = new Goal.Query();
         // Define our query conditions
         goalsQuery.whereEqualTo("user", ParseUser.getCurrentUser());
@@ -160,24 +221,33 @@ public class ProfileActivity extends AppCompatActivity {
                     tvProgress.setText(progressGoals + " Current\nGoals");
                     tvCompleted.setText(completedGoals + " Completed\nGoal");
                     goalAdapter.notifyDataSetChanged();
+=======
+        List<ParseObject> arr = ParseUser.getCurrentUser().getList("goals");
+        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        completedGoals = 0;
+        progressGoals = 0;
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = (Goal) arr.get(i);
+                goals.add(goal);
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+>>>>>>> 910129c0882c1a543647525ac58c4fd6300a5239
                 } else {
-                    Log.d("item", "Error: " + e.getMessage());
+                    progressGoals += 1;
                 }
             }
-        });
-
-        /* STORY FRAGMENT EXAMPLE
-        ArrayList<String> testImages = new ArrayList<String>();
-        testImages.add("https://picsum.photos/500/150/?image=392");
-        testImages.add("https://picsum.photos/23/150/?image=393");
-        testImages.add("https://picsum.photos/532/150/?image=397");
-        testImages.add("https://picsum.photos/76/150/?image=395");
-        testImages.add("https://picsum.photos/700/150/?image=396");
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(testImages, 0)).commit();
-        */
+            goalAdapter.notifyDataSetChanged();
+            tvProgress.setText(progressGoals + " Current\nGoals");
+            tvCompleted.setText(completedGoals + " Completed\nGoal");
+            tvProgress2.setText(progressGoals + " Current Goals");
+            tvCompleted2.setText(completedGoals + " Completed Goal");
+        };
     }
 
     public void selectImage(View v) {
@@ -367,14 +437,36 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void toCamera(View v) {
-        Intent i = new Intent(this, CameraActivity.class);
+    public void toCamera() {
+        Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+        i.putExtra("goals", (Serializable) goals);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
+
+    public void toFeed() {
+        Intent i = new Intent(getApplicationContext(), FeedActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void logout() {
+        ParseUser.logOut();
+        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
+        finish();
     }
 
     public void addGoal(View v) {
         Intent i = new Intent(this, AddGoalActivity.class);
         startActivityForResult(i, ADD_GOAL_ACTIVITY_REQUEST_CODE);
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
+    }
+
+    public void openDrawer(View v) {
+        drawerLayout.openDrawer(GravityCompat.START);
     }
 
     public Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {

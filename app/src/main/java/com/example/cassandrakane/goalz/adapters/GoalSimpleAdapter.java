@@ -14,6 +14,9 @@ import com.example.cassandrakane.goalz.models.Goal;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.ViewHolder> {
 
     private List<Goal> mGoals;
@@ -41,17 +44,17 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         // get the data according to position
         final Goal goal = mGoals.get(position);
 
-        holder.title.setText(goal.getTitle());
-//        holder.description.setText(goal.getDescription());
-//        holder.progress.setText(goal.getProgress() + "/" + goal.getDuration());
+        holder.tvTitle.setText(goal.getTitle());
+//        holder.tvDescription.setText(goal.getDescription());
+//        holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
 //        if (goal.getStreak() > 0) {
-//            holder.streak.setText(String.format("%d", goal.getStreak()));
+//            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
 //        } else {
-//            holder.streak.setText("");
+//            holder.tvStreak.setText("");
 //        }
 //        if (goal.getCompleted()) {
-//            holder.title.setTextColor(context.getResources().getColor(R.color.grey));
-//            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
+//            holder.tvTitle.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 //        }
     }
 
@@ -75,19 +78,14 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView title;
-//        TextView description;
-//        TextView streak;
-//        TextView progress;
+        @BindView(R.id.tvTitle) TextView tvTitle;
+//        @BindView(R.id.tvDescription) TextView tvDescription;
+//        @BindView(R.id.tvStreak) TextView tvStreak;
+//        @BindView(R.id.tvProgress) TextView tvProgress;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            title = itemView.findViewById(R.id.tvTitle);
-//            description = itemView.findViewById(R.id.tvDescription);
-//            streak = itemView.findViewById(R.id.tvStreak);
-//            progress = itemView.findViewById(R.id.tvProgress);
-
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

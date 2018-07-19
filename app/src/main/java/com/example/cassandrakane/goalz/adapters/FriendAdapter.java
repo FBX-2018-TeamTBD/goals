@@ -7,11 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
 import com.parse.ParseException;
@@ -19,6 +22,9 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
 
@@ -46,7 +52,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // get the data according to position
         final ParseUser friend = friends.get(position);
-        holder.tvUsername.setText(friend.getUsername());
+        try {
+            holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (friend.getParseFile("profile") != null) {
             ParseFile imageFile = friend.getParseFile("profile");
             Bitmap bitmap = null;
@@ -60,6 +70,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             roundedBitmapDrawable.setAntiAlias(true);
             holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
+        holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG);
+            }
+        });
     }
 
     @Override
@@ -82,14 +98,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvUsername;
-        ImageView ivProfile;
+        @BindView(R.id.tvUsername) TextView tvUsername;
+        @BindView(R.id.ivProfile) ImageView ivProfile;
+        @BindView(R.id.pokeBtn) Button pokeBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            ivProfile = itemView.findViewById(R.id.tvUsername);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
+            ButterKnife.bind(this, itemView);
         }
     }
 

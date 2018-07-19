@@ -3,34 +3,40 @@ package com.example.cassandrakane.goalz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.SearchView;
+import android.view.WindowManager;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import com.parse.ParseException;
 import java.util.List;
+
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FeedActivity extends AppCompatActivity {
 
+    public final static int ADD_FRIEND_ACTIVITY_REQUEST_CODE = 14;
+
     List<ParseUser> friends;
-    RecyclerView rvFriends;
     FriendAdapter friendAdapter;
-    SearchView svSearch;
+
+    @BindView(R.id.rvFriends) RecyclerView rvFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        getSupportActionBar().hide();
+        ButterKnife.bind(this);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
@@ -45,9 +51,11 @@ public class FeedActivity extends AppCompatActivity {
 
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
-        rvFriends = findViewById(R.id.rvFriends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(friendAdapter);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
+        rvFriends.addItemDecoration(itemDecor);
+        rvFriends.setOnTouchListener(onSwipeTouchListener);
         populateFriends();
     }
 
@@ -55,13 +63,32 @@ public class FeedActivity extends AppCompatActivity {
         List<ParseUser> arr = ParseUser.getCurrentUser().getList("friends");
         Log.i("sdf", arr.toString());
         if (arr != null) {
+            try {
+                ParseUser.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             friends.addAll(arr);
             friendAdapter.notifyDataSetChanged();
         }
     }
 
     public void addFriend(View v) {
+        Intent i = new Intent(this, SearchFriendsActivity.class);
+        startActivityForResult(i, ADD_FRIEND_ACTIVITY_REQUEST_CODE);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_FRIEND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                ParseUser friend = data.getParcelableExtra(ParseUser.class.getSimpleName());
+                friends.add(0, friend);
+                friendAdapter.notifyItemInserted(0);
+                rvFriends.scrollToPosition(0);
+                ProfileActivity.numFriends += 1;
+            }
+        }
     }
 
 }

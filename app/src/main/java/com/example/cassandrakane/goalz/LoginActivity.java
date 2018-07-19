@@ -19,17 +19,20 @@ import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText tvUsername;
-    EditText tvPassword;
+    @BindView(R.id.tvUsername) EditText tvUsername;
+    @BindView(R.id.tvPassword) EditText tvPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportActionBar().hide();
+        ButterKnife.bind(this);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
@@ -37,9 +40,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         }
-
-        tvUsername = findViewById(R.id.tvUsername);
-        tvPassword = findViewById(R.id.tvPassword);
 
         tvUsername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     // transition to home screen
                     Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(i);
-                    finish();
+                    overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     tvUsername.setText("");
                     tvPassword.setText("");
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                         // transition to home screen
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);
-                        finish();
+                        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }

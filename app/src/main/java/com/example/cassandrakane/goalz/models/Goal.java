@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz.models;
 import android.os.Parcelable;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -38,10 +39,8 @@ public class Goal extends ParseObject implements Parcelable {
     public ArrayList<ParseObject> getStory() {
         List<ParseObject> arr = getList("images");
         ArrayList<ParseObject> story = new ArrayList<>();
-        if (arr != null){
-            for (int i = 0; i < arr.size(); i++) {
-                story.add(arr.get(i));
-            }
+        for (int i = 0; i < arr.size(); i++) {
+            story.add(arr.get(i));
         }
         return story;
     }
