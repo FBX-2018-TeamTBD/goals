@@ -18,7 +18,9 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +44,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.etDuration) EditText etDuration;
 
     int frequency = 1;
+    Date currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,8 @@ public class AddGoalActivity extends AppCompatActivity {
             }
         });
 
+        currentDate = new Date();
+
     }
 
     public void onRadioButtonClicked(View v) {
@@ -92,11 +97,11 @@ public class AddGoalActivity extends AppCompatActivity {
                     break;
             case R.id.rbWeek:
                 if (checked)
-                    frequency = 2;
+                    frequency = 7;
                     break;
             case R.id.rbMonth:
                 if (checked)
-                    frequency = 3;
+                    frequency = 30;
                     break;
         }
 
@@ -108,7 +113,9 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
-        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false);
+        long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
+        Date updateBy = new Date(sum);
+        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
         final ParseUser user = ParseUser.getCurrentUser();
         List<ParseObject> goals = user.getList("goals");
         goals.add(goal);

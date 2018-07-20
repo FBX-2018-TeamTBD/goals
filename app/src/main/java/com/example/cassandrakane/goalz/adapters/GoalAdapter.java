@@ -66,7 +66,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
-                if (!goal.isItemAdded()) {
+                if (!goal.getIsItemAdded()) {
                     goal.setStreak(0);
                 }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
@@ -92,7 +92,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
-        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(4) && !goal.isItemAdded()){
+        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(4) && !goal.getIsItemAdded()){
             holder.ivStar.setImageResource(R.drawable.clock);
         } else {
             holder.ivStar.setImageResource(R.drawable.star);

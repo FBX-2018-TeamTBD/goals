@@ -94,7 +94,7 @@ public class DisplayActivity extends AppCompatActivity {
                                             }
                                         });
                                     } else {
-                                        if (!goal.isItemAdded()) {
+                                        if (!goal.getIsItemAdded()) {
                                             if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                                 goal.setItemAdded(true);
                                                 goal.setStreak(goal.getStreak() + 1);

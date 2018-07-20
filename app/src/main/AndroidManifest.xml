@@ -58,15 +58,15 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!--<receiver-->
-            <!--android:name="com.parse.ParsePushBroadcastReceiver"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.parse.push.intent.RECEIVE" />-->
-                <!--<action android:name="com.parse.push.intent.DELETE" />-->
-                <!--<action android:name="com.parse.push.intent.OPEN" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <!-- <receiver -->
+        <!-- android:name="com.parse.ParsePushBroadcastReceiver" -->
+        <!-- android:exported="false"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.parse.push.intent.RECEIVE" /> -->
+        <!-- <action android:name="com.parse.push.intent.DELETE" /> -->
+        <!-- <action android:name="com.parse.push.intent.OPEN" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
         <receiver android:name=".NotificationReceiver" />
 
         <meta-data
@@ -74,7 +74,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".SearchFriendsActivity" />
-        <activity android:name=".FriendActivity"></activity>
+        <activity android:name=".FriendActivity" />
+        <activity android:name=".SplashActivity"></activity>
     </application>
 
 </manifest>

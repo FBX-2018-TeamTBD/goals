@@ -24,7 +24,7 @@ public class Goal extends ParseObject implements Parcelable {
         super();
     }
 
-    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded) {
+    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy) {
         super();
         setTitle(title);
         setDescription(description);
@@ -35,6 +35,7 @@ public class Goal extends ParseObject implements Parcelable {
         setStory(story);
         setUser(user);
         setItemAdded(itemAdded);
+        setUpdateStoryBy(updateBy);
     }
 
     public ArrayList<ParseObject> getStory() {
@@ -123,7 +124,7 @@ public class Goal extends ParseObject implements Parcelable {
         return new Date();
     }
 
-    public boolean isItemAdded() {
+    public boolean getIsItemAdded() {
         try {
             return fetchIfNeeded().getBoolean("itemAdded");
         } catch (ParseException e) {
