@@ -26,4 +26,5 @@
     <string name="_0_completed_goals">0 completed goals</string>
     <string name="_0_current_goals">0 current goals</string>
     <string name="zero">0</string>
+    <string name="no_goals">Add a goal</string>
 </resources>
