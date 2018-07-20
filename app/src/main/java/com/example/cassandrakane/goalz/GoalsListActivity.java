@@ -109,7 +109,6 @@ public class GoalsListActivity extends AppCompatActivity {
                                             });
                                         }
                                     } else {
-                                        progressBar.setVisibility(ProgressBar.INVISIBLE);
                                         Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
                                         startActivity(intent);
                                     }

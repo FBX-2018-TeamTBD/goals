@@ -133,7 +133,7 @@ public class DisplayActivity extends AppCompatActivity {
         goals = (List) getIntent().getSerializableExtra("goals");
         file = (File) getIntent().getSerializableExtra("image");
         image = BitmapFactory.decodeFile(file.getAbsolutePath());
-        image = rotateBitmapOrientation(file.getPath());
+        image = rotateBitmapOrientation(file.getAbsolutePath());
 
         ivImage.setImageBitmap(image);
 
