@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -107,8 +108,15 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                         holder.rvStory.setVisibility(View.GONE);
                         holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
                     } else {
-                        holder.rvStory.setVisibility(View.VISIBLE);
-                        holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
+                        holder.rvStory.setVisibility(View.INVISIBLE);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.rvStory.setVisibility(View.VISIBLE);
+                                holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
+                            }
+                        }, 500);
                     }
 //                    holder.ivMenu.setImageDrawable(holder.rvStory.isShown()
 //                            ? );

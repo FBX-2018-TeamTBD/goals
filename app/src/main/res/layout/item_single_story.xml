@@ -20,5 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivStory"
         android:layout_centerHorizontal="true"
+        android:fontFamily="@font/quicksand"
         android:text="TextView" />
 </RelativeLayout>
