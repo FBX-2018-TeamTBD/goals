@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 public class FriendActivity extends AppCompatActivity {
 
@@ -47,6 +49,7 @@ public class FriendActivity extends AppCompatActivity {
     TextView tvFriends;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     private ParseUser user;
 
@@ -63,6 +66,8 @@ public class FriendActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+
         tvCompleted = relativeLayout.findViewById(R.id.tvCompleted);
         tvProgress = relativeLayout.findViewById(R.id.tvProgress);
         tvFriends = relativeLayout.findViewById(R.id.tvFriends);
@@ -74,21 +79,7 @@ public class FriendActivity extends AppCompatActivity {
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
 
-        ParseFile imageFile = null;
-        try {
-            imageFile = user.fetchIfNeeded().getParseFile("image");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (imageFile != null) {
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            setImageBitmap(bitmap);
-        }
+        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
         populateProfile();
     }
 
@@ -99,9 +90,15 @@ public class FriendActivity extends AppCompatActivity {
     }
 
     public void populateProfile() {
-        List<ParseObject> arr = user.getList("goals");
+        List<ParseObject> arr = new ArrayList<>();
+        try {
+            arr = user.fetch().getList("goals");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
         completedGoals = 0;
         progressGoals = 0;
+        goals.clear();
         if (arr != null) {
             try {
                 ParseObject.fetchAllIfNeeded(arr);
@@ -109,7 +106,12 @@ public class FriendActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
+                Goal goal = null;
+                try {
+                    goal = arr.get(i).fetch();
+                } catch(ParseException e) {
+                    e.printStackTrace();
+                }
                 goals.add(goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
@@ -117,19 +119,13 @@ public class FriendActivity extends AppCompatActivity {
                     progressGoals += 1;
                 }
             }
-            goalAdapter.notifyDataSetChanged();
-            tvUsername.setText(user.getUsername());
             tvProgress.setText(String.valueOf(progressGoals));
             tvCompleted.setText(String.valueOf(completedGoals));
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
+            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         }
-    }
-
-    public void setImageBitmap(Bitmap bitmap) {
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCornerRadius(80.0f);
-        roundedBitmapDrawable.setAntiAlias(true);
-        ivProfile.setImageDrawable(roundedBitmapDrawable);
+        goalAdapter.notifyDataSetChanged();
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
 }

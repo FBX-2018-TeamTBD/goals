@@ -31,6 +31,7 @@ import java.util.List;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -57,24 +58,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     public void onBindViewHolder(SearchFriendAdapter.ViewHolder holder, int position) {
         final ParseUser user = filteredList.get(position);
         holder.tvUsername.setText(user.getUsername());
-        ParseFile imageFile = null;
-        try {
-            imageFile = user.fetch().getParseFile("profile");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (imageFile != null) {
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(8.0f);
-            roundedBitmapDrawable.setAntiAlias(true);
-            holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
-        }
+        Util.setImage(user, "image", context.getResources(), holder.ivProfile, 8.0f);
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

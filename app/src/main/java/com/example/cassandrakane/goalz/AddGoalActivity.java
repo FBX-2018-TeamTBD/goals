@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.text.LocaleDisplayNames;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,8 +11,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -108,29 +111,34 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
-        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false);
-        final ParseUser user = ParseUser.getCurrentUser();
-        List<ParseObject> goals = user.getList("goals");
-        goals.add(goal);
-        user.put("goals", goals);
-        user.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    try {
-                        user.fetch();
-                        Intent data  = new Intent();
-                        data.putExtra(Goal.class.getSimpleName(), goal);
-                        setResult(RESULT_OK, data);
-                        finish();
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+        try {
+            final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false);
+            final ParseUser user = ParseUser.getCurrentUser();
+            List<ParseObject> goals = user.getList("goals");
+            goals.add(goal);
+            user.put("goals", goals);
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        try {
+                            user.fetch();
+                            Intent data = new Intent();
+                            data.putExtra(Goal.class.getSimpleName(), goal);
+                            setResult(RESULT_OK, data);
+                            finish();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else {
+                        Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
                     }
-                } else {
-                    Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
                 }
-            }
-        });
+            });
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Make sure to fill out each field!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void hideKeyboard(View view) {
