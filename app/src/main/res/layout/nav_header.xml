@@ -13,14 +13,17 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         app:cardCornerRadius="16dp"
+        android:background="@color/white"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:onClick="selectImage"
         android:elevation="10dp">
         <ImageView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:layout_width="76dp"
             android:id="@+id/ivProfile"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="2dp"
             app:srcCompat="@drawable/placeholder_profile" />
     </android.support.v7.widget.CardView>
 
@@ -42,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvUsername"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true" >
 
         <TextView
