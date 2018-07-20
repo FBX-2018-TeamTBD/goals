@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
+import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -119,11 +120,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 public void onClick(View view) {
                     List<Image> imageList = goal.getList("images");
                     ArrayList<String> imageUrls = getImageUrls(imageList);
-                    ProfileActivity activity = (ProfileActivity) context;
-                    final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                    FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
-                    activity.toolbar.setVisibility(View.INVISIBLE);
+                    if (context.getClass().isAssignableFrom(ProfileActivity.class)) {
+                        ProfileActivity activity = (ProfileActivity) context;
+                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
+                        activity.toolbar.setVisibility(View.INVISIBLE);
+                    }
+                    if (context.getClass().isAssignableFrom(FriendActivity.class)) {
+                        FriendActivity activity = (FriendActivity) context;
+                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
+                        activity.ivProfile.setVisibility(View.INVISIBLE);
+                        activity.cardView.setVisibility(View.INVISIBLE);
+                        activity.btnBack.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
         } else {

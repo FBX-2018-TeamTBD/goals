@@ -92,6 +92,13 @@ public class StoryFragment extends Fragment {
                     feedActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
                     feedActivity.toolbar.setVisibility(View.VISIBLE);
                 }
+                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
+                    FriendActivity friendActivity = (FriendActivity) activity;
+                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
+                    friendActivity.cardView.setVisibility(View.VISIBLE);
+                    friendActivity.btnBack.setVisibility(View.VISIBLE);
+                }
             }
         });
 

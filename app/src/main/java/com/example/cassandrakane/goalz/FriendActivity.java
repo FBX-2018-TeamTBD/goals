@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,7 +27,9 @@ import utils.Util;
 
 public class FriendActivity extends AppCompatActivity {
 
-    @BindView(R.id.ivProfile) ImageView ivProfile;
+    @BindView(R.id.ivProfile) public ImageView ivProfile;
+    @BindView(R.id.btnBack) public Button btnBack;
+    @BindView(R.id.cardview) public CardView cardView;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.info_layout) View relativeLayout;
 
