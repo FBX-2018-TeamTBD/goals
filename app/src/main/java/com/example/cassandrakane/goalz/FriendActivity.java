@@ -112,7 +112,7 @@ public class FriendActivity extends AppCompatActivity {
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
-                goals.add(goal);
+                goals.add(0, goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
                 } else {
@@ -126,6 +126,10 @@ public class FriendActivity extends AppCompatActivity {
         }
         goalAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+
+    public void goBack(View v) {
+        finish();
     }
 
 }

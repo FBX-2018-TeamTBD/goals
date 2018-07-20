@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".FriendActivity">
 
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/cancel"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/orange"
+        android:onClick="goBack" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
