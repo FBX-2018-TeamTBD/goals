@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.noGoals) RelativeLayout noGoalPage;
 
     private ParseUser user;
 
@@ -209,6 +211,11 @@ public class ProfileActivity extends AppCompatActivity {
             tvCompleted.setText(String.valueOf(completedGoals));
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+            if (arr.size() == 0) {
+                noGoalPage.setVisibility(View.VISIBLE);
+            } else {
+                noGoalPage.setVisibility(View.GONE);
+            }
         }
         goalAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);

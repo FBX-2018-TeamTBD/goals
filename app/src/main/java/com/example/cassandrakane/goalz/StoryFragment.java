@@ -87,7 +87,11 @@ public class StoryFragment extends Fragment {
                     profileActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
                     profileActivity.toolbar.setVisibility(View.VISIBLE);
                 }
-                // TODO implement for other activities
+                if (activity.getClass().isAssignableFrom(FeedActivity.class)) {
+                    FeedActivity feedActivity = (FeedActivity) activity;
+                    feedActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+                    feedActivity.toolbar.setVisibility(View.VISIBLE);
+                }
             }
         });
 

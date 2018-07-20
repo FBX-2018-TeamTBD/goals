@@ -138,9 +138,7 @@ public class AddGoalActivity extends AppCompatActivity {
                     if (e == null) {
                         try {
                             NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                            int timeRunningOutHours = getApplicationContext().getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-                            long delay = TimeUnit.DAYS.toMillis(goal.getFrequency()) - TimeUnit.HOURS.toMillis(timeRunningOutHours);
-                            notificationHelper.sendNotification(goal.getObjectId(), goal.getTitle(), goal.getDescription(), goal.getIntId(), delay);
+                            notificationHelper.setReminder(goal);
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), goal);
