@@ -58,9 +58,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:gravity="center"
                     android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/goals"
+                    android:gravity="center"
+                    android:text="my goals"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
                 <Button
