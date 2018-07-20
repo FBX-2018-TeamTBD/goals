@@ -128,4 +128,8 @@ public class FriendActivity extends AppCompatActivity {
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
+    public void goBack(View v) {
+        finish();
+    }
+
 }
