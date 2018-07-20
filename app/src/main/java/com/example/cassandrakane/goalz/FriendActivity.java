@@ -112,7 +112,7 @@ public class FriendActivity extends AppCompatActivity {
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
-                goals.add(goal);
+                goals.add(0, goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
                 } else {
