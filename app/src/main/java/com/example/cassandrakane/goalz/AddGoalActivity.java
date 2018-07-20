@@ -2,7 +2,6 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.LocaleDisplayNames;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -129,10 +127,7 @@ public class AddGoalActivity extends AppCompatActivity {
                     if (e == null) {
                         try {
                             NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                            int timeRunningOutHours = getApplicationContext().getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-                            long delay = TimeUnit.DAYS.toMillis(goal.getFrequency()) - TimeUnit.HOURS.toMillis(timeRunningOutHours);
-                            notificationHelper.sendNotification(goal.getObjectId(), goal.getTitle(), goal.getDescription(), goal.getIntId(), delay);
-
+                            notificationHelper.setReminder(goal);
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), goal);
