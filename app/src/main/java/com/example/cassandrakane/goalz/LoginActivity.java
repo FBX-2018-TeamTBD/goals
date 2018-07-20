@@ -32,10 +32,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ButterKnife.bind(this);
+
         tvUsername.setText("");
         tvPassword.setText("");
-
-        ButterKnife.bind(this);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {

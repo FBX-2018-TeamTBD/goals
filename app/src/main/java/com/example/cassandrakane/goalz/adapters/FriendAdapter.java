@@ -76,13 +76,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 toFriendActivity(friend);
             }
         });
-        holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
+      /*  holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG).show();
                 Log.i("Friend Added", "You poked " + friend.getUsername() + "!");
             }
-        });
+        });*/
 
         goals = friend.getList("goals");
         if (goals == null){
@@ -156,7 +156,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivProfile) ImageView ivProfile;
-        @BindView(R.id.pokeBtn) Button pokeBtn;
+        //@BindView(R.id.pokeBtn) Button pokeBtn;
         @BindView(R.id.rvStory) RecyclerView rvStory;
         @BindView(R.id.ivMenu) ImageView ivMenu;
 

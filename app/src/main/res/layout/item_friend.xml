@@ -45,7 +45,7 @@
         android:layout_marginTop="20dp"
         android:background="@color/lightGrey" />
 
-    <Button
+   <!-- <Button
         android:id="@+id/pokeBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -54,7 +54,7 @@
         android:layout_marginRight="48dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/poke"
-        android:backgroundTint="@color/lightOrange" />
+        android:backgroundTint="@color/lightOrange" />-->
 
     <ImageView
         android:id="@+id/ivMenu"
@@ -62,7 +62,7 @@
         android:layout_height="25dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/tvUsername"
-        android:layout_marginEnd="14dp"
+        android:layout_marginEnd="20dp"
         android:visibility="gone"
         app:srcCompat="@drawable/dropdown" />
 

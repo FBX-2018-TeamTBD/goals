@@ -108,7 +108,7 @@ public class FriendActivity extends AppCompatActivity {
             tvProgress.setText(String.valueOf(progressGoals));
             tvCompleted.setText(String.valueOf(completedGoals));
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
-            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+            tvUsername.setText(user.getUsername());
         }
         goalAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
