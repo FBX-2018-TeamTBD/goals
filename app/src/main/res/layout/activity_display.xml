@@ -17,13 +17,13 @@
 
     <ImageButton
         android:id="@+id/btnConfirm"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="42dp"
-        android:background="@null"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/btn_send" />
+        android:background="@color/transparent"
+        app:srcCompat="@drawable/send" />
 </RelativeLayout>

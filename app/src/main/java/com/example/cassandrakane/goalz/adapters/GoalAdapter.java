@@ -37,11 +37,13 @@ import butterknife.ButterKnife;
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private final List<Goal> goals;
+    private boolean personal; //for determining whether this is for user or for a friend
     Context context;
     Date currentDate;
 
-    public GoalAdapter(List<Goal> goals) {
+    public GoalAdapter(List<Goal> goals, boolean personal) {
         this.goals = goals;
+        this.personal = personal;
     }
 
     // for each row, inflate the layout and cache references into ViewHolder
@@ -90,6 +92,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getCompleted()) {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
@@ -121,6 +127,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
+            if (personal) {
+                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_user));
+            } else {
+                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_friend));
+            }
             holder.ivStory.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
@@ -136,18 +147,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return goals.size();
-    }
-
-    // Clean all elements of the recycler
-    public void clear() {
-        goals.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<Goal> list) {
-        goals.addAll(list);
-        notifyDataSetChanged();
     }
 
     public ArrayList<String> getImageUrls(List<Image> imageList) {

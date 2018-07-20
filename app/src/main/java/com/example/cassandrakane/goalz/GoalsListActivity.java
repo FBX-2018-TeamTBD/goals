@@ -83,10 +83,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                 notificationHelper.cancelReminder(goal);
                                 notificationHelper.setReminder(goal);
                                 if (goal.getStory().size() == 1){
-//                                    Image lastUpdate = (Image) story.get(story.size() - 1);
-//                                    long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
-//                                    Date updateStoryBy = new Date(sum);
-//                                    goal.setUpdateStoryBy(updateStoryBy);
+                                    goal.setProgress(1);
                                     goal.setStreak(1);
                                     goal.setItemAdded(false);
                                     goal.saveInBackground(new SaveCallback() {

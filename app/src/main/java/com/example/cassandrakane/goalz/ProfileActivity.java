@@ -153,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
         user = ParseUser.getCurrentUser();
 
         goals = new ArrayList<>();
-        goalAdapter = new GoalAdapter(goals);
+        goalAdapter = new GoalAdapter(goals, true);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
@@ -186,6 +186,7 @@ public class ProfileActivity extends AppCompatActivity {
         completedGoals = 0;
         progressGoals = 0;
         goals.clear();
+        List<Goal> completed = new ArrayList<>();
         if (arr != null) {
             try {
                 ParseObject.fetchAllIfNeeded(arr);
@@ -199,13 +200,15 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
-                goals.add(0, goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
+                    completed.add(0, goal);
                 } else {
                     progressGoals += 1;
+                    goals.add(0, goal);
                 }
             }
+            goals.addAll(completed);
             tvProgress.setText(String.valueOf(progressGoals));
             tvCompleted.setText(String.valueOf(completedGoals));
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
@@ -430,7 +433,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-        i.putExtra("goals", (Serializable) goals);
+        List<Goal> uncompleteGoals = new ArrayList<>();
+        for (Goal goal : goals){
+            if (!goal.getCompleted()){
+                uncompleteGoals.add(goal);
+            }
+        }
+        i.putExtra("goals", (Serializable) uncompleteGoals);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
