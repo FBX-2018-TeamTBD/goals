@@ -1,8 +1,12 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,20 +19,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
+import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import com.parse.ParseException;
 import java.util.List;
 
-import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
 public class FeedActivity extends AppCompatActivity {
 
@@ -46,6 +54,11 @@ public class FeedActivity extends AppCompatActivity {
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+
+    ParseUser user;
+    int completedGoals;
+    int progressGoals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +67,9 @@ public class FeedActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ButterKnife.bind(this);
+
+        user = ParseUser.getCurrentUser();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
@@ -72,6 +88,7 @@ public class FeedActivity extends AppCompatActivity {
         //getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.menu));
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(2).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -83,11 +100,14 @@ public class FeedActivity extends AppCompatActivity {
                             case R.id.nav_camera:
                                 toCamera();
                                 break;
+                            case R.id.nav_goals:
+                                finish();
+                                break;
                             case R.id.nav_feed:
-                                toFeed();
                                 break;
                             case R.id.nav_logout:
                                 logout();
+                                break;
                         }
 
                         return true;
@@ -96,9 +116,9 @@ public class FeedActivity extends AppCompatActivity {
 
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
-        tvFriends = navigationView.getHeaderView(0).findViewById(R.id.tvFriends);
-        tvProgress = navigationView.getHeaderView(0).findViewById(R.id.tvProgress);
-        tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.tvCompleted);
+        tvFriends = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvFriends);
+        tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
+        tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
 
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
@@ -109,6 +129,7 @@ public class FeedActivity extends AppCompatActivity {
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvFriends.addItemDecoration(itemDecor);
         rvFriends.setOnTouchListener(onSwipeTouchListener);
+        populateGoals();
         populateFriends();
     }
 
@@ -124,6 +145,49 @@ public class FeedActivity extends AppCompatActivity {
             friends.addAll(arr);
             friendAdapter.notifyDataSetChanged();
         }
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+
+    public void populateGoals() {
+        List<ParseObject> arr = user.getList("goals");
+        completedGoals = 0;
+        progressGoals = 0;
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = (Goal) arr.get(i);
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+                } else {
+                    progressGoals += 1;
+                }
+            }
+            tvProgress.setText(String.valueOf(progressGoals));
+            tvCompleted.setText(String.valueOf(completedGoals));
+            tvFriends.setText(String.valueOf(user.getList("friends").size()));
+            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        };
+        if (user.getParseFile("image") != null) {
+            ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            setImageBitmap(bitmap);
+        }
+    }
+
+    public void setImageBitmap(Bitmap bitmap) {
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        roundedBitmapDrawable.setCornerRadius(16.0f);
+        roundedBitmapDrawable.setAntiAlias(true);
+        ivProfile.setImageDrawable(roundedBitmapDrawable);
     }
 
     public void addFriend(View v) {

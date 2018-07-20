@@ -64,23 +64,23 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        ParseFile imageFile = null;
         try {
-            ParseFile profile = friend.fetchIfNeeded().getParseFile("profile");
-            if (profile != null) {
-                ParseFile imageFile = friend.getParseFile("profile");
-                Bitmap bitmap = null;
-                try {
-                    bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-                roundedBitmapDrawable.setCornerRadius(8.0f);
-                roundedBitmapDrawable.setAntiAlias(true);
-                holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
-            }
+            imageFile = friend.fetchIfNeeded().getParseFile("image");
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        if (imageFile != null) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+            roundedBitmapDrawable.setCornerRadius(16.0f);
+            roundedBitmapDrawable.setAntiAlias(true);
+            holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
         }
         holder.ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override

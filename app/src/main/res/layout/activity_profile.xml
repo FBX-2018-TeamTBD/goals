@@ -18,6 +18,17 @@
         android:fitsSystemWindows="false"
         tools:context=".ProfileActivity">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rvGoals"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="-10dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@android:color/background_dark" />
+
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:id="@+id/toolbar"
@@ -30,6 +41,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <Button
                     android:id="@+id/menu"
                     android:layout_width="40dp"

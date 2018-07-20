@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -34,6 +35,7 @@ public class GoalsListActivity extends AppCompatActivity {
     Date currentDate;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class GoalsListActivity extends AppCompatActivity {
 
     public void addImage(View v) {
         // TODO update notification time
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         final ParseFile parseFile = new ParseFile(file);
         parseFile.saveInBackground(new SaveCallback() {
             @Override
@@ -106,6 +109,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                             });
                                         }
                                     } else {
+                                        progressBar.setVisibility(ProgressBar.INVISIBLE);
                                         Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
                                         startActivity(intent);
                                     }
@@ -116,7 +120,5 @@ public class GoalsListActivity extends AppCompatActivity {
                 });
             }
         }
-        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-        startActivity(intent);
     }
 }

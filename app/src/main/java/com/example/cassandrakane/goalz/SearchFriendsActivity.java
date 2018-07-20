@@ -63,19 +63,25 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
     public List<ParseUser> getUsers() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        List<ParseUser> friends = null;
+        try {
+            ParseUser.getCurrentUser().fetch().getList("friends");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        final List<ParseUser> users = new ArrayList<>();
         List<String> friendUsernames = new ArrayList<>();
-        for (int i = 0; i < friends.size(); i++) {
-            friendUsernames.add(friends.get(i).getUsername());
+        if (friends != null) {
+            for (int i = 0; i < friends.size(); i++) {
+                friendUsernames.add(friends.get(i).getUsername());
+            }
         }
         final List<String> friendNames = friendUsernames;
-        final List<ParseUser> users = new ArrayList<>();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        Log.i("Sdf", objects.get(i).getUsername());
                         if (!ParseUser.getCurrentUser().getUsername().equals(objects.get(i).getUsername())
                                 && !friendNames.contains(objects.get(i).getUsername())) {
                             users.add(objects.get(i));
