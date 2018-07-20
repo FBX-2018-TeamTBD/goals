@@ -123,6 +123,11 @@ public class Goal extends ParseObject implements Parcelable {
         return new Date();
     }
 
+    public int getIntId() {
+        String id = getObjectId();
+        return id.hashCode();
+    }
+
     public boolean isItemAdded() {
         try {
             return fetchIfNeeded().getBoolean("itemAdded");

@@ -56,6 +56,7 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
+        // TODO update notification time
         progressBar.setVisibility(ProgressBar.VISIBLE);
         final ParseFile parseFile = new ParseFile(file);
         parseFile.saveInBackground(new SaveCallback() {
