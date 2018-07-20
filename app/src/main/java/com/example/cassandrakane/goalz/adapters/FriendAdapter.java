@@ -96,6 +96,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         final FeedActivity activity = (FeedActivity) context;
 
         if (goals.size() != 0) {
+            holder.ivMenu.setVisibility(View.VISIBLE);
             holder.ivMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -114,6 +115,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 //                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 }
             });
+        } else {
+            holder.ivMenu.setVisibility(View.GONE);
         }
     }
 
