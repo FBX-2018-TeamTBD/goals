@@ -9,6 +9,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
 
@@ -64,24 +66,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        ParseFile imageFile = null;
-        try {
-            imageFile = friend.fetchIfNeeded().getParseFile("image");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (imageFile != null) {
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-            roundedBitmapDrawable.setCornerRadius(16.0f);
-            roundedBitmapDrawable.setAntiAlias(true);
-            holder.ivProfile.setImageDrawable(roundedBitmapDrawable);
-        }
+        Util.setImage(friend, "image", context.getResources(), holder.ivProfile, 16.0f);
         holder.ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +82,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG);
+                Toast.makeText(context, "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG).show();
+                Log.i("Friend Added", "You poked " + friend.getUsername() + "!");
             }
         });
 

@@ -60,6 +60,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -147,8 +148,6 @@ public class ProfileActivity extends AppCompatActivity {
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         user = ParseUser.getCurrentUser();
-        TextView tvToolbarTitle = (TextView) toolbar.findViewById(R.id.tvTitle);
-        tvToolbarTitle.setText(user.getUsername() + "'s goals");
 
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals);
@@ -156,21 +155,7 @@ public class ProfileActivity extends AppCompatActivity {
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
 
-        ParseFile imageFile = null;
-        try {
-            imageFile = user.fetchIfNeeded().getParseFile("image");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (imageFile != null) {
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            setImageBitmap(bitmap);
-        }
+        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
 
         ParseACL acl = new ParseACL();
         if (!acl.getReadAccess(user)) {
@@ -196,8 +181,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
         completedGoals = 0;
         progressGoals = 0;
+        goals.clear();
         if (arr != null) {
-            goals.clear();
             try {
                 ParseObject.fetchAllIfNeeded(arr);
             } catch (ParseException e) {
@@ -217,15 +202,12 @@ public class ProfileActivity extends AppCompatActivity {
                     progressGoals += 1;
                 }
             }
-            goalAdapter.notifyDataSetChanged();
             tvProgress.setText(String.valueOf(progressGoals));
             tvCompleted.setText(String.valueOf(completedGoals));
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        } else {
-            goals = new ArrayList<>();
-            goalAdapter.notifyDataSetChanged();
         }
+        goalAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
@@ -388,6 +370,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         } else if (requestCode == ADD_GOAL_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                ParseACL acl = new ParseACL();
+                if (!acl.getReadAccess(user)) {
+                    acl.setReadAccess(user, true);
+                    user.setACL(acl);
+                }
                 Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
                 goals.add(0, goal);
                 goalAdapter.notifyItemInserted(0);
@@ -404,6 +391,11 @@ public class ProfileActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         user.fetch();
+                        ParseACL acl = new ParseACL();
+                        if (!acl.getReadAccess(user)) {
+                            acl.setReadAccess(user, true);
+                            user.setACL(acl);
+                        }
                         Toast.makeText(ProfileActivity.this, "Successfully updated profile image!", Toast.LENGTH_LONG);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

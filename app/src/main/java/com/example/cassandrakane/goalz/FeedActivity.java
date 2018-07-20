@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.Parse;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseException;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
@@ -133,9 +135,21 @@ public class FeedActivity extends AppCompatActivity {
         populateFriends();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        populateFriends();
+        populateGoals();
+    }
+
     public void populateFriends() {
-        List<ParseUser> arr = ParseUser.getCurrentUser().getList("friends");
-        Log.i("sdf", arr.toString());
+        List<ParseUser> arr = null;
+        try {
+            arr = user.fetch().getList("friends");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        friends.clear();
         if (arr != null) {
             try {
                 ParseUser.fetchAllIfNeeded(arr);
@@ -143,8 +157,8 @@ public class FeedActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             friends.addAll(arr);
-            friendAdapter.notifyDataSetChanged();
         }
+        friendAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
@@ -170,24 +184,8 @@ public class FeedActivity extends AppCompatActivity {
             tvCompleted.setText(String.valueOf(completedGoals));
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        };
-        if (user.getParseFile("image") != null) {
-            ParseFile imageFile = ParseUser.getCurrentUser().getParseFile("image");
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeFile(imageFile.getFile().getAbsolutePath());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            setImageBitmap(bitmap);
         }
-    }
-
-    public void setImageBitmap(Bitmap bitmap) {
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCornerRadius(16.0f);
-        roundedBitmapDrawable.setAntiAlias(true);
-        ivProfile.setImageDrawable(roundedBitmapDrawable);
+        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
     }
 
     public void addFriend(View v) {
