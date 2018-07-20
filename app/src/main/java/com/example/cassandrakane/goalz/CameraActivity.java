@@ -158,6 +158,13 @@ public class CameraActivity extends AppCompatActivity {
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
     }
 
+    @Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
     private void takePicture() {
         if (cameraDevice == null){
             return;

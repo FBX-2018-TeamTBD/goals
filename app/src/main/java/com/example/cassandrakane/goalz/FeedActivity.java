@@ -21,9 +21,11 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,8 @@ import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 public class FeedActivity extends AppCompatActivity {
 
     public final static int ADD_FRIEND_ACTIVITY_REQUEST_CODE = 14;
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
 
     List<ParseUser> friends;
     FriendAdapter friendAdapter;
@@ -54,6 +58,10 @@ public class FeedActivity extends AppCompatActivity {
     ParseUser user;
     int completedGoals;
     int progressGoals;
+
+    private ParseFile imageFile;
+    private String photoFileName;
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +225,101 @@ public class FeedActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
+
+    public void selectImage(View v) {
+//        final CharSequence[] items = { "Take Photo", "Choose from Library",
+//                "Cancel" };
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//
+//                if (items[item].equals("Take Photo")) {
+//                    onLaunchCamera();
+//
+//                } else if (items[item].equals("Choose from Library")) {
+//                    onLaunchGallery();
+//
+//                } else if (items[item].equals("Cancel")) {
+//                    dialog.dismiss();
+//                }
+//            }
+//        });
+//        builder.show();
+    }
+//
+//    public void onLaunchCamera() {
+//        // create Intent to take a picture and return control to the calling application
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Create a File reference to access to future access
+//        photoFile = getPhotoFileUri(photoFileName);
+//
+//        // wrap File object into a content provider
+//        // required for API >= 24
+//        Uri fileProvider = FileProvider.getUriForFile(this, "com.fbu.fileprovider", photoFile);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+//        try {
+//            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+//            // So as long as the result is not null, it's safe to use the intent.
+//            if (intent.resolveActivity(getPackageManager()) != null) {
+//                if (Build.VERSION.SDK_INT >= 23) {
+//                    int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+//                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+//                        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//                    }
+//                }
+//                // Start the image capture intent to take photo
+//                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//            }
+//        } catch(SecurityException e) {
+//            if (intent.resolveActivity(getPackageManager()) != null) {
+//                if (Build.VERSION.SDK_INT >= 23) {
+//                    int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+//                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+//                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//                    }
+//                }
+//                // Start the image capture intent to take photo
+//                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//            }
+//        }
+//    }
+//
+//    public void onLaunchGallery() {
+//        Intent intent = new Intent(Intent.ACTION_PICK,
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            // Start the image capture intent to take photo
+//            startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+//        }
+//    }
+//
+//    // Returns the File for a photo stored on disk given the fileName
+//    public File getPhotoFileUri(String fileName) {
+//        // Get safe storage directory for photos
+//        // Use `getExternalFilesDir` on Context to access package-specific directories.
+//        // This way, we don't need to request external read/write runtime permissions.
+//        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Goals");
+//
+//        // Create the storage directory if it does not exist
+//        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+//            Log.d("Goals", "failed to create directory");
+//        }
+//
+//        // Return the file target for the photo based on filename
+//        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+//
+//        return file;
+//    }
 
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event)  {
