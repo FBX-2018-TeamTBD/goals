@@ -19,7 +19,7 @@ public class NotificationHelper {
         context = c;
     }
 
-    public void sendNotification(String channelId, String notifTitle, String notifText, int notifId, int delay) {
+    public void sendNotification(String channelId, String notifTitle, String notifText, int notifId, long delay) {
         createNotificationChannel(notifTitle, channelId);
 
         // TODO set icon as app icon

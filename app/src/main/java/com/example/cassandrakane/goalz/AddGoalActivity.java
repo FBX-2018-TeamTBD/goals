@@ -19,6 +19,7 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +42,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.etDescription) EditText etDescription;
     @BindView(R.id.etDuration) EditText etDuration;
 
-    int frequency = 1;
+    int frequency = R.integer.FREQUENCY_DAILY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,15 +89,15 @@ public class AddGoalActivity extends AppCompatActivity {
         switch(v.getId()) {
             case R.id.rbDay:
                 if (checked)
-                    frequency = 1;
+                    frequency = R.integer.FREQUENCY_DAILY;
                     break;
             case R.id.rbWeek:
                 if (checked)
-                    frequency = 2;
+                    frequency = R.integer.FREQUENCY_WEEKLY;
                     break;
             case R.id.rbMonth:
                 if (checked)
-                    frequency = 3;
+                    frequency = R.integer.FREQUENCY_MONTHLY;
                     break;
         }
 
@@ -108,9 +109,9 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
-        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false);
+        final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), getApplicationContext().getResources().getInteger(frequency), 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false);
         final ParseUser user = ParseUser.getCurrentUser();
-        List<ParseObject> goals = user.getList("goals");
+        final List<ParseObject> goals = user.getList("goals");
         goals.add(goal);
         user.put("goals", goals);
         user.saveInBackground(new SaveCallback() {
@@ -118,6 +119,10 @@ public class AddGoalActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     try {
+                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                        int timeRunningOutHours = getApplicationContext().getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+                        long delay = TimeUnit.DAYS.toMillis(goal.getFrequency()) - TimeUnit.HOURS.toMillis(timeRunningOutHours);
+                        notificationHelper.sendNotification(goal.getObjectId(), goal.getTitle(), goal.getDescription(), goal.getIntId(), delay);
                         user.fetch();
                         Intent data  = new Intent();
                         data.putExtra(Goal.class.getSimpleName(), goal);

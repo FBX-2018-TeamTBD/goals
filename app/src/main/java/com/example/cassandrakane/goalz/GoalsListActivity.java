@@ -54,6 +54,7 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
+        // TODO update notification time
         final ParseFile parseFile = new ParseFile(file);
         parseFile.saveInBackground(new SaveCallback() {
             @Override
