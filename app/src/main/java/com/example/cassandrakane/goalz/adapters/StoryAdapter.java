@@ -81,18 +81,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         return mGoals.size();
     }
 
-    // Clean all elements of the recycler
-    public void clear() {
-        mGoals.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<Goal> list) {
-        mGoals.addAll(list);
-        notifyDataSetChanged();
-    }
-
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

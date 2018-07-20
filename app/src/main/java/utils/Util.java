@@ -34,8 +34,7 @@ public class Util {
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
         } else {
-            ivProfile.setImageDrawable(null);
-            ivProfile.setBackgroundColor(resources.getColor(R.color.lightOrange));
+            ivProfile.setImageDrawable(resources.getDrawable(R.drawable.placeholder_profile));
         }
     }
 

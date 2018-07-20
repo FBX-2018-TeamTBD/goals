@@ -60,7 +60,7 @@ public class FriendActivity extends AppCompatActivity {
         user = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
 
         goals = new ArrayList<>();
-        goalAdapter = new GoalAdapter(goals);
+        goalAdapter = new GoalAdapter(goals, false);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
 
