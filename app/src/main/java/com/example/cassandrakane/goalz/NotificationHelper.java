@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.cassandrakane.goalz.models.Goal;
@@ -23,17 +24,15 @@ public class NotificationHelper {
     }
 
     public void setReminder(Goal goal) {
-        // TODO implement
         createNotificationChannel(goal);
 
         PendingIntent pendingIntent = getPendingIntent(goal);
-//        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-//        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"));
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//        calendar.set(Calendar.HOUR_OF_DAY, 10);
-//        calendar.set(Calendar.MINUTE, 32);
-//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        int frequencyHours = goal.getFrequency() * 24;
+        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+        int startOffsetHours = frequencyHours - timeRunningOutHours;
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + convertHoursToMillis(startOffsetHours),
+                convertHoursToMillis(frequencyHours), pendingIntent);
     }
 
     public void cancelReminder(Goal goal) {
@@ -76,5 +75,9 @@ public class NotificationHelper {
                 .setAutoCancel(true);
 
         return mBuilder.build();
+    }
+
+    private long convertHoursToMillis(int hour) {
+        return hour * 3600000;
     }
 }

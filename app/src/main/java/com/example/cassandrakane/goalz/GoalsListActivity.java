@@ -55,7 +55,6 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
-        // TODO update notification time
         progressBar.setVisibility(ProgressBar.VISIBLE);
         final ParseFile parseFile = new ParseFile(file);
         parseFile.saveInBackground(new SaveCallback() {
@@ -80,6 +79,9 @@ public class GoalsListActivity extends AppCompatActivity {
                         goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
+                                NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                                notificationHelper.cancelReminder(goal);
+                                notificationHelper.setReminder(goal);
                                 if (goal.getStory().size() == 1){
 //                                    Image lastUpdate = (Image) story.get(story.size() - 1);
 //                                    long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
