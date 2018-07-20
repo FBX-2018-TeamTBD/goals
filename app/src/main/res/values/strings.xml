@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Goals</string>
     <string name="title">Title</string>
-    <string name="description">Description</string>
-    <string name="duration">Estimated duration in days</string>
+    <string name="description">Describe your goal.</string>
+    <string name="duration">How many days?</string>
     <string name="monthly">Monthly</string>
     <string name="weekly">Weekly</string>
     <string name="daily">Daily</string>
     <string name="logout">Logout</string>
     <string name="friends_feed">Friends Feed</string>
     <string name="camera">Camera</string>
-    <string name="friends">friends</string>
+    <string name="friends">my friends</string>
     <string name="goals">goals</string>
     <string name="username">Username</string>
     <string name="_0_current_ngoals">0 Current Goals</string>
@@ -27,4 +27,5 @@
     <string name="_0_current_goals">0 current goals</string>
     <string name="zero">0</string>
     <string name="no_goals">Add a goal</string>
+    <string name="what_s_your_goal">What\'s your goal?</string>
 </resources>

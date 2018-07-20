@@ -32,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        tvUsername.setText("");
+        tvPassword.setText("");
+
         ButterKnife.bind(this);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -70,8 +73,6 @@ public class LoginActivity extends AppCompatActivity {
                     Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(i);
                     overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
-                    tvUsername.setText("");
-                    tvPassword.setText("");
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(LoginActivity.this, "Sorry, login failed. Try again or sign up for new user.", Toast.LENGTH_LONG).show();

@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -96,6 +97,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         final FeedActivity activity = (FeedActivity) context;
 
         if (goals.size() != 0) {
+            holder.ivMenu.setVisibility(View.VISIBLE);
             holder.ivMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -106,14 +108,23 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                         holder.rvStory.setVisibility(View.GONE);
                         holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
                     } else {
-                        holder.rvStory.setVisibility(View.VISIBLE);
-                        holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
+                        holder.rvStory.setVisibility(View.INVISIBLE);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.rvStory.setVisibility(View.VISIBLE);
+                                holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
+                            }
+                        }, 500);
                     }
 //                    holder.ivMenu.setImageDrawable(holder.rvStory.isShown()
 //                            ? );
 //                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 }
             });
+        } else {
+            holder.ivMenu.setVisibility(View.GONE);
         }
     }
 
