@@ -39,7 +39,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:background="@android:drawable/ic_menu_send"
+                android:background="@drawable/menu_send"
                 android:backgroundTint="@color/white"
                 android:onClick="addImage" />
         </RelativeLayout>

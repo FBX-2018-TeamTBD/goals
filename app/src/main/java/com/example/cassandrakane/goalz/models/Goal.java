@@ -171,7 +171,7 @@ public class Goal extends ParseObject implements Parcelable {
     }
 
     public boolean getCompleted() {
-        return getProgress() == getDuration();
+        return getProgress() >= getDuration();
     }
 
     public void setSelected(boolean selected) {
