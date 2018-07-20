@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +46,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.etDescription) EditText etDescription;
     @BindView(R.id.etDuration) EditText etDuration;
 
+    Date currentDate;
     int frequency = R.integer.FREQUENCY_DAILY;
 
     @Override
@@ -82,6 +84,8 @@ public class AddGoalActivity extends AppCompatActivity {
             }
         });
 
+        currentDate = new Date();
+
     }
 
     public void onRadioButtonClicked(View v) {
@@ -113,8 +117,9 @@ public class AddGoalActivity extends AppCompatActivity {
 
     public void postGoal(View v) {
         try {
-            final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false);
-            final ParseUser user = ParseUser.getCurrentUser();
+            long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
+            Date updateBy = new Date(sum);
+            final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);            final ParseUser user = ParseUser.getCurrentUser();
             List<ParseObject> goals = user.getList("goals");
             goals.add(goal);
             user.put("goals", goals);

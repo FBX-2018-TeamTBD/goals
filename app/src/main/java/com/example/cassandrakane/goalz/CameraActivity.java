@@ -132,7 +132,6 @@ public class CameraActivity extends AppCompatActivity {
         btnCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FadeIn(ivFade, 0, 255, 150, true);
                 takePicture();
             }
         });
@@ -173,13 +172,13 @@ public class CameraActivity extends AppCompatActivity {
             }
 
             // capture image with custom size
-            int width = 480;
-            int height = 640;
+            int width = 1440;
+            int height = 1080;
 
-            if (jpegSizes != null && jpegSizes.length > 0){
-                width = jpegSizes[0].getWidth();
-                height = jpegSizes[0].getHeight();
-            }
+//            if (jpegSizes != null && jpegSizes.length > 0){
+//                width = jpegSizes[0].getWidth();
+//                height = jpegSizes[0].getHeight();
+//            }
 
             final ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
             List<Surface> outputSurface = new ArrayList<>(2);
@@ -236,6 +235,14 @@ public class CameraActivity extends AppCompatActivity {
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
                     Toast.makeText(CameraActivity.this, "Saved" + file, Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Your code to run in GUI thread here
+                            FadeIn(ivFade, 0, 255, 150, true);
+                        }//public void run() {
+                    });
+
                     createCameraPreview();
                 }
             };

@@ -9,9 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
+import com.parse.ParseException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,6 +48,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         // get the data according to position
         final Goal goal = mGoals.get(position);
 
+        List<Image> imageList = goal.getList("images");
+        final ArrayList<String> imageUrls = getImageUrls(imageList);
+
+        if (imageUrls.size() > 0) {
+            Glide.with(context)
+                    .load(imageUrls.get(imageUrls.size() - 1))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.ivStory);
+        }
         holder.tvTitle.setText(goal.getTitle());
     }
 
@@ -85,5 +99,21 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 //                itemView.setBackgroundColor(goal.isSelected() ? Color.CYAN : Color.WHITE);
 //            }
         }
+    }
+
+    public ArrayList<String> getImageUrls(List<Image> imageList) {
+        ArrayList<Image> images = new ArrayList<Image>();
+        if (imageList != null) {
+            images.addAll(imageList);
+        }
+        ArrayList<String> imageUrls = new ArrayList<String>();
+        for (Image i : images) {
+            try {
+                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return imageUrls;
     }
 }

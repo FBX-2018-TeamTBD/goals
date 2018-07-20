@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,10 +81,11 @@ public class GoalsListActivity extends AppCompatActivity {
                             @Override
                             public void done(ParseException e) {
                                 if (goal.getStory().size() == 1){
-                                    Image lastUpdate = (Image) story.get(story.size() - 1);
-                                    long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
-                                    Date updateStoryBy = new Date(sum);
-                                    goal.setUpdateStoryBy(updateStoryBy);
+//                                    Image lastUpdate = (Image) story.get(story.size() - 1);
+//                                    long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
+//                                    Date updateStoryBy = new Date(sum);
+//                                    goal.setUpdateStoryBy(updateStoryBy);
+                                    goal.setStreak(1);
                                     goal.setItemAdded(false);
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
@@ -95,7 +95,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    if (!goal.isItemAdded()) {
+                                    if (!goal.getIsItemAdded()) {
                                         goal.setProgress(goal.getProgress() + 1);
                                         if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                             goal.setItemAdded(true);
@@ -109,7 +109,6 @@ public class GoalsListActivity extends AppCompatActivity {
                                             });
                                         }
                                     } else {
-                                        progressBar.setVisibility(ProgressBar.INVISIBLE);
                                         Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
                                         startActivity(intent);
                                     }
