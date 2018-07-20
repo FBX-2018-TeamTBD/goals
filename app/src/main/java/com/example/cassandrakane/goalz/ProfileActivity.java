@@ -56,6 +56,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -96,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREcEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -158,9 +159,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
 
-        ParseACL acl = new ParseACL();
-        if (!acl.getReadAccess(user)) {
-            acl.setReadAccess(user, true);
+        ParseACL acl = user.getACL();
+        if (!acl.getPublicReadAccess()) {
+            acl.setPublicReadAccess(true);
             user.setACL(acl);
         }
 
@@ -197,7 +198,7 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
-                goals.add(goal);
+                goals.add(0, goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
                 } else {
@@ -253,18 +254,30 @@ public class ProfileActivity extends AppCompatActivity {
         // required for API >= 24
         Uri fileProvider = FileProvider.getUriForFile(this, "com.fbu.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            if (Build.VERSION.SDK_INT >= 23) {
-                int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        try {
+            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+            // So as long as the result is not null, it's safe to use the intent.
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
                 }
+                // Start the image capture intent to take photo
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        } catch(SecurityException e) {
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
+                }
+                // Start the image capture intent to take photo
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
         }
     }
 
@@ -332,7 +345,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= 23) {
                         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
                         }
                     }
                     Uri uri = data.getData();
@@ -372,9 +385,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         } else if (requestCode == ADD_GOAL_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                ParseACL acl = new ParseACL();
-                if (!acl.getReadAccess(user)) {
-                    acl.setReadAccess(user, true);
+                ParseACL acl = user.getACL();
+                if (!acl.getPublicReadAccess()) {
+                    acl.setPublicReadAccess(true);
                     user.setACL(acl);
                 }
                 Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
@@ -387,17 +400,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void onProfile() {
         user.put("image", imageFile);
+        ParseACL acl = user.getACL();
+        if (!acl.getPublicReadAccess()) {
+            acl.setPublicReadAccess(true);
+            user.setACL(acl);
+        }
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     try {
                         user.fetch();
-                        ParseACL acl = new ParseACL();
-                        if (!acl.getReadAccess(user)) {
-                            acl.setReadAccess(user, true);
-                            user.setACL(acl);
-                        }
                         Toast.makeText(ProfileActivity.this, "Successfully updated profile image!", Toast.LENGTH_LONG);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

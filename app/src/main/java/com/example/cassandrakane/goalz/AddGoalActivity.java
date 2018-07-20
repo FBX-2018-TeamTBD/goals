@@ -49,6 +49,8 @@ public class AddGoalActivity extends AppCompatActivity {
     Date currentDate;
     int frequency = R.integer.FREQUENCY_DAILY;
 
+    ParseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,9 @@ public class AddGoalActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ButterKnife.bind(this);
+
+        user = ParseUser.getCurrentUser();
+        Log.i("sdf", ""+user.getACL().getPublicReadAccess());
 
         etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -119,10 +124,15 @@ public class AddGoalActivity extends AppCompatActivity {
         try {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
-            final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);            final ParseUser user = ParseUser.getCurrentUser();
+            final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
             List<ParseObject> goals = user.getList("goals");
             goals.add(goal);
             user.put("goals", goals);
+            ParseACL acl = user.getACL();
+            if (!acl.getPublicReadAccess()) {
+                acl.setPublicReadAccess(true);
+                user.setACL(acl);
+            }
             user.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -132,7 +142,6 @@ public class AddGoalActivity extends AppCompatActivity {
                             int timeRunningOutHours = getApplicationContext().getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
                             long delay = TimeUnit.DAYS.toMillis(goal.getFrequency()) - TimeUnit.HOURS.toMillis(timeRunningOutHours);
                             notificationHelper.sendNotification(goal.getObjectId(), goal.getTitle(), goal.getDescription(), goal.getIntId(), delay);
-
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), goal);

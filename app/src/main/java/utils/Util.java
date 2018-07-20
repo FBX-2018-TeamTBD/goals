@@ -8,6 +8,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.widget.ImageView;
 
+import com.example.cassandrakane.goalz.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -32,6 +33,9 @@ public class Util {
             roundedBitmapDrawable.setCornerRadius(cornerRadius);
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
+        } else {
+            ivProfile.setImageDrawable(null);
+            ivProfile.setBackgroundColor(resources.getColor(R.color.lightOrange));
         }
     }
 
