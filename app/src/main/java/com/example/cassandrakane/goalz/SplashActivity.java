@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void scheduleSplashScreen(){
-        int duration = 200;
+        int duration = 500;
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

@@ -56,7 +56,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -198,11 +197,12 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
-                goals.add(0, goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
+                    goals.add(goals.size() - 1, goal);
                 } else {
                     progressGoals += 1;
+                    goals.add(0, goal);
                 }
             }
             tvProgress.setText(String.valueOf(progressGoals));

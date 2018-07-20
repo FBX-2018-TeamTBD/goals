@@ -2,7 +2,6 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.LocaleDisplayNames;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -101,15 +100,15 @@ public class AddGoalActivity extends AppCompatActivity {
         switch(v.getId()) {
             case R.id.rbDay:
                 if (checked)
-                    frequency = R.integer.FREQUENCY_DAILY;
+                    frequency = getResources().getInteger(R.integer.FREQUENCY_DAILY);
                     break;
             case R.id.rbWeek:
                 if (checked)
-                    frequency = R.integer.FREQUENCY_WEEKLY;
+                    frequency = getResources().getInteger(R.integer.FREQUENCY_WEEKLY);
                     break;
             case R.id.rbMonth:
                 if (checked)
-                    frequency = R.integer.FREQUENCY_MONTHLY;
+                    frequency = getResources().getInteger(R.integer.FREQUENCY_MONTHLY);
                     break;
         }
 
