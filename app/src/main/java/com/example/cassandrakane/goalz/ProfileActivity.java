@@ -431,7 +431,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-        i.putExtra("goals", (Serializable) goals);
+        List<Goal> uncompleteGoals = new ArrayList<>();
+        for (Goal goal : goals){
+            if (!goal.getCompleted()){
+                uncompleteGoals.add(goal);
+            }
+        }
+        i.putExtra("goals", (Serializable) uncompleteGoals);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

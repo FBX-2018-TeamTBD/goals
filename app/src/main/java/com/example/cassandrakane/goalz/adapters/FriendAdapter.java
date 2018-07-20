@@ -2,17 +2,14 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +20,6 @@ import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -103,12 +99,19 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             holder.ivMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    holder.rvStory.setVisibility(holder.rvStory.isShown()
-                            ? View.GONE
-                            : View.VISIBLE);
+//                    holder.rvStory.setVisibility(holder.rvStory.isShown()
+//                            ? View.GONE
+//                            : View.VISIBLE);
+                    if (holder.rvStory.isShown()){
+                        holder.rvStory.setVisibility(View.GONE);
+                        holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
+                    } else {
+                        holder.rvStory.setVisibility(View.VISIBLE);
+                        holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
+                    }
 //                    holder.ivMenu.setImageDrawable(holder.rvStory.isShown()
 //                            ? );
-                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
+//                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 }
             });
         }
