@@ -55,6 +55,7 @@
                     android:layout_centerVertical="true"
                     android:backgroundTint="@color/white"
                     android:onClick="openDrawer" />
+
                 <TextView
                     android:id="@+id/tvFriends"
                     android:layout_width="wrap_content"
