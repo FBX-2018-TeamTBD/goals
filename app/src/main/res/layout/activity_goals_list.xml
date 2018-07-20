@@ -6,6 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".GoalsListActivity">
 
+    <RelativeLayout
+        android:id="@+id/noGoals"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/tvNone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:fontFamily="@font/quicksand"
+            android:text="@string/no_goals"
+            android:textColor="@color/orange"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:layout_above="@id/btnAdd2"
+            android:layout_marginBottom="10dp" />
+        <Button
+            android:id="@+id/btnAdd2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/add_goal"
+            android:backgroundTint="@color/orange"
+            android:onClick="addGoal" />
+
+    </RelativeLayout>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"

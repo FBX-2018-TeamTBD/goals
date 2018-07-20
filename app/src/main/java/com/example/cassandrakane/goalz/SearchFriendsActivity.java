@@ -65,7 +65,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         List<ParseUser> friends = null;
         try {
-            ParseUser.getCurrentUser().fetch().getList("friends");
+            friends = ParseUser.getCurrentUser().fetch().getList("friends");
         } catch (ParseException e) {
             e.printStackTrace();
         }

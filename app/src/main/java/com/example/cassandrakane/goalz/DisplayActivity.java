@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,8 +67,6 @@ public class DisplayActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-                    goal = Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
                     final ArrayList<ParseObject> story = goal.getStory();
                     final Image image = new Image(parseFile, "", goal);
                     image.saveInBackground(new SaveCallback() {
@@ -80,11 +77,12 @@ public class DisplayActivity extends AppCompatActivity {
                             goal.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
+                                    NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                                    notificationHelper.cancelReminder(goal);
+                                    notificationHelper.setReminder(goal);
                                     if (goal.getStory().size() == 1){
-                                        Image lastUpdate = (Image) story.get(story.size() - 1);
-                                        long sum = lastUpdate.getCreatedAt().getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
-                                        Date updateStoryBy = new Date(sum);
-                                        goal.setUpdateStoryBy(updateStoryBy);
+                                        goal.setProgress(1);
+                                        goal.setStreak(1);
                                         goal.setItemAdded(false);
                                         goal.saveInBackground(new SaveCallback() {
                                             @Override
@@ -95,6 +93,7 @@ public class DisplayActivity extends AppCompatActivity {
                                         });
                                     } else {
                                         if (!goal.getIsItemAdded()) {
+                                            goal.setProgress(goal.getProgress() + 1);
                                             if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                                 goal.setItemAdded(true);
                                                 goal.setStreak(goal.getStreak() + 1);

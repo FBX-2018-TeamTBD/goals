@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -26,6 +28,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.cassandrakane.goalz.ProfileActivity.ADD_GOAL_ACTIVITY_REQUEST_CODE;
+
 public class GoalsListActivity extends AppCompatActivity {
 
     List<Goal> goals;
@@ -35,6 +39,8 @@ public class GoalsListActivity extends AppCompatActivity {
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.noGoals) RelativeLayout noGoals;
+    @BindView(R.id.btnConfirm) Button btnConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +54,14 @@ public class GoalsListActivity extends AppCompatActivity {
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
 
-        goalSimpleAdapter = new GoalSimpleAdapter(goals);
-        rvGoals.setLayoutManager(new LinearLayoutManager(this));
-        rvGoals.setAdapter(goalSimpleAdapter);
-
+        if (goals.size() != 0) {
+            goalSimpleAdapter = new GoalSimpleAdapter(goals);
+            rvGoals.setLayoutManager(new LinearLayoutManager(this));
+            rvGoals.setAdapter(goalSimpleAdapter);
+        } else {
+            noGoals.setVisibility(View.VISIBLE);
+            btnConfirm.setVisibility(View.GONE);
+        }
     }
 
     public void addImage(View v) {
@@ -118,5 +128,11 @@ public class GoalsListActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    public void addGoal(View v) {
+        Intent i = new Intent(this, AddGoalActivity.class);
+        startActivityForResult(i, ADD_GOAL_ACTIVITY_REQUEST_CODE);
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
     }
 }
