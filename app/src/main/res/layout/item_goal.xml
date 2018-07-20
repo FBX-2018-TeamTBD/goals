@@ -74,7 +74,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
-                app:srcCompat="@drawable/add" />
+                app:srcCompat="@drawable/placeholder_user" />
 
             <ImageView
                 android:id="@+id/ivStar"

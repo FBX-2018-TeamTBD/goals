@@ -12,7 +12,7 @@
         android:layout_height="45dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/placeholder_friend" />
 
     <TextView
         android:id="@+id/tvTitle"
