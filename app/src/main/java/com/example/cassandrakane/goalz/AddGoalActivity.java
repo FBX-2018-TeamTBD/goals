@@ -100,15 +100,15 @@ public class AddGoalActivity extends AppCompatActivity {
         switch(v.getId()) {
             case R.id.rbDay:
                 if (checked)
-                    frequency = R.integer.FREQUENCY_DAILY;
+                    frequency = getResources().getInteger(R.integer.FREQUENCY_DAILY);
                     break;
             case R.id.rbWeek:
                 if (checked)
-                    frequency = R.integer.FREQUENCY_WEEKLY;
+                    frequency = getResources().getInteger(R.integer.FREQUENCY_WEEKLY);
                     break;
             case R.id.rbMonth:
                 if (checked)
-                    frequency = R.integer.FREQUENCY_MONTHLY;
+                    frequency = getResources().getInteger(R.integer.FREQUENCY_MONTHLY);
                     break;
         }
 

@@ -1,12 +1,8 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +10,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,10 +20,8 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.Parse;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -225,4 +218,15 @@ public class FeedActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+//            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+//            startActivity(i);
+//            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+//            return true;
+//        }
+//
+//        return super.onKeyDown(keyCode, event);
+//    }
 }

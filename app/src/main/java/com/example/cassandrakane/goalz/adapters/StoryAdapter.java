@@ -2,6 +2,8 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.parse.ParseException;
@@ -56,6 +60,18 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     .load(imageUrls.get(imageUrls.size() - 1))
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.ivStory);
+            holder.ivStory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    List<Image> imageList = goal.getList("images");
+                    ArrayList<String> imageUrls = getImageUrls(imageList);
+                    FeedActivity activity = (FeedActivity) context;
+                    final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                    FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
+                    activity.toolbar.setVisibility(View.INVISIBLE);
+                }
+            });
         }
         holder.tvTitle.setText(goal.getTitle());
     }
@@ -68,10 +84,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.tvTitle)
-        TextView tvTitle;
-        @BindView(R.id.ivStory)
-        ImageView ivStory;
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.ivStory) ImageView ivStory;
 
         public ViewHolder(View itemView) {
             super(itemView);
