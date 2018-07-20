@@ -43,7 +43,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     public SearchFriendAdapter(List<ParseUser> list) {
         searchList = list;
-        filteredList = list;
+        filteredList = new ArrayList<>();
     }
 
     @NonNull
@@ -106,7 +106,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    filteredList = searchList;
+                    filteredList.clear();
                 } else {
                     List<ParseUser> filtered = new ArrayList<>();
                     for (ParseUser user : searchList) {
