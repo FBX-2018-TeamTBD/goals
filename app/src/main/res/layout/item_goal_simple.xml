@@ -37,10 +37,13 @@
 
     <ImageView
         android:id="@+id/ivCheck"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="15dp"
-        android:layout_centerVertical="true"
-        app:srcCompat="@null" />
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignEnd="@+id/ivStory"
+        android:layout_alignTop="@+id/ivStory"
+        android:layout_marginRight="-7dp"
+        android:layout_marginTop="-2dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/check_circle" />
+
 </RelativeLayout>
