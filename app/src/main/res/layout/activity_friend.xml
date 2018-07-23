@@ -140,4 +140,26 @@
         android:layout_below="@+id/info_layout"
         android:layout_marginTop="10dp" />
 
+    <RelativeLayout
+        android:id="@+id/noGoals"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/info_layout"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/tvNone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/quicksand"
+            android:text="@string/no_friend_goals"
+            android:textColor="@color/orange"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="100dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

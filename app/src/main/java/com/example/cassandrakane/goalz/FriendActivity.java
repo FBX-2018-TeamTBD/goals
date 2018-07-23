@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
@@ -32,6 +33,7 @@ public class FriendActivity extends AppCompatActivity {
     @BindView(R.id.cardview) public CardView cardView;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.info_layout) View relativeLayout;
+    @BindView(R.id.noGoals) RelativeLayout noGoalPage;
 
     TextView tvProgress;
     TextView tvCompleted;
@@ -115,6 +117,11 @@ public class FriendActivity extends AppCompatActivity {
         }
         goalAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
+        if (completedGoals == 0 && progressGoals == 0) {
+            noGoalPage.setVisibility(View.VISIBLE);
+        } else {
+            noGoalPage.setVisibility(View.GONE);
+        }
     }
 
     public void goBack(View v) {
