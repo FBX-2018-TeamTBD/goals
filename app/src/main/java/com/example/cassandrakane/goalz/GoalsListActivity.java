@@ -142,4 +142,8 @@ public class GoalsListActivity extends AppCompatActivity {
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
     }
+
+    public void goBack(View v) {
+        finish();
+    }
 }
