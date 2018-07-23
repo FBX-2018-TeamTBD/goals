@@ -66,15 +66,16 @@
                     android:text="@string/friends"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
                 <Button
                     android:id="@+id/btnAddFriend"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/add_friend"
-                    android:backgroundTint="@color/white"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
+                    android:background="@drawable/add_friend"
+                    android:backgroundTint="@color/white"
                     android:onClick="addFriend" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
