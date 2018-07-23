@@ -17,6 +17,14 @@
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/orange"
         android:onClick="goBack" />
+    <Button
+        android:id="@+id/btnUnfriend"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/unfriend"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"

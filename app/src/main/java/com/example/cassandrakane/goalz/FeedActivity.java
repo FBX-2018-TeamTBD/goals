@@ -121,10 +121,12 @@ public class FeedActivity extends AppCompatActivity {
                                 toCamera();
                                 break;
                             case R.id.nav_goals:
-                                finish();
-                                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                                toGoals();
                                 break;
                             case R.id.nav_feed:
+                                break;
+                            case R.id.nav_friend_request:
+                                toFriendRequests();
                                 break;
                             case R.id.nav_logout:
                                 logout();
@@ -220,6 +222,18 @@ public class FeedActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
+
+    public void toGoals() {
+        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
+
+    public void toFriendRequests() {
+        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
     public void logout() {

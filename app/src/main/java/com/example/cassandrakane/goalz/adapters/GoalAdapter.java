@@ -1,12 +1,15 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +20,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
+import com.example.cassandrakane.goalz.NotificationHelper;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.GetCallback;
+import com.parse.ParseACL;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -97,6 +108,26 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                new AlertDialog.Builder(context)
+                        .setTitle(R.string.delete_goal)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
+                                notificationHelper.cancelReminder(goal);
+                                goals.remove(goal);
+                                removeGoal(goal.getObjectId());
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                return true;
+            }
+        });
+
         int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
         if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded()){
             holder.ivStar.setImageResource(R.drawable.clock);
@@ -151,6 +182,44 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
     }
 
+    private void removeGoal(String id) {
+        final ParseUser user = ParseUser.getCurrentUser();
+        user.put("goals", goals);
+        ParseACL acl = user.getACL();
+        if (!acl.getPublicReadAccess()) {
+            acl.setPublicReadAccess(true);
+            user.setACL(acl);
+        }
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    try {
+                        user.fetch();
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    Log.i("Profile Activity", "Failed to delete object, with error code: " + e.toString());
+                }
+            }
+        });
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Goal");
+        query.whereEqualTo("objectId", id);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                try {
+                    object.delete();
+                    object.saveInBackground();
+                    notifyDataSetChanged();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
+
     @Override
     public int getItemCount() {
         return goals.size();
@@ -170,6 +239,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
     }
 
 }

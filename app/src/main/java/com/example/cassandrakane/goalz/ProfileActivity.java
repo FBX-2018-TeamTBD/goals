@@ -122,6 +122,9 @@ public class ProfileActivity extends AppCompatActivity {
                             case R.id.nav_feed:
                                 toFeed();
                                 break;
+                            case R.id.nav_friend_request:
+                                toFriendRequests();
+                                break;
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -397,6 +400,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void toFeed() {
         Intent i = new Intent(getApplicationContext(), FeedActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void toFriendRequests() {
+        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }

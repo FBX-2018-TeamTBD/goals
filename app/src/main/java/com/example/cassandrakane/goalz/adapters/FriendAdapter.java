@@ -137,18 +137,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         return friends.size();
     }
 
-    // Clean all elements of the recycler
-    public void clear() {
-        friends.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<ParseUser> list) {
-        friends.addAll(list);
-        notifyDataSetChanged();
-    }
-
     public void toFriendActivity(ParseUser friend) {
         Intent i = new Intent(context, FriendActivity.class);
         i.putExtra(ParseUser.class.getSimpleName(), friend);
