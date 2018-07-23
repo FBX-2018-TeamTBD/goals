@@ -70,7 +70,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/menu_send"
+                android:background="@drawable/send_pic"
                 android:backgroundTint="@color/white"
                 android:onClick="addImage" />
         </RelativeLayout>
