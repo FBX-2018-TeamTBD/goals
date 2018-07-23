@@ -166,4 +166,8 @@ public class DisplayActivity extends AppCompatActivity {
         // Return result
         return rotatedBitmap;
     }
+
+    public void goBack(View v) {
+        finish();
+    }
 }
