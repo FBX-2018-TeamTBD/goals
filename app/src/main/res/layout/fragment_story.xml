@@ -36,6 +36,7 @@
     </LinearLayout>
 
     <ImageButton
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnClose"
         android:layout_width="35dp"
         android:layout_height="35dp"

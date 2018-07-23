@@ -7,6 +7,7 @@
     tools:context=".DisplayActivity">
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnBack"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -27,6 +28,7 @@
         app:srcCompat="@android:color/background_light" />
 
     <ImageButton
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnConfirm"
         android:layout_width="80dp"
         android:layout_height="80dp"

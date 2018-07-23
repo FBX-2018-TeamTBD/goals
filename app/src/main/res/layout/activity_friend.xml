@@ -8,6 +8,7 @@
     tools:context=".FriendActivity">
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -18,6 +19,7 @@
         android:backgroundTint="@color/orange"
         android:onClick="goBack" />
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnUnfriend"
         android:layout_width="30dp"
         android:layout_height="30dp"

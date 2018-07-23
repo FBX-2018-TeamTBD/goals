@@ -71,10 +71,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(i);
+                    finish();
                     overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Sorry, login failed. Try again or sign up.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Login failed. Try again or sign up.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
-                    Toast.makeText(LoginActivity.this, "Sorry, sign up failed. Check your Internet connection.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Sign up failed.", Toast.LENGTH_LONG).show();
                 }
             }
         });
