@@ -55,7 +55,7 @@ public class GoalsListActivity extends AppCompatActivity {
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
 
-        if (goals.size() != 0) {
+        if (goals != null && goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
             rvGoals.setLayoutManager(new LinearLayoutManager(this));
             rvGoals.setAdapter(goalSimpleAdapter);
