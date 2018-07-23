@@ -21,8 +21,6 @@ import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.Image;
-import com.parse.ParseException;
 
 import org.parceler.Parcels;
 
@@ -106,8 +104,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStar.setImageResource(R.drawable.star);
         }
 
-        List<Image> imageList = goal.getList("images");
-        final ArrayList<String> imageUrls = getImageUrls(imageList);
+        final ArrayList<String> imageUrls = goal.getStoryUrls();
 
         if (imageUrls.size() > 0) {
             Glide.with(context)
@@ -118,8 +115,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    List<Image> imageList = goal.getList("images");
-                    ArrayList<String> imageUrls = getImageUrls(imageList);
                     if (context.getClass().isAssignableFrom(ProfileActivity.class)) {
                         ProfileActivity activity = (ProfileActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -159,22 +154,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return goals.size();
-    }
-
-    public ArrayList<String> getImageUrls(List<Image> imageList) {
-        ArrayList<Image> images = new ArrayList<Image>();
-        if (imageList != null) {
-            images.addAll(imageList);
-        }
-        ArrayList<String> imageUrls = new ArrayList<String>();
-        for (Image i : images) {
-            try {
-                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return imageUrls;
     }
 
     // create ViewHolder class

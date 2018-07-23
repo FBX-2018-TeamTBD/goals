@@ -52,6 +52,19 @@ public class Goal extends ParseObject implements Parcelable {
         return story;
     }
 
+    public ArrayList<String> getStoryUrls() {
+        ArrayList<ParseObject> images = getStory();
+        ArrayList<String> imageUrls = new ArrayList<String>();
+        for (ParseObject i : images) {
+            try {
+                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return imageUrls;
+    }
+
     public String getTitle() {
         try {
             return fetchIfNeeded().getString("title");
