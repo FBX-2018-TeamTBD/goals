@@ -55,6 +55,7 @@
         android:inputType="textPassword" />
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnLogin"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -69,6 +70,7 @@
         android:text="@string/login" />
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnSignup"
         android:layout_width="200dp"
         android:layout_height="wrap_content"

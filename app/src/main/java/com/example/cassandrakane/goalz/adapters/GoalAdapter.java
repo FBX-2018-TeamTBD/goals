@@ -124,6 +124,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 } else {
                                     ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).progressGoals - 1));
                                 }
+                                notificationHelper.cancelReminder(goal);
                                 removeGoal(goal.getObjectId());
                             }
                         })
@@ -171,19 +172,19 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             if (personal) {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_user));
+                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
+                holder.ivStory.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
+                        Intent intent = new Intent(context, CameraActivity.class);
+                        intent.putExtra("goals", (Serializable) goals);
+                        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
+                        context.startActivity(intent);
+                    }
+                });
             } else {
                 holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_friend));
             }
-            holder.ivStory.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view){
-                    Intent intent = new Intent(context, CameraActivity.class);
-                    intent.putExtra("goals", (Serializable) goals);
-                    intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
-                    context.startActivity(intent);
-                }
-            });
         }
     }
 
