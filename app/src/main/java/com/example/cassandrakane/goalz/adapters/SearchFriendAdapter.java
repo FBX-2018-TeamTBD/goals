@@ -17,9 +17,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
+import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -55,41 +58,26 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     }
 
     @Override
-    public void onBindViewHolder(SearchFriendAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final ParseUser user = filteredList.get(position);
         holder.tvUsername.setText(user.getUsername());
         Util.setImage(user, "image", context.getResources(), holder.ivProfile, 8.0f);
+        holder.addBtn.setTag(R.drawable.add);
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFriend(user);
+                if (!holder.addBtn.getTag().equals(R.drawable.check)) {
+                    holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
+                    holder.addBtn.setTag(R.drawable.check);
+                    addFriend(user);
+                }
             }
         });
     }
 
     public void addFriend(final ParseUser user) {
-        final ParseUser currentUser = ParseUser.getCurrentUser();
-        List<ParseUser> friends = currentUser.getList("friends");
-        friends.add(0, user);
-        currentUser.put("friends", friends);
-        currentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    try {
-                        currentUser.fetch();
-                        Intent data  = new Intent();
-                        data.putExtra(ParseUser.class.getSimpleName(), user);
-                        ((SearchFriendsActivity) context).setResult(RESULT_OK, data);
-                        ((SearchFriendsActivity) context).finish();
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                } else {
-                    Log.i("Search Friend Activity", "Failed to update object, with error code: " + e.toString());
-                }
-            }
-        });
+        SentFriendRequests request = new SentFriendRequests(ParseUser.getCurrentUser(), user);
+        request.saveInBackground();
     }
 
     @Override

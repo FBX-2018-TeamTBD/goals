@@ -65,6 +65,7 @@
         android:onClick="login"
         android:textColor="@color/orange"
         android:fontFamily="@font/quicksand_regular"
+        android:shadowRadius="10.0"
         android:text="@string/login" />
 
     <Button

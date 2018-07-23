@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,7 @@ public class FeedActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
 
     ParseUser user;
     int completedGoals;
@@ -94,18 +96,18 @@ public class FeedActivity extends AppCompatActivity {
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
             public void onSwipeRight() {
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                toGoals();
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                toFriendRequests();
             }
         };
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
         setSupportActionBar(toolbar);
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.menu));
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(2).setChecked(true);
@@ -179,6 +181,11 @@ public class FeedActivity extends AppCompatActivity {
             }
             friends.addAll(arr);
         }
+        if (friends.size() == 0) {
+            noFriendsPage.setVisibility(View.VISIBLE);
+        } else {
+            noFriendsPage.setVisibility(View.GONE);
+        }
         friendAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
@@ -231,7 +238,7 @@ public class FeedActivity extends AppCompatActivity {
     }
 
     public void toFriendRequests() {
-        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
@@ -247,14 +254,7 @@ public class FeedActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_FRIEND_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                ParseUser friend = data.getParcelableExtra(ParseUser.class.getSimpleName());
-                friends.add(0, friend);
-                friendAdapter.notifyItemInserted(0);
-                rvFriends.scrollToPosition(0);
-            }
-        } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String imagePath = photoFile.getAbsolutePath();
                 Bitmap bitmap = Util.scaleCenterCrop(BitmapFactory.decodeFile(imagePath), 80, 80);
@@ -329,7 +329,6 @@ public class FeedActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

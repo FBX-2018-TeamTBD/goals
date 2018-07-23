@@ -33,4 +33,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="friend_requests">Friend Requests</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="add_a_friend">Add a friend</string>
 </resources>
