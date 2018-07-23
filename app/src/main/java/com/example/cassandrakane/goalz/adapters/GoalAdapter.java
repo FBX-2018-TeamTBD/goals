@@ -119,6 +119,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
                                 notificationHelper.cancelReminder(goal);
                                 goals.remove(goal);
+                                notificationHelper.cancelReminder(goal);
                                 removeGoal(goal.getObjectId());
                             }
                         })

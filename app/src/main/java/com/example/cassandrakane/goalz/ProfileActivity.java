@@ -1,29 +1,19 @@
 package com.example.cassandrakane.goalz;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -48,7 +38,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -413,6 +402,10 @@ public class ProfileActivity extends AppCompatActivity {
     public void logout() {
         ParseUser.logOut();
         Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
+        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+        for (Goal goal : goals) {
+            notificationHelper.cancelReminder(goal);
+        }
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
