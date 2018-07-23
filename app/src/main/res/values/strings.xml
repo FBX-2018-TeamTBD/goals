@@ -28,4 +28,5 @@
     <string name="zero">0</string>
     <string name="no_goals">Add a goal</string>
     <string name="what_s_your_goal">What\'s your goal?</string>
+    <string name="no_friend_goals">Your friend hasn\'t added any goals!</string>
 </resources>
