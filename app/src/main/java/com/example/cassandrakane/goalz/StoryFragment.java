@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 
@@ -29,7 +29,7 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
     @BindView(R.id.btnClose) ImageButton btnClose;
-    @BindView(R.id.tvProgress) TextView tvProgress;
+    @BindView(R.id.pbProgress) ProgressBar pbProgress;
 
     public StoryFragment() { }
 
@@ -114,6 +114,6 @@ public class StoryFragment extends Fragment {
         Glide.with(this)
                 .load(mImageURLs.get(mIndex))
                 .into(ivImage);
-        tvProgress.setText(String.format("%d/%d", mIndex + 1, mImageURLs.size()));
+        pbProgress.setProgress((mIndex + 1) * 100 / mImageURLs.size());
     }
 }
