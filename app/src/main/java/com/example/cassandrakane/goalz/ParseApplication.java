@@ -4,9 +4,11 @@ import android.app.Application;
 
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -26,6 +28,8 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(SentFriendRequests.class);
         ParseObject.registerSubclass(ApprovedFriendRequests.class);
         ParseObject.registerSubclass(RemovedFriends.class);
+        ParseObject.registerSubclass(SharedGoal.class);
+        ParseObject.registerSubclass(GoalRequests.class);
 
         // Use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
