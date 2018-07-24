@@ -126,68 +126,10 @@ public class FriendRequestsActivity extends AppCompatActivity {
         rvFriendRequests.setAdapter(friendRequestAdapter);
         rvFriendRequests.setOnTouchListener(onSwipeTouchListener);
 
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", user);
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("friend requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
-        query2.whereEqualTo("user", user);
-        try {
-            int count = query3.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(4).setTitle("goal requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        populateGoals();
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
         getFriendRequests();
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        populateGoals();
-        getFriendRequests();
-    }
-
-    public void populateGoals() {
-        List<ParseObject> arr = user.getList("goals");
-        int completedGoals = 0;
-        int progressGoals = 0;
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                } else {
-                    progressGoals += 1;
-                }
-            }
-            tvProgress.setText(String.valueOf(progressGoals));
-            tvCompleted.setText(String.valueOf(completedGoals));
-            tvFriends.setText(String.valueOf(user.getList("friends").size()));
-            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        }
-        ParseFile pfile = (ParseFile) user.get("image");
-        Util.setImage(user, pfile, getResources(), ivProfile, 16.0f);
+        Util.setRequests(user, navigationView);
     }
 
     public void getFriendRequests() {

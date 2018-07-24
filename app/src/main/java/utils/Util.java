@@ -14,20 +14,28 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
+import java.util.List;
 
 public class Util {
 
@@ -53,6 +61,61 @@ public class Util {
             ivProfile.setImageDrawable(resources.getDrawable(R.drawable.placeholder_profile));
         }
     }
+
+    public static void setRequests(ParseUser user, NavigationView navigationView) {
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.whereEqualTo("toUser", user);
+        try {
+            int count = query2.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(3).setTitle("friend requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
+        query2.whereEqualTo("user", user);
+        try {
+            int count = query3.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(4).setTitle("goal requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile) {
+        List<ParseObject> arr = user.getList("goals");
+        int completedGoals = 0;
+        int progressGoals = 0;
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = (Goal) arr.get(i);
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+                } else {
+                    progressGoals += 1;
+                }
+            }
+            tvProgress.setText(String.valueOf(progressGoals));
+            tvCompleted.setText(String.valueOf(completedGoals));
+            tvFriends.setText(String.valueOf(user.getList("friends").size()));
+            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        }
+        ParseFile pfile = (ParseFile) user.get("image");
+        setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
+    }
+
 
     public static void setImageBitmap(Bitmap bitmap, Context context, ImageView ivProfile) {
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);

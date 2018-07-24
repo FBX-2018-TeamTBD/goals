@@ -187,7 +187,12 @@ public class ProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         navigationView.getMenu().getItem(1).setChecked(true);
-//        populateGoals();
+        if (goals.size() == 0) {
+            noGoalPage.setVisibility(View.VISIBLE);
+        } else {
+            noGoalPage.setVisibility(View.GONE);
+        }
+        // populateGoals();
     }
 
     public void populateGoals(){
@@ -292,31 +297,7 @@ public class ProfileActivity extends AppCompatActivity {
         query.include("fromUser");
         query.whereEqualTo("fromUser", user);
 
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", user);
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("friend requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
-        query2.whereEqualTo("user", user);
-        try {
-            int count = query3.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(4).setTitle("goal requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Util.setRequests(user, navigationView);
 
         final List<ParseUser> friends = user.getList("friends");
         final List<ParseUser> newFriends = new ArrayList<>();
