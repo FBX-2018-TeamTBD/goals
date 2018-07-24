@@ -217,7 +217,6 @@ public class ProfileActivity extends AppCompatActivity {
                     goalAdapter.notifyDataSetChanged();
                 }
             }
-<<<<<<< HEAD
         });
 //        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
 //        localUserQuery.fromLocalDatastore();

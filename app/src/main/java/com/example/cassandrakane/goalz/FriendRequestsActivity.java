@@ -1,15 +1,14 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,16 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendRequestAdapter;
-import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,7 +165,8 @@ public class FriendRequestsActivity extends AppCompatActivity {
             tvFriends.setText(String.valueOf(user.getList("friends").size()));
             tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         }
-        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+        ParseFile pfile = (ParseFile) user.get("image");
+        Util.setImage(user, pfile, getResources(), ivProfile, 16.0f);
     }
 
     public void getFriendRequests() {

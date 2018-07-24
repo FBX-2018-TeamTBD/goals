@@ -99,7 +99,8 @@ public class FriendActivity extends AppCompatActivity {
             }
         });
 
-        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+        ParseFile pfile = (ParseFile) user.get("image");
+        Util.setImage(user, pfile, getResources(), ivProfile, 16.0f);
         populateProfile();
     }
 
