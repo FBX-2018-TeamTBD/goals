@@ -53,7 +53,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.nav_view) public NavigationView navigationView;
     @BindView(R.id.noFriendRequests) public RelativeLayout noFriendsPage;
 
     @Override
@@ -119,6 +119,19 @@ public class FriendRequestsActivity extends AppCompatActivity {
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(friendRequestAdapter);
         rvFriendRequests.setOnTouchListener(onSwipeTouchListener);
+
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.whereEqualTo("toUser", user);
+        try {
+            int count = query2.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         populateGoals();
         getFriendRequests();

@@ -8,9 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.SearchFriendAdapter;
+import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
+import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -77,6 +81,41 @@ public class SearchFriendsActivity extends AppCompatActivity {
             }
         }
         final List<String> friendNames = friendUsernames;
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.include("toUser");
+        query2.include("fromUser");
+        query2.whereEqualTo("fromUser", ParseUser.getCurrentUser());
+        query2.findInBackground(new FindCallback<SentFriendRequests>() {
+            @Override
+            public void done(List<SentFriendRequests> objects, ParseException e) {
+                for (int i = 0; i < objects.size(); i++) {
+                    SentFriendRequests request = objects.get(i);
+                    try {
+                        friendNames.add(request.getParseUser("toUser").fetch().getUsername());
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+
+                }
+            }
+        });
+        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("SentFriendRequests");
+        query3.include("toUser");
+        query3.include("fromUser");
+        query3.whereEqualTo("toUser", ParseUser.getCurrentUser());
+        query3.findInBackground(new FindCallback<SentFriendRequests>() {
+            @Override
+            public void done(List<SentFriendRequests> objects, ParseException e) {
+                for (int i = 0; i < objects.size(); i++) {
+                    SentFriendRequests request = objects.get(i);
+                    try {
+                        friendNames.add(request.getParseUser("fromUser").fetch().getUsername());
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
