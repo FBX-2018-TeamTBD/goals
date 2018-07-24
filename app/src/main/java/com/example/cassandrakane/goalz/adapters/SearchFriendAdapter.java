@@ -1,14 +1,8 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,26 +11,18 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
-import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
-import com.parse.ParseACL;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import utils.Util;
-
-import static android.app.Activity.RESULT_OK;
 
 public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapter.ViewHolder> implements Filterable {
 
@@ -61,7 +47,9 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final ParseUser user = filteredList.get(position);
         holder.tvUsername.setText(user.getUsername());
-        Util.setImage(user, "image", context.getResources(), holder.ivProfile, 8.0f);
+
+        ParseFile image = (ParseFile) user.get("image");
+        Util.setImage(user, image, context.getResources(), holder.ivProfile, 8.0f);
         holder.addBtn.setTag(R.drawable.add);
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override

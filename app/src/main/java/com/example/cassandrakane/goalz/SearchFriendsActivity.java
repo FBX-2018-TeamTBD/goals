@@ -31,6 +31,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
     List<ParseUser> searched;
     RecyclerView rvSearched;
     SearchFriendAdapter searchfriendAdapter;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
 
         searchView = findViewById(R.id.searchView);
+        progressBar = findViewById(R.id.progressBar);
 
         searched = getUsers();
         searchfriendAdapter = new SearchFriendAdapter(searched);

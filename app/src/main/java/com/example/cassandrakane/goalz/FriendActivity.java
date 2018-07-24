@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
+import com.parse.ParseFile;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -77,6 +78,12 @@ public class FriendActivity extends AppCompatActivity {
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
 
+        ParseFile file = (ParseFile) user.get("image");
+        Util.setImage(user, file, getResources(), ivProfile, 16.0f);
+//        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+        user.unpinInBackground();
+        user.pinInBackground("friends");
+
         btnUnfriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -93,39 +100,78 @@ public class FriendActivity extends AppCompatActivity {
             }
         });
 
-        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+        ParseFile pfile = (ParseFile) user.get("image");
+        Util.setImage(user, pfile, getResources(), ivProfile, 16.0f);
         populateProfile();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        populateProfile();
+//        populateProfile();
     }
 
+//    public void populateProfile(){
+//        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
+//        localQuery.fromPin("friendGoals");
+//        localQuery.whereEqualTo("user", user);
+//        localQuery.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if (e == null){
+//                    goals.clear();
+//                    for (int i=0; i <objects.size(); i++){
+//                        Goal goal = (Goal) objects.get(i);
+//
+//                        if (goal.getCompleted()) {
+//                            completedGoals += 1;
+//                            goals.add(goal);
+//                        } else {
+//                            progressGoals += 1;
+//                            goals.add(0, goal);
+//                        }
+//                    }
+//                    tvProgress.setText(String.valueOf(progressGoals));
+//                    tvCompleted.setText(String.valueOf(completedGoals));
+//                    tvUsername.setText(user.getUsername());
+//                    goalAdapter.notifyDataSetChanged();
+//                }
+//            }
+//        });
+//        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
+//        localUserQuery.fromPin("friends");
+//        localQuery.whereNotEqualTo("objectId", user.getObjectId());
+//        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                tvFriends.setText(String.valueOf(objects.size() - 1));
+//                progressBar.setVisibility(ProgressBar.INVISIBLE);
+//            }
+//        });
+//    }
     public void populateProfile() {
         List<ParseObject> arr = new ArrayList<>();
-        try {
-            arr = user.fetch().getList("goals");
-        } catch(ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+        arr = user.getList("goals");
+//        } catch(ParseException e) {
+//            e.printStackTrace();
+//        }
         completedGoals = 0;
         progressGoals = 0;
         goals.clear();
         if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                ParseObject.fetchAllIfNeeded(arr);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
             for(int i = 0; i < arr.size(); i++) {
                 Goal goal = null;
-                try {
-                    goal = arr.get(i).fetch();
-                } catch(ParseException e) {
-                    e.printStackTrace();
-                }
+//                try {
+                goal = (Goal) arr.get(i);
+//                } catch(ParseException e) {
+//                    e.printStackTrace();
+//                }
                 goals.add(0, goal);
                 if (goal.getCompleted()) {
                     completedGoals += 1;

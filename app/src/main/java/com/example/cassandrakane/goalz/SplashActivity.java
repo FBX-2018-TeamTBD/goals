@@ -8,12 +8,18 @@ import android.view.WindowManager;
 
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 public class SplashActivity extends AppCompatActivity {
+
+    DataFetcher dataFetcher;
+    ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        currentUser = ParseUser.getCurrentUser();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         scheduleSplashScreen();
@@ -27,7 +33,9 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
+                    dataFetcher = new DataFetcher(currentUser);
                     Intent i = new Intent(SplashActivity.this, ProfileActivity.class);
+                    i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(currentUser));
                     startActivity(i);
                     finish();
                 }  else {

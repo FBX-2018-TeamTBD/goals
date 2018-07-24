@@ -46,6 +46,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,7 +55,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -90,6 +91,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     public int completedGoals = 0;
     public int progressGoals = 0;
+
+    DataFetcher dataFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +153,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
-        user = ParseUser.getCurrentUser();
+        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
+        if (user == null) {
+            user = ParseUser.getCurrentUser();
+        }
 
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, true);
@@ -158,7 +164,10 @@ public class ProfileActivity extends AppCompatActivity {
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
 
-        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+        ParseFile file = (ParseFile) user.get("image");
+        Util.setImage(user, file, getResources(), ivProfile, 16.0f);
+//        Bitmap bitmap = BitmapFactory.decodeFile(file.get);
+//        Util.setImageBitmap(bitmap, this, ivProfile);
 
         ParseACL acl = user.getACL();
         if (!acl.getPublicReadAccess()) {
@@ -175,54 +184,105 @@ public class ProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         navigationView.getMenu().getItem(1).setChecked(true);
-        populateGoals();
+//        populateGoals();
     }
 
-    public void populateGoals() {
-        List<ParseObject> arr = new ArrayList<>();
-        try {
-            arr = user.fetch().getList("goals");
-        } catch(ParseException e) {
-            e.printStackTrace();
-        }
-        completedGoals = 0;
-        progressGoals = 0;
-        goals.clear();
-        List<Goal> completed = new ArrayList<>();
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = null;
-                try {
-                    goal = arr.get(i).fetch();
-                } catch(ParseException e) {
-                    e.printStackTrace();
+    public void populateGoals(){
+        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
+        localQuery.fromLocalDatastore();
+        localQuery.whereEqualTo("user", user);
+        localQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null){
+                    goals.clear();
+                    for (int i=0; i <objects.size(); i++){
+                        Goal goal = (Goal) objects.get(i);
+
+                        if (goal.getCompleted()) {
+                            completedGoals += 1;
+                            goals.add(goal);
+                        } else {
+                            progressGoals += 1;
+                            goals.add(0, goal);
+                        }
+
+                        if (goals.size() == 0) {
+                            noGoalPage.setVisibility(View.VISIBLE);
+                        } else {
+                            noGoalPage.setVisibility(View.GONE);
+                        }
+                    }
+                    tvProgress.setText(String.valueOf(progressGoals));
+                    tvCompleted.setText(String.valueOf(completedGoals));
+                    goalAdapter.notifyDataSetChanged();
                 }
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                    completed.add(0, goal);
-                } else {
-                    progressGoals += 1;
-                    goals.add(0, goal);
-                }
             }
-            goals.addAll(completed);
-            tvProgress.setText(String.valueOf(progressGoals));
-            tvCompleted.setText(String.valueOf(completedGoals));
-            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-            if (arr.size() == 0) {
-                noGoalPage.setVisibility(View.VISIBLE);
-            } else {
-                noGoalPage.setVisibility(View.GONE);
-            }
-        }
-        goalAdapter.notifyDataSetChanged();
+        });
+//        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
+//        localUserQuery.fromLocalDatastore();
+//        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
+//        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                tvFriends.setText(String.valueOf(objects.size()));
+//                progressBar.setVisibility(ProgressBar.INVISIBLE);
+//            }
+//        });
+
+        tvUsername.setText(user.getUsername());
+        tvFriends.setText(String.valueOf(user.getList("friends").size()));
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
+
+//    public void populateGoals() {
+//        List<ParseObject> arr = new ArrayList<>();
+////        try {
+//        arr = user.getList("goals");
+////        } catch(ParseException e) {
+//////            e.printStackTrace();
+//////        }
+//        completedGoals = 0;
+//        progressGoals = 0;
+//        goals.clear();
+////        ParseObject.pinAllInBackground(arr);
+//        List<Goal> completed = new ArrayList<>();
+//        if (arr != null) {
+////            try {
+////                ParseObject.fetchAllIfNeeded(arr);
+////            } catch (ParseException e) {
+////                e.printStackTrace();
+////            }
+//            for(int i = 0; i < arr.size(); i++) {
+//                Goal goal = null;
+////                try {
+////                    goal = arr.get(i).fetch();
+////                } catch(ParseException e) {
+////                    e.printStackTrace();
+////                }
+//                goal = (Goal) arr.get(i);
+//                if (goal.getCompleted()) {
+//                    completedGoals += 1;
+//                    completed.add(0, goal);
+//                } else {
+//                    progressGoals += 1;
+//                    goals.add(0, goal);
+//                }
+//            }
+//            goals.addAll(completed);
+//            tvProgress.setText(String.valueOf(progressGoals));
+//            tvCompleted.setText(String.valueOf(completedGoals));
+//            tvFriends.setText(String.valueOf(user.getList("friends").size()));
+//            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+//            if (arr.size() == 0) {
+//                noGoalPage.setVisibility(View.VISIBLE);
+//            } else {
+//                noGoalPage.setVisibility(View.GONE);
+//            }
+//        }
+//        goalAdapter.notifyDataSetChanged();
+//        progressBar.setVisibility(ProgressBar.INVISIBLE);
+//    }
 
     public void updateFriends() {
         ParseQuery<ApprovedFriendRequests> query = ParseQuery.getQuery("ApprovedFriendRequests");
@@ -360,6 +420,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
 
     public void onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
@@ -513,6 +574,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void toFeed() {
         Intent i = new Intent(getApplicationContext(), FeedActivity.class);
+        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }

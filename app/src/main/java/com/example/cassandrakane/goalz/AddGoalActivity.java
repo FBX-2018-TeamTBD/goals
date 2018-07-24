@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.etTitle) EditText etTitle;
     @BindView(R.id.etDescription) EditText etDescription;
     @BindView(R.id.etDuration) EditText etDuration;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     Date currentDate;
     int frequency = R.integer.FREQUENCY_DAILY;
@@ -120,12 +122,14 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
+        progressBar.setVisibility(View.VISIBLE);
         try {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
             final Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(), Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0, new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
             List<ParseObject> goals = user.getList("goals");
             goals.add(goal);
+            goal.pinInBackground();
             user.put("goals", goals);
             ParseACL acl = user.getACL();
             if (!acl.getPublicReadAccess()) {
@@ -143,6 +147,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), goal);
                             setResult(RESULT_OK, data);
+                            progressBar.setVisibility(View.GONE);
                             finish();
                         } catch (ParseException e1) {
                             e1.printStackTrace();
