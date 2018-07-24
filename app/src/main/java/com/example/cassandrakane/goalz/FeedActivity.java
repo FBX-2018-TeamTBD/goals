@@ -139,6 +139,9 @@ public class FeedActivity extends AppCompatActivity {
                             case R.id.nav_friend_request:
                                 toFriendRequests();
                                 break;
+                            case R.id.nav_goal_request:
+                                toGoalRequests();
+                                break;
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -172,9 +175,22 @@ public class FeedActivity extends AppCompatActivity {
         try {
             int count = query2.count();
             if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
             } else {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+                navigationView.getMenu().getItem(3).setTitle("friend requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
+        query2.whereEqualTo("user", user);
+        try {
+            int count = query3.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(4).setTitle("goal requests");
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -320,6 +336,12 @@ public class FeedActivity extends AppCompatActivity {
 
     public void toFriendRequests() {
         Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void toGoalRequests() {
+        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }

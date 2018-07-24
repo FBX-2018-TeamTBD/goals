@@ -85,6 +85,9 @@ public class FriendRequestsActivity extends AppCompatActivity {
                                 break;
                             case R.id.nav_friend_request:
                                 break;
+                            case R.id.nav_goal_request:
+                                toGoalRequests();
+                                break;
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -105,6 +108,11 @@ public class FriendRequestsActivity extends AppCompatActivity {
             public void onSwipeRight() {
                 toFeed();
             }
+
+            @Override
+            public void onSwipeLeft() {
+                toGoalRequests();
+            }
         };
 
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
@@ -123,9 +131,22 @@ public class FriendRequestsActivity extends AppCompatActivity {
         try {
             int count = query2.count();
             if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
             } else {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+                navigationView.getMenu().getItem(3).setTitle("friend requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
+        query2.whereEqualTo("user", user);
+        try {
+            int count = query3.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(4).setTitle("goal requests");
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -216,6 +237,12 @@ public class FriendRequestsActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), FeedActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
+
+    public void toGoalRequests() {
+        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
     public void logout() {

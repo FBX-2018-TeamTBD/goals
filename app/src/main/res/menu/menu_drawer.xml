@@ -7,13 +7,16 @@
             android:title="@string/camera" />
         <item android:id="@+id/nav_goals"
             android:icon="@drawable/goals"
-            android:title="My Goals" />
+            android:title="@string/goals" />
         <item android:id="@+id/nav_feed"
             android:icon="@drawable/feed"
             android:title="@string/friends_feed" />
         <item android:id="@+id/nav_friend_request"
             android:icon="@drawable/friend_requests"
             android:title="@string/friend_requests" />
+        <item android:id="@+id/nav_goal_request"
+            android:icon="@drawable/goal_requests"
+            android:title="@string/goal_requests" />
         <item android:id="@+id/nav_logout"
             android:icon="@drawable/logout"
             android:title="@string/logout" />

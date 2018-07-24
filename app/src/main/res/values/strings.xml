@@ -6,15 +6,12 @@
     <string name="monthly">Monthly</string>
     <string name="weekly">Weekly</string>
     <string name="daily">Daily</string>
-    <string name="logout">Logout</string>
-    <string name="friends_feed">Friends Feed</string>
-    <string name="camera">Camera</string>
+    <string name="logout">logout</string>
+    <string name="friends_feed">friends feed</string>
+    <string name="camera">camera</string>
     <string name="friends">my friends</string>
-    <string name="goals">goals</string>
+    <string name="goals">my goals</string>
     <string name="username">Username</string>
-    <string name="_0_current_ngoals">0 Current Goals</string>
-    <string name="_0_completed_ngoals">0 Completed Goals</string>
-    <string name="_0_nfriends">0 friends</string>
     <string name="add_goal">add goal</string>
     <string name="reminder_frequency">Reminder Frequency</string>
     <string name="password">Password</string>
@@ -32,8 +29,12 @@
     <string name="delete_goal">Are you sure you want to remove this goal?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="friend_requests">Friend Requests</string>
+    <string name="friend_requests">friend requests</string>
     <string name="confirm">Confirm</string>
     <string name="delete">Delete</string>
     <string name="add_a_friend">Add a friend</string>
+    <string name="no_other_users">No other users</string>
+    <string name="no_friend_requests_to_show">No friend requests to show</string>
+    <string name="no_goal_requests_to_show">No goal requests to show</string>
+    <string name="goal_requests">goal requests</string>
 </resources>

@@ -60,7 +60,7 @@
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/quicksand_medium"
                     android:gravity="center"
-                    android:text="my goals"
+                    android:text="@string/goals"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
