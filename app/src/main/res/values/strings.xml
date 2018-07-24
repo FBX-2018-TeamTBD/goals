@@ -28,4 +28,12 @@
     <string name="zero">0</string>
     <string name="no_goals">Add a goal</string>
     <string name="what_s_your_goal">What\'s your goal?</string>
+    <string name="no_friend_goals">Your friend hasn\'t added any goals!</string>
+    <string name="delete_goal">Are you sure you want to remove this goal?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="friend_requests">Friend Requests</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="add_a_friend">Add a friend</string>
 </resources>

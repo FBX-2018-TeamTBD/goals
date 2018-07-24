@@ -17,8 +17,6 @@ import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.Image;
-import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +49,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final StoryAdapter.ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = mGoals.get(position);
-
-        List<Image> imageList = goal.getList("images");
-        final ArrayList<String> imageUrls = getImageUrls(imageList);
-
+        final ArrayList<String> imageUrls = goal.getStoryUrls();
         if (imageUrls.size() > 0) {
             Glide.with(context)
                     .load(imageUrls.get(imageUrls.size() - 1))
@@ -63,8 +58,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    List<Image> imageList = goal.getList("images");
-                    ArrayList<String> imageUrls = getImageUrls(imageList);
+                    ArrayList<String> imageUrls = goal.getStoryUrls();
                     FeedActivity activity = (FeedActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
@@ -101,21 +95,5 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 //                itemView.setBackgroundColor(goal.isSelected() ? Color.CYAN : Color.WHITE);
 //            }
         }
-    }
-
-    public ArrayList<String> getImageUrls(List<Image> imageList) {
-        ArrayList<Image> images = new ArrayList<Image>();
-        if (imageList != null) {
-            images.addAll(imageList);
-        }
-        ArrayList<String> imageUrls = new ArrayList<String>();
-        for (Image i : images) {
-            try {
-                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return imageUrls;
     }
 }

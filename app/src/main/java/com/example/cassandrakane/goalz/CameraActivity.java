@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -17,13 +18,19 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -37,9 +44,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -54,11 +63,15 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
+
+import static com.example.cassandrakane.goalz.ProfileActivity.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE;
 
 public class CameraActivity extends AppCompatActivity {
 
     @BindView(R.id.btnCapture) ImageButton btnCapture;
     @BindView(R.id.btnSwap) ImageButton btnSwap;
+    @BindView(R.id.btnGallery) ImageButton btnGallery;
     @BindView(R.id.textureView) TextureView textureView;
     @BindView(R.id.ivFade) ImageView ivFade;
 
@@ -144,6 +157,13 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onLaunchGallery();
+            }
+        });
+
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(CameraActivity.this) {
             @Override
             public void onSwipeLeft() {
@@ -163,6 +183,68 @@ public class CameraActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void onLaunchGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        }
+                    }
+                    Uri uri = data.getData();
+                    file = new File(Environment.getExternalStorageDirectory()+"/"+ UUID.randomUUID().toString()+".jpg");
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    // Configure byte output stream
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    // Compress the image further
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(file.getAbsolutePath());
+                        // Write the bytes of the bitmap to file
+                        try {
+                            fos.write(bytes.toByteArray());
+                            fos.close();
+                            finish();
+                            Intent intent = new Intent(CameraActivity.this, DisplayActivity.class);
+                            intent.putExtra("image", file);
+                            intent.putExtra("goals", (Serializable) goals);
+                            intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
+                            startActivity(intent);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (FileNotFoundException e) {
+                        Log.i("asdf", "error");
+                        e.printStackTrace();
+                    }
+                }
+
+            } else { // Result was a failure
+                Toast.makeText(this, "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void takePicture() {

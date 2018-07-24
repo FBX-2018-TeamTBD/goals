@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -54,7 +55,7 @@ public class GoalsListActivity extends AppCompatActivity {
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
 
-        if (goals.size() != 0) {
+        if (goals != null && goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
             rvGoals.setLayoutManager(new LinearLayoutManager(this));
             rvGoals.setAdapter(goalSimpleAdapter);
@@ -77,8 +78,10 @@ public class GoalsListActivity extends AppCompatActivity {
                 }
             }
         });
+        int selected = 0;
         for (final Goal goal : goals){
             if (goal.isSelected()){
+                selected += 1;
                 final ArrayList<ParseObject> story = goal.getStory();
                 final Image image = new Image(parseFile, "", goal);
                 image.saveInBackground(new SaveCallback() {
@@ -128,11 +131,19 @@ public class GoalsListActivity extends AppCompatActivity {
                 });
             }
         }
+        if (selected == 0) {
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void addGoal(View v) {
         Intent i = new Intent(this, AddGoalActivity.class);
-        startActivityForResult(i, ADD_GOAL_ACTIVITY_REQUEST_CODE);
+        startActivity(i);
         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
+    }
+
+    public void goBack(View v) {
+        finish();
     }
 }

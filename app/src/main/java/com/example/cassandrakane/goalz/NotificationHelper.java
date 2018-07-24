@@ -67,7 +67,7 @@ public class NotificationHelper {
     private Notification createNotification(Goal goal) {
         // TODO set icon as app icon
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, goal.getObjectId())
-                .setSmallIcon(R.drawable.button_bg_round)
+                .setSmallIcon(R.drawable.check_circle_background)
                 .setContentTitle(goal.getTitle())
                 .setContentText(goal.getDescription())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

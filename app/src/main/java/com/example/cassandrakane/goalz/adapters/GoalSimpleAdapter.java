@@ -1,18 +1,23 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,23 +51,18 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         final Goal goal = mGoals.get(position);
 
         holder.tvTitle.setText(goal.getTitle());
+        ArrayList<String> storyUrls = goal.getStoryUrls();
+        if (storyUrls.size() > 0) {
+            Glide.with(context)
+                    .load(storyUrls.get(storyUrls.size() - 1))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.ivStory);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mGoals.size();
-    }
-
-    // Clean all elements of the recycler
-    public void clear() {
-        mGoals.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<Goal> list) {
-        mGoals.addAll(list);
-        notifyDataSetChanged();
     }
 
     // create ViewHolder class
@@ -85,9 +85,55 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
                 goal.setSelected(!(goal.isSelected()));
                 //itemView.setBackgroundColor(goal.isSelected() ? context.getColor(R.color.orange) : Color.WHITE);
                 //ivStory.setImageDrawable(goal.isSelected() ? context.getDrawable(R.drawable.check) : context.getDrawable(R.drawable.placeholder_user));
-                ivCheck.setImageDrawable(goal.isSelected() ? context.getDrawable(R.drawable.check) : null);
+                if (goal.isSelected()) {
+                    enterReveal(ivCheck);
+                } else {
+                    exitReveal(ivCheck);
+                }
             }
         }
+    }
+
+    void enterReveal(ImageView view) {
+        // get the center for the clipping circle
+        int cx = view.getMeasuredWidth() / 2;
+        int cy = view.getMeasuredHeight() / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(view.getWidth(), view.getHeight()) / 2;
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
+
+        // make the view visible and start the animation
+        view.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    void exitReveal(final ImageView view) {
+        // get the center for the clipping circle
+        int cx = view.getMeasuredWidth() / 2;
+        int cy = view.getMeasuredHeight() / 2;
+
+        // get the initial radius for the clipping circle
+        int initialRadius = view.getWidth() / 2;
+
+        // create the animation (the final radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
+
+        // make the view invisible when the animation is done
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                view.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // start the animation
+        anim.start();
     }
 
 }

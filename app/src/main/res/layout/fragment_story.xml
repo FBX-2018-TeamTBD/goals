@@ -37,28 +37,26 @@
 
     <ImageButton
         android:id="@+id/btnClose"
+        style="@style/SelectableItemBackground"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:background="@drawable/cancel" />
+        android:background="@drawable/cancel"
+        android:backgroundTint="@color/white" />
 
-    <TextView
-        android:id="@+id/tvProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ProgressBar
+        android:id="@+id/pbProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_weight="1"
-        android:textColor="@color/white"
-        android:fontFamily="@font/quicksand_medium"
-        android:textSize="20sp"
-        android:text="#/#" />
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:progress="25"
+        android:progressTint="@color/white" />
 
 </RelativeLayout>

@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <Button
+                style="@style/SelectableItemBackground"
                 android:id="@+id/btnBack"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -48,6 +49,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
             <Button
+                style="@style/SelectableItemBackground"
                 android:id="@+id/btnPost"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

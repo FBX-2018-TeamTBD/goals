@@ -8,6 +8,7 @@
     tools:context=".FriendActivity">
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -17,6 +18,15 @@
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/orange"
         android:onClick="goBack" />
+    <Button
+        style="@style/SelectableItemBackground"
+        android:id="@+id/btnUnfriend"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/unfriend"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -139,5 +149,27 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/info_layout"
         android:layout_marginTop="10dp" />
+
+    <RelativeLayout
+        android:id="@+id/noGoals"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/info_layout"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/tvNone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/quicksand"
+            android:text="@string/no_friend_goals"
+            android:textColor="@color/orange"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="100dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

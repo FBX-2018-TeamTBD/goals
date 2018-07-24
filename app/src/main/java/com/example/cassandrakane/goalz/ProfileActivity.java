@@ -32,14 +32,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
+import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -63,8 +67,8 @@ public class ProfileActivity extends AppCompatActivity {
     public final static int ADD_GOAL_ACTIVITY_REQUEST_CODE = 14;
 
     ImageView ivProfile;
-    TextView tvProgress;
-    TextView tvCompleted;
+    public TextView tvProgress;
+    public TextView tvCompleted;
     TextView tvFriends;
     TextView tvUsername;
 
@@ -84,8 +88,8 @@ public class ProfileActivity extends AppCompatActivity {
     private String photoFileName;
     private File photoFile;
 
-    private int completedGoals = 0;
-    private int progressGoals = 0;
+    public int completedGoals = 0;
+    public int progressGoals = 0;
 
     DataFetcher dataFetcher;
 
@@ -116,6 +120,9 @@ public class ProfileActivity extends AppCompatActivity {
                                 break;
                             case R.id.nav_feed:
                                 toFeed();
+                                break;
+                            case R.id.nav_friend_request:
+                                toFriendRequests();
                                 break;
                             case R.id.nav_logout:
                                 logout();
@@ -164,10 +171,12 @@ public class ProfileActivity extends AppCompatActivity {
         ParseACL acl = user.getACL();
         if (!acl.getPublicReadAccess()) {
             acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
             user.setACL(acl);
         }
 
         populateGoals();
+        updateFriends();
     }
 
     @Override
@@ -208,6 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
                     goalAdapter.notifyDataSetChanged();
                 }
             }
+<<<<<<< HEAD
         });
 //        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
 //        localUserQuery.fromLocalDatastore();
@@ -273,6 +283,80 @@ public class ProfileActivity extends AppCompatActivity {
 //        goalAdapter.notifyDataSetChanged();
 //        progressBar.setVisibility(ProgressBar.INVISIBLE);
 //    }
+
+    public void updateFriends() {
+        ParseQuery<ApprovedFriendRequests> query = ParseQuery.getQuery("ApprovedFriendRequests");
+        query.include("toUser");
+        query.include("fromUser");
+        query.whereEqualTo("fromUser", user);
+
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.whereEqualTo("toUser", user);
+        try {
+            int count = query2.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        final List<ParseUser> friends = user.getList("friends");
+        final List<ParseUser> newFriends = new ArrayList<>();
+        query.findInBackground(new FindCallback<ApprovedFriendRequests>() {
+            @Override
+            public void done(List<ApprovedFriendRequests> objects, ParseException e) {
+                newFriends.clear();
+                Log.i("sdf", ""+friends.size());
+                Log.i("sdf", ""+objects.size());
+                for (int i = 0; i < objects.size(); i++) {
+                    ApprovedFriendRequests request = objects.get(i);
+                    try {
+                        deleteApprovedRequest(request.getObjectId());
+                        ParseUser user = request.getParseUser("toUser").fetch();
+                        newFriends.add(user);
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                friends.addAll(newFriends);
+                user.put("friends", friends);
+                user.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            try {
+                                user.fetch();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        } else {
+                            Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
+                        }
+                    }
+                });
+                tvFriends.setText(String.valueOf(friends.size()));
+            }
+        });
+    }
+
+    public void deleteApprovedRequest(String id) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ApprovedFriendRequests");
+        query.whereEqualTo("objectId", id);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                try {
+                    object.delete();
+                    object.saveInBackground();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
 
     public void selectImage(View v) {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
@@ -424,6 +508,7 @@ public class ProfileActivity extends AppCompatActivity {
                 ParseACL acl = user.getACL();
                 if (!acl.getPublicReadAccess()) {
                     acl.setPublicReadAccess(true);
+                    acl.setPublicWriteAccess(true);
                     user.setACL(acl);
                 }
                 Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
@@ -454,9 +539,19 @@ public class ProfileActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
+    public void toFriendRequests() {
+        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
     public void logout() {
         ParseUser.logOut();
         Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
+        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+        for (Goal goal : goals) {
+            notificationHelper.cancelReminder(goal);
+        }
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
