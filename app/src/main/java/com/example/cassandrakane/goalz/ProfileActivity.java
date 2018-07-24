@@ -206,12 +206,11 @@ public class ProfileActivity extends AppCompatActivity {
                             progressGoals += 1;
                             goals.add(0, goal);
                         }
-
-                        if (goals.size() == 0) {
-                            noGoalPage.setVisibility(View.VISIBLE);
-                        } else {
-                            noGoalPage.setVisibility(View.GONE);
-                        }
+                    }
+                    if (goals.size() == 0) {
+                        noGoalPage.setVisibility(View.VISIBLE);
+                    } else {
+                        noGoalPage.setVisibility(View.GONE);
                     }
                     tvProgress.setText(String.valueOf(progressGoals));
                     tvCompleted.setText(String.valueOf(completedGoals));
