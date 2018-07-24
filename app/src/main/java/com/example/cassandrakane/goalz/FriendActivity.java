@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -189,6 +190,8 @@ public class FriendActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         me.fetch();
+                        RemovedFriends remove = new RemovedFriends(user, me);
+                        remove.saveInBackground();
                         finish();
                     } catch (ParseException e1) {
                         e1.printStackTrace();

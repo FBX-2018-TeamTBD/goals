@@ -62,8 +62,8 @@
         android:id="@+id/ivMenu"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="27dp"
         android:layout_marginRight="20dp"
         android:visibility="gone"
         app:srcCompat="@drawable/dropdown" />

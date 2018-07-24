@@ -34,6 +34,8 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.RemovedFriends;
+import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
@@ -51,6 +53,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -246,8 +249,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void done(List<ApprovedFriendRequests> objects, ParseException e) {
                 newFriends.clear();
-                Log.i("sdf", ""+friends.size());
-                Log.i("sdf", ""+objects.size());
                 for (int i = 0; i < objects.size(); i++) {
                     ApprovedFriendRequests request = objects.get(i);
                     try {
@@ -258,29 +259,71 @@ public class ProfileActivity extends AppCompatActivity {
                         e1.printStackTrace();
                     }
                 }
-                friends.addAll(newFriends);
-                user.put("friends", friends);
-                user.saveInBackground(new SaveCallback() {
+                ParseQuery<RemovedFriends> query3 = ParseQuery.getQuery("RemovedRequests");
+                query3.include("removedFriend");
+                query3.include("remover");
+                query3.whereEqualTo("removedFriend", user);
+                final List<String> removedFriends = new ArrayList<>();
+                query3.findInBackground(new FindCallback<RemovedFriends>() {
                     @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
+                    public void done(List<RemovedFriends> objects, ParseException e) {
+                        for (int i = 0; i < objects.size(); i++) {
+                            RemovedFriends request = objects.get(i);
+                            deleteRemoveRequest(request.getObjectId());
+                            removedFriends.add(request.getParseUser("remover").getUsername());
+
+                        }
+                        friends.addAll(newFriends);
+                        for (int i = friends.size() - 1; i >= 0; i--) {
                             try {
-                                user.fetch();
+                                if (removedFriends.contains(friends.get(i).fetch().getUsername())) {
+                                    friends.remove(i);
+                                }
                             } catch (ParseException e1) {
                                 e1.printStackTrace();
                             }
-                        } else {
-                            Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
                         }
+                        user.put("friends", friends);
+
+                        user.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    try {
+                                        user.fetch();
+                                    } catch (ParseException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                } else {
+                                    Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
+                                }
+                            }
+                        });
+                        tvFriends.setText(String.valueOf(friends.size()));
                     }
                 });
-                tvFriends.setText(String.valueOf(friends.size()));
             }
         });
     }
 
     public void deleteApprovedRequest(String id) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ApprovedFriendRequests");
+        query.whereEqualTo("objectId", id);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                try {
+                    object.delete();
+                    object.saveInBackground();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void deleteRemoveRequest(String id) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("RemovedRequests");
         query.whereEqualTo("objectId", id);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
