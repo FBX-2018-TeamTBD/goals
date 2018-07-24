@@ -83,6 +83,21 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         });
     }
 
+    public void decreaseFriendRequests() {
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.whereEqualTo("toUser", ParseUser.getCurrentUser());
+        try {
+            int count = query2.count();
+            if(count > 0) {
+                ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+            } else {
+                ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public int getItemCount() {
         return mFriends.size();
@@ -104,6 +119,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                     } else {
                         ((FriendRequestsActivity) context).noFriendsPage.setVisibility(View.VISIBLE);
                     }
+                    decreaseFriendRequests();
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();

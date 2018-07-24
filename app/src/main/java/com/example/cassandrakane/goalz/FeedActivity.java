@@ -33,9 +33,11 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
@@ -155,6 +157,18 @@ public class FeedActivity extends AppCompatActivity {
         rvFriends.setOnTouchListener(onSwipeTouchListener);
         populateGoals();
         populateFriends();
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.whereEqualTo("toUser", user);
+        try {
+            int count = query2.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

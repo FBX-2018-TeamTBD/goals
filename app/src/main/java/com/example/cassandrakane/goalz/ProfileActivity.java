@@ -43,6 +43,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -226,6 +227,19 @@ public class ProfileActivity extends AppCompatActivity {
         query.include("toUser");
         query.include("fromUser");
         query.whereEqualTo("fromUser", user);
+
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+        query2.whereEqualTo("toUser", user);
+        try {
+            int count = query2.count();
+            if(count > 0) {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+            } else {
+                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         final List<ParseUser> friends = user.getList("friends");
         final List<ParseUser> newFriends = new ArrayList<>();
