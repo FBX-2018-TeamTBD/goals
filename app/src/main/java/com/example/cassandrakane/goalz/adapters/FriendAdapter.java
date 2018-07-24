@@ -6,21 +6,21 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.DataFetcher;
 import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -36,6 +36,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     Context context;
     StoryAdapter storyAdapter;
     List<Goal> goals;
+    List<Goal> friendGoals;
+    DataFetcher dataFetcher;
 
     public FriendAdapter(List<ParseUser> friends) {
         this.friends = friends;
@@ -58,12 +60,18 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         // get the data according to position
         final ParseUser friend = friends.get(position);
+
+//        dataFetcher = new DataFetcher(friend);
+//        dataFetcher.setUserGoals();
+
         try {
             holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Util.setImage(friend, "image", context.getResources(), holder.ivProfile, 16.0f);
+        ParseFile file = (ParseFile) friend.get("image");
+        Util.setImage(friend, file, context.getResources(), holder.ivProfile, 16.0f);
+//        Util.setImage(friend, "image", context.getResources(), holder.ivProfile, 16.0f);
         holder.ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +114,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 //                            : View.VISIBLE);
                     if (holder.rvStory.isShown()){
                         holder.rvStory.setVisibility(View.GONE);
-                        holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
                     } else {
                         holder.rvStory.setVisibility(View.INVISIBLE);
                         Handler handler = new Handler();
@@ -116,7 +123,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                                 holder.rvStory.setVisibility(View.VISIBLE);
                                 holder.rvStory.startAnimation(AnimationUtils.loadAnimation(context, R.anim.menu_slide_up));
                             }
-                        }, 500);
+                        }, 100);
                     }
 //                    holder.ivMenu.setImageDrawable(holder.rvStory.isShown()
 //                            ? );
@@ -166,4 +173,24 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
     }
 
+    public void getFriendGoals(ParseUser friend){
+        List<ParseObject> arr = new ArrayList<>();
+        friendGoals = new ArrayList<>();
+        arr = friend.getList("goals");
+        for(int i = 0; i < arr.size(); i++) {
+            Goal goal = null;
+            try {
+                goal = arr.get(i).fetch();
+            } catch(ParseException e) {
+                e.printStackTrace();
+            }
+            if (goal.getCompleted()) {
+                friendGoals.add(goal);
+            } else {
+                friendGoals.add(0, goal);
+            }
+        }
+
+        ParseObject.pinAllInBackground("friendGoals", friendGoals);
+    }
 }

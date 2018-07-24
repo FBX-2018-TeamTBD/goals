@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.SearchFriendAdapter;
@@ -27,6 +29,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
     List<ParseUser> searched;
     RecyclerView rvSearched;
     SearchFriendAdapter searchfriendAdapter;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
 
         searchView = findViewById(R.id.searchView);
+        progressBar = findViewById(R.id.progressBar);
 
         searched = getUsers();
         searchfriendAdapter = new SearchFriendAdapter(searched);

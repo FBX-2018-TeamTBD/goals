@@ -1,68 +1,43 @@
 package utils;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.AddGoalActivity;
-import com.example.cassandrakane.goalz.CameraActivity;
-import com.example.cassandrakane.goalz.FeedActivity;
-import com.example.cassandrakane.goalz.LoginActivity;
-import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
-import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Util {
 
-    public static void setImage(ParseUser user, String parseKey, Resources resources, ImageView ivProfile, float cornerRadius) {
-        ParseFile imageFile = null;
-        try {
-            imageFile = user.fetch().getParseFile(parseKey);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public static void setImage(ParseUser user, ParseFile imageFile, Resources resources, ImageView ivProfile, float cornerRadius) {
+//        ParseFile imageFile = null;
+//        try {
+//            imageFile = user.fetch().getParseFile(parseKey);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         if (imageFile != null) {
             Bitmap bitmap = null;
             try {

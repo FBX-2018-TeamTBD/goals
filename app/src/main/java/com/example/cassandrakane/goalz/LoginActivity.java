@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
@@ -24,8 +25,11 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
 
+    DataFetcher dataFetcher;
+
     @BindView(R.id.tvUsername) EditText tvUsername;
     @BindView(R.id.tvPassword) EditText tvPassword;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +68,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View v) {
+        progressBar.setVisibility(View.VISIBLE);
         final String username = tvUsername.getText().toString();
         final String password = tvPassword.getText().toString();
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
                     // transition to home screen
+                    dataFetcher = new DataFetcher(user);
                     Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(i);
+                    progressBar.setVisibility(View.GONE);
                     overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Sorry, login failed. Try again or sign up for new user.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -83,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signUp(View v) {
         // Create the ParseUser
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
         // Set core properties
         final String username = tvUsername.getText().toString();
         final String password = tvPassword.getText().toString();
@@ -122,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         currentUser.fetch();
+                        dataFetcher = new DataFetcher(currentUser);
                         // transition to home screen
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);

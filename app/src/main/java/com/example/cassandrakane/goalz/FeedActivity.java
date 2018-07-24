@@ -22,7 +22,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,16 +32,21 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +64,7 @@ public class FeedActivity extends AppCompatActivity {
 
     List<ParseUser> friends;
     FriendAdapter friendAdapter;
+    List<Goal> goals;
 
     ImageView ivProfile;
     TextView tvProgress;
@@ -88,13 +93,17 @@ public class FeedActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        user = ParseUser.getCurrentUser();
+        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
+        if (user == null) {
+            user = ParseUser.getCurrentUser();
+        }
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
             public void onSwipeRight() {
                 Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
             }
@@ -150,62 +159,116 @@ public class FeedActivity extends AppCompatActivity {
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvFriends.addItemDecoration(itemDecor);
         rvFriends.setOnTouchListener(onSwipeTouchListener);
-        populateGoals();
         populateFriends();
+        populateGoals();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        populateFriends();
-        populateGoals();
+//        populateFriends();
+//        populateGoals();
     }
 
+//    public void populateFriends(){
+//        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
+//        localUserQuery.fromLocalDatastore();
+//        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
+//        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                friends.clear();
+//                friends.addAll(objects);
+//                tvFriends.setText(String.valueOf(friends.size()));
+//                friendAdapter.notifyDataSetChanged();
+//                ParseObject.unpinAllInBackground("friends");
+//                ParseObject.pinAllInBackground("friends", objects);
+//                progressBar.setVisibility(ProgressBar.INVISIBLE);
+//            }
+//        });
+//    }
     public void populateFriends() {
         List<ParseUser> arr = null;
-        try {
-            arr = user.fetch().getList("friends");
-        } catch(ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+        arr = user.getList("friends");
+//        } catch(ParseException e) {
+//            e.printStackTrace();
+//        }
         friends.clear();
         if (arr != null) {
-            try {
-                ParseUser.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                ParseUser.fetchAllIfNeeded(arr);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
             friends.addAll(arr);
         }
+        tvFriends.setText(String.valueOf(friends.size()));
+        ParseObject.unpinAllInBackground(arr);
+        ParseObject.pinAllInBackground(arr);
         friendAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
-    public void populateGoals() {
-        List<ParseObject> arr = user.getList("goals");
-        completedGoals = 0;
-        progressGoals = 0;
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                } else {
-                    progressGoals += 1;
+    public void populateGoals(){
+        goals = new ArrayList<>();
+        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
+        localQuery.fromLocalDatastore();
+        localQuery.whereEqualTo("user", user);
+        localQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null){
+                    goals.clear();
+                    for (int i=0; i <objects.size(); i++){
+                        Goal goal = (Goal) objects.get(i);
+
+                        if (goal.getCompleted()) {
+                            completedGoals += 1;
+                            goals.add(goal);
+                        } else {
+                            progressGoals += 1;
+                            goals.add(0, goal);
+                        }
+                    }
+                    tvProgress.setText(String.valueOf(progressGoals));
+                    tvCompleted.setText(String.valueOf(completedGoals));
+                    tvUsername.setText(user.getUsername());
                 }
             }
-            tvProgress.setText(String.valueOf(progressGoals));
-            tvCompleted.setText(String.valueOf(completedGoals));
-            tvFriends.setText(String.valueOf(user.getList("friends").size()));
-            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        }
-        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+        });
     }
+
+//    public void populateGoals() {
+//        List<ParseObject> arr = user.getList("goals");
+//        goals = new ArrayList<>();
+//        completedGoals = 0;
+//        progressGoals = 0;
+//        if (arr != null) {
+////            try {
+////                ParseObject.fetchAllIfNeeded(arr);
+////            } catch (ParseException e) {
+////                e.printStackTrace();
+////            }
+//            for(int i = 0; i < arr.size(); i++) {
+//                Goal goal = (Goal) arr.get(i);
+//                if (goal.getCompleted()) {
+//                    completedGoals += 1;
+//                    goals.add(goal);
+//                } else {
+//                    progressGoals += 1;
+//                    goals.add(goal);
+//                }
+//            }
+//            tvProgress.setText(String.valueOf(progressGoals));
+//            tvCompleted.setText(String.valueOf(completedGoals));
+//            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+//        }
+//        ParseFile file = (ParseFile) user.get("image");
+//        Util.setImage(user, file, getResources(), ivProfile, 16.0f);
+////        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
+//
+//    }
 
     public void addFriend(View v) {
         Intent i = new Intent(this, SearchFriendsActivity.class);
@@ -218,6 +281,7 @@ public class FeedActivity extends AppCompatActivity {
 
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+        i.putExtra("goals", (Serializable) goals);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

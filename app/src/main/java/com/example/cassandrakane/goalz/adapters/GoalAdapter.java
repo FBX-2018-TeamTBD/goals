@@ -107,7 +107,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         List<Image> imageList = goal.getList("images");
-        final ArrayList<String> imageUrls = getImageUrls(imageList);
+//        Image im = imageList.get(0);
+//        String url = im.getImage().getUrl();
+        ArrayList<String> imageUrls = new ArrayList<>();
+        if (imageList.size() != 0) {
+            imageUrls = getImageUrls(imageList);
+        }
 
         if (imageUrls.size() > 0) {
             Glide.with(context)
@@ -167,12 +172,19 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             images.addAll(imageList);
         }
         ArrayList<String> imageUrls = new ArrayList<String>();
-        for (Image i : images) {
+        for (int i = 0; i<imageList.size(); i++) {
+//            try {
+                Image im = imageList.get(i);
+            String url = null;
             try {
-                imageUrls.add(i.fetchIfNeeded().getParseFile("image").getUrl());
+                url = im.fetchIfNeeded().getParseFile("image").getUrl();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            imageUrls.add(url);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
         }
         return imageUrls;
     }
