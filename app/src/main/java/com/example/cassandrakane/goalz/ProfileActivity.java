@@ -34,7 +34,6 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
