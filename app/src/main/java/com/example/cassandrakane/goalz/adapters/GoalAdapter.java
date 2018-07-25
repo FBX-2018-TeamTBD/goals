@@ -30,6 +30,7 @@ import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -49,9 +50,10 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
+public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<Goal> goals;
+    private final List<SharedGoal> sharedGoals;
+    private final List<Goal> individualGoals;
     private boolean personal; //for determining whether this is for user or for a friend
     Context context;
     Date currentDate;
@@ -59,30 +61,68 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     float endX = 0;
     boolean longClick = false;
 
-    public GoalAdapter(List<Goal> goals, boolean personal) {
-        this.goals = goals;
+    public GoalAdapter(List<SharedGoal> shGoals, List<Goal> indGoals, boolean personal) {
+        this.sharedGoals = shGoals;
+        this.individualGoals = indGoals;
         this.personal = personal;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position < sharedGoals.size() ? 0 : 1;
     }
 
     // for each row, inflate the layout and cache references into ViewHolder
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        return new ViewHolder(
-                inflater.inflate(R.layout.item_goal, parent, false)
-        );
+        switch (viewType) {
+            case 0:
+                return new SharedGoalViewHolder(inflater.inflate(R.layout.item_shared_goal, parent, false));
+            case 1:
+                return new IndividualGoalViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
+        }
+        return null;
     }
 
     // bind the values based on the position of the element
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        // get the data according to position
-        final Goal goal = goals.get(position);
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
+        Goal goal = null;
+        TextView tvTitle = null;
+        TextView tvDescription = null;
+        TextView tvProgress = null;
+        TextView tvStreak = null;
+        ImageView ivStar = null;
+        ImageView ivStory = null;
+        switch (holder.getItemViewType()) {
+            case 0:
+                goal = sharedGoals.get(position);
+                SharedGoalViewHolder shHolder = (SharedGoalViewHolder) holder;
+                tvTitle = shHolder.tvTitle;
+                tvDescription = shHolder.tvDescription;
+                tvProgress = shHolder.tvProgress;
+                tvStreak = shHolder.tvStreak;
+                ivStar = shHolder.ivStar;
+                ivStory = shHolder.ivStory;
+                break;
+            case 1:
+                goal = individualGoals.get(position - sharedGoals.size());
+                IndividualGoalViewHolder indHolder = (IndividualGoalViewHolder) holder;
+                tvTitle = indHolder.tvTitle;
+                tvDescription = indHolder.tvDescription;
+                tvProgress = indHolder.tvProgress;
+                tvStreak = indHolder.tvStreak;
+                ivStar = indHolder.ivStar;
+                ivStory = indHolder.ivStory;
+                break;
+        }
         currentDate = new Date();
 
+        final Goal finalGoal = goal;
         final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
             @Override
             public boolean onDown(MotionEvent motionEvent) {
@@ -125,15 +165,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
-                                    notificationHelper.cancelReminder(goal);
-                                    goals.remove(goal);
-                                    if (goal.getCompleted()) {
+                                    notificationHelper.cancelReminder(finalGoal);
+                                    switch (holder.getItemViewType()) {
+                                        case 0:
+                                            sharedGoals.remove(finalGoal);
+                                            break;
+                                        case 1:
+                                            individualGoals.remove(finalGoal);
+                                            break;
+                                    }
+                                    if (finalGoal.getCompleted()) {
                                         ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).completedGoals - 1));
                                     } else {
                                         ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).progressGoals - 1));
                                     }
-                                    notificationHelper.cancelReminder(goal);
-                                    removeGoal(goal.getObjectId());
+                                    notificationHelper.cancelReminder(finalGoal);
+                                    removeGoal(finalGoal.getObjectId());
                                 }
                             })
                             .setNegativeButton(R.string.no, null)
@@ -181,30 +228,30 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
         }
 
-        holder.tvTitle.setText(goal.getTitle());
-        holder.tvDescription.setText(goal.getDescription());
-        holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
+        tvTitle.setText(goal.getTitle());
+        tvDescription.setText(goal.getDescription());
+        tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
         if (goal.getStreak() > 0) {
-            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
-            holder.ivStar.setVisibility(View.VISIBLE);
+            tvStreak.setText(String.format("%d", goal.getStreak()));
+            ivStar.setVisibility(View.VISIBLE);
         } else {
-            holder.tvStreak.setText("");
-            holder.ivStar.setVisibility(View.INVISIBLE);
+            tvStreak.setText("");
+            ivStar.setVisibility(View.INVISIBLE);
         }
         if (goal.getCompleted()) {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
+            tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.black));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            tvTitle.setTextColor(context.getResources().getColor(R.color.black));
+            tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            tvTitle.setPaintFlags(tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
         if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded()){
-            holder.ivStar.setImageResource(R.drawable.clock);
+            ivStar.setImageResource(R.drawable.clock);
         } else {
-            holder.ivStar.setImageResource(R.drawable.star);
+            ivStar.setImageResource(R.drawable.star);
         }
 
 //        List<Image> imageList = goal.getList("images");
@@ -220,9 +267,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             Glide.with(context)
                     .load(imageUrls.get(imageUrls.size() - 1))
                     .apply(RequestOptions.circleCropTransform())
-                    .into(holder.ivStory);
+                    .into(ivStory);
 
-            holder.ivStory.setOnClickListener(new View.OnClickListener() {
+            ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (context.getClass().isAssignableFrom(ProfileActivity.class)) {
@@ -245,25 +292,38 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             if (personal) {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
-                holder.ivStory.setOnClickListener(new View.OnClickListener(){
+                ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
+                final Goal finalGoal1 = goal;
+                ivStory.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
                         Intent intent = new Intent(context, CameraActivity.class);
-                        intent.putExtra("goals", (Serializable) goals);
-                        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
+                        List<Goal> uncompleteGoals = new ArrayList<>();
+                        for (Goal goal : sharedGoals){
+                            if (!goal.getCompleted()){
+                                uncompleteGoals.add(goal);
+                            }
+                        }
+                        for (Goal goal : individualGoals){
+                            if (!goal.getCompleted()){
+                                uncompleteGoals.add(goal);
+                            }
+                        }
+                        intent.putExtra("goals", (Serializable) uncompleteGoals);
+                        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(finalGoal1));
                         context.startActivity(intent);
                     }
                 });
             } else {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_friend));
+                ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_friend));
             }
         }
     }
 
     private void removeGoal(String id) {
         final ParseUser user = ParseUser.getCurrentUser();
-        user.put("goals", goals);
+        user.put("goals", individualGoals);
+        user.put("sharedGoals", sharedGoals);
         ParseACL acl = user.getACL();
         if (!acl.getPublicReadAccess()) {
             acl.setPublicReadAccess(true);
@@ -301,7 +361,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return goals.size();
+        return sharedGoals.size() + individualGoals.size();
     }
 
 //    public ArrayList<String> getImageUrls(List<Image> imageList) {
@@ -327,8 +387,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 //        return imageUrls;
 //    }
 
-    // create ViewHolder class
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class IndividualGoalViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.tvDescription) TextView tvDescription;
@@ -337,7 +396,23 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivStar) ImageView ivStar;
 
-        public ViewHolder(View itemView) {
+        public IndividualGoalViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+    }
+
+    public static class SharedGoalViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvDescription) TextView tvDescription;
+        @BindView(R.id.tvStreak) TextView tvStreak;
+        @BindView(R.id.tvProgress) TextView tvProgress;
+        @BindView(R.id.ivStory) ImageView ivStory;
+        @BindView(R.id.ivStar) ImageView ivStar;
+
+        public SharedGoalViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

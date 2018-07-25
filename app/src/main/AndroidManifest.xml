@@ -81,7 +81,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FriendRequestsActivity" />
-        <activity android:name=".GoalRequestsActivity"></activity>
+        <activity android:name=".GoalRequestsActivity" />
+        <activity android:name=".VideoActivity"></activity>
     </application>
 
 </manifest>

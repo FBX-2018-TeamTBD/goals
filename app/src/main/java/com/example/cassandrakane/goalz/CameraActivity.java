@@ -174,7 +174,9 @@ public class CameraActivity extends AppCompatActivity {
         btnVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(CameraActivity.this, VideoActivity.class);
+                intent.putExtra("goals", (Serializable) goals);
+                startActivity(intent);
             }
         });
 

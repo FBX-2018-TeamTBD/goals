@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -89,6 +88,7 @@ public class AddGoalActivity extends AppCompatActivity {
             if (form.getFrequency() == getResources().getInteger(R.integer.FREQUENCY_MONTHLY)) {
                 rbMonth.setChecked(true);
             }
+            frequency = form.getFrequency();
             swShare.setChecked(form.getIsShared());
             selectedFriends = form.getSelectedFriends();
             if (form.getIsShared()) {
@@ -240,6 +240,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), finalGoal);
+                            data.putExtra("isShared", swShare.isChecked());
                             setResult(RESULT_OK, data);
                             progressBar.setVisibility(View.GONE);
                             finish();

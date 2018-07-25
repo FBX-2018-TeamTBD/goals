@@ -19,6 +19,7 @@ import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -93,9 +94,14 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             }
         });*/
 
-        goals = friend.getList("goals");
-        if (goals == null){
-            goals = new ArrayList<Goal>();
+        goals = new ArrayList<Goal>();
+        List<SharedGoal> sharedGoals = friend.getList("sharedGoals");
+        List<SharedGoal> individualGoals = friend.getList("goals");
+        if (sharedGoals != null) {
+            goals.addAll(sharedGoals);
+        }
+        if (individualGoals != null) {
+            goals.addAll(individualGoals);
         }
         storyAdapter = new StoryAdapter(goals);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);

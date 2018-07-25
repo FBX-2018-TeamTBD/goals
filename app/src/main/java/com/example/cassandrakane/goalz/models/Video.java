@@ -4,34 +4,30 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+@ParseClassName("Video")
+public class Video extends ParseObject {
 
-@ParseClassName("Image")
-public class Image extends ParseObject{
-
-    public Image() {
+    public Video() {
         super();
     }
 
-    public Image(ParseFile image, String caption) {
+    public Video(ParseFile video, String caption) {
         super();
-        setImage(image);
+        setVideo(video);
         setCaption(caption);
     }
 
-    public ParseFile getImage() {
+    public ParseFile getVideo() {
         return getParseFile("image");
     }
 
-    public String getDescription() {
-        return getString("description");
-    }
 
-
-    public void setImage(ParseFile image) {
-        put("image", image);
+    public void setVideo(ParseFile video) {
+        put("video", video);
     }
 
     public void setCaption(String caption) {
         put("caption", caption);
     }
+
 }
