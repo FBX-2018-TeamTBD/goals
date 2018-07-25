@@ -29,9 +29,11 @@ public class DataFetcher {
         user.pinInBackground();
         setUserGoals();
         setUserFriends();
-        Intent i = new Intent(context, ProfileActivity.class);
-        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
-        context.startActivity(i);
+        if (!mContext.getClass().getSimpleName().equals(ProfileActivity.class.getSimpleName())) {
+            Intent i = new Intent(context, ProfileActivity.class);
+            i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
+            context.startActivity(i);
+        }
     }
 
     public void setUserGoals() {

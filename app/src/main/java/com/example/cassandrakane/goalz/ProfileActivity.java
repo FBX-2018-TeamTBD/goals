@@ -15,7 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -79,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     private ParseUser user;
 
@@ -136,6 +140,23 @@ public class ProfileActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (dataFetcher == null) {
+                    dataFetcher = new DataFetcher(user, ProfileActivity.this);
+                }
+                dataFetcher.setUserFriends();
+                dataFetcher.setUserGoals();
+                populateGoals();
+                updateFriends();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_red_light);
 
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
@@ -204,6 +225,8 @@ public class ProfileActivity extends AppCompatActivity {
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null){
                     goals.clear();
+                    completedGoals = 0;
+                    progressGoals = 0;
                     for (int i=0; i <objects.size(); i++){
                         Goal goal = (Goal) objects.get(i);
 
@@ -226,6 +249,12 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        Log.i("sdf", ""+goals.size());
+        if (goals.size() == 0) {
+            noGoalPage.setVisibility(View.VISIBLE);
+        } else {
+            noGoalPage.setVisibility(View.GONE);
+        }
 //        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
 //        localUserQuery.fromLocalDatastore();
 //        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
@@ -359,6 +388,7 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         });
                         tvFriends.setText(String.valueOf(friends.size()));
+                        swipeContainer.setRefreshing(false);
                     }
                 });
             }

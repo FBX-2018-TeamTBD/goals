@@ -172,10 +172,12 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
-        i.putExtra("form", Parcels.wrap(form));
-        form.setIsShared(false);
-        startActivity(i);
+        if (form != null) {
+            Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
+            i.putExtra("form", Parcels.wrap(form));
+            form.setIsShared(false);
+            startActivity(i);
+        }
         finish();
     }
 }
