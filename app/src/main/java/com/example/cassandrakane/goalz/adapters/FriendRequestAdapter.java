@@ -63,6 +63,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         ParseFile pfile = (ParseFile) friend.get("image");
         Util.setImage(friend, pfile, context.getResources(), holder.ivProfile, 16.0f);
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {

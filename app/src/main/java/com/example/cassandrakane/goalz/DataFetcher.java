@@ -1,11 +1,16 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +21,17 @@ public class DataFetcher {
     List<Goal> friendGoals;
     List<ParseUser> userFriends;
     ParseUser user;
+    Context context;
 
-    public DataFetcher(ParseUser currentUser){
+    public DataFetcher(ParseUser currentUser, Context mContext){
         this.user = currentUser;
-        unpinAll();
+        this.context = mContext;
         user.pinInBackground();
         setUserGoals();
         setUserFriends();
+        Intent i = new Intent(context, ProfileActivity.class);
+        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
+        context.startActivity(i);
     }
 
     public void setUserGoals() {

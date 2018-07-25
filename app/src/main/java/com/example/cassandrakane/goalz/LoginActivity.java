@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import butterknife.ButterKnife;
 public class LoginActivity extends AppCompatActivity {
 
     DataFetcher dataFetcher;
+    Context context;
 
     @BindView(R.id.tvUsername) EditText tvUsername;
     @BindView(R.id.tvPassword) EditText tvPassword;
@@ -75,10 +77,10 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
                     // transition to home screen
-                    dataFetcher = new DataFetcher(user);
-                    Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
-                    startActivity(i);
-                    finish();
+                    dataFetcher = new DataFetcher(user, LoginActivity.this);
+//                    Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
+//                    startActivity(i);
+//                    finish();
                     progressBar.setVisibility(View.GONE);
                     overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
@@ -131,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        dataFetcher = new DataFetcher(currentUser);
+//                        dataFetcher = new DataFetcher(currentUser, LoginActivity.this);
                         // transition to home screen
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);

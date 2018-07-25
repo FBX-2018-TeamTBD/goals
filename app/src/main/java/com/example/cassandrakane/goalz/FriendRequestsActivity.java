@@ -113,7 +113,33 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
         getFriendRequests();
+    }
 
+    public void populateGoals() {
+        List<ParseObject> arr = user.getList("goals");
+        int completedGoals = 0;
+        int progressGoals = 0;
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = (Goal) arr.get(i);
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+                } else {
+                    progressGoals += 1;
+                }
+            }
+            tvProgress.setText(String.valueOf(progressGoals));
+            tvCompleted.setText(String.valueOf(completedGoals));
+            tvFriends.setText(String.valueOf(user.getList("friends").size()));
+            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        }
+        ParseFile image = user.getParseFile("image");
+        Util.setImage(user, image, getResources(), ivProfile, 16.0f);
         Util.setRequests(user, navigationView);
     }
 

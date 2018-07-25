@@ -44,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -70,6 +71,7 @@ public class CameraActivity extends AppCompatActivity {
     @BindView(R.id.btnCapture) ImageButton btnCapture;
     @BindView(R.id.btnSwap) ImageButton btnSwap;
     @BindView(R.id.btnGallery) ImageButton btnGallery;
+    @BindView(R.id.btnVideo) ImageButton btnVideo;
     @BindView(R.id.textureView) TextureView textureView;
     @BindView(R.id.ivFade) ImageView ivFade;
 
@@ -91,9 +93,11 @@ public class CameraActivity extends AppCompatActivity {
     private CaptureRequest.Builder captureRequestBuilder;
     private Size imageDimension;
     private ImageReader imageReader;
+    private int mTotalRotation;
 
     // save to FILE
     private File file;
+    private File videoFile;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
@@ -101,6 +105,8 @@ public class CameraActivity extends AppCompatActivity {
 
     private List<Goal> goals;
     private Goal goal;
+
+    ParseUser user;
 
     CameraDevice.StateCallback stateCallBack = new CameraDevice.StateCallback() {
         @Override
@@ -129,11 +135,14 @@ public class CameraActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+
         if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
             goal = (Goal) Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
         } else {
             goal = null;
         }
+
+        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
 
         ivFade = findViewById(R.id.ivFade);
         textureView = findViewById(R.id.textureView);
@@ -162,10 +171,18 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
+        btnVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(CameraActivity.this) {
             @Override
             public void onSwipeLeft() {
                 Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
@@ -277,8 +294,8 @@ public class CameraActivity extends AppCompatActivity {
             captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
             // check orientation based on device
-            int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+            mTotalRotation = getWindowManager().getDefaultDisplay().getRotation();
+            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(mTotalRotation));
 
             file = new File(Environment.getExternalStorageDirectory()+"/"+ UUID.randomUUID().toString()+".jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
@@ -399,10 +416,11 @@ public class CameraActivity extends AppCompatActivity {
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
-//            cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
+            // check orientation based on device
+            mTotalRotation = getWindowManager().getDefaultDisplay().getRotation();
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
 
             // check realtime permission if run higher API 23
@@ -466,8 +484,16 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        closeCamera();
         stopBackgroundThread();
         super.onPause();
+    }
+
+    private void closeCamera() {
+        if(cameraDevice != null) {
+            cameraDevice.close();
+            cameraDevice = null;
+        }
     }
 
     private void stopBackgroundThread() {
@@ -639,6 +665,7 @@ public class CameraActivity extends AppCompatActivity {
                 intent.putExtra("image", file);
                 intent.putExtra("goals", (Serializable) goals);
                 intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
+                intent.putExtra("cameraId", cameraId);
                 startActivity(intent);
             }
 

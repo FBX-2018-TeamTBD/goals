@@ -567,6 +567,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
         i.putExtra("goals", (Serializable) uncompleteGoals);
+        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

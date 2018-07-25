@@ -29,8 +29,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.cassandrakane.goalz.ProfileActivity.ADD_GOAL_ACTIVITY_REQUEST_CODE;
-
 public class GoalsListActivity extends AppCompatActivity {
 
     List<Goal> goals;

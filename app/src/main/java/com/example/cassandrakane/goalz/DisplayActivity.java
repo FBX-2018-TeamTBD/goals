@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,12 +22,15 @@ import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +39,7 @@ public class DisplayActivity extends AppCompatActivity {
 
     File file;
     Bitmap image;
+    String cameraId;
     @BindView(R.id.ivImage) ImageView ivImage;
     @BindView(R.id.btnConfirm) ImageView btnConfirm;
     List<Goal> goals;
@@ -130,13 +135,34 @@ public class DisplayActivity extends AppCompatActivity {
         }
 
         goals = (List) getIntent().getSerializableExtra("goals");
+        cameraId = getIntent().getStringExtra("cameraId");
         file = (File) getIntent().getSerializableExtra("image");
         image = BitmapFactory.decodeFile(file.getAbsolutePath());
         image = rotateBitmapOrientation(file.getAbsolutePath());
 
+        if (cameraId.equals("1")) {
+            try {
+                //create a file to write bitmap data
+                file = new File(Environment.getExternalStorageDirectory()+"/"+ UUID.randomUUID().toString()+"1.jpg");
+
+                    file.createNewFile();
+
+                //Convert bitmap to byte array
+                Bitmap bitmap = image;
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                //write the bytes in file
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         ivImage.setImageBitmap(image);
-
-
     }
 
     public Bitmap rotateBitmapOrientation(String photoFilePath) {
@@ -161,6 +187,9 @@ public class DisplayActivity extends AppCompatActivity {
         if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
         // Rotate Bitmap
         Matrix matrix = new Matrix();
+        if (cameraId.equals("1")){
+            rotationAngle += 180;
+        }
         matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
         Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
         // Return result
