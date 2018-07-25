@@ -309,14 +309,16 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void done(List<ApprovedFriendRequests> objects, ParseException e) {
                 newFriends.clear();
-                for (int i = 0; i < objects.size(); i++) {
-                    ApprovedFriendRequests request = objects.get(i);
-                    try {
-                        deleteApprovedRequest(request.getObjectId());
-                        ParseUser user = request.getParseUser("toUser").fetch();
-                        newFriends.add(user);
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ApprovedFriendRequests request = objects.get(i);
+                        try {
+                            deleteApprovedRequest(request.getObjectId());
+                            ParseUser user = request.getParseUser("toUser").fetch();
+                            newFriends.add(user);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 ParseQuery<RemovedFriends> query3 = ParseQuery.getQuery("RemovedRequests");
@@ -327,11 +329,12 @@ public class ProfileActivity extends AppCompatActivity {
                 query3.findInBackground(new FindCallback<RemovedFriends>() {
                     @Override
                     public void done(List<RemovedFriends> objects, ParseException e) {
-                        for (int i = 0; i < objects.size(); i++) {
-                            RemovedFriends request = objects.get(i);
-                            deleteRemoveRequest(request.getObjectId());
-                            removedFriends.add(request.getParseUser("remover").getUsername());
-
+                        if (objects != null) {
+                            for (int i = 0; i < objects.size(); i++) {
+                                RemovedFriends request = objects.get(i);
+                                deleteRemoveRequest(request.getObjectId());
+                                removedFriends.add(request.getParseUser("remover").getUsername());
+                            }
                         }
                         friends.addAll(newFriends);
                         for (int i = friends.size() - 1; i >= 0; i--) {

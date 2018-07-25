@@ -12,6 +12,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cassandrakane.goalz.AddGoalActivity;
+import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseFile;
@@ -28,11 +30,15 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     List<ParseUser> searchList;
     List<ParseUser> filteredList;
+    public List<ParseUser> selectedFriends;
     Context context;
+    String requestActivityName;
 
-    public SearchFriendAdapter(List<ParseUser> list) {
+    public SearchFriendAdapter(List<ParseUser> list, String rActivityName) {
         searchList = list;
         filteredList = new ArrayList<>();
+        selectedFriends = new ArrayList<>();
+        requestActivityName = rActivityName;
     }
 
     @NonNull
@@ -57,7 +63,18 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                 if (!holder.addBtn.getTag().equals(R.drawable.check)) {
                     holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
                     holder.addBtn.setTag(R.drawable.check);
-                    addFriend(user);
+                    if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
+                        addFriend(user);
+                    }
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                        selectedFriends.add(user);
+                    }
+                } else {
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                        holder.addBtn.setBackground(context.getDrawable(R.drawable.add));
+                        holder.addBtn.setTag(R.drawable.add);
+                        selectedFriends.remove(user);
+                    }
                 }
             }
         });
@@ -70,7 +87,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return filteredList != null ? filteredList.size() : 0;
     }
 
     @Override
