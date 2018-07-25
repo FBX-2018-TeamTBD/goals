@@ -236,6 +236,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), finalGoal);
+                            data.putExtra("isShared", swShare.isChecked());
                             setResult(RESULT_OK, data);
                             progressBar.setVisibility(View.GONE);
                             finish();

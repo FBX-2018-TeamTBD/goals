@@ -46,8 +46,10 @@ public class Goal extends ParseObject implements Parcelable {
             e.printStackTrace();
         }
         ArrayList<ParseObject> story = new ArrayList<>();
-        for (int i = 0; i < arr.size(); i++) {
-            story.add(arr.get(i));
+        if (arr != null) {
+            for (int i = 0; i < arr.size(); i++) {
+                story.add(arr.get(i));
+            }
         }
         return story;
     }
