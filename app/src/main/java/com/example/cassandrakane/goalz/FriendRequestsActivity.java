@@ -103,20 +103,6 @@ public class FriendRequestsActivity extends AppCompatActivity {
         tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
         tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
 
-        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FriendRequestsActivity.this) {
-            @Override
-            public void onSwipeRight() {
-                toFeed();
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                toGoalRequests();
-            }
-        };
-
-        getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
-
         user = ParseUser.getCurrentUser();
 
         friendRequests = new ArrayList<>();
@@ -124,7 +110,6 @@ public class FriendRequestsActivity extends AppCompatActivity {
         friendRequestAdapter = new FriendRequestAdapter(friendRequests, allRequests);
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(friendRequestAdapter);
-        rvFriendRequests.setOnTouchListener(onSwipeTouchListener);
 
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
         getFriendRequests();
