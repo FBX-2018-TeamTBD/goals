@@ -77,7 +77,7 @@ public class Util {
         }
 
         ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
-        query2.whereEqualTo("user", user);
+        query3.whereEqualTo("user", user);
         try {
             int count = query3.count();
             if(count > 0) {

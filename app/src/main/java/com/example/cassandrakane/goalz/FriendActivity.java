@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
-import com.parse.ParseFile;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -53,7 +53,8 @@ public class FriendActivity extends AppCompatActivity {
 
     private ParseUser user;
 
-    private List<Goal> goals;
+    private List<SharedGoal> sharedGoals;
+    private List<Goal> individualGoals;
     private GoalAdapter goalAdapter;
 
     private int completedGoals = 0;
@@ -74,8 +75,9 @@ public class FriendActivity extends AppCompatActivity {
 
         user = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
 
-        goals = new ArrayList<>();
-        goalAdapter = new GoalAdapter(goals, false);
+        sharedGoals = new ArrayList<>();
+        individualGoals = new ArrayList<>();
+        goalAdapter = new GoalAdapter(sharedGoals, individualGoals, false);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
 
@@ -152,47 +154,64 @@ public class FriendActivity extends AppCompatActivity {
 //        });
 //    }
     public void populateProfile() {
-        List<ParseObject> arr = new ArrayList<>();
+        List<ParseObject> shGoals = user.getList("sharedGoals");
+        List<ParseObject> indGoals = user.getList("goals");
 //        try {
-        arr = user.getList("goals");
 //        } catch(ParseException e) {
 //            e.printStackTrace();
 //        }
         completedGoals = 0;
         progressGoals = 0;
-        goals.clear();
-        if (arr != null) {
+        sharedGoals.clear();
+        individualGoals.clear();
+        List<SharedGoal> shCompleted = new ArrayList<>();
+        List<Goal> indCompleted = new ArrayList<>();
+        if (shGoals != null && indGoals != null) {
+            for (int i = 0; i < shGoals.size(); i++) {
+                SharedGoal sharedGoal = (SharedGoal) shGoals.get(i);
+                if (sharedGoal.getCompleted()) {
+                    completedGoals += 1;
+                    shCompleted.add(0, sharedGoal);
+                } else {
+                    progressGoals += 1;
+                    sharedGoals.add(0, sharedGoal);
+                }
+            }
+            sharedGoals.addAll(shCompleted);
+
+            for (int i = 0; i < indGoals.size(); i++) {
+                Goal goal = (Goal) indGoals.get(i);
+//                try {
+//                    goal = arr.get(i).fetch();
+//                } catch(ParseException e) {
+//                    e.printStackTrace();
+//                }
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+                    indCompleted.add(0, goal);
+                } else {
+                    progressGoals += 1;
+                    individualGoals.add(0, goal);
+                }
+            }
+            individualGoals.addAll(indCompleted);
 //            try {
 //                ParseObject.fetchAllIfNeeded(arr);
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = null;
-//                try {
-                goal = (Goal) arr.get(i);
-//                } catch(ParseException e) {
-//                    e.printStackTrace();
-//                }
-                goals.add(0, goal);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                } else {
-                    progressGoals += 1;
-                }
-            }
-            tvProgress.setText(String.valueOf(progressGoals));
-            tvCompleted.setText(String.valueOf(completedGoals));
-            tvFriends.setText(String.valueOf(user.getList("friends").size()));
-            tvUsername.setText(user.getUsername());
         }
-        goalAdapter.notifyDataSetChanged();
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
+        tvProgress.setText(String.valueOf(progressGoals));
+        tvCompleted.setText(String.valueOf(completedGoals));
+        tvFriends.setText(String.valueOf(user.getList("friends").size()));
+        tvUsername.setText(user.getUsername());
         if (completedGoals == 0 && progressGoals == 0) {
             noGoalPage.setVisibility(View.VISIBLE);
         } else {
             noGoalPage.setVisibility(View.GONE);
         }
+        goalAdapter.notifyDataSetChanged();
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     public void goBack(View v) {

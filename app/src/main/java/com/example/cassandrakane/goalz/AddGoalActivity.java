@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -87,6 +88,7 @@ public class AddGoalActivity extends AppCompatActivity {
             if (form.getFrequency() == getResources().getInteger(R.integer.FREQUENCY_MONTHLY)) {
                 rbMonth.setChecked(true);
             }
+            frequency = form.getFrequency();
             swShare.setChecked(form.getIsShared());
             selectedFriends = form.getSelectedFriends();
             if (form.getIsShared()) {
@@ -197,7 +199,6 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public void postGoal(View v) {
-        // TODO send goal request
         progressBar.setVisibility(View.VISIBLE);
         try {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
@@ -206,11 +207,14 @@ public class AddGoalActivity extends AppCompatActivity {
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
             if (swShare.isChecked()) {
-                List<ParseUser> pendingFriends = new ArrayList<ParseUser>();
+                List<ParseUser> pendingFriends = new ArrayList<>();
                 pendingFriends.addAll(selectedFriends);
                 selectedFriends.add(ParseUser.getCurrentUser());
-                goal = new SharedGoal(goal, selectedFriends, pendingFriends, new ArrayList<ParseUser> ());
+                List<ParseUser> approved = new ArrayList<>();
+                approved.add(ParseUser.getCurrentUser());
+                goal = new SharedGoal(goal, selectedFriends, pendingFriends, approved);
                 List<ParseObject> sharedGoals = user.getList("sharedGoals");
+                sendGoalRequest(goal, pendingFriends);
                 sharedGoals.add(goal);
                 goal.pinInBackground();
                 user.put("sharedGoals", sharedGoals);
@@ -236,6 +240,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), finalGoal);
+                            data.putExtra("isShared", swShare.isChecked());
                             setResult(RESULT_OK, data);
                             progressBar.setVisibility(View.GONE);
                             finish();
@@ -250,6 +255,13 @@ public class AddGoalActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(this, "Make sure to fill out each field!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void sendGoalRequest(Goal goal, List<ParseUser> pending) {
+        for (int i = 0; i < pending.size(); i++) {
+            GoalRequests request = new GoalRequests(pending.get(i), (SharedGoal) goal);
+            request.saveInBackground();
         }
     }
 

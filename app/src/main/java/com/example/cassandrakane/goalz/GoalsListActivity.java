@@ -67,6 +67,7 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
+        // TODO fix
         progressBar.setVisibility(ProgressBar.VISIBLE);
         if (file != null) {
             final ParseFile parseFile = new ParseFile(file);
@@ -79,6 +80,7 @@ public class GoalsListActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+<<<<<<< HEAD
             });
             int selected = 0;
             for (final Goal goal : goals) {

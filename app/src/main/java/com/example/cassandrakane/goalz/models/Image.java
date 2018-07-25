@@ -3,7 +3,6 @@ package com.example.cassandrakane.goalz.models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 
 @ParseClassName("Image")
@@ -34,25 +33,5 @@ public class Image extends ParseObject{
 
     public void setCaption(String caption) {
         put("caption", caption);
-    }
-
-    public void setGoal(ParseObject goal) {
-        put("goal", goal);
-    }
-
-    public static class Query extends ParseQuery<Image> {
-        public Query() {
-            super(Image.class);
-        }
-
-        public Image.Query getTop(){
-            setLimit(20);
-            return this;
-        }
-
-        public Image.Query withGoal(){
-            include("goal");
-            return this;
-        }
     }
 }
