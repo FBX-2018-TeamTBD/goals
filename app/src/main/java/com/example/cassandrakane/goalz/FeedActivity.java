@@ -283,6 +283,7 @@ public class FeedActivity extends AppCompatActivity {
 
     public void addFriend(View v) {
         Intent i = new Intent(this, SearchFriendsActivity.class);
+        i.putExtra("requestActivity", this.getClass().getSimpleName());
         startActivityForResult(i, ADD_FRIEND_ACTIVITY_REQUEST_CODE);
     }
 

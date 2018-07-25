@@ -22,8 +22,9 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //register the Goal class
+        //register classes
         ParseObject.registerSubclass(Goal.class);
+        ParseObject.registerSubclass(SharedGoal.class);
         ParseObject.registerSubclass(Image.class);
         ParseObject.registerSubclass(SentFriendRequests.class);
         ParseObject.registerSubclass(ApprovedFriendRequests.class);

@@ -1,50 +1,81 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.SearchFriendAdapter;
-import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
+import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
 public class SearchFriendsActivity extends AppCompatActivity {
 
-    SearchView searchView;
     List<ParseUser> searched;
-    RecyclerView rvSearched;
     SearchFriendAdapter searchfriendAdapter;
-    ProgressBar progressBar;
+    AddGoalForm form;
+
+    @BindView(R.id.searchView) SearchView searchView;
+    @Nullable @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.rvSearched) RecyclerView rvSearched;
+    @BindView(R.id.ivConfirmBackground) ImageView ivConfirmBackground;
+    @BindView(R.id.btnConfirm) ImageButton btnConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_friends);
+        ButterKnife.bind(this);
 
+        String requestActivityName = getIntent().getStringExtra("requestActivity");
+        form = Parcels.unwrap(getIntent().getParcelableExtra("form"));
 
-        searchView = findViewById(R.id.searchView);
-        progressBar = findViewById(R.id.progressBar);
+        if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+            searched = getFriends();
+            ivConfirmBackground.setVisibility(View.VISIBLE);
+            btnConfirm.setVisibility(View.VISIBLE);
 
-        searched = getUsers();
-        searchfriendAdapter = new SearchFriendAdapter(searched);
-        rvSearched = findViewById(R.id.rvSearched);
+            btnConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
+                    form.setSelectedFriends(searchfriendAdapter.selectedFriends);
+                    i.putExtra("form", Parcels.wrap(form));
+                    startActivity(i);
+                    finish();
+                }
+            });
+        }
+        if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
+            searched = getUsers();
+            ivConfirmBackground.setVisibility(View.INVISIBLE);
+            btnConfirm.setVisibility(View.INVISIBLE);
+        }
+        searchfriendAdapter = new SearchFriendAdapter(searched, requestActivityName);
         rvSearched.setLayoutManager(new LinearLayoutManager(this));
         rvSearched.setAdapter(searchfriendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
@@ -67,14 +98,19 @@ public class SearchFriendsActivity extends AppCompatActivity {
         });
     }
 
-    public List<ParseUser> getUsers() {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
+    public List<ParseUser> getFriends() {
         List<ParseUser> friends = null;
         try {
             friends = ParseUser.getCurrentUser().fetch().getList("friends");
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return friends;
+    }
+
+    public List<ParseUser> getUsers() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        List<ParseUser> friends = getFriends();
         final List<ParseUser> users = new ArrayList<>();
         List<String> friendUsernames = new ArrayList<>();
         if (friends != null) {
@@ -132,5 +168,14 @@ public class SearchFriendsActivity extends AppCompatActivity {
             }
         });
         return users;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
+        i.putExtra("form", Parcels.wrap(form));
+        form.setIsShared(false);
+        startActivity(i);
+        finish();
     }
 }

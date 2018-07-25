@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.AddGoalActivity;
+import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseFile;
@@ -32,11 +34,15 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     List<ParseUser> searchList;
     List<ParseUser> filteredList;
+    public List<ParseUser> selectedFriends;
     Context context;
+    String requestActivityName;
 
-    public SearchFriendAdapter(List<ParseUser> list) {
+    public SearchFriendAdapter(List<ParseUser> list, String rActivityName) {
         searchList = list;
         filteredList = new ArrayList<>();
+        selectedFriends = new ArrayList<>();
+        requestActivityName = rActivityName;
     }
 
     @NonNull
@@ -54,12 +60,28 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
         ParseFile image = (ParseFile) user.get("image");
         Util.setImage(user, image, context.getResources(), holder.ivProfile, 8.0f);
+        holder.addBtn.setTag(R.drawable.add);
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!holder.addBtn.getTag().equals(R.drawable.check)) {
+                    holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
+                    holder.addBtn.setTag(R.drawable.check);
+                    if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
+                        addFriend(user);
+                        Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
+                    }
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                        selectedFriends.add(user);
+                    }
+                } else {
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                        holder.addBtn.setBackground(context.getDrawable(R.drawable.add));
+                        holder.addBtn.setTag(R.drawable.add);
+                        selectedFriends.remove(user);
+                    }
+                }
                 hideKeyboard(holder.itemView);
-                addFriend(user);
-                Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -79,7 +101,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return filteredList != null ? filteredList.size() : 0;
     }
 
     @Override

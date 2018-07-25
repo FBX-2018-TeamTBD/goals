@@ -126,7 +126,8 @@
                 android:text="@string/reminder_frequency"
                 android:textSize="18sp" />
 
-            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            <RadioGroup
+                android:id="@+id/rgFrequency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/etDuration"
@@ -161,6 +162,36 @@
                     android:text="@string/monthly"
                     android:textSize="16sp" />
             </RadioGroup>
+
+            <Switch
+                android:id="@+id/swShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/etTitle"
+                android:layout_below="@+id/rgFrequency"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/tvShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/swShare"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/swShare"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="Share this goal?"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvShareFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/etTitle"
+                android:layout_below="@+id/swShare"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="Shared with..." />
 
         </RelativeLayout>
 
