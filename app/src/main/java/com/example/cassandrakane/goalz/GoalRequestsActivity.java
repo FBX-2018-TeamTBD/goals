@@ -107,15 +107,6 @@ public class GoalRequestsActivity extends AppCompatActivity {
         tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
         tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
 
-        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(GoalRequestsActivity.this) {
-            @Override
-            public void onSwipeRight() {
-                toFriendRequests();
-            }
-        };
-
-        getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
-
         user = ParseUser.getCurrentUser();
 
         goalRequests = new ArrayList<>();
@@ -123,7 +114,6 @@ public class GoalRequestsActivity extends AppCompatActivity {
         goalRequestAdapter = new GoalRequestAdapter(goalRequests, allRequests);
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(goalRequestAdapter);
-        rvFriendRequests.setOnTouchListener(onSwipeTouchListener);
 
         Util.setRequests(user, navigationView);
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);

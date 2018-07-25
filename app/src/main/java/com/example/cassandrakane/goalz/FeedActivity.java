@@ -107,11 +107,6 @@ public class FeedActivity extends AppCompatActivity {
             public void onSwipeRight() {
                 toGoals();
             }
-
-            @Override
-            public void onSwipeLeft() {
-                toFriendRequests();
-            }
         };
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -169,7 +164,6 @@ public class FeedActivity extends AppCompatActivity {
 
         populateFriends();
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
-
         Util.setRequests(user, navigationView);
     }
 
