@@ -67,7 +67,6 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
-        // TODO fix
         progressBar.setVisibility(ProgressBar.VISIBLE);
         if (file != null) {
             final ParseFile parseFile = new ParseFile(file);
