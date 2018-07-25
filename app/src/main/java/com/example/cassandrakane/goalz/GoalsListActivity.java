@@ -80,7 +80,7 @@ public class GoalsListActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-<<<<<<< HEAD
+
             });
             int selected = 0;
             for (final Goal goal : goals) {
