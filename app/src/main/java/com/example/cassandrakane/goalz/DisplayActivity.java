@@ -74,7 +74,7 @@ public class DisplayActivity extends AppCompatActivity {
                         }
                     });
                     final ArrayList<ParseObject> story = goal.getStory();
-                    final Image image = new Image(parseFile, "", goal);
+                    final Image image = new Image(parseFile, "");
                     image.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

@@ -82,7 +82,7 @@ public class GoalsListActivity extends AppCompatActivity {
             if (goal.isSelected()){
                 selected += 1;
                 final ArrayList<ParseObject> story = goal.getStory();
-                final Image image = new Image(parseFile, "", goal);
+                final Image image = new Image(parseFile, "");
                 image.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -118,6 +118,9 @@ public class GoalsListActivity extends AppCompatActivity {
                                                     startActivity(intent);
                                                 }
                                             });
+                                        } else {
+                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                            startActivity(intent);
                                         }
                                     } else {
                                         Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
