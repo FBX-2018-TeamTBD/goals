@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.FriendRequestsActivity;
+import com.example.cassandrakane.goalz.GoalRequestsActivity;
 import com.example.cassandrakane.goalz.R;
-import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
+import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -23,20 +25,22 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import utils.Util;
 
-public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.ViewHolder> {
+public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.ViewHolder> {
 
-    private List<ParseUser> mFriends;
-    private List<SentFriendRequests> requests;
+
+    private List<SharedGoal> mGoals;
+    private List<GoalRequests> requests;
     Context context;
 
-    public FriendRequestAdapter(List<ParseUser> friends, List<SentFriendRequests> requests) {
-        this.mFriends = friends;
+    public GoalRequestAdapter(List<SharedGoal> goals, List<GoalRequests> requests) {
+        this.mGoals = goals;
         this.requests = requests;
     }
 
@@ -48,7 +52,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(
-                inflater.inflate(R.layout.item_friend_request, parent, false)
+                inflater.inflate(R.layout.item_goal_request, parent, false)
         );
     }
 
@@ -56,33 +60,34 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         // get the data according to position
-        final ParseUser friend = mFriends.get(position);
-
+        SharedGoal goal2 = null;
         try {
-            holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
+            goal2 = mGoals.get(position).fetchIfNeeded();
+            holder.tvGoalTitle.setText(goal2.getTitle());
+            List<ParseUser> allUsers = goal2.getApprovedUsers();
+            allUsers.addAll(goal2.getPendingUsers());
+            holder.tvGoalUsers.setText(Arrays.toString(allUsers.toArray()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        ParseFile pfile = (ParseFile) friend.get("image");
-        Util.setImage(friend, pfile, context.getResources(), holder.ivProfile, 16.0f);
+        final SharedGoal goal = goal2;
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFriend(friend, position);
+                addGoal(goal, position);
             }
         });
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteSentRequest(position);
+                deleteGoalRequest(position);
             }
         });
     }
 
-    public void decreaseFriendRequests() {
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", ParseUser.getCurrentUser());
+    public void decreaseGoalRequests() {
+        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("GoalRequests");
+        query2.whereEqualTo("user", ParseUser.getCurrentUser());
         try {
             int count = query2.count();
             if(count > 0) {
@@ -97,11 +102,11 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     @Override
     public int getItemCount() {
-        return mFriends.size();
+        return mGoals.size();
     }
 
-    public void deleteSentRequest(final int position) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("SentFriendRequests");
+    public void deleteGoalRequest(final int position) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("GoalRequests");
         query.whereEqualTo("objectId", requests.get(position).getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -110,13 +115,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                     object.delete();
                     object.saveInBackground();
                     requests.remove(position);
-                    mFriends.remove(position);
+                    mGoals.remove(position);
                     if (requests.size() > 0) {
-                        ((FriendRequestsActivity) context).noFriendsPage.setVisibility(View.GONE);
+                        ((GoalRequestsActivity) context).noGoalsPage.setVisibility(View.GONE);
                     } else {
-                        ((FriendRequestsActivity) context).noFriendsPage.setVisibility(View.VISIBLE);
+                        ((GoalRequestsActivity) context).noGoalsPage.setVisibility(View.VISIBLE);
                     }
-                    decreaseFriendRequests();
+                    decreaseGoalRequests();
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -125,21 +130,20 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         });
     }
 
-    public void addFriend(final ParseUser user, final int position) {
+    public void addGoal(final SharedGoal goal, final int position) {
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        List<ParseUser> friends = currentUser.getList("friends");
-        friends.add(0, user);
-        currentUser.put("friends", friends);
-        ApprovedFriendRequests request = new ApprovedFriendRequests(user, currentUser);
-        request.saveInBackground();
+        List<SharedGoal> goals = currentUser.getList("sharedGoals");
+        goals.add(0, goal);
+        currentUser.put("sharedGoals", goals);
+        // move this user to the approved section of the shared goal
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        ((FriendRequestsActivity) context).tvFriends.setText(String.valueOf(Integer.parseInt(((FriendRequestsActivity) context).tvFriends.getText().toString()) + 1));
-                        deleteSentRequest(position);
+                        ((GoalRequestsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((GoalRequestsActivity) context).tvProgress.getText().toString()) + 1));
+                        deleteGoalRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
@@ -152,8 +156,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tvUsername) TextView tvUsername;
-        @BindView(R.id.ivProfile) ImageView ivProfile;
+        @BindView(R.id.tvGoalTitle) TextView tvGoalTitle;
+        @BindView(R.id.tvGoalUsers) TextView tvGoalUsers;
         @BindView(R.id.btnConfirm) Button btnConfirm;
         @BindView(R.id.btnDelete) Button btnDelete;
 
@@ -163,5 +167,6 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         }
 
     }
+
 
 }

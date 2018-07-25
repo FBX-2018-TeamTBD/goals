@@ -1,17 +1,23 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.AddGoalActivity;
+import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseFile;
@@ -28,11 +34,15 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
     List<ParseUser> searchList;
     List<ParseUser> filteredList;
+    public List<ParseUser> selectedFriends;
     Context context;
+    String requestActivityName;
 
-    public SearchFriendAdapter(List<ParseUser> list) {
+    public SearchFriendAdapter(List<ParseUser> list, String rActivityName) {
         searchList = list;
         filteredList = new ArrayList<>();
+        selectedFriends = new ArrayList<>();
+        requestActivityName = rActivityName;
     }
 
     @NonNull
@@ -57,8 +67,21 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                 if (!holder.addBtn.getTag().equals(R.drawable.check)) {
                     holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
                     holder.addBtn.setTag(R.drawable.check);
-                    addFriend(user);
+                    if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
+                        addFriend(user);
+                        Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
+                    }
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                        selectedFriends.add(user);
+                    }
+                } else {
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                        holder.addBtn.setBackground(context.getDrawable(R.drawable.add));
+                        holder.addBtn.setTag(R.drawable.add);
+                        selectedFriends.remove(user);
+                    }
                 }
+                hideKeyboard(holder.itemView);
             }
         });
     }
@@ -66,11 +89,19 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     public void addFriend(final ParseUser user) {
         SentFriendRequests request = new SentFriendRequests(ParseUser.getCurrentUser(), user);
         request.saveInBackground();
+        searchList.remove(user);
+        filteredList.remove(user);
+        notifyDataSetChanged();
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return filteredList != null ? filteredList.size() : 0;
     }
 
     @Override

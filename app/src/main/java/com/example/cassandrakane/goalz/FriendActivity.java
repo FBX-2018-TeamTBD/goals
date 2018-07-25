@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.RemovedFriends;
+import com.parse.ParseFile;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -100,6 +102,8 @@ public class FriendActivity extends AppCompatActivity {
             }
         });
 
+        ParseFile pfile = (ParseFile) user.get("image");
+        Util.setImage(user, pfile, getResources(), ivProfile, 16.0f);
         populateProfile();
     }
 
@@ -234,6 +238,8 @@ public class FriendActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         me.fetch();
+                        RemovedFriends remove = new RemovedFriends(user, me);
+                        remove.saveInBackground();
                         finish();
                     } catch (ParseException e1) {
                         e1.printStackTrace();

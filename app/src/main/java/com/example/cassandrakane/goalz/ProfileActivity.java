@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -124,6 +125,9 @@ public class ProfileActivity extends AppCompatActivity {
                             case R.id.nav_friend_request:
                                 toFriendRequests();
                                 break;
+                            case R.id.nav_goal_request:
+                                toGoalRequests();
+                                break;
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -183,7 +187,12 @@ public class ProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         navigationView.getMenu().getItem(1).setChecked(true);
-//        populateGoals();
+        if (goals.size() == 0) {
+            noGoalPage.setVisibility(View.VISIBLE);
+        } else {
+            noGoalPage.setVisibility(View.GONE);
+        }
+        // populateGoals();
     }
 
     public void populateGoals(){
@@ -205,12 +214,11 @@ public class ProfileActivity extends AppCompatActivity {
                             progressGoals += 1;
                             goals.add(0, goal);
                         }
-
-                        if (goals.size() == 0) {
-                            noGoalPage.setVisibility(View.VISIBLE);
-                        } else {
-                            noGoalPage.setVisibility(View.GONE);
-                        }
+                    }
+                    if (goals.size() == 0) {
+                        noGoalPage.setVisibility(View.VISIBLE);
+                    } else {
+                        noGoalPage.setVisibility(View.GONE);
                     }
                     tvProgress.setText(String.valueOf(progressGoals));
                     tvCompleted.setText(String.valueOf(completedGoals));
@@ -289,18 +297,7 @@ public class ProfileActivity extends AppCompatActivity {
         query.include("fromUser");
         query.whereEqualTo("fromUser", user);
 
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", user);
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Util.setRequests(user, navigationView);
 
         final List<ParseUser> friends = user.getList("friends");
         final List<ParseUser> newFriends = new ArrayList<>();
@@ -308,41 +305,84 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void done(List<ApprovedFriendRequests> objects, ParseException e) {
                 newFriends.clear();
-                Log.i("sdf", ""+friends.size());
-                Log.i("sdf", ""+objects.size());
-                for (int i = 0; i < objects.size(); i++) {
-                    ApprovedFriendRequests request = objects.get(i);
-                    try {
-                        deleteApprovedRequest(request.getObjectId());
-                        ParseUser user = request.getParseUser("toUser").fetch();
-                        newFriends.add(user);
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ApprovedFriendRequests request = objects.get(i);
+                        try {
+                            deleteApprovedRequest(request.getObjectId());
+                            ParseUser user = request.getParseUser("toUser").fetch();
+                            newFriends.add(user);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
-                friends.addAll(newFriends);
-                user.put("friends", friends);
-                user.saveInBackground(new SaveCallback() {
+                ParseQuery<RemovedFriends> query3 = ParseQuery.getQuery("RemovedRequests");
+                query3.include("removedFriend");
+                query3.include("remover");
+                query3.whereEqualTo("removedFriend", user);
+                final List<String> removedFriends = new ArrayList<>();
+                query3.findInBackground(new FindCallback<RemovedFriends>() {
                     @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
+                    public void done(List<RemovedFriends> objects, ParseException e) {
+                        if (objects != null) {
+                            for (int i = 0; i < objects.size(); i++) {
+                                RemovedFriends request = objects.get(i);
+                                deleteRemoveRequest(request.getObjectId());
+                                removedFriends.add(request.getParseUser("remover").getUsername());
+                            }
+                        }
+                        friends.addAll(newFriends);
+                        for (int i = friends.size() - 1; i >= 0; i--) {
                             try {
-                                user.fetch();
+                                if (removedFriends.contains(friends.get(i).fetch().getUsername())) {
+                                    friends.remove(i);
+                                }
                             } catch (ParseException e1) {
                                 e1.printStackTrace();
                             }
-                        } else {
-                            Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
                         }
+                        user.put("friends", friends);
+
+                        user.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    try {
+                                        user.fetch();
+                                    } catch (ParseException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                } else {
+                                    Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
+                                }
+                            }
+                        });
+                        tvFriends.setText(String.valueOf(friends.size()));
                     }
                 });
-                tvFriends.setText(String.valueOf(friends.size()));
             }
         });
     }
 
     public void deleteApprovedRequest(String id) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ApprovedFriendRequests");
+        query.whereEqualTo("objectId", id);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                try {
+                    object.delete();
+                    object.saveInBackground();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void deleteRemoveRequest(String id) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("RemovedRequests");
         query.whereEqualTo("objectId", id);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -541,6 +581,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void toFriendRequests() {
         Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void toGoalRequests() {
+        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }

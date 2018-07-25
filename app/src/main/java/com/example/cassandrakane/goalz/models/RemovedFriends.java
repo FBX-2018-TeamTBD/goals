@@ -11,12 +11,13 @@ public class RemovedFriends extends ParseObject {
         super();
     }
 
-    public RemovedFriends(ParseUser user) {
-        setRemoved(user);
+    public RemovedFriends(ParseUser removed, ParseUser remover) {
+        setRemoved(removed, remover);
     }
 
-    public void setRemoved(ParseUser user) {
-        put("removedFriend", user);
+    public void setRemoved(ParseUser removed, ParseUser remover) {
+        put("removedFriend", removed);
+        put("remover", remover);
     }
 
 }

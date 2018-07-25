@@ -19,12 +19,12 @@ public class Goal extends ParseObject implements Parcelable {
     public boolean continueStreak;
     public boolean showClock = false;
 
-
     public Goal() {
         super();
     }
 
-    public Goal(String title, String description, int duration, int frequency, int progress, int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy) {
+    public Goal(String title, String description, int duration, int frequency, int progress,
+                int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy) {
         super();
         setTitle(title);
         setDescription(description);
