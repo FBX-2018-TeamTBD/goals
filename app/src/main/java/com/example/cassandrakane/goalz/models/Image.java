@@ -13,11 +13,10 @@ public class Image extends ParseObject{
         super();
     }
 
-    public Image(ParseFile image, String caption, ParseObject goal) {
+    public Image(ParseFile image, String caption) {
         super();
         setImage(image);
         setCaption(caption);
-        setGoal(goal);
     }
 
     public ParseFile getImage() {

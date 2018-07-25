@@ -27,6 +27,16 @@
         android:scaleType="centerCrop"
         app:srcCompat="@android:color/background_light" />
 
+    <VideoView
+        android:id="@+id/videoView"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+
     <ImageView
         android:id="@+id/ivConfirmBackground"
         android:layout_width="70dp"

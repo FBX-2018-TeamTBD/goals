@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Video;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -34,6 +35,7 @@ public class GoalsListActivity extends AppCompatActivity {
     List<Goal> goals;
     GoalSimpleAdapter goalSimpleAdapter;
     File file;
+    ArrayList<File> videos;
     Date currentDate;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
@@ -52,6 +54,7 @@ public class GoalsListActivity extends AppCompatActivity {
 
         file = (File) getIntent().getSerializableExtra("image");
         goals = (List) getIntent().getSerializableExtra("goals");
+        videos = (ArrayList) getIntent().getSerializableExtra("videos");
 
         if (goals != null && goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
@@ -65,73 +68,93 @@ public class GoalsListActivity extends AppCompatActivity {
 
     public void addImage(View v) {
         progressBar.setVisibility(ProgressBar.VISIBLE);
-        final ParseFile parseFile = new ParseFile(file);
-        parseFile.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null){
-                    Log.d("GoalsListActivity", "ParseFile has been saved");
-                } else{
-                    e.printStackTrace();
+        if (file != null) {
+            final ParseFile parseFile = new ParseFile(file);
+            parseFile.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d("GoalsListActivity", "ParseFile has been saved");
+                    } else {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-        int selected = 0;
-        for (final Goal goal : goals){
-            if (goal.isSelected()){
-                selected += 1;
-                final ArrayList<ParseObject> story = goal.getStory();
-                final Image image = new Image(parseFile, "", goal);
-                image.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        story.add(image);
-                        goal.setStory(story);
-                        goal.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                                notificationHelper.cancelReminder(goal);
-                                notificationHelper.setReminder(goal);
-                                if (goal.getStory().size() == 1){
-                                    goal.setProgress(1);
-                                    goal.setStreak(1);
-                                    goal.setItemAdded(false);
-                                    goal.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
+            });
+            int selected = 0;
+            for (final Goal goal : goals) {
+                if (goal.isSelected()) {
+                    selected += 1;
+                    final ArrayList<ParseObject> story = goal.getStory();
+                    final Image image = new Image(parseFile, "");
+                    image.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            story.add(image);
+                            goal.setStory(story);
+                            goal.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                                    notificationHelper.cancelReminder(goal);
+                                    notificationHelper.setReminder(goal);
+                                    if (goal.getStory().size() == 1) {
+                                        goal.setProgress(1);
+                                        goal.setStreak(1);
+                                        goal.setItemAdded(false);
+                                        goal.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    } else {
+                                        if (!goal.getIsItemAdded()) {
+                                            goal.setProgress(goal.getProgress() + 1);
+                                            if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
+                                                goal.setItemAdded(true);
+                                                goal.setStreak(goal.getStreak() + 1);
+                                                goal.saveInBackground(new SaveCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                });
+                                            }
+                                        } else {
                                             Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
                                             startActivity(intent);
                                         }
-                                    });
-                                } else {
-                                    if (!goal.getIsItemAdded()) {
-                                        goal.setProgress(goal.getProgress() + 1);
-                                        if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
-                                            goal.setItemAdded(true);
-                                            goal.setStreak(goal.getStreak() + 1);
-                                            goal.saveInBackground(new SaveCallback() {
-                                                @Override
-                                                public void done(ParseException e) {
-                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                        startActivity(intent);
                                     }
                                 }
+                            });
+                        }
+                    });
+                }
+            }
+            if (selected == 0) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
+            }
+        } else if (videos != null){
+            for (File video : videos){
+                ParseFile parseFile = new ParseFile(video);
+                parseFile.saveInBackground();
+                for (final Goal goal : goals) {
+                    if (goal.isSelected()) {
+                        final ArrayList<ParseObject> story = goal.getStory();
+                        final Video videoFile = new Video(parseFile, "");
+                        videoFile.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+                                startActivity(intent);
                             }
                         });
                     }
-                });
+                }
             }
-        }
-        if (selected == 0) {
-            progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
         }
     }
 
