@@ -18,9 +18,9 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.ParseFile;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -81,6 +81,7 @@ public class FriendActivity extends AppCompatActivity {
         Util.setImage(user, file, getResources(), ivProfile, 16.0f);
 //        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
         user.unpinInBackground();
+
         user.pinInBackground("friends");
 
         btnUnfriend.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +100,6 @@ public class FriendActivity extends AppCompatActivity {
             }
         });
 
-        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
         populateProfile();
     }
 

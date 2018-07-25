@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,12 +9,11 @@ import android.view.WindowManager;
 
 import com.parse.ParseUser;
 
-import org.parceler.Parcels;
-
 public class SplashActivity extends AppCompatActivity {
 
     DataFetcher dataFetcher;
     ParseUser currentUser;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,6 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         currentUser = ParseUser.getCurrentUser();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         scheduleSplashScreen();
     }
 
@@ -33,11 +32,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
-                    dataFetcher = new DataFetcher(currentUser);
-                    Intent i = new Intent(SplashActivity.this, ProfileActivity.class);
-                    i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(currentUser));
-                    startActivity(i);
-                    finish();
+                    dataFetcher = new DataFetcher(currentUser, SplashActivity.this);
                 }  else {
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(i);

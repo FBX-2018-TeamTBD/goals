@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,22 +11,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.FriendRequestsActivity;
 import com.example.cassandrakane.goalz.R;
-import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
-import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,7 +63,9 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Util.setImage(friend, "image", context.getResources(), holder.ivProfile, 16.0f);
+
+        ParseFile image = friend.getParseFile("image");
+        Util.setImage(friend, image, context.getResources(), holder.ivProfile, 16.0f);
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
