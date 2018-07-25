@@ -17,6 +17,7 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.example.cassandrakane.goalz.models.SharedGoal;
+import com.google.android.gms.common.internal.PendingResultUtil;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -64,9 +65,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         try {
             goal2 = mGoals.get(position).fetchIfNeeded();
             holder.tvGoalTitle.setText(goal2.getTitle());
-            List<ParseUser> allUsers = goal2.getApprovedUsers();
-            allUsers.addAll(goal2.getPendingUsers());
-            holder.tvGoalUsers.setText(Arrays.toString(allUsers.toArray()));
+            holder.tvGoalUsers.setText(getSharedFriendsListString(goal2.getFriends()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -80,9 +79,24 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteGoalRequest(position);
+                removeUserfromFriends(goal, position);
             }
         });
+    }
+
+    public String getSharedFriendsListString(List<ParseUser> selectedFriends) {
+        if (selectedFriends.size() > 0) {
+            String str = "Shared with ";
+            for (ParseUser friend : selectedFriends) {
+                try {
+                    str = str + friend.fetch().getUsername() + ", ";
+                } catch(ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            return str.substring(0, str.length() - 2);
+        }
+        return "";
     }
 
     public void decreaseGoalRequests() {
@@ -91,9 +105,9 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         try {
             int count = query2.count();
             if(count > 0) {
-                ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
+                ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
             } else {
-                ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests");
+                ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests");
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -130,6 +144,59 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         });
     }
 
+    public void removeUserfromFriends(SharedGoal goal, int position) {
+        try {
+            goal = goal.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<ParseUser> friends = goal.getFriends();
+        try {
+            ParseObject.fetchAll(friends);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        friends.remove(ParseUser.getCurrentUser());
+        goal.setFriends(friends);
+        goal.saveInBackground();
+        deleteGoalRequest(position);
+        removeUserfromPending(goal);
+    }
+
+    public void removeUserfromPending(SharedGoal goal) {
+        try {
+            goal = goal.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<ParseUser> pending = goal.getPendingUsers();
+        try {
+            ParseObject.fetchAll(pending);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        pending.remove(ParseUser.getCurrentUser());
+        goal.setPendingUsers(pending);
+        goal.saveInBackground();
+    }
+
+    public void moveUser(SharedGoal goal) {
+        try {
+            goal = goal.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<ParseUser> approved = goal.getApprovedUsers();
+        try {
+            ParseObject.fetchAll(approved);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        approved.add(ParseUser.getCurrentUser());
+        goal.setApprovedUsers(approved);
+        removeUserfromPending(goal);
+    }
+
     public void addGoal(final SharedGoal goal, final int position) {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         List<SharedGoal> goals = currentUser.getList("sharedGoals");
@@ -142,6 +209,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                 if (e == null) {
                     try {
                         currentUser.fetch();
+                        moveUser(goal);
                         ((GoalRequestsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((GoalRequestsActivity) context).tvProgress.getText().toString()) + 1));
                         deleteGoalRequest(position);
                     } catch (ParseException e1) {
