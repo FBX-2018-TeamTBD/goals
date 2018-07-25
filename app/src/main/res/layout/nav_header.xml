@@ -86,7 +86,7 @@
             android:layout_toRightOf="@+id/tvCompleted"
             android:layout_alignTop="@id/tvCompleted"
             android:layout_marginLeft="5dp"
-            android:tint="@color/white"
+            android:tint="@color/lightestGrey"
             app:srcCompat="@drawable/complete" />
 
         <TextView
@@ -108,7 +108,7 @@
             android:layout_toRightOf="@+id/tvFriends"
             android:layout_alignTop="@id/tvFriends"
             android:layout_marginLeft="5dp"
-            android:tint="@color/white"
+            android:tint="@color/lightestGrey"
             app:srcCompat="@drawable/friends" />
 
     </RelativeLayout>

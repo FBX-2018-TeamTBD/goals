@@ -1,16 +1,20 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.AddGoalActivity;
 import com.example.cassandrakane.goalz.FeedActivity;
@@ -65,6 +69,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                     holder.addBtn.setTag(R.drawable.check);
                     if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
                         addFriend(user);
+                        Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
                     }
                     if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
                         selectedFriends.add(user);
@@ -76,6 +81,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                         selectedFriends.remove(user);
                     }
                 }
+                hideKeyboard(holder.itemView);
             }
         });
     }
@@ -83,6 +89,14 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     public void addFriend(final ParseUser user) {
         SentFriendRequests request = new SentFriendRequests(ParseUser.getCurrentUser(), user);
         request.saveInBackground();
+        searchList.remove(user);
+        filteredList.remove(user);
+        notifyDataSetChanged();
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

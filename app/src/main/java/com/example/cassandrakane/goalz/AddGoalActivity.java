@@ -206,8 +206,9 @@ public class AddGoalActivity extends AppCompatActivity {
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
             if (swShare.isChecked()) {
-                goal = new SharedGoal(goal, selectedFriends);
-                // TODO fix sharedGoals being null
+                List<ParseUser> pendingFriends = selectedFriends;
+                selectedFriends.add(ParseUser.getCurrentUser());
+                goal = new SharedGoal(goal, selectedFriends, pendingFriends, new ArrayList<ParseUser> ());
                 List<ParseObject> sharedGoals = user.getList("sharedGoals");
                 sharedGoals.add(goal);
                 goal.pinInBackground();

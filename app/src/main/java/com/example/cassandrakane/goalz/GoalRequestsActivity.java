@@ -1,11 +1,11 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,8 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendRequestAdapter;
+import com.example.cassandrakane.goalz.adapters.GoalRequestAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -35,29 +38,30 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import utils.Util;
 
-public class FriendRequestsActivity extends AppCompatActivity {
+public class GoalRequestsActivity extends AppCompatActivity {
 
     ImageView ivProfile;
-    TextView tvProgress;
+    public TextView tvProgress;
     TextView tvCompleted;
     public TextView tvFriends;
     TextView tvUsername;
-    List<ParseUser> friendRequests;
-    List<SentFriendRequests> allRequests;
-    FriendRequestAdapter friendRequestAdapter;
+    List<SharedGoal> goalRequests;
+    List<GoalRequests> allRequests;
+    GoalRequestAdapter goalRequestAdapter;
     ParseUser user;
 
-    @BindView(R.id.rvFriendRequests) RecyclerView rvFriendRequests;
+    @BindView(R.id.rvGoalRequests) RecyclerView rvFriendRequests;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.nav_view) public NavigationView navigationView;
-    @BindView(R.id.noFriendRequests) public RelativeLayout noFriendsPage;
+    @BindView(R.id.noGoalRequests) public RelativeLayout noGoalsPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_requests);
+        setContentView(R.layout.activity_goal_requests);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
@@ -65,7 +69,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(3).setChecked(true);
+        navigationView.getMenu().getItem(4).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -84,9 +88,9 @@ public class FriendRequestsActivity extends AppCompatActivity {
                                 toFeed();
                                 break;
                             case R.id.nav_friend_request:
+                                toFriendRequests();
                                 break;
                             case R.id.nav_goal_request:
-                                toGoalRequests();
                                 break;
                             case R.id.nav_logout:
                                 logout();
@@ -103,15 +107,10 @@ public class FriendRequestsActivity extends AppCompatActivity {
         tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
         tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
 
-        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FriendRequestsActivity.this) {
+        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(GoalRequestsActivity.this) {
             @Override
             public void onSwipeRight() {
-                toFeed();
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                toGoalRequests();
+                toFriendRequests();
             }
         };
 
@@ -119,45 +118,44 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         user = ParseUser.getCurrentUser();
 
-        friendRequests = new ArrayList<>();
+        goalRequests = new ArrayList<>();
         allRequests = new ArrayList<>();
-        friendRequestAdapter = new FriendRequestAdapter(friendRequests, allRequests);
+        goalRequestAdapter = new GoalRequestAdapter(goalRequests, allRequests);
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
-        rvFriendRequests.setAdapter(friendRequestAdapter);
+        rvFriendRequests.setAdapter(goalRequestAdapter);
         rvFriendRequests.setOnTouchListener(onSwipeTouchListener);
 
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
-        getFriendRequests();
-
         Util.setRequests(user, navigationView);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
+
+        getGoalRequests();
     }
 
-    public void getFriendRequests() {
-        ParseQuery<SentFriendRequests> query = ParseQuery.getQuery("SentFriendRequests");
-        query.include("toUser");
-        query.include("fromUser");
-        query.whereEqualTo("toUser", user);
+    public void getGoalRequests() {
+        ParseQuery<GoalRequests> query = ParseQuery.getQuery("GoalRequests");
+        query.include("goal");
+        query.whereEqualTo("user", user);
         query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<SentFriendRequests>() {
+        query.findInBackground(new FindCallback<GoalRequests>() {
             @Override
-            public void done(List<SentFriendRequests> objects, ParseException e) {
-                friendRequests.clear();
+            public void done(List<GoalRequests> objects, ParseException e) {
+                goalRequests.clear();
                 allRequests.clear();
                 for (int i = 0; i < objects.size(); i++) {
-                    SentFriendRequests request = objects.get(i);
+                    GoalRequests request = objects.get(i);
                     try {
-                        friendRequests.add(request.getParseUser("fromUser").fetch());
+                        goalRequests.add(((SharedGoal) request.getParseObject("goal").fetch()));
                         allRequests.add(request);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
                 }
                 if (objects.size() > 0) {
-                    noFriendsPage.setVisibility(View.GONE);
+                    noGoalsPage.setVisibility(View.GONE);
                 } else {
-                    noFriendsPage.setVisibility(View.VISIBLE);
+                    noGoalsPage.setVisibility(View.VISIBLE);
                 }
-                friendRequestAdapter.notifyDataSetChanged();
+                goalRequestAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
@@ -181,10 +179,10 @@ public class FriendRequestsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
-    public void toGoalRequests() {
-        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
+    public void toFriendRequests() {
+        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
         startActivity(i);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
     public void logout() {

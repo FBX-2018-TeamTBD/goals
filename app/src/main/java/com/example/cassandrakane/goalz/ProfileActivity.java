@@ -125,6 +125,9 @@ public class ProfileActivity extends AppCompatActivity {
                             case R.id.nav_friend_request:
                                 toFriendRequests();
                                 break;
+                            case R.id.nav_goal_request:
+                                toGoalRequests();
+                                break;
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -184,7 +187,12 @@ public class ProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         navigationView.getMenu().getItem(1).setChecked(true);
-//        populateGoals();
+        if (goals.size() == 0) {
+            noGoalPage.setVisibility(View.VISIBLE);
+        } else {
+            noGoalPage.setVisibility(View.GONE);
+        }
+        // populateGoals();
     }
 
     public void populateGoals(){
@@ -206,12 +214,11 @@ public class ProfileActivity extends AppCompatActivity {
                             progressGoals += 1;
                             goals.add(0, goal);
                         }
-
-                        if (goals.size() == 0) {
-                            noGoalPage.setVisibility(View.VISIBLE);
-                        } else {
-                            noGoalPage.setVisibility(View.GONE);
-                        }
+                    }
+                    if (goals.size() == 0) {
+                        noGoalPage.setVisibility(View.VISIBLE);
+                    } else {
+                        noGoalPage.setVisibility(View.GONE);
                     }
                     tvProgress.setText(String.valueOf(progressGoals));
                     tvCompleted.setText(String.valueOf(completedGoals));
@@ -290,18 +297,7 @@ public class ProfileActivity extends AppCompatActivity {
         query.include("fromUser");
         query.whereEqualTo("fromUser", user);
 
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", user);
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Util.setRequests(user, navigationView);
 
         final List<ParseUser> friends = user.getList("friends");
         final List<ParseUser> newFriends = new ArrayList<>();
@@ -584,6 +580,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void toFriendRequests() {
         Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void toGoalRequests() {
+        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }

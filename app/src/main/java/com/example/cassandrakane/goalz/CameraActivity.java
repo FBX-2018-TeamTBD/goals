@@ -44,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
@@ -63,7 +62,6 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
 
 import static com.example.cassandrakane.goalz.ProfileActivity.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE;
 

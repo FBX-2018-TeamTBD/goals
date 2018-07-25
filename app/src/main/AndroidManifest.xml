@@ -80,7 +80,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FriendRequestsActivity"></activity>
+        <activity android:name=".FriendRequestsActivity" />
+        <activity android:name=".GoalRequestsActivity"></activity>
     </application>
 
 </manifest>

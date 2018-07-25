@@ -139,6 +139,9 @@ public class FeedActivity extends AppCompatActivity {
                             case R.id.nav_friend_request:
                                 toFriendRequests();
                                 break;
+                            case R.id.nav_goal_request:
+                                toGoalRequests();
+                                break;
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -165,26 +168,15 @@ public class FeedActivity extends AppCompatActivity {
         rvFriends.setOnTouchListener(onSwipeTouchListener);
 
         populateFriends();
-        populateGoals();
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
 
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", user);
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("Friend Requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Util.setRequests(user, navigationView);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        populateFriends();
+        populateFriends();
 //        populateGoals();
     }
 
@@ -321,6 +313,12 @@ public class FeedActivity extends AppCompatActivity {
 
     public void toFriendRequests() {
         Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+    }
+
+    public void toGoalRequests() {
+        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
