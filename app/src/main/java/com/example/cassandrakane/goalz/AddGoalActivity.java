@@ -88,6 +88,7 @@ public class AddGoalActivity extends AppCompatActivity {
             if (form.getFrequency() == getResources().getInteger(R.integer.FREQUENCY_MONTHLY)) {
                 rbMonth.setChecked(true);
             }
+            frequency = form.getFrequency();
             swShare.setChecked(form.getIsShared());
             selectedFriends = form.getSelectedFriends();
             if (form.getIsShared()) {
