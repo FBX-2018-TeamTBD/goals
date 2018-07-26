@@ -9,22 +9,28 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.SearchFriendAdapter;
 import com.example.cassandrakane.goalz.models.AddGoalForm;
+import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +76,33 @@ public class SearchFriendsActivity extends AppCompatActivity {
                 }
             });
         }
+        if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
+            final Goal goal = getIntent().getParcelableExtra(Goal.class.getSimpleName());
+
+            searched = getNonPendingFriends(goal);
+            ivConfirmBackground.setVisibility(View.VISIBLE);
+            btnConfirm.setVisibility(View.VISIBLE);
+
+            btnConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    List<ParseUser> newPending = goal.getPendingUsers();
+                    newPending.addAll(searchfriendAdapter.selectedFriends);
+                    goal.setPendingUsers(newPending);
+                    List<ParseUser> newFriends = goal.getFriends();
+                    newPending.addAll(searchfriendAdapter.selectedFriends);
+                    goal.setFriends(newFriends);
+                    goal.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            sendGoalRequest(goal, searchfriendAdapter.selectedFriends);
+                            Toast.makeText(SearchFriendsActivity.this,  searchfriendAdapter.selectedFriends.size() > 1 ? "Sent requests to friends!" : "Sent request to friend!", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
         if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
             searched = getUsers();
             ivConfirmBackground.setVisibility(View.INVISIBLE);
@@ -106,6 +139,28 @@ public class SearchFriendsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return friends;
+    }
+
+    public List<ParseUser> getNonPendingFriends(Goal goal) {
+        List<ParseUser> friends = getFriends();
+        List<ParseUser> pending = goal.getPendingUsers();
+        for(int i = friends.size() - 1; i >= 0; i--) {
+            if (pending.contains(friends.get(i))) {
+                friends.remove(i);
+            }
+            if (friends.get(i).getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                friends.remove(i);
+            }
+        }
+        return friends;
+    }
+
+    public void sendGoalRequest(Goal goal, List<ParseUser> pending) {
+        for (int i = 0; i < pending.size(); i++) {
+            Log.i("sdf", pending.get(i).getUsername());
+            GoalRequests request = new GoalRequests(pending.get(i), (Goal) goal);
+            request.saveInBackground();
+        }
     }
 
     public List<ParseUser> getUsers() {

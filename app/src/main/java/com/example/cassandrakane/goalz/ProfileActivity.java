@@ -139,23 +139,6 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (dataFetcher == null) {
-                    dataFetcher = new DataFetcher(user, ProfileActivity.this);
-                }
-                dataFetcher.setUserFriends();
-                dataFetcher.setUserGoals();
-                populateGoals();
-                updateFriends();
-            }
-        });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_blue_light,
-                android.R.color.holo_red_light);
-
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
         tvFriends = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvFriends);
@@ -186,6 +169,17 @@ public class ProfileActivity extends AppCompatActivity {
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Util.populateGoalsAsync(ProfileActivity.this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, completed, swipeContainer);
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_red_light);
 
         ParseFile file = (ParseFile) user.get("image");
         Util.setImage(user, file, getResources(), ivProfile, 16.0f);

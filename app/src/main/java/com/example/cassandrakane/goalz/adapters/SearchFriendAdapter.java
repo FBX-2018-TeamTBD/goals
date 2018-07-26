@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.AddGoalActivity;
 import com.example.cassandrakane.goalz.FeedActivity;
+import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseFile;
@@ -71,11 +72,11 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                         addFriend(user);
                         Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
                     }
-                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName()) || requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
                         selectedFriends.add(user);
                     }
                 } else {
-                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
+                    if (requestActivityName.equals(AddGoalActivity.class.getSimpleName()) || requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
                         holder.addBtn.setBackground(context.getDrawable(R.drawable.add));
                         holder.addBtn.setTag(R.drawable.add);
                         selectedFriends.remove(user);
