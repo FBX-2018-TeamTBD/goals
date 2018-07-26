@@ -3,6 +3,9 @@ package com.example.cassandrakane.goalz.models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 @ParseClassName("Video")
 public class Video extends ParseObject {
@@ -22,6 +25,7 @@ public class Video extends ParseObject {
         return getParseFile("image");
     }
 
+    public List<ParseUser> getViewedBy() { return getList("viewedBy"); }
 
     public void setVideo(ParseFile video) {
         put("video", video);
@@ -33,4 +37,5 @@ public class Video extends ParseObject {
 
     public void setThumbnail(ParseFile thumbnail) { put("image", thumbnail);}
 
+    public void setViewedBy(List<ParseUser> viewedBy) { put("viewedBy", viewedBy); }
 }
