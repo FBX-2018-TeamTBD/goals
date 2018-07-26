@@ -13,17 +13,15 @@ public class AddGoalForm {
     String description;
     String duration;
     int frequency;
-    boolean isShared;
     List<ParseUser> selectedFriends;
 
     public AddGoalForm() {}
 
-    public AddGoalForm(String t, String d, String dur, int f, boolean iSh, List<ParseUser> sFriends) {
+    public AddGoalForm(String t, String d, String dur, int f, List<ParseUser> sFriends) {
         title = t;
         description = d;
         duration = dur;
         frequency = f;
-        isShared = iSh;
         selectedFriends = sFriends;
     }
 
@@ -43,16 +41,8 @@ public class AddGoalForm {
         return frequency;
     }
 
-    public boolean getIsShared() {
-        return isShared;
-    }
-
     public List<ParseUser> getSelectedFriends() {
         return selectedFriends;
-    }
-
-    public void setIsShared(boolean b) {
-        isShared = b;
     }
 
     public void setSelectedFriends(List<ParseUser> selectedFriends) {

@@ -59,6 +59,10 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
         String requestActivityName = getIntent().getStringExtra("requestActivity");
         form = Parcels.unwrap(getIntent().getParcelableExtra("form"));
+        List<ParseUser> selectedUsers = new ArrayList<ParseUser>();
+        if (form != null && form.getSelectedFriends() != null) {
+            selectedUsers = form.getSelectedFriends();
+        }
 
         if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
             searched = getFriends();
@@ -108,7 +112,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
             ivConfirmBackground.setVisibility(View.INVISIBLE);
             btnConfirm.setVisibility(View.INVISIBLE);
         }
-        searchfriendAdapter = new SearchFriendAdapter(searched, requestActivityName);
+        searchfriendAdapter = new SearchFriendAdapter(searched, selectedUsers, requestActivityName);
         rvSearched.setLayoutManager(new LinearLayoutManager(this));
         rvSearched.setAdapter(searchfriendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
@@ -230,7 +234,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
         if (form != null) {
             Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
             i.putExtra("form", Parcels.wrap(form));
-            form.setIsShared(false);
             startActivity(i);
         }
         finish();

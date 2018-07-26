@@ -7,13 +7,13 @@
     tools:context=".SplashActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
-        app:srcCompat="@mipmap/ic_launcher_round"
+        android:layout_marginTop="200dp"
+        app:srcCompat="@drawable/app_icon"
         tools:layout_editor_absoluteX="175dp"
         tools:layout_editor_absoluteY="266dp" />
 
@@ -22,8 +22,8 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="137dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/ivIcon"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="285dp"
+        android:layout_marginTop="20dp"
         android:indeterminate="true" />
 </RelativeLayout>

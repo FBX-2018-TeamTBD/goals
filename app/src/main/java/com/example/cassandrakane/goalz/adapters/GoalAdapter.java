@@ -54,9 +54,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private boolean personal; //for determining whether this is for user or for a friend
     Context context;
     Date currentDate;
+    ParseUser currentUser;
     float startX = 0;
     float endX = 0;
     boolean longClick = false;
+    int startIndex = 0;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
         this.goals = gGoals;
@@ -78,6 +80,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Goal goal = goals.get(position);
         currentDate = new Date();
+        currentUser = ParseUser.getCurrentUser();
 
         final Goal finalGoal = goal;
         final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
@@ -241,6 +244,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
 
+
         if (imageUrls.size() > 0) {
             Glide.with(context)
                     .load(imageUrls.get(imageUrls.size() - 1))
@@ -250,18 +254,35 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    for (int i =0; i<story.size(); i++){
+                        boolean seen = false;
+                        ParseObject image = story.get(i);
+                        List<ParseUser> users = image.getList("viewedBy");
+                        if (users != null) {
+                            for (ParseUser user : users) {
+                                if (user.getObjectId().equals(currentUser.getObjectId())) {
+                                    seen = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!seen) {
+                            startIndex = i;
+                            break;
+                        }
+                    }
                     if (context.getClass().isAssignableFrom(ProfileActivity.class)) {
                         ProfileActivity activity = (ProfileActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1)).commit();
+                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
                         activity.toolbar.setVisibility(View.INVISIBLE);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, story.size() - 1)).commit();
+                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);

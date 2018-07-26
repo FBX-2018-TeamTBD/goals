@@ -8,11 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +55,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.rbDay) RadioButton rbDay;
     @BindView(R.id.rbWeek) RadioButton rbWeek;
     @BindView(R.id.rbMonth) RadioButton rbMonth;
-    @BindView(R.id.swShare) Switch swShare;
+    @BindView(R.id.btnShare) Button btnShare;
     @BindView(R.id.tvShareFriends) TextView tvShareFriends;
 
     Date currentDate;
@@ -88,12 +87,8 @@ public class AddGoalActivity extends AppCompatActivity {
                 rbMonth.setChecked(true);
             }
             frequency = form.getFrequency();
-            swShare.setChecked(form.getIsShared());
             selectedFriends = form.getSelectedFriends();
-            if (form.getIsShared()) {
-                tvShareFriends.setText(getSharedFriendsListString());
-                tvShareFriends.setVisibility(View.VISIBLE);
-            }
+            tvShareFriends.setText(getSharedFriendsListString());
         }
 
         user = ParseUser.getCurrentUser();
@@ -133,21 +128,15 @@ public class AddGoalActivity extends AppCompatActivity {
             }
         });
 
-        swShare.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    Intent i = new Intent(getApplicationContext(), SearchFriendsActivity.class);
-                    AddGoalForm currentForm = getCurrentForm();
-                    i.putExtra("form", Parcels.wrap(currentForm));
-                    i.putExtra("requestActivity", AddGoalActivity.class.getSimpleName());
-                    startActivity(i);
-                    finish();
-                } else {
-                    selectedFriends.clear();
-                    tvShareFriends.setText("");
-                    tvShareFriends.setVisibility(View.INVISIBLE);
-                }
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SearchFriendsActivity.class);
+                AddGoalForm currentForm = getCurrentForm();
+                i.putExtra("form", Parcels.wrap(currentForm));
+                i.putExtra("requestActivity", AddGoalActivity.class.getSimpleName());
+                startActivity(i);
+                finish();
             }
         });
 
@@ -179,7 +168,7 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public AddGoalForm getCurrentForm() {
-        return new AddGoalForm(etTitle.getText().toString(), etDescription.getText().toString(), etDuration.getText().toString(), frequency, swShare.isChecked(), selectedFriends);
+        return new AddGoalForm(etTitle.getText().toString(), etDescription.getText().toString(), etDuration.getText().toString(), frequency, selectedFriends);
     }
 
     public String getSharedFriendsListString() {
@@ -239,9 +228,8 @@ public class AddGoalActivity extends AppCompatActivity {
                             NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
                             notificationHelper.setReminder(finalGoal);
                             user.fetch();
-                            Intent data = new Intent();
-                            data.putExtra(Goal.class.getSimpleName(), finalGoal);
-                            setResult(RESULT_OK, data);
+                            Intent data = new Intent(getApplicationContext(), ProfileActivity.class);
+                            startActivity(data);
                             progressBar.setVisibility(View.GONE);
                             finish();
                         } catch (ParseException e1) {
