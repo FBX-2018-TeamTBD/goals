@@ -21,11 +21,8 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.FriendRequestAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
-import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -49,8 +46,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
     FriendRequestAdapter friendRequestAdapter;
     ParseUser user;
 
-    List<Goal> individualGoals;
-    List<SharedGoal> sharedGoals;
+    List<Goal> goals;
     List<Goal> incompleted;
 
     @BindView(R.id.rvFriendRequests) RecyclerView rvFriendRequests;
@@ -113,14 +109,13 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         friendRequests = new ArrayList<>();
         allRequests = new ArrayList<>();
-        individualGoals = new ArrayList<>();
-        sharedGoals = new ArrayList<>();
+        goals = new ArrayList<>();
         incompleted = new ArrayList<>();
         friendRequestAdapter = new FriendRequestAdapter(friendRequests, allRequests);
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(friendRequestAdapter);
 
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
         getFriendRequests();
     }
 

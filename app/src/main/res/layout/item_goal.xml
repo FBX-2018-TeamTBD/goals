@@ -25,9 +25,9 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/ivStory"
+                android:layout_alignTop="@+id/ivStory"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/ivStory"
+                android:layout_toRightOf="@+id/ivStory"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/title"
                 android:textSize="18sp"
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tvTitle"
-                android:layout_below="@id/tvTitle"
+                android:layout_below="@+id/tvTitle"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/quicksand_regular"
                 android:text="@string/description"
@@ -48,8 +48,8 @@
                 android:id="@+id/tvProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/tvDescription"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tvDescription"
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
@@ -61,8 +61,8 @@
                 android:id="@+id/tvStreak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/tvProgress"
-                android:layout_alignLeft="@id/ivProfile"
+                android:layout_alignTop="@+id/tvProgress"
+                android:layout_alignLeft="@+id/ivProfile"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/black"
                 android:text="@string/_0" />
@@ -82,11 +82,30 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_toRightOf="@+id/tvStreak"
-                android:layout_alignTop="@id/tvStreak"
+                android:layout_alignTop="@+id/tvStreak"
                 android:layout_marginLeft="5dp"
                 android:visibility="invisible"
                 android:tint="@color/lightOrange"
                 app:srcCompat="@drawable/star" />
+
+            <TextView
+                android:id="@+id/tvFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivFriends"
+                android:layout_toLeftOf="@id/ivFriends"
+                android:textColor="@color/black"
+                android:text="@string/_0" />
+
+            <ImageView
+                android:id="@+id/ivFriends"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignRight="@+id/tvProgress"
+                android:layout_alignTop="@+id/ivStory"
+                android:tint="@color/lightOrange"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/friend" />
 
         </RelativeLayout>
 

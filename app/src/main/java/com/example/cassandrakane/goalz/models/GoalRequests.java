@@ -11,7 +11,7 @@ public class GoalRequests extends ParseObject {
         super();
     }
 
-    public GoalRequests(ParseUser user, SharedGoal goal) {
+    public GoalRequests(ParseUser user, Goal goal) {
         setUser(user);
         setGoal(goal);
     }
@@ -20,7 +20,7 @@ public class GoalRequests extends ParseObject {
         put("user", user);
     }
 
-    public void setGoal(SharedGoal goal) {
+    public void setGoal(Goal goal) {
         put("goal", goal);
     }
 

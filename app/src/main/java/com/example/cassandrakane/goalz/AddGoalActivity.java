@@ -8,18 +8,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -57,7 +55,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.rbDay) RadioButton rbDay;
     @BindView(R.id.rbWeek) RadioButton rbWeek;
     @BindView(R.id.rbMonth) RadioButton rbMonth;
-    @BindView(R.id.swShare) Switch swShare;
+    @BindView(R.id.btnShare) Button btnShare;
     @BindView(R.id.tvShareFriends) TextView tvShareFriends;
 
     Date currentDate;
@@ -89,12 +87,8 @@ public class AddGoalActivity extends AppCompatActivity {
                 rbMonth.setChecked(true);
             }
             frequency = form.getFrequency();
-            swShare.setChecked(form.getIsShared());
             selectedFriends = form.getSelectedFriends();
-            if (form.getIsShared()) {
-                tvShareFriends.setText(getSharedFriendsListString());
-                tvShareFriends.setVisibility(View.VISIBLE);
-            }
+            tvShareFriends.setText(getSharedFriendsListString());
         }
 
         user = ParseUser.getCurrentUser();
@@ -134,21 +128,15 @@ public class AddGoalActivity extends AppCompatActivity {
             }
         });
 
-        swShare.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    Intent i = new Intent(getApplicationContext(), SearchFriendsActivity.class);
-                    AddGoalForm currentForm = getCurrentForm();
-                    i.putExtra("form", Parcels.wrap(currentForm));
-                    i.putExtra("requestActivity", AddGoalActivity.class.getSimpleName());
-                    startActivity(i);
-                    finish();
-                } else {
-                    selectedFriends.clear();
-                    tvShareFriends.setText("");
-                    tvShareFriends.setVisibility(View.INVISIBLE);
-                }
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SearchFriendsActivity.class);
+                AddGoalForm currentForm = getCurrentForm();
+                i.putExtra("form", Parcels.wrap(currentForm));
+                i.putExtra("requestActivity", AddGoalActivity.class.getSimpleName());
+                startActivity(i);
+                finish();
             }
         });
 
@@ -180,7 +168,7 @@ public class AddGoalActivity extends AppCompatActivity {
     }
 
     public AddGoalForm getCurrentForm() {
-        return new AddGoalForm(etTitle.getText().toString(), etDescription.getText().toString(), etDuration.getText().toString(), frequency, swShare.isChecked(), selectedFriends);
+        return new AddGoalForm(etTitle.getText().toString(), etDescription.getText().toString(), etDuration.getText().toString(), frequency, selectedFriends);
     }
 
     public String getSharedFriendsListString() {
@@ -203,27 +191,21 @@ public class AddGoalActivity extends AppCompatActivity {
         try {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
+            List<ParseUser> pendingFriends = new ArrayList<>();
+            pendingFriends.addAll(selectedFriends);
+            selectedFriends.add(ParseUser.getCurrentUser());
+            List<ParseUser> approved = new ArrayList<>();
+            approved.add(ParseUser.getCurrentUser());
             Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(),
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
-                    new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
-            if (swShare.isChecked()) {
-                List<ParseUser> pendingFriends = new ArrayList<>();
-                pendingFriends.addAll(selectedFriends);
-                selectedFriends.add(ParseUser.getCurrentUser());
-                List<ParseUser> approved = new ArrayList<>();
-                approved.add(ParseUser.getCurrentUser());
-                goal = new SharedGoal(goal, selectedFriends, pendingFriends, approved);
-                List<ParseObject> sharedGoals = user.getList("sharedGoals");
-                sendGoalRequest(goal, pendingFriends);
-                sharedGoals.add(goal);
-                goal.pinInBackground();
-                user.put("sharedGoals", sharedGoals);
-            } else {
-                List<ParseObject> goals = user.getList("goals");
-                goals.add(goal);
-                goal.pinInBackground();
-                user.put("goals", goals);
-            }
+                    new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
+                    selectedFriends, pendingFriends, approved);
+            List<ParseObject> goals = user.getList("goals");
+            sendGoalRequest(goal, pendingFriends);
+            goals.add(goal);
+            goal.pinInBackground();
+            user.put("goals", goals);
+
             ParseACL acl = user.getACL();
             if (!acl.getPublicReadAccess()) {
                 acl.setPublicReadAccess(true);
@@ -240,7 +222,6 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), finalGoal);
-                            data.putExtra("isShared", swShare.isChecked());
                             setResult(RESULT_OK, data);
                             progressBar.setVisibility(View.GONE);
                             finish();
@@ -260,7 +241,7 @@ public class AddGoalActivity extends AppCompatActivity {
 
     public void sendGoalRequest(Goal goal, List<ParseUser> pending) {
         for (int i = 0; i < pending.size(); i++) {
-            GoalRequests request = new GoalRequests(pending.get(i), (SharedGoal) goal);
+            GoalRequests request = new GoalRequests(pending.get(i), (Goal) goal);
             request.saveInBackground();
         }
     }

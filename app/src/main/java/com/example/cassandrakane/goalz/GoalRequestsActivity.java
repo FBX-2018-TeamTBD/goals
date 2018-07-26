@@ -18,16 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.adapters.FriendRequestAdapter;
 import com.example.cassandrakane.goalz.adapters.GoalRequestAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
-import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -46,13 +41,12 @@ public class GoalRequestsActivity extends AppCompatActivity {
     TextView tvCompleted;
     public TextView tvFriends;
     TextView tvUsername;
-    List<SharedGoal> goalRequests;
+    List<Goal> goalRequests;
     List<GoalRequests> allRequests;
     GoalRequestAdapter goalRequestAdapter;
     ParseUser user;
 
-    List<SharedGoal> sharedGoals;
-    List<Goal> individualGoals;
+    List<Goal> goals;
     List<Goal> incompleted;
 
     @BindView(R.id.rvGoalRequests) RecyclerView rvFriendRequests;
@@ -120,13 +114,11 @@ public class GoalRequestsActivity extends AppCompatActivity {
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(goalRequestAdapter);
 
-        individualGoals = new ArrayList<>();
-        sharedGoals = new ArrayList<>();
+        goals = new ArrayList<>();
         incompleted = new ArrayList<>();
 
         Util.setRequests(user, navigationView);
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
-
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
         getGoalRequests();
     }
 
@@ -143,7 +135,7 @@ public class GoalRequestsActivity extends AppCompatActivity {
                 for (int i = 0; i < objects.size(); i++) {
                     GoalRequests request = objects.get(i);
                     try {
-                        goalRequests.add(((SharedGoal) request.getParseObject("goal").fetch()));
+                        goalRequests.add(((Goal) request.getParseObject("goal").fetch()));
                         allRequests.add(request);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

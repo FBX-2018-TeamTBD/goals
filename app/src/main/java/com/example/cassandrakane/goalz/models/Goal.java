@@ -24,7 +24,8 @@ public class Goal extends ParseObject implements Parcelable {
     }
 
     public Goal(String title, String description, int duration, int frequency, int progress,
-                int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy) {
+                int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy,
+                List<ParseUser> friends, List<ParseUser> approvedUsers, List<ParseUser> pendingUsers) {
         super();
         setTitle(title);
         setDescription(description);
@@ -36,6 +37,9 @@ public class Goal extends ParseObject implements Parcelable {
         setUser(user);
         setItemAdded(itemAdded);
         setUpdateStoryBy(updateBy);
+        setFriends(friends);
+        setApprovedUsers(approvedUsers);
+        setPendingUsers(pendingUsers);
     }
 
     public ArrayList<ParseObject> getStory() {
@@ -153,6 +157,36 @@ public class Goal extends ParseObject implements Parcelable {
         return false;
     }
 
+    public List<ParseUser> getFriends() {
+        List<ParseUser> friends = null;
+        try {
+            friends = fetchIfNeeded().getList("friends");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return friends;
+    }
+
+    public List<ParseUser> getApprovedUsers() {
+        List<ParseUser> users = null;
+        try {
+            users = fetchIfNeeded().getList("approvedUsers");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<ParseUser> getPendingUsers() {
+        List<ParseUser> users = null;
+        try {
+            users = fetchIfNeeded().getList("pendingUsers");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
     public void setStory(ArrayList<ParseObject> story) {
         put("images", story);
     }
@@ -183,6 +217,18 @@ public class Goal extends ParseObject implements Parcelable {
 
     public void setUser(ParseUser user) {
         put("user", user);
+    }
+
+    public void setFriends(List<ParseUser> friends) {
+        put("friends", friends);
+    }
+
+    public void setApprovedUsers(List<ParseUser> users) {
+        put("approvedUsers", users);
+    }
+
+    public void setPendingUsers(List<ParseUser> users) {
+        put("pendingUsers", users);
     }
 
     public boolean getCompleted() {

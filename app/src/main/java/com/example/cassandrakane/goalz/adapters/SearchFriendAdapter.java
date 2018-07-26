@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +37,10 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     Context context;
     String requestActivityName;
 
-    public SearchFriendAdapter(List<ParseUser> list, String rActivityName) {
+    public SearchFriendAdapter(List<ParseUser> list, List<ParseUser> selFriends, String rActivityName) {
         searchList = list;
         filteredList = new ArrayList<>();
-        selectedFriends = new ArrayList<>();
+        selectedFriends = selFriends;
         requestActivityName = rActivityName;
     }
 
@@ -60,7 +59,13 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
 
         ParseFile image = (ParseFile) user.get("image");
         Util.setImage(user, image, context.getResources(), holder.ivProfile, 8.0f);
-        holder.addBtn.setTag(R.drawable.add);
+        if (selectedFriends.contains(user)) {
+            holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
+            holder.addBtn.setTag(R.drawable.check);
+        } else {
+            holder.addBtn.setBackground(context.getDrawable(R.drawable.add));
+            holder.addBtn.setTag(R.drawable.add);
+        }
         holder.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
