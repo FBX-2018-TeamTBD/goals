@@ -77,7 +77,9 @@ public class GoalsListActivity extends AppCompatActivity {
             noGoals.setVisibility(View.VISIBLE);
             btnConfirm.setVisibility(View.GONE);
         }
-        mTasksRequired = videos.size();
+        if (videos != null) {
+            mTasksRequired = videos.size();
+        }
     }
 
     public void addImage(View v) {
