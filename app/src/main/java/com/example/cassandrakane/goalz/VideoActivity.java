@@ -317,7 +317,7 @@ public class VideoActivity extends AppCompatActivity {
                         Toast.makeText(this,
                                 "Video app required access to camera", Toast.LENGTH_SHORT).show();
                     }
-                    requestPermissions(new String[] {android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION_RESULT);
+                    requestPermissions(new String[] {android.Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, REQUEST_CAMERA_PERMISSION_RESULT);
                 }
             } else {
                 cameraManager.openCamera(mCameraId, mCameraDeviceStateCallback, mBackgroundHandler);
@@ -334,6 +334,9 @@ public class VideoActivity extends AppCompatActivity {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getApplicationContext(),
                         "Application will not run without camera services", Toast.LENGTH_SHORT).show();
+            }
+            if (grantResults[1] != PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(getApplicationContext(), "Application will not run without permission to record audio", Toast.LENGTH_SHORT).show();
             }
         }
         if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT) {
@@ -433,6 +436,7 @@ public class VideoActivity extends AppCompatActivity {
 
     private void setUpMediaRecorder() throws IOException {
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mMediaRecorder.setOutputFile(mVideoFilename);
         mMediaRecorder.setMaxDuration(6000);
@@ -440,6 +444,7 @@ public class VideoActivity extends AppCompatActivity {
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mMediaRecorder.setOrientationHint(mTotalRotation);
         mMediaRecorder.prepare();
     }

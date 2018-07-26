@@ -22,8 +22,8 @@ public class Image extends ParseObject{
         return getParseFile("image");
     }
 
-    public String getDescription() {
-        return getString("description");
+    public String getCaption() {
+        return getString("caption");
     }
 
 
