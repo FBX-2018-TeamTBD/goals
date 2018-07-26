@@ -7,10 +7,14 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.NotificationHelper;
+import com.example.cassandrakane.goalz.OnSwipeTouchListener;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -52,6 +57,9 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean personal; //for determining whether this is for user or for a friend
     Context context;
     Date currentDate;
+    float startX = 0;
+    float endX = 0;
+    boolean longClick = false;
 
     public GoalAdapter(List<SharedGoal> shGoals, List<Goal> indGoals, boolean personal) {
         this.sharedGoals = shGoals;
@@ -114,6 +122,98 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         currentDate = new Date();
 
+        final Goal finalGoal = goal;
+        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return true;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                Log.i("scroll", startX + " " + endX);
+                startX = motionEvent.getX();
+                endX = motionEvent1.getX();
+                if (endX >= startX + 60) {
+                    ((ProfileActivity) context).toCamera();
+                    startX = 0;
+                    endX = 0;
+                } else if (startX >= endX + 50) {
+                    ((ProfileActivity) context).toFeed();
+                    startX = 0;
+                    endX = 0;
+                }
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+                if (Math.abs(endX - startX) < 10) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(R.string.delete_goal)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
+                                    notificationHelper.cancelReminder(finalGoal);
+                                    switch (holder.getItemViewType()) {
+                                        case 0:
+                                            sharedGoals.remove(finalGoal);
+                                            break;
+                                        case 1:
+                                            individualGoals.remove(finalGoal);
+                                            break;
+                                    }
+                                    if (finalGoal.getCompleted()) {
+                                        ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).completedGoals - 1));
+                                    } else {
+                                        ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).progressGoals - 1));
+                                    }
+                                    notificationHelper.cancelReminder(finalGoal);
+                                    removeGoal(finalGoal.getObjectId());
+                                }
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .show();
+                }
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                Log.i("fling", startX + " " + endX);
+                startX = motionEvent.getX();
+                endX = motionEvent1.getX();
+                if (endX >= startX + 60) {
+                    ((ProfileActivity) context).toCamera();
+                    startX = 0;
+                    endX = 0;
+                } else if (startX >= endX + 50) {
+                    ((ProfileActivity) context).toFeed();
+                    startX = 0;
+                    endX = 0;
+                }
+                return false;
+            }
+
+        });
+
+        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
+        });
+
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
@@ -146,36 +246,6 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             tvTitle.setPaintFlags(tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
-
-        final Goal finalGoal = goal;
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                new AlertDialog.Builder(context)
-                        .setTitle(R.string.delete_goal)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
-                                notificationHelper.cancelReminder(finalGoal);
-                                switch (holder.getItemViewType()) {
-                                    case 0: sharedGoals.remove(finalGoal);
-                                    case 1: individualGoals.remove(finalGoal);
-                                }
-                                if (finalGoal.getCompleted()) {
-                                    ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).completedGoals - 1));
-                                } else {
-                                    ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).progressGoals - 1));
-                                }
-                                notificationHelper.cancelReminder(finalGoal);
-                                removeGoal(finalGoal.getObjectId());
-                            }
-                        })
-                        .setNegativeButton(R.string.no, null)
-                        .show();
-                return true;
-            }
-        });
 
         int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
         if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded()){

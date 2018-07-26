@@ -64,7 +64,6 @@ public class DisplayActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
-            // TODO fix
             goal = Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
