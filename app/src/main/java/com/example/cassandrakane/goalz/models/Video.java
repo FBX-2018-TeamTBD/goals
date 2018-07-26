@@ -11,10 +11,11 @@ public class Video extends ParseObject {
         super();
     }
 
-    public Video(ParseFile video, String caption) {
+    public Video(ParseFile video, String caption, ParseFile thumbnail) {
         super();
         setVideo(video);
         setCaption(caption);
+        setThumbnail(thumbnail);
     }
 
     public ParseFile getVideo() {
@@ -29,5 +30,7 @@ public class Video extends ParseObject {
     public void setCaption(String caption) {
         put("caption", caption);
     }
+
+    public void setThumbnail(ParseFile thumbnail) { put("image", thumbnail);}
 
 }

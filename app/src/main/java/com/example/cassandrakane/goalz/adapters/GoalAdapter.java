@@ -262,6 +262,7 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //            imageUrls = getImageUrls(imageList);
 //        }
         final ArrayList<String> imageUrls = goal.getStoryUrls();
+        final ArrayList<ParseObject> story = goal.getStory();
 
         if (imageUrls.size() > 0) {
             Glide.with(context)
@@ -276,14 +277,14 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         ProfileActivity activity = (ProfileActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
+                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1)).commit();
                         activity.toolbar.setVisibility(View.INVISIBLE);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
+                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, story.size() - 1)).commit();
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);

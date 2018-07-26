@@ -17,6 +17,7 @@ import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         // get the data according to position
         final Goal goal = mGoals.get(position);
         final ArrayList<String> imageUrls = goal.getStoryUrls();
+        final ArrayList<ParseObject> story = goal.getStory();
         if (imageUrls.size() > 0) {
             Glide.with(context)
                     .load(imageUrls.get(imageUrls.size() - 1))
@@ -62,7 +64,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     FeedActivity activity = (FeedActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(imageUrls, imageUrls.size() - 1)).commit();
+                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1)).commit();
                     activity.toolbar.setVisibility(View.INVISIBLE);
                 }
             });
