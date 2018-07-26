@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -35,6 +36,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Util {
@@ -89,29 +91,60 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile) {
-        List<ParseObject> arr = user.getList("goals");
+    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> individualGoals, List<SharedGoal> sharedGoals, List<Goal> completed) {
+        List<ParseObject> shGoals = user.getList("sharedGoals");
+        List<ParseObject> indGoals = user.getList("goals");
+//        } catch(ParseException e) {
+////            e.printStackTrace();
+////        }
         int completedGoals = 0;
         int progressGoals = 0;
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
-                if (goal.getCompleted()) {
+        sharedGoals.clear();
+        individualGoals.clear();
+        List<SharedGoal> shCompleted = new ArrayList<>();
+        List<Goal> indCompleted = new ArrayList<>();
+//        ParseObject.pinAllInBackground(arr);
+        if (shGoals != null && indGoals != null) {
+//            try {
+//                ParseObject.fetchAllIfNeeded(arr);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+            for (int i = 0; i < shGoals.size(); i++) {
+                SharedGoal sharedGoal = (SharedGoal) shGoals.get(i);
+                if (sharedGoal.getCompleted()) {
                     completedGoals += 1;
+                    shCompleted.add(0, sharedGoal);
                 } else {
                     progressGoals += 1;
+                    sharedGoals.add(0, sharedGoal);
                 }
             }
-            tvProgress.setText(String.valueOf(progressGoals));
-            tvCompleted.setText(String.valueOf(completedGoals));
-            tvFriends.setText(String.valueOf(user.getList("friends").size()));
-            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+            sharedGoals.addAll(shCompleted);
+
+            for (int i = 0; i < indGoals.size(); i++) {
+                Goal goal = (Goal) indGoals.get(i);
+//                try {
+//                    goal = arr.get(i).fetch();
+//                } catch(ParseException e) {
+//                    e.printStackTrace();
+//                }
+                if (goal.getCompleted()) {
+                    completedGoals += 1;
+                    indCompleted.add(0, goal);
+                } else {
+                    progressGoals += 1;
+                    individualGoals.add(0, goal);
+                }
+            }
+            individualGoals.addAll(indCompleted);
+            completed.addAll(sharedGoals);
+            completed.addAll(individualGoals);
         }
+        tvProgress.setText(String.valueOf(progressGoals));
+        tvCompleted.setText(String.valueOf(completedGoals));
+        tvFriends.setText(String.valueOf(user.getList("friends").size()));
+        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         ParseFile pfile = (ParseFile) user.get("image");
         setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
     }

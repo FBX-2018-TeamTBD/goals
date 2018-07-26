@@ -31,6 +31,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class GoalRequestsActivity extends AppCompatActivity {
     List<GoalRequests> allRequests;
     GoalRequestAdapter goalRequestAdapter;
     ParseUser user;
+
+    List<SharedGoal> sharedGoals;
+    List<Goal> individualGoals;
+    List<Goal> incompleted;
 
     @BindView(R.id.rvGoalRequests) RecyclerView rvFriendRequests;
     @BindView(R.id.toolbar) public Toolbar toolbar;
@@ -115,8 +120,12 @@ public class GoalRequestsActivity extends AppCompatActivity {
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(goalRequestAdapter);
 
+        individualGoals = new ArrayList<>();
+        sharedGoals = new ArrayList<>();
+        incompleted = new ArrayList<>();
+
         Util.setRequests(user, navigationView);
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
 
         getGoalRequests();
     }
@@ -153,6 +162,7 @@ public class GoalRequestsActivity extends AppCompatActivity {
 
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+        i.putExtra("goals", (Serializable) incompleted);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

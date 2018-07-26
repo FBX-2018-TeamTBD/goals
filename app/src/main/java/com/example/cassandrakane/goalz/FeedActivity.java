@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.FindCallback;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseException;
@@ -66,7 +67,9 @@ public class FeedActivity extends AppCompatActivity {
 
     List<ParseUser> friends;
     FriendAdapter friendAdapter;
-    List<Goal> goals;
+    List<Goal> individualGoals;
+    List<SharedGoal> sharedGoals;
+    List<Goal> incompleted;
 
     ImageView ivProfile;
     TextView tvProgress;
@@ -162,8 +165,12 @@ public class FeedActivity extends AppCompatActivity {
         rvFriends.addItemDecoration(itemDecor);
         rvFriends.setOnTouchListener(onSwipeTouchListener);
 
+        sharedGoals = new ArrayList<>();
+        individualGoals = new ArrayList<>();
+        incompleted = new ArrayList<>();
+
         populateFriends();
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
         Util.setRequests(user, navigationView);
     }
 
@@ -221,7 +228,7 @@ public class FeedActivity extends AppCompatActivity {
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
-    public void populateGoals(){
+   /* public void populateGoals(){
         goals = new ArrayList<>();
         ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
         localQuery.fromLocalDatastore();
@@ -249,7 +256,7 @@ public class FeedActivity extends AppCompatActivity {
             }
         });
     }
-
+*/
 //    public void populateGoals() {
 //        List<ParseObject> arr = user.getList("goals");
 //        goals = new ArrayList<>();
@@ -293,7 +300,7 @@ public class FeedActivity extends AppCompatActivity {
 
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-        i.putExtra("goals", (Serializable) goals);
+        i.putExtra("goals", (Serializable) incompleted);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

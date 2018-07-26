@@ -88,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private List<SharedGoal> sharedGoals;
     private List<Goal> individualGoals;
+    private List<Goal> completed;
     private GoalAdapter goalAdapter;
 
     private ParseFile imageFile;
@@ -185,6 +186,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         sharedGoals = new ArrayList<>();
         individualGoals = new ArrayList<>();
+        completed = new ArrayList<>();
         goalAdapter = new GoalAdapter(sharedGoals, individualGoals, true);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
@@ -202,7 +204,7 @@ public class ProfileActivity extends AppCompatActivity {
             user.setACL(acl);
         }
 
-        populateGoals();
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, completed);
         updateFriends();
     }
 
