@@ -175,7 +175,15 @@ public class AddGoalActivity extends AppCompatActivity {
         if (selectedFriends.size() > 0) {
             String str = "Shared with ";
             for (ParseUser friend : selectedFriends) {
-                str = str + friend.getUsername() + ", ";
+                try {
+                    if (friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                        str = str + "me, ";
+                    } else {
+                        str = str + friend.fetch().getUsername() + ", ";
+                    }
+                } catch(ParseException e) {
+                    e.printStackTrace();
+                }
             }
             return str.substring(0, str.length() - 2);
         }
@@ -199,7 +207,7 @@ public class AddGoalActivity extends AppCompatActivity {
             Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(),
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
-                    selectedFriends, pendingFriends, approved);
+                    selectedFriends, approved, pendingFriends);
             List<ParseObject> goals = user.getList("goals");
             sendGoalRequest(goal, pendingFriends);
             goals.add(goal);

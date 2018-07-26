@@ -83,7 +83,11 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
             String str = "Shared with ";
             for (ParseUser friend : selectedFriends) {
                 try {
-                    str = str + friend.fetch().getUsername() + ", ";
+                    if (friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                        str = str + "me, ";
+                    } else {
+                        str = str + friend.fetch().getUsername() + ", ";
+                    }
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }

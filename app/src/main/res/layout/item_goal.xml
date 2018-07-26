@@ -94,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/ivFriends"
                 android:layout_toLeftOf="@id/ivFriends"
+                android:layout_marginRight="5dp"
                 android:textColor="@color/black"
                 android:text="@string/_0" />
 
@@ -102,9 +103,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignRight="@+id/tvProgress"
-                android:layout_alignTop="@+id/ivStory"
+                android:layout_alignTop="@+id/tvTitle"
                 android:tint="@color/lightOrange"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/friend" />
 
         </RelativeLayout>

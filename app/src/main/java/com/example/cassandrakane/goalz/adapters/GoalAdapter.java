@@ -22,9 +22,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
+import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.NotificationHelper;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.GetCallback;
@@ -76,7 +78,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     // bind the values based on the position of the element
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        Goal goal = goals.get(position);
+        final Goal goal = goals.get(position);
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
 
@@ -189,10 +191,33 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvStreak.setText("");
             holder.ivStar.setVisibility(View.INVISIBLE);
         }
-        //set friends count here
-        /*
 
-         */
+
+        if (goal.getApprovedUsers().size() > 1) {
+            holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
+            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.friend));
+            holder.ivFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, FriendsModalActivity.class);
+                    i.putExtra(Goal.class.getSimpleName(), goal);
+                    context.startActivity(i);
+                }
+            });
+        } else {
+            holder.tvFriends.setText("");
+            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
+            holder.ivFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, SearchFriendsActivity.class);
+                    i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
+                    i.putExtra(Goal.class.getSimpleName(), goal);
+                    context.startActivity(i);
+                }
+            });
+        }
+
         if (goal.getCompleted()) {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -364,6 +389,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivStar) ImageView ivStar;
         @BindView(R.id.ivFriends) ImageView ivFriends;
+        @BindView(R.id.tvFriends) TextView tvFriends;
 
         public ViewHolder(View itemView) {
             super(itemView);
