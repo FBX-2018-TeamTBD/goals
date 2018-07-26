@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -203,27 +202,21 @@ public class AddGoalActivity extends AppCompatActivity {
         try {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
+            List<ParseUser> pendingFriends = new ArrayList<>();
+            pendingFriends.addAll(selectedFriends);
+            selectedFriends.add(ParseUser.getCurrentUser());
+            List<ParseUser> approved = new ArrayList<>();
+            approved.add(ParseUser.getCurrentUser());
             Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(),
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
-                    new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy);
-            if (swShare.isChecked()) {
-                List<ParseUser> pendingFriends = new ArrayList<>();
-                pendingFriends.addAll(selectedFriends);
-                selectedFriends.add(ParseUser.getCurrentUser());
-                List<ParseUser> approved = new ArrayList<>();
-                approved.add(ParseUser.getCurrentUser());
-                goal = new SharedGoal(goal, selectedFriends, pendingFriends, approved);
-                List<ParseObject> sharedGoals = user.getList("sharedGoals");
-                sendGoalRequest(goal, pendingFriends);
-                sharedGoals.add(goal);
-                goal.pinInBackground();
-                user.put("sharedGoals", sharedGoals);
-            } else {
-                List<ParseObject> goals = user.getList("goals");
-                goals.add(goal);
-                goal.pinInBackground();
-                user.put("goals", goals);
-            }
+                    new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
+                    selectedFriends, pendingFriends, approved);
+            List<ParseObject> goals = user.getList("goals");
+            sendGoalRequest(goal, pendingFriends);
+            goals.add(goal);
+            goal.pinInBackground();
+            user.put("goals", goals);
+
             ParseACL acl = user.getACL();
             if (!acl.getPublicReadAccess()) {
                 acl.setPublicReadAccess(true);
@@ -240,7 +233,6 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent();
                             data.putExtra(Goal.class.getSimpleName(), finalGoal);
-                            data.putExtra("isShared", swShare.isChecked());
                             setResult(RESULT_OK, data);
                             progressBar.setVisibility(View.GONE);
                             finish();
@@ -260,7 +252,7 @@ public class AddGoalActivity extends AppCompatActivity {
 
     public void sendGoalRequest(Goal goal, List<ParseUser> pending) {
         for (int i = 0; i < pending.size(); i++) {
-            GoalRequests request = new GoalRequests(pending.get(i), (SharedGoal) goal);
+            GoalRequests request = new GoalRequests(pending.get(i), (Goal) goal);
             request.saveInBackground();
         }
     }

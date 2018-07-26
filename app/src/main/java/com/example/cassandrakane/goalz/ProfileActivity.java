@@ -15,7 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -25,7 +24,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -38,7 +36,6 @@ import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
-import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
@@ -86,8 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ParseUser user;
 
-    private List<SharedGoal> sharedGoals;
-    private List<Goal> individualGoals;
+    private List<Goal> goals;
     private List<Goal> completed;
     private GoalAdapter goalAdapter;
 
@@ -184,10 +180,9 @@ public class ProfileActivity extends AppCompatActivity {
             user = ParseUser.getCurrentUser();
         }
 
-        sharedGoals = new ArrayList<>();
-        individualGoals = new ArrayList<>();
+        goals = new ArrayList<>();
         completed = new ArrayList<>();
-        goalAdapter = new GoalAdapter(sharedGoals, individualGoals, true);
+        goalAdapter = new GoalAdapter(goals, true);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
         rvGoals.setOnTouchListener(onSwipeTouchListener);
@@ -204,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
             user.setACL(acl);
         }
 
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, completed);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, completed);
         updateFriends();
     }
 
@@ -212,7 +207,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         navigationView.getMenu().getItem(1).setChecked(true);
-        if (sharedGoals.size() + individualGoals.size() == 0) {
+        if (goals.size() == 0) {
             noGoalPage.setVisibility(View.VISIBLE);
         } else {
             noGoalPage.setVisibility(View.GONE);
@@ -270,58 +265,38 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void populateGoals() {
 //        try {
-        List<ParseObject> shGoals = user.getList("sharedGoals");
-        List<ParseObject> indGoals = user.getList("goals");
+        List<ParseObject> lGoals = user.getList("goals");
 //        } catch(ParseException e) {
 ////            e.printStackTrace();
 ////        }
         completedGoals = 0;
         progressGoals = 0;
-        sharedGoals.clear();
-        individualGoals.clear();
-        List<SharedGoal> shCompleted = new ArrayList<>();
-        List<Goal> indCompleted = new ArrayList<>();
+        goals.clear();
+        List<Goal> completed = new ArrayList<>();
 //        ParseObject.pinAllInBackground(arr);
-        if (shGoals != null && indGoals != null) {
+        if (lGoals != null) {
 //            try {
 //                ParseObject.fetchAllIfNeeded(arr);
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
-            for (int i = 0; i < shGoals.size(); i++) {
-                SharedGoal sharedGoal = (SharedGoal) shGoals.get(i);
-                if (sharedGoal.getCompleted()) {
-                    completedGoals += 1;
-                    shCompleted.add(0, sharedGoal);
-                } else {
-                    progressGoals += 1;
-                    sharedGoals.add(0, sharedGoal);
-                }
-            }
-            sharedGoals.addAll(shCompleted);
-
-            for (int i = 0; i < indGoals.size(); i++) {
-                Goal goal = (Goal) indGoals.get(i);
-//                try {
-//                    goal = arr.get(i).fetch();
-//                } catch(ParseException e) {
-//                    e.printStackTrace();
-//                }
+            for (int i = 0; i < lGoals.size(); i++) {
+                Goal goal = (Goal) lGoals.get(i);
                 if (goal.getCompleted()) {
                     completedGoals += 1;
-                    indCompleted.add(0, goal);
+                    completed.add(0, goal);
                 } else {
                     progressGoals += 1;
-                    individualGoals.add(0, goal);
+                    goals.add(0, goal);
                 }
             }
-            individualGoals.addAll(indCompleted);
+            goals.addAll(completed);
         }
         tvProgress.setText(String.valueOf(progressGoals));
         tvCompleted.setText(String.valueOf(completedGoals));
         tvFriends.setText(String.valueOf(user.getList("friends").size()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        if (sharedGoals.size() + individualGoals.size() == 0) {
+        if (goals.size() == 0) {
             noGoalPage.setVisibility(View.VISIBLE);
         } else {
             noGoalPage.setVisibility(View.GONE);
@@ -590,13 +565,8 @@ public class ProfileActivity extends AppCompatActivity {
                     acl.setPublicWriteAccess(true);
                     user.setACL(acl);
                 }
-                if (data.getBooleanExtra("isShared", false)) {
-                    SharedGoal shGoal = data.getParcelableExtra(Goal.class.getSimpleName());
-                    sharedGoals.add(0, shGoal);
-                } else {
-                    Goal indGoal = data.getParcelableExtra(Goal.class.getSimpleName());
-                    individualGoals.add(0, indGoal);
-                }
+                Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
+                goals.add(0, goal);
                 goalAdapter.notifyItemInserted(0);
                 rvGoals.scrollToPosition(0);
             }
@@ -606,12 +576,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
         List<Goal> uncompleteGoals = new ArrayList<>();
-        for (Goal goal : sharedGoals){
-            if (!goal.getCompleted()){
-                uncompleteGoals.add(goal);
-            }
-        }
-        for (Goal goal : individualGoals){
+        for (Goal goal : goals){
             if (!goal.getCompleted()){
                 uncompleteGoals.add(goal);
             }
@@ -645,10 +610,7 @@ public class ProfileActivity extends AppCompatActivity {
         ParseUser.logOut();
         Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
         NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-        for (Goal goal : sharedGoals) {
-            notificationHelper.cancelReminder(goal);
-        }
-        for (Goal goal : individualGoals) {
+        for (Goal goal : goals) {
             notificationHelper.cancelReminder(goal);
         }
         Intent i = new Intent(this, LoginActivity.class);

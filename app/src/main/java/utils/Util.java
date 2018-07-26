@@ -18,7 +18,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
-import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -91,56 +89,35 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> individualGoals, List<SharedGoal> sharedGoals, List<Goal> incompleted) {
-        List<ParseObject> shGoals = user.getList("sharedGoals");
-        List<ParseObject> indGoals = user.getList("goals");
+    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
+        List<ParseObject> lGoals = user.getList("goals");
 //        } catch(ParseException e) {
 ////            e.printStackTrace();
 ////        }
         int completedGoals = 0;
         int progressGoals = 0;
-        sharedGoals.clear();
-        individualGoals.clear();
-        List<SharedGoal> shCompleted = new ArrayList<>();
-        List<Goal> indCompleted = new ArrayList<>();
+        goals.clear();
+        List<Goal> completed = new ArrayList<>();
 //        ParseObject.pinAllInBackground(arr);
-        if (shGoals != null && indGoals != null) {
+        if (lGoals != null) {
 //            try {
 //                ParseObject.fetchAllIfNeeded(arr);
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
-            for (int i = 0; i < shGoals.size(); i++) {
-                SharedGoal sharedGoal = (SharedGoal) shGoals.get(i);
-                if (sharedGoal.getCompleted()) {
+            for (int i = 0; i < lGoals.size(); i++) {
+                Goal g = (Goal) lGoals.get(i);
+                if (g.getCompleted()) {
                     completedGoals += 1;
-                    shCompleted.add(0, sharedGoal);
+                    completed.add(0, g);
                 } else {
                     progressGoals += 1;
-                    sharedGoals.add(0, sharedGoal);
+                    goals.add(0, g);
                 }
             }
-            sharedGoals.addAll(shCompleted);
-
-            for (int i = 0; i < indGoals.size(); i++) {
-                Goal goal = (Goal) indGoals.get(i);
-//                try {
-//                    goal = arr.get(i).fetch();
-//                } catch(ParseException e) {
-//                    e.printStackTrace();
-//                }
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                    indCompleted.add(0, goal);
-                } else {
-                    progressGoals += 1;
-                    individualGoals.add(0, goal);
-                }
-            }
-            individualGoals.addAll(indCompleted);
-            incompleted.addAll(sharedGoals);
-            incompleted.addAll(individualGoals);
+            goals.addAll(completed);
         }
+
         tvProgress.setText(String.valueOf(progressGoals));
         tvCompleted.setText(String.valueOf(completedGoals));
         tvFriends.setText(String.valueOf(user.getList("friends").size()));

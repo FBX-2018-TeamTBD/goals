@@ -33,13 +33,8 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.SharedGoal;
-import com.parse.FindCallback;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -67,8 +62,7 @@ public class FeedActivity extends AppCompatActivity {
 
     List<ParseUser> friends;
     FriendAdapter friendAdapter;
-    List<Goal> individualGoals;
-    List<SharedGoal> sharedGoals;
+    List<Goal> goals;
     List<Goal> incompleted;
 
     ImageView ivProfile;
@@ -165,12 +159,11 @@ public class FeedActivity extends AppCompatActivity {
         rvFriends.addItemDecoration(itemDecor);
         rvFriends.setOnTouchListener(onSwipeTouchListener);
 
-        sharedGoals = new ArrayList<>();
-        individualGoals = new ArrayList<>();
+        goals = new ArrayList<>();
         incompleted = new ArrayList<>();
 
         populateFriends();
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
         Util.setRequests(user, navigationView);
     }
 

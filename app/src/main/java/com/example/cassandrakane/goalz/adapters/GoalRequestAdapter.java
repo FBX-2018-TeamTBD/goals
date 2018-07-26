@@ -8,39 +8,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.cassandrakane.goalz.FriendRequestsActivity;
 import com.example.cassandrakane.goalz.GoalRequestsActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
-import com.example.cassandrakane.goalz.models.SharedGoal;
-import com.google.android.gms.common.internal.PendingResultUtil;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
 
 public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.ViewHolder> {
 
 
-    private List<SharedGoal> mGoals;
+    private List<Goal> mGoals;
     private List<GoalRequests> requests;
     Context context;
 
-    public GoalRequestAdapter(List<SharedGoal> goals, List<GoalRequests> requests) {
+    public GoalRequestAdapter(List<Goal> goals, List<GoalRequests> requests) {
         this.mGoals = goals;
         this.requests = requests;
     }
@@ -61,7 +55,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         // get the data according to position
-        SharedGoal goal2 = null;
+        Goal goal2 = null;
         try {
             goal2 = mGoals.get(position).fetchIfNeeded();
             holder.tvGoalTitle.setText(goal2.getTitle());
@@ -69,7 +63,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        final SharedGoal goal = goal2;
+        final Goal goal = goal2;
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,7 +138,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         });
     }
 
-    public void removeUserfromFriends(SharedGoal goal, int position) {
+    public void removeUserfromFriends(Goal goal, int position) {
         try {
             goal = goal.fetch();
         } catch (ParseException e) {
@@ -163,7 +157,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         removeUserfromPending(goal);
     }
 
-    public void removeUserfromPending(SharedGoal goal) {
+    public void removeUserfromPending(Goal goal) {
         try {
             goal = goal.fetch();
         } catch (ParseException e) {
@@ -180,7 +174,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         goal.saveInBackground();
     }
 
-    public void moveUser(SharedGoal goal) {
+    public void moveUser(Goal goal) {
         try {
             goal = goal.fetch();
         } catch (ParseException e) {
@@ -197,11 +191,11 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         removeUserfromPending(goal);
     }
 
-    public void addGoal(final SharedGoal goal, final int position) {
+    public void addGoal(final Goal goal, final int position) {
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        List<SharedGoal> goals = currentUser.getList("sharedGoals");
+        List<Goal> goals = currentUser.getList("goals");
         goals.add(0, goal);
-        currentUser.put("sharedGoals", goals);
+        currentUser.put("goals", goals);
         // move this user to the approved section of the shared goal
         currentUser.saveInBackground(new SaveCallback() {
             @Override
