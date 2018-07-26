@@ -23,6 +23,7 @@ import com.example.cassandrakane.goalz.models.Video;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -77,9 +78,7 @@ public class GoalsListActivity extends AppCompatActivity {
             noGoals.setVisibility(View.VISIBLE);
             btnConfirm.setVisibility(View.GONE);
         }
-        if (videos != null) {
-            mTasksRequired = videos.size();
-        }
+        mTasksRequired = videos != null ? videos.size() : 0;
     }
 
     public void addImage(View v) {
@@ -102,7 +101,7 @@ public class GoalsListActivity extends AppCompatActivity {
                 if (goal.isSelected()) {
                     selected += 1;
                     final ArrayList<ParseObject> story = goal.getStory();
-                    final Image image = new Image(parseFile, caption);
+                    final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser());
                     image.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

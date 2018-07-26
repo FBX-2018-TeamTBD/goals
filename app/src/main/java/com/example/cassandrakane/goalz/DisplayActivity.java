@@ -31,6 +31,7 @@ import com.example.cassandrakane.goalz.models.Video;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
@@ -101,8 +102,7 @@ public class DisplayActivity extends AppCompatActivity {
                             }
                         });
                         final ArrayList<ParseObject> story = goal.getStory();
-
-                        final Image image = new Image(parseFile, caption);
+                        final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser());
                         image.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
