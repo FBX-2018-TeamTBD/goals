@@ -220,9 +220,8 @@ public class AddGoalActivity extends AppCompatActivity {
                             NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
                             notificationHelper.setReminder(finalGoal);
                             user.fetch();
-                            Intent data = new Intent();
-                            data.putExtra(Goal.class.getSimpleName(), finalGoal);
-                            setResult(RESULT_OK, data);
+                            Intent data = new Intent(getApplicationContext(), ProfileActivity.class);
+                            startActivity(data);
                             progressBar.setVisibility(View.GONE);
                             finish();
                         } catch (ParseException e1) {

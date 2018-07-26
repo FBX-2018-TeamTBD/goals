@@ -65,7 +65,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
-    public final static int ADD_GOAL_ACTIVITY_REQUEST_CODE = 14;
 
     ImageView ivProfile;
     public TextView tvProgress;
@@ -557,19 +556,6 @@ public class ProfileActivity extends AppCompatActivity {
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == ADD_GOAL_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                ParseACL acl = user.getACL();
-                if (!acl.getPublicReadAccess()) {
-                    acl.setPublicReadAccess(true);
-                    acl.setPublicWriteAccess(true);
-                    user.setACL(acl);
-                }
-                Goal goal = data.getParcelableExtra(Goal.class.getSimpleName());
-                goals.add(0, goal);
-                goalAdapter.notifyItemInserted(0);
-                rvGoals.scrollToPosition(0);
-            }
         }
     }
 
@@ -621,7 +607,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void addGoal(View v) {
         Intent i = new Intent(this, AddGoalActivity.class);
-        startActivityForResult(i, ADD_GOAL_ACTIVITY_REQUEST_CODE);
+        startActivity(i);
         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
     }
 
