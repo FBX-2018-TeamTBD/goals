@@ -176,6 +176,9 @@ public class CameraActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(CameraActivity.this, VideoActivity.class);
                 intent.putExtra("goals", (Serializable) goals);
+                if (goal != null){
+                    intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
+                }
                 startActivity(intent);
             }
         });
@@ -429,7 +432,8 @@ public class CameraActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.RECORD_AUDIO
                 }, REQUEST_CAMERA_PERMISSION);
                 return;
             }

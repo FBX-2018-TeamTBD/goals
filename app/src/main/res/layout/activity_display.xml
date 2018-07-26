@@ -58,4 +58,29 @@
         android:scaleType="fitXY"
         app:srcCompat="@drawable/check_circle" />
 
+    <ImageButton
+        android:id="@+id/btnAddCaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ivConfirmBackground"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp"
+        app:srcCompat="@android:drawable/stat_notify_chat" />
+
+    <EditText
+        android:id="@+id/etCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="117dp"
+        android:background="#CB000000"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:scrollHorizontally="false"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:visibility="gone"
+        android:textColor="#ffffff" />
+
 </RelativeLayout>

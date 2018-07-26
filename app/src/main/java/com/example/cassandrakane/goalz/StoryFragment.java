@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -33,12 +34,12 @@ public class StoryFragment extends Fragment {
     private int mIndex;
 
     @BindView(R.id.ivImage) ImageView ivImage;
-    @BindView(R.id.viewStory)
-    VideoView viewStory;
+    @BindView(R.id.viewStory) VideoView viewStory;
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
     @BindView(R.id.btnClose) ImageButton btnClose;
     @BindView(R.id.pbProgress) ProgressBar pbProgress;
+    @BindView(R.id.tvCaption) TextView tvCaption;
 
     private URL url;
     private File file;
@@ -128,6 +129,14 @@ public class StoryFragment extends Fragment {
             viewStory.setVisibility(View.VISIBLE);
             ParseFile video = (ParseFile) object.get("video");
 
+            String caption = (String) object.get("caption");
+            if (caption.length() != 0){
+                tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
+            } else {
+                tvCaption.setVisibility(View.GONE);
+            }
+
             File file = null;
             try {
                 file = video.getFile();
@@ -140,6 +149,15 @@ public class StoryFragment extends Fragment {
         } else {
             viewStory.setVisibility(View.GONE);
             ParseFile image = (ParseFile) object.get("image");
+
+            String caption = (String) object.get("caption");
+            if (caption.length() != 0){
+                tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
+            } else {
+                tvCaption.setVisibility(View.GONE);
+            }
+
             String url = image.getUrl();
             Glide.with(this)
                     .load(url)
