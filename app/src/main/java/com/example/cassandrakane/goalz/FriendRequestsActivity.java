@@ -120,7 +120,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(friendRequestAdapter);
 
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, incompleted);
         getFriendRequests();
     }
 

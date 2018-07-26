@@ -125,7 +125,7 @@ public class GoalRequestsActivity extends AppCompatActivity {
         incompleted = new ArrayList<>();
 
         Util.setRequests(user, navigationView);
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, incompleted);
 
         getGoalRequests();
     }

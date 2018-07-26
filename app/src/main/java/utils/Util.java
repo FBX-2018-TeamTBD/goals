@@ -91,37 +91,22 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> individualGoals, List<SharedGoal> sharedGoals, List<Goal> incompleted) {
-        List<ParseObject> shGoals = user.getList("sharedGoals");
+    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
         List<ParseObject> indGoals = user.getList("goals");
 //        } catch(ParseException e) {
 ////            e.printStackTrace();
 ////        }
         int completedGoals = 0;
         int progressGoals = 0;
-        sharedGoals.clear();
-        individualGoals.clear();
-        List<SharedGoal> shCompleted = new ArrayList<>();
+        goals.clear();
         List<Goal> indCompleted = new ArrayList<>();
 //        ParseObject.pinAllInBackground(arr);
-        if (shGoals != null && indGoals != null) {
+        if (indGoals != null) {
 //            try {
 //                ParseObject.fetchAllIfNeeded(arr);
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
-            for (int i = 0; i < shGoals.size(); i++) {
-                SharedGoal sharedGoal = (SharedGoal) shGoals.get(i);
-                if (sharedGoal.getCompleted()) {
-                    completedGoals += 1;
-                    shCompleted.add(0, sharedGoal);
-                } else {
-                    progressGoals += 1;
-                    sharedGoals.add(0, sharedGoal);
-                }
-            }
-            sharedGoals.addAll(shCompleted);
-
             for (int i = 0; i < indGoals.size(); i++) {
                 Goal goal = (Goal) indGoals.get(i);
 //                try {
@@ -134,12 +119,11 @@ public class Util {
                     indCompleted.add(0, goal);
                 } else {
                     progressGoals += 1;
-                    individualGoals.add(0, goal);
+                    goals.add(0, goal);
                 }
             }
-            individualGoals.addAll(indCompleted);
-            incompleted.addAll(sharedGoals);
-            incompleted.addAll(individualGoals);
+            incompleted.addAll(goals);
+            goals.addAll(indCompleted);
         }
         tvProgress.setText(String.valueOf(progressGoals));
         tvCompleted.setText(String.valueOf(completedGoals));

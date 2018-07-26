@@ -170,7 +170,7 @@ public class FeedActivity extends AppCompatActivity {
         incompleted = new ArrayList<>();
 
         populateFriends();
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, incompleted);
         Util.setRequests(user, navigationView);
     }
 

@@ -204,7 +204,7 @@ public class ProfileActivity extends AppCompatActivity {
             user.setACL(acl);
         }
 
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, completed);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, completed);
         updateFriends();
     }
 

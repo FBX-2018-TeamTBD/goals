@@ -83,6 +83,9 @@
         <activity android:name=".FriendRequestsActivity" />
         <activity android:name=".GoalRequestsActivity" />
         <activity android:name=".VideoActivity"></activity>
+        <activity android:name=".FriendsModal"
+            android:theme="@style/AppTheme.PopupTheme">
+        </activity>
     </application>
 
 </manifest>

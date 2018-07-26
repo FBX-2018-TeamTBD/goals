@@ -238,6 +238,10 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvStreak.setText("");
             ivStar.setVisibility(View.INVISIBLE);
         }
+        //set friends count here
+        /*
+
+         */
         if (goal.getCompleted()) {
             tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             tvTitle.setPaintFlags(tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -396,6 +400,7 @@ public class GoalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.tvProgress) TextView tvProgress;
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivStar) ImageView ivStar;
+        @BindView(R.id.ivFriends) ImageView ivFriends;
 
         public IndividualGoalViewHolder(View itemView) {
             super(itemView);
