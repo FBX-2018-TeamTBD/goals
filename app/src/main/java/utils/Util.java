@@ -91,7 +91,7 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> individualGoals, List<SharedGoal> sharedGoals, List<Goal> completed) {
+    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> individualGoals, List<SharedGoal> sharedGoals, List<Goal> incompleted) {
         List<ParseObject> shGoals = user.getList("sharedGoals");
         List<ParseObject> indGoals = user.getList("goals");
 //        } catch(ParseException e) {
@@ -138,8 +138,8 @@ public class Util {
                 }
             }
             individualGoals.addAll(indCompleted);
-            completed.addAll(sharedGoals);
-            completed.addAll(individualGoals);
+            incompleted.addAll(sharedGoals);
+            incompleted.addAll(individualGoals);
         }
         tvProgress.setText(String.valueOf(progressGoals));
         tvCompleted.setText(String.valueOf(completedGoals));

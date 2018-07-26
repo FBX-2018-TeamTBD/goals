@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.FriendRequestAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.SharedGoal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -28,6 +29,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,10 @@ public class FriendRequestsActivity extends AppCompatActivity {
     List<SentFriendRequests> allRequests;
     FriendRequestAdapter friendRequestAdapter;
     ParseUser user;
+
+    List<Goal> individualGoals;
+    List<SharedGoal> sharedGoals;
+    List<Goal> incompleted;
 
     @BindView(R.id.rvFriendRequests) RecyclerView rvFriendRequests;
     @BindView(R.id.toolbar) public Toolbar toolbar;
@@ -107,40 +113,15 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         friendRequests = new ArrayList<>();
         allRequests = new ArrayList<>();
+        individualGoals = new ArrayList<>();
+        sharedGoals = new ArrayList<>();
+        incompleted = new ArrayList<>();
         friendRequestAdapter = new FriendRequestAdapter(friendRequests, allRequests);
         rvFriendRequests.setLayoutManager(new LinearLayoutManager(this));
         rvFriendRequests.setAdapter(friendRequestAdapter);
 
-        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile);
+        Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, individualGoals, sharedGoals, incompleted);
         getFriendRequests();
-    }
-
-    public void populateGoals() {
-        List<ParseObject> arr = user.getList("goals");
-        int completedGoals = 0;
-        int progressGoals = 0;
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = (Goal) arr.get(i);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                } else {
-                    progressGoals += 1;
-                }
-            }
-            tvProgress.setText(String.valueOf(progressGoals));
-            tvCompleted.setText(String.valueOf(completedGoals));
-            tvFriends.setText(String.valueOf(user.getList("friends").size()));
-            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        }
-        ParseFile image = user.getParseFile("image");
-        Util.setImage(user, image, getResources(), ivProfile, 16.0f);
-        Util.setRequests(user, navigationView);
     }
 
     public void getFriendRequests() {
@@ -176,6 +157,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
     public void toCamera() {
         Intent i = new Intent(getApplicationContext(), CameraActivity.class);
+        i.putExtra("goals", (Serializable) incompleted);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
