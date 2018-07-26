@@ -119,7 +119,6 @@ public class GoalRequestsActivity extends AppCompatActivity {
 
         Util.setRequests(user, navigationView);
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
-
         getGoalRequests();
     }
 
