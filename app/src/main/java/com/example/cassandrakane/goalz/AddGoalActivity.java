@@ -28,7 +28,9 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -200,6 +202,9 @@ public class AddGoalActivity extends AppCompatActivity {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
             List<ParseUser> pendingFriends = new ArrayList<>();
+            Map<String, String> usersAdded = new HashMap<String, String>(){{
+                put(user.getObjectId(), "false");
+            }};
             pendingFriends.addAll(selectedFriends);
             selectedFriends.add(ParseUser.getCurrentUser());
             List<ParseUser> approved = new ArrayList<>();
@@ -207,7 +212,7 @@ public class AddGoalActivity extends AppCompatActivity {
             Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(),
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
-                    selectedFriends, approved, pendingFriends);
+                    selectedFriends, approved, pendingFriends, usersAdded);
             List<ParseObject> goals = user.getList("goals");
             sendGoalRequest(goal, pendingFriends);
             goals.add(goal);

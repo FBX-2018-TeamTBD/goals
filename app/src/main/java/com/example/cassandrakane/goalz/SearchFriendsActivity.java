@@ -148,6 +148,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
     public List<ParseUser> getNonPendingFriends(Goal goal) {
         List<ParseUser> friends = getFriends();
         List<ParseUser> pending = goal.getPendingUsers();
+
         for(int i = friends.size() - 1; i >= 0; i--) {
             if (pending.contains(friends.get(i))) {
                 friends.remove(i);
