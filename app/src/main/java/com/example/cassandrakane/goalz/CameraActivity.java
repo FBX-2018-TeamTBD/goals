@@ -44,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -54,7 +53,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +61,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.OnSwipeTouchListener;
 
 import static com.example.cassandrakane.goalz.ProfileActivity.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE;
 
@@ -103,10 +102,7 @@ public class CameraActivity extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
-    private List<Goal> goals;
     private Goal goal;
-
-    ParseUser user;
 
     CameraDevice.StateCallback stateCallBack = new CameraDevice.StateCallback() {
         @Override
@@ -135,14 +131,10 @@ public class CameraActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
+        goal = null;
         if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
             goal = (Goal) Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
-        } else {
-            goal = null;
         }
-
-        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
 
         ivFade = findViewById(R.id.ivFade);
         textureView = findViewById(R.id.textureView);
@@ -175,7 +167,6 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CameraActivity.this, VideoActivity.class);
-                intent.putExtra("goals", (Serializable) goals);
                 if (goal != null){
                     intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
                 }
@@ -187,20 +178,15 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onSwipeLeft() {
                 Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         };
-
-        goals = (List) getIntent().getSerializableExtra("goals");
-
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
     }
 
     @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
@@ -249,7 +235,6 @@ public class CameraActivity extends AppCompatActivity {
                             finish();
                             Intent intent = new Intent(CameraActivity.this, DisplayActivity.class);
                             intent.putExtra("image", file);
-                            intent.putExtra("goals", (Serializable) goals);
                             intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
                             startActivity(intent);
                         } catch (IOException e) {
@@ -416,7 +401,6 @@ public class CameraActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
@@ -669,7 +653,6 @@ public class CameraActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 Intent intent = new Intent(CameraActivity.this, DisplayActivity.class);
                 intent.putExtra("image", file);
-                intent.putExtra("goals", (Serializable) goals);
                 intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
                 intent.putExtra("cameraId", cameraId);
                 startActivity(intent);

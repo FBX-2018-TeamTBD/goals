@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,13 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.GoalRequestsActivity;
+import com.example.cassandrakane.goalz.GoalRequestsFragment;
+import com.example.cassandrakane.goalz.NotificationsActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.GetCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.ViewHolder> {
 
@@ -67,12 +71,14 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((NotificationsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 addGoal(goal, position);
             }
         });
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((NotificationsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 removeUserfromFriends(goal, position);
             }
         });
@@ -83,9 +89,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
             String str = "Shared with ";
             for (ParseUser friend : selectedFriends) {
                 try {
-                    if (friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        str = str + "me, ";
-                    } else {
+                    if (!friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                         str = str + friend.fetch().getUsername() + ", ";
                     }
                 } catch(ParseException e) {
@@ -95,21 +99,6 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
             return str.substring(0, str.length() - 2);
         }
         return "";
-    }
-
-    public void decreaseGoalRequests() {
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("GoalRequests");
-        query2.whereEqualTo("user", ParseUser.getCurrentUser());
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
-            } else {
-                ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -128,12 +117,14 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                     object.saveInBackground();
                     requests.remove(position);
                     mGoals.remove(position);
+                    GoalRequestsFragment frag = (GoalRequestsFragment) ((NotificationsActivity) context).pagerAdapter.getCurrentFragment();
                     if (requests.size() > 0) {
-                        ((GoalRequestsActivity) context).noGoalsPage.setVisibility(View.GONE);
+                        frag.noGoalsPage.setVisibility(View.GONE);
                     } else {
-                        ((GoalRequestsActivity) context).noGoalsPage.setVisibility(View.VISIBLE);
+                        frag.noGoalsPage.setVisibility(View.VISIBLE);
                     }
-                    decreaseGoalRequests();
+                    NavigationView navigationView = ((NotificationsActivity) context).navigationView;
+                    Util.setNotifications(ParseUser.getCurrentUser(), navigationView);
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -201,6 +192,11 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         goals.add(0, goal);
         currentUser.put("goals", goals);
         // move this user to the approved section of the shared goal
+        ParseACL acl = currentUser.getACL();
+        if (!acl.getPublicWriteAccess()) {
+            acl.setPublicWriteAccess(true);
+            currentUser.setACL(acl);
+        }
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -208,7 +204,8 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                     try {
                         currentUser.fetch();
                         moveUser(goal);
-                        ((GoalRequestsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((GoalRequestsActivity) context).tvProgress.getText().toString()) + 1));
+                        Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
+                        ((NotificationsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((NotificationsActivity) context).tvProgress.getText().toString()) + 1));
                         deleteGoalRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

@@ -19,9 +19,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,16 +64,12 @@ public class Util {
         }
     }
 
-    public static void setRequests(ParseUser user, NavigationView navigationView) {
+    public static void setNotifications(ParseUser user, NavigationView navigationView) {
         ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
         query2.whereEqualTo("toUser", user);
+        int count = 0;
         try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("friend requests");
-            }
+            count += query2.count();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -83,14 +77,15 @@ public class Util {
         ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
         query3.whereEqualTo("user", user);
         try {
-            int count = query3.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(4).setTitle("goal requests");
-            }
+            count += query3.count();
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if(count > 0) {
+            navigationView.getMenu().getItem(3).setTitle("notifications (" + count + ")");
+        } else {
+            navigationView.getMenu().getItem(3).setTitle("notifications");
         }
     }
     public static void populateStoredGoals(Context context, ParseUser user, final TextView tvProgress, final TextView tvCompleted, final TextView tvFriends, TextView tvUsername, ImageView ivProfile, final List<Goal> goals, final List<Goal> incompleted) {
@@ -137,20 +132,11 @@ public class Util {
 
     public static void populateGoals(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
         List<ParseObject> lGoals = user.getList("goals");
-//        } catch(ParseException e) {
-////            e.printStackTrace();
-////        }
         int completedGoals = 0;
         int progressGoals = 0;
         goals.clear();
         List<Goal> completed = new ArrayList<>();
-//        ParseObject.pinAllInBackground(arr);
         if (lGoals != null) {
-//            try {
-//                ParseObject.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
             for (int i = 0; i < lGoals.size(); i++) {
                 Goal g = (Goal) lGoals.get(i);
                 if (g.getCompleted()) {
@@ -175,20 +161,11 @@ public class Util {
 
     public static void populateGoalsAsync(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
         List<ParseObject> lGoals = user.getList("goals");
-//        } catch(ParseException e) {
-////            e.printStackTrace();
-////        }
         int completedGoals = 0;
         int progressGoals = 0;
         goals.clear();
         List<Goal> completed = new ArrayList<>();
-//        ParseObject.pinAllInBackground(arr);
         if (lGoals != null) {
-//            try {
-//                ParseObject.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
             for (int i = 0; i < lGoals.size(); i++) {
                 Goal g = (Goal) lGoals.get(i);
                 if (g.getCompleted()) {

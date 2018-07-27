@@ -26,7 +26,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
-import com.example.cassandrakane.goalz.NotificationHelper;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
@@ -58,6 +57,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NavigationHelper;
+import utils.NotificationHelper;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
@@ -71,6 +72,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     boolean longClick = false;
     int startIndex = 0;
     File tempFile;
+    NavigationHelper navigationHelper;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
         this.goals = gGoals;
@@ -82,6 +84,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+        navigationHelper = new NavigationHelper(((ProfileActivity) context));
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -117,11 +120,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    ((ProfileActivity) context).toCamera();
+                    navigationHelper.toCamera(false);
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    ((ProfileActivity) context).toFeed();
+                    navigationHelper.toFeed(true);
                     startX = 0;
                     endX = 0;
                 }
@@ -159,11 +162,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    ((ProfileActivity) context).toCamera();
+                    navigationHelper.toCamera(false);
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    ((ProfileActivity) context).toFeed();
+                    navigationHelper.toFeed(true);
                     startX = 0;
                     endX = 0;
                 }
@@ -277,13 +280,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStar.setImageResource(R.drawable.star);
         }
 
-//        List<Image> imageList = goal.getList("images");
-////        Image im = imageList.get(0);
-////        String url = im.getImage().getUrl();
-//        ArrayList<String> imageUrls = new ArrayList<>();
-//        if (imageList.size() != 0) {
-//            imageUrls = getImageUrls(imageList);
-//        }
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
 
@@ -396,29 +392,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public int getItemCount() {
         return goals.size();
     }
-
-//    public ArrayList<String> getImageUrls(List<Image> imageList) {
-//        ArrayList<Image> images = new ArrayList<Image>();
-//        if (imageList != null) {
-//            images.addAll(imageList);
-//        }
-//        ArrayList<String> imageUrls = new ArrayList<String>();
-//        for (int i = 0; i<imageList.size(); i++) {
-////            try {
-//                Image im = imageList.get(i);
-//            String url = null;
-//            try {
-//                url = im.fetchIfNeeded().getParseFile("image").getUrl();
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            imageUrls.add(url);
-////            } catch (ParseException e) {
-////                e.printStackTrace();
-////            }
-//        }
-//        return imageUrls;
-//    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -35,20 +35,9 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NotificationHelper;
 
 public class AddGoalActivity extends AppCompatActivity {
-
-    /*enum Frequency {
-        DAILY(R.id.rbDay),
-        WEEKLY(R.id.rbWeek),
-        MONTHLY(R.id.rbMonth);
-
-        private int value;
-
-        private Frequency(int val) {
-            value = val;
-        }
-    }*/
 
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.etTitle) EditText etTitle;
@@ -178,11 +167,7 @@ public class AddGoalActivity extends AppCompatActivity {
             String str = "Shared with ";
             for (ParseUser friend : selectedFriends) {
                 try {
-                    if (friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        str = str + "me, ";
-                    } else {
-                        str = str + friend.fetch().getUsername() + ", ";
-                    }
+                    str = str + friend.fetch().getUsername() + ", ";
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
@@ -220,8 +205,8 @@ public class AddGoalActivity extends AppCompatActivity {
             user.put("goals", goals);
 
             ParseACL acl = user.getACL();
-            if (!acl.getPublicReadAccess()) {
-                acl.setPublicReadAccess(true);
+            if (!acl.getPublicWriteAccess()) {
+                acl.setPublicWriteAccess(true);
                 user.setACL(acl);
             }
             final Goal finalGoal = goal;
@@ -235,7 +220,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent(getApplicationContext(), ProfileActivity.class);
                             startActivity(data);
-                            progressBar.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.INVISIBLE);
                             finish();
                         } catch (ParseException e1) {
                             e1.printStackTrace();
@@ -248,6 +233,7 @@ public class AddGoalActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(this, "Make sure to fill out each field!", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 

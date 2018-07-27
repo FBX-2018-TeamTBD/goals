@@ -14,7 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.cassandrakane.goalz.DataFetcher;
+import utils.DataFetcher;
 import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
@@ -62,9 +62,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         // get the data according to position
         final ParseUser friend = friends.get(position);
 
-//        dataFetcher = new DataFetcher(friend);
-//        dataFetcher.setUserGoals();
-
         try {
             holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
         } catch (ParseException e) {
@@ -72,7 +69,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
         ParseFile file = (ParseFile) friend.get("image");
         Util.setImage(friend, file, context.getResources(), holder.ivProfile, 16.0f);
-//        Util.setImage(friend, "image", context.getResources(), holder.ivProfile, 16.0f);
         holder.ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,13 +81,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 toFriendActivity(friend);
             }
         });
-      /*  holder.pokeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "You poked " + friend.getUsername() + "!", Toast.LENGTH_LONG).show();
-                Log.i("Friend Added", "You poked " + friend.getUsername() + "!");
-            }
-        });*/
 
         goals = new ArrayList<Goal>();
         List<Goal> lGoals = friend.getList("goals");
@@ -111,9 +100,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             holder.ivMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    holder.rvStory.setVisibility(holder.rvStory.isShown()
-//                            ? View.GONE
-//                            : View.VISIBLE);
                     if (holder.rvStory.isShown()){
                         Animation rotateAnimation = AnimationUtils.loadAnimation(context, R.anim.rotate_counterclockwise_180);
                         holder.ivMenu.startAnimation(rotateAnimation);
@@ -133,9 +119,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                             }
                         }, 100);
                     }
-//                    holder.ivMenu.setImageDrawable(holder.rvStory.isShown()
-//                            ? );
-//                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 }
             });
         } else {
@@ -159,7 +142,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivProfile) ImageView ivProfile;
-        //@BindView(R.id.pokeBtn) Button pokeBtn;
         @BindView(R.id.rvStory) RecyclerView rvStory;
         @BindView(R.id.ivMenu) ImageView ivMenu;
 

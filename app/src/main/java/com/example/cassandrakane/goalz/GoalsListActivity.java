@@ -36,6 +36,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NotificationHelper;
 
 public class GoalsListActivity extends AppCompatActivity {
 
@@ -66,14 +67,20 @@ public class GoalsListActivity extends AppCompatActivity {
         currentUser = ParseUser.getCurrentUser();
         ButterKnife.bind(this);
 
+        goals = new ArrayList<Goal>();
+        List<Goal> allGoals = ParseUser.getCurrentUser().getList("goals");
+        for (Goal goal : allGoals){
+            if (!goal.getCompleted()){
+                goals.add(goal);
+            }
+        }
         file = (File) getIntent().getSerializableExtra("image");
-        goals = (List) getIntent().getSerializableExtra("goals");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         caption = getIntent().getStringExtra("caption");
 
         parseVideos = new ArrayList<>();
 
-        if (goals != null && goals.size() != 0) {
+        if (goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
             rvGoals.setLayoutManager(new LinearLayoutManager(this));
             rvGoals.setAdapter(goalSimpleAdapter);
@@ -126,39 +133,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                     NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
                                     notificationHelper.cancelReminder(goal);
                                     notificationHelper.setReminder(goal);
-//                                    if (goal.getStory().size() == 1) {
-//                                        goal.setProgress(1);
-//                                        goal.setStreak(1);
-//                                        goal.setItemAdded(false);
-//                                        goal.saveInBackground(new SaveCallback() {
-//                                            @Override
-//                                            public void done(ParseException e) {
-//                                                Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-//                                                startActivity(intent);
-//                                                finish();
-//                                            }
-//                                        });
-//                                    } else {
-//                                        if (!goal.getIsItemAdded()) {
-//                                            goal.setProgress(goal.getProgress() + 1);
-//                                            if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
-//                                                goal.setItemAdded(true);
-//                                                goal.setStreak(goal.getStreak() + 1);
-//                                                goal.saveInBackground(new SaveCallback() {
-//                                                    @Override
-//                                                    public void done(ParseException e) {
-//                                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-//                                                        startActivity(intent);
-//                                                        finish();
-//                                                    }
-//                                                });
-//                                            }
-//                                        } else {
-//                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-//                                            startActivity(intent);
-//                                            finish();
-//                                        }
-//                                    }
+
                                     if (goal.getIsItemAdded()) {
                                         goal.setProgress(goal.getProgress() + 1);
                                         if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
@@ -166,16 +141,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                    toProfile();
                                                 }
                                             });
                                         }
                                     } else{
-                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        toProfile();
                                     }
                                 }
                             });
@@ -251,9 +222,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                            toProfile();
                                         }
                                     });
                                 } else {
@@ -265,16 +234,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                    toProfile();
                                                 }
                                             });
                                         }
                                     } else {
-                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        toProfile();
                                     }
                                 }
                             }
@@ -283,7 +248,13 @@ public class GoalsListActivity extends AppCompatActivity {
         }
         if (selected == 0) {
             progressBar.setVisibility(View.INVISIBLE);
-//                                    Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void toProfile() {
+        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }

@@ -94,7 +94,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
                     newPending.addAll(searchfriendAdapter.selectedFriends);
                     goal.setPendingUsers(newPending);
                     List<ParseUser> newFriends = goal.getFriends();
-                    newPending.addAll(searchfriendAdapter.selectedFriends);
+                    newFriends.addAll(searchfriendAdapter.selectedFriends);
                     goal.setFriends(newFriends);
                     goal.saveInBackground(new SaveCallback() {
                         @Override
@@ -150,10 +150,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
         List<ParseUser> pending = goal.getPendingUsers();
 
         for(int i = friends.size() - 1; i >= 0; i--) {
-            if (pending.contains(friends.get(i))) {
-                friends.remove(i);
-            }
-            if (friends.get(i).getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            if (pending.contains(friends.get(i)) || friends.get(i).getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                 friends.remove(i);
             }
         }
@@ -186,14 +183,15 @@ public class SearchFriendsActivity extends AppCompatActivity {
         query2.findInBackground(new FindCallback<SentFriendRequests>() {
             @Override
             public void done(List<SentFriendRequests> objects, ParseException e) {
-                for (int i = 0; i < objects.size(); i++) {
-                    SentFriendRequests request = objects.get(i);
-                    try {
-                        friendNames.add(request.getParseUser("toUser").fetch().getUsername());
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        SentFriendRequests request = objects.get(i);
+                        try {
+                            friendNames.add(request.getParseUser("toUser").fetch().getUsername());
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
-
                 }
             }
         });
@@ -204,12 +202,14 @@ public class SearchFriendsActivity extends AppCompatActivity {
         query3.findInBackground(new FindCallback<SentFriendRequests>() {
             @Override
             public void done(List<SentFriendRequests> objects, ParseException e) {
-                for (int i = 0; i < objects.size(); i++) {
-                    SentFriendRequests request = objects.get(i);
-                    try {
-                        friendNames.add(request.getParseUser("fromUser").fetch().getUsername());
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        SentFriendRequests request = objects.get(i);
+                        try {
+                            friendNames.add(request.getParseUser("fromUser").fetch().getUsername());
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
             }

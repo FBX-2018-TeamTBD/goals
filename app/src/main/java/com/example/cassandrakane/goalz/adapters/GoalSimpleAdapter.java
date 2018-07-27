@@ -83,8 +83,6 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
             if (position != RecyclerView.NO_POSITION){
                 Goal goal = mGoals.get(position);
                 goal.setSelected(!(goal.isSelected()));
-                //itemView.setBackgroundColor(goal.isSelected() ? context.getColor(R.color.orange) : Color.WHITE);
-                //ivStory.setImageDrawable(goal.isSelected() ? context.getDrawable(R.drawable.check) : context.getDrawable(R.drawable.placeholder_user));
                 if (goal.isSelected()) {
                     enterReveal(ivCheck);
                 } else {

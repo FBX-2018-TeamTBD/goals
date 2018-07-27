@@ -9,6 +9,8 @@ import android.view.WindowManager;
 
 import com.parse.ParseUser;
 
+import utils.DataFetcher;
+
 public class SplashActivity extends AppCompatActivity {
 
     DataFetcher dataFetcher;

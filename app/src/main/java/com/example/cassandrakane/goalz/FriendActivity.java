@@ -80,7 +80,6 @@ public class FriendActivity extends AppCompatActivity {
 
         ParseFile file = (ParseFile) user.get("image");
         Util.setImage(user, file, getResources(), ivProfile, 16.0f);
-//        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
         user.unpinInBackground();
 
         user.pinInBackground("friends");
@@ -109,53 +108,11 @@ public class FriendActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-//        populateProfile();
     }
 
-//    public void populateProfile(){
-//        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
-//        localQuery.fromPin("friendGoals");
-//        localQuery.whereEqualTo("user", user);
-//        localQuery.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> objects, ParseException e) {
-//                if (e == null){
-//                    goals.clear();
-//                    for (int i=0; i <objects.size(); i++){
-//                        Goal goal = (Goal) objects.get(i);
-//
-//                        if (goal.getCompleted()) {
-//                            completedGoals += 1;
-//                            goals.add(goal);
-//                        } else {
-//                            progressGoals += 1;
-//                            goals.add(0, goal);
-//                        }
-//                    }
-//                    tvProgress.setText(String.valueOf(progressGoals));
-//                    tvCompleted.setText(String.valueOf(completedGoals));
-//                    tvUsername.setText(user.getUsername());
-//                    goalAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        });
-//        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
-//        localUserQuery.fromPin("friends");
-//        localQuery.whereNotEqualTo("objectId", user.getObjectId());
-//        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
-//            @Override
-//            public void done(List<ParseUser> objects, ParseException e) {
-//                tvFriends.setText(String.valueOf(objects.size() - 1));
-//                progressBar.setVisibility(ProgressBar.INVISIBLE);
-//            }
-//        });
-//    }
     public void populateProfile() {
+        progressBar.setVisibility(View.VISIBLE);
         List<ParseObject> lGoals = user.getList("goals");
-//        try {
-//        } catch(ParseException e) {
-//            e.printStackTrace();
-//        }
         completedGoals = 0;
         progressGoals = 0;
         goals.clear();
@@ -191,6 +148,7 @@ public class FriendActivity extends AppCompatActivity {
     }
 
     public void unfriend() {
+        progressBar.setVisibility(View.VISIBLE);
         final ParseUser me = ParseUser.getCurrentUser();
         List<ParseUser> arr = new ArrayList<>();
         try {
@@ -229,6 +187,7 @@ public class FriendActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         me.fetch();
+                        progressBar.setVisibility(View.INVISIBLE);
                         RemovedFriends remove = new RemovedFriends(user, me);
                         remove.saveInBackground();
                         finish();
