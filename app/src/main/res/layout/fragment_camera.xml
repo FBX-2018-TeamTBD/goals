@@ -1,15 +1,79 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".CameraActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:id="@+id/ivFade"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:srcCompat="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/ivFlip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Camera"
-        android:layout_centerInParent="true"
-        android:textSize="30dp"
-        />
+        android:src="@android:color/background_dark" />
+
+    <ImageButton
+        android:id="@+id/btnCapture"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/take_pic" />
+
+    <ImageButton
+        android:id="@+id/btnSwap"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignTop="@+id/btnCapture"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="25dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:tint="#ffffff"
+        android:src="@drawable/reverse_cam" />
+
+    <ImageButton
+        android:id="@+id/btnGallery"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignTop="@+id/btnCapture"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="25dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:tint="#ffffff"
+        android:src="@drawable/select_image" />
+
+    <ImageButton
+        android:id="@+id/btnVideo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/btnSwap"
+        android:layout_marginTop="25dp"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:tint="#ffffff"
+        android:src="@drawable/ic_video" />
 
 </RelativeLayout>
