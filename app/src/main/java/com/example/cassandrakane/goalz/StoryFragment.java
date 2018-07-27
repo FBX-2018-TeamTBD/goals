@@ -201,11 +201,6 @@ public class StoryFragment extends Fragment {
                 tvCaption.setVisibility(View.GONE);
             }
 
-            ParseUser user = object.getParseUser("user");
-            if (user != null) {
-                tvUsername.setText(user.getUsername());
-            }
-
             String url = image.getUrl();
             Glide.with(this)
                     .load(url)
@@ -219,6 +214,10 @@ public class StoryFragment extends Fragment {
                     setImage();
                     }
             }, 5000);
+        }
+        ParseUser user = object.getParseUser("user");
+        if (user != null) {
+            tvUsername.setText(user.getUsername());
         }
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
