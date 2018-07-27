@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.FriendRequestsActivity;
+import com.example.cassandrakane.goalz.FriendRequestsFragment;
+import com.example.cassandrakane.goalz.NotificationsActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
@@ -71,33 +73,17 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((FriendRequestsActivity) context).progressBar.setVisibility(View.VISIBLE);
+                ((NotificationsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 addFriend(friend, position);
             }
         });
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((FriendRequestsActivity) context).progressBar.setVisibility(View.VISIBLE);
+                ((NotificationsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 deleteSentRequest(position);
             }
         });
-    }
-
-    public void decreaseFriendRequests() {
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", ParseUser.getCurrentUser());
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests (" + count + ")");
-            } else {
-                ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests");
-            }
-            ((FriendRequestsActivity) context).progressBar.setVisibility(View.INVISIBLE);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -116,12 +102,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                     object.saveInBackground();
                     requests.remove(position);
                     mFriends.remove(position);
+                    FriendRequestsFragment frag = (FriendRequestsFragment) ((NotificationsActivity) context).pagerAdapter.getCurrentFragment();
                     if (requests.size() > 0) {
-                        ((FriendRequestsActivity) context).noFriendsPage.setVisibility(View.GONE);
+                        frag.noFriendsPage.setVisibility(View.GONE);
                     } else {
-                        ((FriendRequestsActivity) context).noFriendsPage.setVisibility(View.VISIBLE);
+                        frag.noFriendsPage.setVisibility(View.VISIBLE);
                     }
-                    decreaseFriendRequests();
+                    NavigationView navigationView = ((NotificationsActivity) context).navigationView;
+                    Util.setNotifications(ParseUser.getCurrentUser(), navigationView);
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -148,8 +136,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        ((FriendRequestsActivity) context).tvFriends.setText(String.valueOf(Integer.parseInt(((FriendRequestsActivity) context).tvFriends.getText().toString()) + 1));
                         Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
+                        ((NotificationsActivity) context).tvFriends.setText(String.valueOf(Integer.parseInt(((NotificationsActivity) context).tvFriends.getText().toString()) + 1));
                         deleteSentRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

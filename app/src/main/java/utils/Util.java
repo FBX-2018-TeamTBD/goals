@@ -64,16 +64,12 @@ public class Util {
         }
     }
 
-    public static void setRequests(ParseUser user, NavigationView navigationView) {
+    public static void setNotifications(ParseUser user, NavigationView navigationView) {
         ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
         query2.whereEqualTo("toUser", user);
+        int count = 0;
         try {
-            int count = query2.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(3).setTitle("friend requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(3).setTitle("friend requests");
-            }
+            count += query2.count();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -81,14 +77,15 @@ public class Util {
         ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
         query3.whereEqualTo("user", user);
         try {
-            int count = query3.count();
-            if(count > 0) {
-                navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
-            } else {
-                navigationView.getMenu().getItem(4).setTitle("goal requests");
-            }
+            count += query3.count();
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if(count > 0) {
+            navigationView.getMenu().getItem(3).setTitle("notifications (" + count + ")");
+        } else {
+            navigationView.getMenu().getItem(3).setTitle("notifications");
         }
     }
     public static void populateStoredGoals(Context context, ParseUser user, final TextView tvProgress, final TextView tvCompleted, final TextView tvFriends, TextView tvUsername, ImageView ivProfile, final List<Goal> goals, final List<Goal> incompleted) {

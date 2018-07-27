@@ -114,18 +114,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                navigationHelper.toCamera();
+                                navigationHelper.toCamera(false);
                                 break;
                             case R.id.nav_goals:
                                 break;
                             case R.id.nav_feed:
-                                navigationHelper.toFeed();
+                                navigationHelper.toFeed(true);
                                 break;
-                            case R.id.nav_friend_request:
-                                navigationHelper.toFriendRequests();
-                                break;
-                            case R.id.nav_goal_request:
-                                navigationHelper.toGoalRequests();
+                            case R.id.nav_notifications:
+                                navigationHelper.toNotifications(true);
                                 break;
                             case R.id.nav_logout:
                                 navigationHelper.logout();
@@ -145,11 +142,11 @@ public class ProfileActivity extends AppCompatActivity {
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
             public void onSwipeLeft() {
-                navigationHelper.toFeed();
+                navigationHelper.toFeed(true);
             }
             @Override
             public void onSwipeRight() {
-                navigationHelper.toCamera();
+                navigationHelper.toCamera(false);
             }
         };
 
@@ -205,7 +202,7 @@ public class ProfileActivity extends AppCompatActivity {
         query.include("fromUser");
         query.whereEqualTo("fromUser", user);
 
-        Util.setRequests(user, navigationView);
+        Util.setNotifications(user, navigationView);
 
         final List<ParseUser> friends = user.getList("friends");
         final List<ParseUser> newFriends = new ArrayList<>();
