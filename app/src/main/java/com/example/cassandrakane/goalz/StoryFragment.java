@@ -122,16 +122,6 @@ public class StoryFragment extends Fragment {
                     mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
                     mainActivity.toolbar.setVisibility(View.VISIBLE);
                 }
-                if (activity.getClass().isAssignableFrom(ProfileActivity.class)) {
-                    ProfileActivity profileActivity = (ProfileActivity) activity;
-                    profileActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-                    profileActivity.toolbar.setVisibility(View.VISIBLE);
-                }
-                if (activity.getClass().isAssignableFrom(FeedActivity.class)) {
-                    FeedActivity feedActivity = (FeedActivity) activity;
-                    feedActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-                    feedActivity.toolbar.setVisibility(View.VISIBLE);
-                }
                 if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
                     FriendActivity friendActivity = (FriendActivity) activity;
                     friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
