@@ -23,7 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
-import com.example.cassandrakane.goalz.ProfileActivity;
+import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -72,7 +72,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        navigationHelper = new NavigationHelper(((ProfileActivity) context));
+        navigationHelper = new NavigationHelper(((MainActivity) context));
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -131,9 +131,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                     notificationHelper.cancelReminder(finalGoal);
                                     goals.remove(finalGoal);
                                     if (finalGoal.getCompleted()) {
-                                        ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).completedGoals - 1));
+                                        ((MainActivity) context).tvProgress.setText(String.valueOf(((MainActivity) context).completedGoals - 1));
                                     } else {
-                                        ((ProfileActivity) context).tvProgress.setText(String.valueOf(((ProfileActivity) context).progressGoals - 1));
+                                        ((MainActivity) context).tvProgress.setText(String.valueOf(((MainActivity) context).progressGoals - 1));
                                     }
                                     notificationHelper.cancelReminder(finalGoal);
                                     removeGoal(finalGoal.getObjectId());
@@ -265,8 +265,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             break;
                         }
                     }
-                    if (context.getClass().isAssignableFrom(ProfileActivity.class)) {
-                        ProfileActivity activity = (ProfileActivity) context;
+                    // TODO ahh fix
+                    if (context.getClass().isAssignableFrom(MainActivity.class)) {
+                        MainActivity activity = (MainActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
