@@ -83,6 +83,7 @@
             android:theme="@style/AppTheme.PopupTheme" />
         <activity android:name=".NotificationsActivity" />
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".SignupActivity"></activity>
     </application>
 
 </manifest>

@@ -221,6 +221,9 @@ public class ProfileActivity extends AppCompatActivity {
                             e1.printStackTrace();
                         }
                     }
+                    if (objects.size() >= 1) {
+                        Toast.makeText(ProfileActivity.this, objects.size() > 1 ? "Friends requests approved!" : "Friend request approved!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 ParseQuery<RemovedFriends> query3 = ParseQuery.getQuery("RemovedRequests");
                 query3.include("removedFriend");

@@ -28,7 +28,6 @@ import utils.DataFetcher;
 public class LoginActivity extends AppCompatActivity {
 
     DataFetcher dataFetcher;
-    Context context;
 
     @BindView(R.id.tvUsername) EditText tvUsername;
     @BindView(R.id.tvPassword) EditText tvPassword;
@@ -90,59 +89,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void signUp(View v) {
-        // Create the ParseUser
-        final ParseUser user = new ParseUser();
-        // Set core properties
-        final String username = tvUsername.getText().toString();
-        final String password = tvPassword.getText().toString();
-        user.setUsername(username);
-        user.setPassword(password);
-
-        // Invoke signUpInBackground
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    initializeUser();
-                    tvUsername.setText("");
-                    tvPassword.setText("");
-                    Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
-                } else {
-                    // Sign up didn't succeed. Look at the ParseException
-                    // to figure out what went wrong
-                    Toast.makeText(LoginActivity.this, "Sign up failed.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+    public void toSignup(View v) {
+        Intent i = new Intent(this, SignupActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-    public void initializeUser() {
-        final ParseUser currentUser = ParseUser.getCurrentUser();
-        currentUser.put("friends", new ArrayList<ParseUser>());
-        currentUser.put("goals", new ArrayList<Goal>());
-        currentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    try {
-                        currentUser.fetch();
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(i);
-                        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
-                        finish();
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                } else {
-                    Log.i("LoginActivity", "Failed to update object, with error code: " + e.toString());
-                }
-            }
-        });
-    }
-
 }

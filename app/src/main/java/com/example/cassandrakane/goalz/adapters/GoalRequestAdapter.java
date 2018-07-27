@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.GoalRequestsFragment;
 import com.example.cassandrakane.goalz.NotificationsActivity;
@@ -203,6 +204,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                     try {
                         currentUser.fetch();
                         moveUser(goal);
+                        Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
                         ((NotificationsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((NotificationsActivity) context).tvProgress.getText().toString()) + 1));
                         deleteGoalRequest(position);
                     } catch (ParseException e1) {

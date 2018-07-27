@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.FriendRequestsFragment;
 import com.example.cassandrakane.goalz.NotificationsActivity;
@@ -135,6 +136,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                 if (e == null) {
                     try {
                         currentUser.fetch();
+                        Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
                         ((NotificationsActivity) context).tvFriends.setText(String.valueOf(Integer.parseInt(((NotificationsActivity) context).tvFriends.getText().toString()) + 1));
                         deleteSentRequest(position);
                     } catch (ParseException e1) {
