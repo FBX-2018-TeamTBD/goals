@@ -35,14 +35,8 @@ public class NavigationHelper {
         activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-    public void toFriendRequests() {
-        Intent i = new Intent(activity, FriendRequestsActivity.class);
-        activity.startActivity(i);
-        activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    public void toGoalRequests() {
-        Intent i = new Intent(activity, GoalRequestsActivity.class);
+    public void toNotifications() {
+        Intent i = new Intent(activity, NotificationsActivity.class);
         activity.startActivity(i);
         activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }

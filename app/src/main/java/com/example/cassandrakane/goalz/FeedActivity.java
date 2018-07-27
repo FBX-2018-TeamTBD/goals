@@ -121,11 +121,8 @@ public class FeedActivity extends AppCompatActivity {
                                 break;
                             case R.id.nav_feed:
                                 break;
-                            case R.id.nav_friend_request:
-                                navigationHelper.toFriendRequests();
-                                break;
-                            case R.id.nav_goal_request:
-                                navigationHelper.toGoalRequests();
+                            case R.id.nav_notifications:
+                                navigationHelper.toNotifications();
                                 break;
                             case R.id.nav_logout:
                                 navigationHelper.logout();
@@ -157,7 +154,7 @@ public class FeedActivity extends AppCompatActivity {
 
         populateFriends();
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
-        Util.setRequests(user, navigationView);
+        Util.setNotifications(user, navigationView);
     }
 
     @Override

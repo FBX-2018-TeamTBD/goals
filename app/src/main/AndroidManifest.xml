@@ -81,12 +81,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FriendRequestsActivity" />
-        <activity android:name=".GoalRequestsActivity" />
-        <activity android:name=".VideoActivity"></activity>
-        <activity android:name=".FriendsModalActivity"
-            android:theme="@style/AppTheme.PopupTheme">
-        </activity>
+        <activity android:name=".VideoActivity" />
+        <activity
+            android:name=".FriendsModalActivity"
+            android:theme="@style/AppTheme.PopupTheme"></activity>
+        <activity android:name=".NotificationsActivity"></activity>
     </application>
 
 </manifest>

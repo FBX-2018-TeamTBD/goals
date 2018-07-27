@@ -39,4 +39,5 @@
     <string name="no_friend_requests_to_show">No friend requests to show</string>
     <string name="no_goal_requests_to_show">No goal requests to show</string>
     <string name="goal_requests">goal requests</string>
+    <string name="notifications">notifications</string>
 </resources>

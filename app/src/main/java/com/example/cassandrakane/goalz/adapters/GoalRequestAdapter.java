@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.cassandrakane.goalz.GoalRequestsActivity;
+import com.example.cassandrakane.goalz.GoalRequestsFragment;
+import com.example.cassandrakane.goalz.NotificationsActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.Util;
 
 public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.ViewHolder> {
 
@@ -97,21 +99,6 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         return "";
     }
 
-    public void decreaseGoalRequests() {
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("GoalRequests");
-        query2.whereEqualTo("user", ParseUser.getCurrentUser());
-        try {
-            int count = query2.count();
-            if(count > 0) {
-                ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests (" + count + ")");
-            } else {
-                ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int getItemCount() {
         return mGoals.size();
@@ -128,12 +115,14 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                     object.saveInBackground();
                     requests.remove(position);
                     mGoals.remove(position);
+                    GoalRequestsFragment frag = (GoalRequestsFragment) ((NotificationsActivity) context).pagerAdapter.getCurrentFragment();
                     if (requests.size() > 0) {
-                        ((GoalRequestsActivity) context).noGoalsPage.setVisibility(View.GONE);
+                        frag.noGoalsPage.setVisibility(View.GONE);
                     } else {
-                        ((GoalRequestsActivity) context).noGoalsPage.setVisibility(View.VISIBLE);
+                        frag.noGoalsPage.setVisibility(View.VISIBLE);
                     }
-                    decreaseGoalRequests();
+                    NavigationView navigationView = ((NotificationsActivity) context).navigationView;
+                    Util.setNotifications(ParseUser.getCurrentUser(), navigationView);
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -208,7 +197,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                     try {
                         currentUser.fetch();
                         moveUser(goal);
-                        ((GoalRequestsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((GoalRequestsActivity) context).tvProgress.getText().toString()) + 1));
+                        ((NotificationsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((NotificationsActivity) context).tvProgress.getText().toString()) + 1));
                         deleteGoalRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
