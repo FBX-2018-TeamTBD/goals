@@ -21,4 +21,16 @@
         android:layout_marginBottom="36dp"
         android:src="@android:drawable/presence_video_online" />
 
+    <ImageButton
+        android:id="@+id/btnSwap"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignBottom="@+id/videoOnlineImageButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="48dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/reverse_cam"
+        android:tint="#ffffff" />
+
 </RelativeLayout>

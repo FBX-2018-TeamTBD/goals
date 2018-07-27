@@ -42,6 +42,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
 
@@ -53,7 +54,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -213,7 +213,6 @@ public class CameraFragment extends Fragment {
         btnSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 switchCamera();
             }
         });
@@ -235,39 +234,6 @@ public class CameraFragment extends Fragment {
         });
 
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
 
     public void onLaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK,
@@ -325,7 +291,7 @@ public class CameraFragment extends Fragment {
                 }
 
             } else { // Result was a failure
-//                Toast.makeText(this, "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -460,7 +426,7 @@ public class CameraFragment extends Fragment {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-//                    Toast.makeText(CameraActivity.this, "Changed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Changed", Toast.LENGTH_SHORT).show();
                 }
             }, null);
         } catch (CameraAccessException e){
@@ -470,7 +436,7 @@ public class CameraFragment extends Fragment {
 
     private void updatePreview() {
         if (cameraDevice == null){
-//            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO);
         try {
@@ -534,9 +500,9 @@ public class CameraFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Permission granted", Toast.LENGTH_SHORT).show();
             } else {
-//                Toast.makeText(this, "You can't use the camera without permission", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "You can't use the camera without permission", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         }

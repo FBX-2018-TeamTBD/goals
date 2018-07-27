@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.cassandrakane.goalz.FeedActivity;
+import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -63,7 +63,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     ArrayList<String> imageUrls = goal.getStoryUrls();
-                    FeedActivity activity = (FeedActivity) context;
+                    MainActivity activity = (MainActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1, user)).commit();
