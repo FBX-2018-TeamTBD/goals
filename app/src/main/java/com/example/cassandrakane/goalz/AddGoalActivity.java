@@ -36,18 +36,6 @@ import butterknife.ButterKnife;
 
 public class AddGoalActivity extends AppCompatActivity {
 
-    /*enum Frequency {
-        DAILY(R.id.rbDay),
-        WEEKLY(R.id.rbWeek),
-        MONTHLY(R.id.rbMonth);
-
-        private int value;
-
-        private Frequency(int val) {
-            value = val;
-        }
-    }*/
-
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.etTitle) EditText etTitle;
     @BindView(R.id.etDescription) EditText etDescription;

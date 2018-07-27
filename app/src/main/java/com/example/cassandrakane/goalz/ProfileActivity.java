@@ -90,8 +90,6 @@ public class ProfileActivity extends AppCompatActivity {
     public int completedGoals = 0;
     public int progressGoals = 0;
 
-    DataFetcher dataFetcher;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,8 +173,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         ParseFile file = (ParseFile) user.get("image");
         Util.setImage(user, file, getResources(), ivProfile, 16.0f);
-//        Bitmap bitmap = BitmapFactory.decodeFile(file.get);
-//        Util.setImageBitmap(bitmap, this, ivProfile);
 
         ParseACL acl = user.getACL();
         if (!acl.getPublicReadAccess()) {
@@ -187,6 +183,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, completed);
         updateFriends();
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     @Override
@@ -198,97 +195,6 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             noGoalPage.setVisibility(View.GONE);
         }
-        // populateGoals();
-    }
-
-
-//    public void populateGoals(){
-//        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
-//        localQuery.fromLocalDatastore();
-//        localQuery.whereEqualTo("user", user);
-//        localQuery.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> objects, ParseException e) {
-//                if (e == null){
-//                    goals.clear();
-//                    for (int i=0; i <objects.size(); i++){
-//                        Goal goal = (Goal) objects.get(i);
-//
-//                        if (goal.getCompleted()) {
-//                            completedGoals += 1;
-//                            goals.add(goal);
-//                        } else {
-//                            progressGoals += 1;
-//                            goals.add(0, goal);
-//                        }
-//                    }
-//                    if (goals.size() == 0) {
-//                        noGoalPage.setVisibility(View.VISIBLE);
-//                    } else {
-//                        noGoalPage.setVisibility(View.GONE);
-//                    }
-//                    tvProgress.setText(String.valueOf(progressGoals));
-//                    tvCompleted.setText(String.valueOf(completedGoals));
-//                    goalAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        });
-////        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
-////        localUserQuery.fromLocalDatastore();
-////        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
-////        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
-////            @Override
-////            public void done(List<ParseUser> objects, ParseException e) {
-////                tvFriends.setText(String.valueOf(objects.size()));
-////                progressBar.setVisibility(ProgressBar.INVISIBLE);
-////            }
-////        });
-//
-//        tvUsername.setText(user.getUsername());
-//        tvFriends.setText(String.valueOf(user.getList("friends").size()));
-//        progressBar.setVisibility(ProgressBar.INVISIBLE);
-//    }
-
-    public void populateGoals() {
-//        try {
-        List<ParseObject> lGoals = user.getList("goals");
-//        } catch(ParseException e) {
-////            e.printStackTrace();
-////        }
-        completedGoals = 0;
-        progressGoals = 0;
-        goals.clear();
-        List<Goal> completed = new ArrayList<>();
-//        ParseObject.pinAllInBackground(arr);
-        if (lGoals != null) {
-//            try {
-//                ParseObject.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-            for (int i = 0; i < lGoals.size(); i++) {
-                Goal goal = (Goal) lGoals.get(i);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                    completed.add(0, goal);
-                } else {
-                    progressGoals += 1;
-                    goals.add(0, goal);
-                }
-            }
-            goals.addAll(completed);
-        }
-        tvProgress.setText(String.valueOf(progressGoals));
-        tvCompleted.setText(String.valueOf(completedGoals));
-        tvFriends.setText(String.valueOf(user.getList("friends").size()));
-        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        if (goals.size() == 0) {
-            noGoalPage.setVisibility(View.VISIBLE);
-        } else {
-            noGoalPage.setVisibility(View.GONE);
-        }
-        goalAdapter.notifyDataSetChanged();
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     public void updateFriends() {

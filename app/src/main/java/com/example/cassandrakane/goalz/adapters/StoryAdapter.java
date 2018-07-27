@@ -91,13 +91,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
-        public void onClick(View v){
-//            int position = getAdapterPosition();
-//            if (position != RecyclerView.NO_POSITION){
-//                Goal goal = mGoals.get(position);
-//                goal.setSelected(!(goal.isSelected()));
-//                itemView.setBackgroundColor(goal.isSelected() ? Color.CYAN : Color.WHITE);
-//            }
-        }
+        public void onClick(View v){ }
     }
 }

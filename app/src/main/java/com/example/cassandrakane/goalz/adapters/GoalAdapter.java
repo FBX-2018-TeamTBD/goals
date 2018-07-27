@@ -237,13 +237,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStar.setImageResource(R.drawable.star);
         }
 
-//        List<Image> imageList = goal.getList("images");
-////        Image im = imageList.get(0);
-////        String url = im.getImage().getUrl();
-//        ArrayList<String> imageUrls = new ArrayList<>();
-//        if (imageList.size() != 0) {
-//            imageUrls = getImageUrls(imageList);
-//        }
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
 
@@ -356,29 +349,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public int getItemCount() {
         return goals.size();
     }
-
-//    public ArrayList<String> getImageUrls(List<Image> imageList) {
-//        ArrayList<Image> images = new ArrayList<Image>();
-//        if (imageList != null) {
-//            images.addAll(imageList);
-//        }
-//        ArrayList<String> imageUrls = new ArrayList<String>();
-//        for (int i = 0; i<imageList.size(); i++) {
-////            try {
-//                Image im = imageList.get(i);
-//            String url = null;
-//            try {
-//                url = im.fetchIfNeeded().getParseFile("image").getUrl();
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            imageUrls.add(url);
-////            } catch (ParseException e) {
-////                e.printStackTrace();
-////            }
-//        }
-//        return imageUrls;
-//    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -225,14 +225,10 @@ public class DisplayActivity extends AppCompatActivity {
 
         etCaption.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -397,9 +393,5 @@ public class DisplayActivity extends AppCompatActivity {
                 });
             }
         }
-//        if (selected == 0) {
-//            progressBar.setVisibility(View.INVISIBLE);
-////                                    Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
-//        }
     }
 }

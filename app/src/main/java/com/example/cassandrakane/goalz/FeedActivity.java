@@ -164,40 +164,13 @@ public class FeedActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         populateFriends();
-//        populateGoals();
     }
 
-//    public void populateFriends(){
-//        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
-//        localUserQuery.fromLocalDatastore();
-//        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
-//        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
-//            @Override
-//            public void done(List<ParseUser> objects, ParseException e) {
-//                friends.clear();
-//                friends.addAll(objects);
-//                tvFriends.setText(String.valueOf(friends.size()));
-//                friendAdapter.notifyDataSetChanged();
-//                ParseObject.unpinAllInBackground("friends");
-//                ParseObject.pinAllInBackground("friends", objects);
-//                progressBar.setVisibility(ProgressBar.INVISIBLE);
-//            }
-//        });
-//    }
     public void populateFriends() {
         List<ParseUser> arr = null;
-//        try {
         arr = user.getList("friends");
-//        } catch(ParseException e) {
-//            e.printStackTrace();
-//        }
         friends.clear();
         if (arr != null) {
-//            try {
-//                ParseUser.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
             friends.addAll(arr);
         }
 
@@ -213,66 +186,6 @@ public class FeedActivity extends AppCompatActivity {
         friendAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
-
-   /* public void populateGoals(){
-        goals = new ArrayList<>();
-        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
-        localQuery.fromLocalDatastore();
-        localQuery.whereEqualTo("user", user);
-        localQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null){
-                    goals.clear();
-                    for (int i=0; i <objects.size(); i++){
-                        Goal goal = (Goal) objects.get(i);
-
-                        if (goal.getCompleted()) {
-                            completedGoals += 1;
-                            goals.add(goal);
-                        } else {
-                            progressGoals += 1;
-                            goals.add(0, goal);
-                        }
-                    }
-                    tvProgress.setText(String.valueOf(progressGoals));
-                    tvCompleted.setText(String.valueOf(completedGoals));
-                    tvUsername.setText(user.getUsername());
-                }
-            }
-        });
-    }
-*/
-//    public void populateGoals() {
-//        List<ParseObject> arr = user.getList("goals");
-//        goals = new ArrayList<>();
-//        completedGoals = 0;
-//        progressGoals = 0;
-//        if (arr != null) {
-////            try {
-////                ParseObject.fetchAllIfNeeded(arr);
-////            } catch (ParseException e) {
-////                e.printStackTrace();
-////            }
-//            for(int i = 0; i < arr.size(); i++) {
-//                Goal goal = (Goal) arr.get(i);
-//                if (goal.getCompleted()) {
-//                    completedGoals += 1;
-//                    goals.add(goal);
-//                } else {
-//                    progressGoals += 1;
-//                    goals.add(goal);
-//                }
-//            }
-//            tvProgress.setText(String.valueOf(progressGoals));
-//            tvCompleted.setText(String.valueOf(completedGoals));
-//            tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-//        }
-//        ParseFile file = (ParseFile) user.get("image");
-//        Util.setImage(user, file, getResources(), ivProfile, 16.0f);
-////        Util.setImage(user, "image", getResources(), ivProfile, 16.0f);
-//
-//    }
 
     public void addFriend(View v) {
         Intent i = new Intent(this, SearchFriendsActivity.class);
