@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +47,7 @@ public class GoalsListActivity extends AppCompatActivity {
     ArrayList<File> videos;
     Date currentDate;
     String caption;
+    ParseUser currentUser;
 
     private int mTasksComplete = 0;
     private int mTasksRequired;
@@ -62,6 +64,7 @@ public class GoalsListActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         currentDate = new Date();
+        currentUser = ParseUser.getCurrentUser();
         ButterKnife.bind(this);
 
         goals = new ArrayList<Goal>();
@@ -114,38 +117,36 @@ public class GoalsListActivity extends AppCompatActivity {
                         public void done(ParseException e) {
                             story.add(image);
                             goal.setStory(story);
+                            goal.setItemAdded(true);
+                            final Map<String, String> userAdded = goal.getUserAdded();
+                            userAdded.put(currentUser.getObjectId(), "true");
+                            for (String value : userAdded.values()) {
+                                if (value.equals("false")) {
+                                    goal.setItemAdded(false);
+                                }
+                            }
+
+                            goal.setUserAdded(userAdded);
                             goal.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
                                     NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
                                     notificationHelper.cancelReminder(goal);
                                     notificationHelper.setReminder(goal);
-                                    if (goal.getStory().size() == 1) {
-                                        goal.setProgress(1);
-                                        goal.setStreak(1);
-                                        goal.setItemAdded(false);
-                                        goal.saveInBackground(new SaveCallback() {
-                                            @Override
-                                            public void done(ParseException e) {
-                                                toProfile();
-                                            }
-                                        });
-                                    } else {
-                                        if (!goal.getIsItemAdded()) {
-                                            goal.setProgress(goal.getProgress() + 1);
-                                            if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
-                                                goal.setItemAdded(true);
-                                                goal.setStreak(goal.getStreak() + 1);
-                                                goal.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        toProfile();
-                                                    }
-                                                });
-                                            }
-                                        } else {
-                                            toProfile();
+
+                                    if (goal.getIsItemAdded()) {
+                                        goal.setProgress(goal.getProgress() + 1);
+                                        if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
+                                            goal.setStreak(goal.getStreak() + 1);
+                                            goal.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    toProfile();
+                                                }
+                                            });
                                         }
+                                    } else{
+                                        toProfile();
                                     }
                                 }
                             });

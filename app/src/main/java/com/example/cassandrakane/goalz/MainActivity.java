@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,11 +40,14 @@ public class MainActivity extends AppCompatActivity {
     List<Goal> completed;
     List<Goal> incompleted;
     ParseUser user;
+    public int completedGoals = 0;
+    public int progressGoals = 0;
 
     @BindView(R.id.nav_view) public NavigationView navigationView;
     @BindView(R.id.progressBar) public ProgressBar progressBar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.pager) public ViewPager viewPager;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
