@@ -138,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);
                         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
+                        finish();
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }

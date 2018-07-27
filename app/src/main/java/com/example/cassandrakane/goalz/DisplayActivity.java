@@ -62,7 +62,6 @@ public class DisplayActivity extends AppCompatActivity {
     @BindView(R.id.etCaption) EditText etCaption;
     @BindView(R.id.btnAddCaption) ImageButton btnAddCaption;
 
-    List<Goal> goals;
     ArrayList<ParseObject> parseVideos;
     ArrayList<File> videos;
     Goal goal;
@@ -190,7 +189,6 @@ public class DisplayActivity extends AppCompatActivity {
                         intent.putExtra("videos", (Serializable) videos);
                     }
                     intent.putExtra("caption", caption);
-                    intent.putExtra("goals", (Serializable) goals);
                     startActivity(intent);
                 }
             });
@@ -255,7 +253,6 @@ public class DisplayActivity extends AppCompatActivity {
         });
 
 
-        goals = (List) getIntent().getSerializableExtra("goals");
         cameraId = getIntent().getStringExtra("cameraId");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         file = (File) getIntent().getSerializableExtra("image");
@@ -347,6 +344,7 @@ public class DisplayActivity extends AppCompatActivity {
 
     public void addToGoal(ArrayList<ParseObject> parseVideos){
         int selected = 0;
+        List<Goal> goals = ParseUser.getCurrentUser().getList("goals");
         for (final Goal goal : goals) {
             selected += 1;
             if (goal.isSelected()) {

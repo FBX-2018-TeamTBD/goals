@@ -46,14 +46,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.parceler.Parcels;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
-    private ParseUser user;
+    private ParseUser user = ParseUser.getCurrentUser();
 
     private List<Goal> goals;
     private List<Goal> completed;
@@ -105,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
         progressBar.setVisibility(ProgressBar.VISIBLE);
         setSupportActionBar(toolbar);
 
+        final NavigationHelper navigationHelper = new NavigationHelper(this);
         navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(1).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
@@ -116,21 +114,21 @@ public class ProfileActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                toCamera();
+                                navigationHelper.toCamera();
                                 break;
                             case R.id.nav_goals:
                                 break;
                             case R.id.nav_feed:
-                                toFeed();
+                                navigationHelper.toFeed();
                                 break;
                             case R.id.nav_friend_request:
-                                toFriendRequests();
+                                navigationHelper.toFriendRequests();
                                 break;
                             case R.id.nav_goal_request:
-                                toGoalRequests();
+                                navigationHelper.toGoalRequests();
                                 break;
                             case R.id.nav_logout:
-                                logout();
+                                navigationHelper.logout();
                                 break;
                         }
 
@@ -147,20 +145,15 @@ public class ProfileActivity extends AppCompatActivity {
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
             public void onSwipeLeft() {
-                toFeed();
+                navigationHelper.toFeed();
             }
             @Override
             public void onSwipeRight() {
-                toCamera();
+                navigationHelper.toCamera();
             }
         };
 
         getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
-
-        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
-        if (user == null) {
-            user = ParseUser.getCurrentUser();
-        }
 
         goals = new ArrayList<>();
         completed = new ArrayList<>();
@@ -551,52 +544,6 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(this, "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    public void toCamera() {
-        Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-        List<Goal> uncompleteGoals = new ArrayList<>();
-        for (Goal goal : goals){
-            if (!goal.getCompleted()){
-                uncompleteGoals.add(goal);
-            }
-        }
-        i.putExtra("goals", (Serializable) uncompleteGoals);
-        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void toFeed() {
-        Intent i = new Intent(getApplicationContext(), FeedActivity.class);
-        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    public void toFriendRequests() {
-        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    public void toGoalRequests() {
-        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    public void logout() {
-        ParseUser.logOut();
-        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
-        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-        for (Goal goal : goals) {
-            notificationHelper.cancelReminder(goal);
-        }
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
-        finish();
     }
 
     public void addGoal(View v) {

@@ -63,14 +63,20 @@ public class GoalsListActivity extends AppCompatActivity {
         currentDate = new Date();
         ButterKnife.bind(this);
 
+        goals = new ArrayList<Goal>();
+        List<Goal> allGoals = ParseUser.getCurrentUser().getList("goals");
+        for (Goal goal : allGoals){
+            if (!goal.getCompleted()){
+                goals.add(goal);
+            }
+        }
         file = (File) getIntent().getSerializableExtra("image");
-        goals = (List) getIntent().getSerializableExtra("goals");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         caption = getIntent().getStringExtra("caption");
 
         parseVideos = new ArrayList<>();
 
-        if (goals != null && goals.size() != 0) {
+        if (goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
             rvGoals.setLayoutManager(new LinearLayoutManager(this));
             rvGoals.setAdapter(goalSimpleAdapter);
@@ -120,9 +126,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                         goal.saveInBackground(new SaveCallback() {
                                             @Override
                                             public void done(ParseException e) {
-                                                Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                startActivity(intent);
-                                                finish();
+                                                toProfile();
                                             }
                                         });
                                     } else {
@@ -134,16 +138,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                                 goal.saveInBackground(new SaveCallback() {
                                                     @Override
                                                     public void done(ParseException e) {
-                                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                        startActivity(intent);
-                                                        finish();
+                                                        toProfile();
                                                     }
                                                 });
                                             }
                                         } else {
-                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                            toProfile();
                                         }
                                     }
                                 }
@@ -220,9 +220,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                            toProfile();
                                         }
                                     });
                                 } else {
@@ -234,16 +232,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                    toProfile();
                                                 }
                                             });
                                         }
                                     } else {
-                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        toProfile();
                                     }
                                 }
                             }
@@ -254,5 +248,12 @@ public class GoalsListActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
 //                                    Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void toProfile() {
+        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }

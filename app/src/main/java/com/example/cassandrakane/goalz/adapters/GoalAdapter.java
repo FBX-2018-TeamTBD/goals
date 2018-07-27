@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
+import com.example.cassandrakane.goalz.NavigationHelper;
 import com.example.cassandrakane.goalz.NotificationHelper;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
@@ -59,6 +60,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     float endX = 0;
     boolean longClick = false;
     int startIndex = 0;
+    NavigationHelper navigationHelper = new NavigationHelper(((ProfileActivity) context));
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
         this.goals = gGoals;
@@ -105,11 +107,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    ((ProfileActivity) context).toCamera();
+                    navigationHelper.toCamera();
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    ((ProfileActivity) context).toFeed();
+                    navigationHelper.toFeed();
                     startX = 0;
                     endX = 0;
                 }
@@ -147,11 +149,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    ((ProfileActivity) context).toCamera();
+                    navigationHelper.toCamera();
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    ((ProfileActivity) context).toFeed();
+                    navigationHelper.toFeed();
                     startX = 0;
                     endX = 0;
                 }

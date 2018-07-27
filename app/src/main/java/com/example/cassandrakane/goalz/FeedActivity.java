@@ -37,14 +37,11 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import org.parceler.Parcels;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +74,7 @@ public class FeedActivity extends AppCompatActivity {
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
 
-    ParseUser user;
+    ParseUser user = ParseUser.getCurrentUser();
     int completedGoals;
     int progressGoals;
 
@@ -92,17 +89,13 @@ public class FeedActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ButterKnife.bind(this);
-
-        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
-        if (user == null) {
-            user = ParseUser.getCurrentUser();
-        }
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
+        final NavigationHelper navigationHelper = new NavigationHelper(this);
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
             public void onSwipeRight() {
-                toGoals();
+                navigationHelper.toGoals();
             }
         };
 
@@ -121,21 +114,21 @@ public class FeedActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                toCamera();
+                                navigationHelper.toCamera();
                                 break;
                             case R.id.nav_goals:
-                                toGoals();
+                                navigationHelper.toGoals();
                                 break;
                             case R.id.nav_feed:
                                 break;
                             case R.id.nav_friend_request:
-                                toFriendRequests();
+                                navigationHelper.toFriendRequests();
                                 break;
                             case R.id.nav_goal_request:
-                                toGoalRequests();
+                                navigationHelper.toGoalRequests();
                                 break;
                             case R.id.nav_logout:
-                                logout();
+                                navigationHelper.logout();
                                 break;
                         }
 
@@ -289,41 +282,6 @@ public class FeedActivity extends AppCompatActivity {
 
     public void openDrawer(View v) {
         drawerLayout.openDrawer(GravityCompat.START);
-    }
-
-    public void toCamera() {
-        Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-        i.putExtra("goals", (Serializable) incompleted);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void toGoals() {
-        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-        i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void toFriendRequests() {
-        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    public void toGoalRequests() {
-        Intent i = new Intent(getApplicationContext(), GoalRequestsActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    public void logout() {
-        ParseUser.logOut();
-        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
-        finish();
     }
 
     @Override
