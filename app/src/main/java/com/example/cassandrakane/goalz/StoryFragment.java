@@ -117,6 +117,11 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
                 Activity activity = getActivity();
+                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
+                    MainActivity mainActivity = (MainActivity) activity;
+                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+                    mainActivity.toolbar.setVisibility(View.VISIBLE);
+                }
                 if (activity.getClass().isAssignableFrom(ProfileActivity.class)) {
                     ProfileActivity profileActivity = (ProfileActivity) activity;
                     profileActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
