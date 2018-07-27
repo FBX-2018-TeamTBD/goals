@@ -2,13 +2,10 @@ package utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.CameraActivity;
-import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.LoginActivity;
-import com.example.cassandrakane.goalz.NotificationsActivity;
-import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseUser;
@@ -17,37 +14,31 @@ import java.util.List;
 
 public class NavigationHelper {
 
-    Activity activity;
+    ViewPager viewPager;
 
-    public NavigationHelper(Activity act) {
-        activity = act;
+    public NavigationHelper(ViewPager vp) {
+        viewPager = vp;
     }
 
-    public void toCamera(boolean toRight) {
-        Intent i = new Intent(activity, CameraActivity.class);
-        activity.startActivity(i);
-        animateTransition(toRight);
+    public void toCamera() {
+        viewPager.setCurrentItem(0);
     }
 
-    public void toGoals(boolean toRight) {
-        Intent i = new Intent(activity, ProfileActivity.class);
-        activity.startActivity(i);
-        animateTransition(toRight);
+    public void toGoals() {
+        viewPager.setCurrentItem(1);
     }
 
-    public void toFeed(boolean toRight) {
-        Intent i = new Intent(activity, FeedActivity.class);
-        activity.startActivity(i);
-        animateTransition(toRight);
+    public void toFeed() {
+        viewPager.setCurrentItem(2);
     }
 
-    public void toNotifications(boolean toRight) {
-        Intent i = new Intent(activity, NotificationsActivity.class);
-        activity.startActivity(i);
-        animateTransition(toRight);
-    }
+//    public void toNotifications(boolean toRight) {
+//        Intent i = new Intent(activity, NotificationsActivity.class);
+//        activity.startActivity(i);
+//        animateTransition(toRight);
+//    }
 
-    public void logout() {
+    public void logout(Activity activity) {
         List<Goal> goals = ParseUser.getCurrentUser().getList("goals");
         NotificationHelper notificationHelper = new NotificationHelper(activity);
         if (goals != null) {
@@ -64,11 +55,11 @@ public class NavigationHelper {
         activity.finish();
     }
 
-    public void animateTransition(boolean toRight) {
-        if (toRight) {
-            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-        } else {
-            activity.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-        }
-    }
+//    public void animateTransition(boolean toRight) {
+//        if (toRight) {
+//            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+//        } else {
+//            activity.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+//        }
+//    }
 }

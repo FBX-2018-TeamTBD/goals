@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NavigationHelper;
 import utils.Util;
 
 public class NotificationsActivity extends AppCompatActivity {
@@ -59,36 +57,36 @@ public class NotificationsActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        final NavigationHelper navigationHelper = new NavigationHelper(this);
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(3).setChecked(true);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // close drawer when item is tapped
-                        drawerLayout.closeDrawers();
-
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_camera:
-                                navigationHelper.toCamera(false);
-                                break;
-                            case R.id.nav_goals:
-                                navigationHelper.toGoals(false);
-                                break;
-                            case R.id.nav_feed:
-                                navigationHelper.toFeed(false);
-                                break;
-                            case R.id.nav_notifications:
-                                break;
-                            case R.id.nav_logout:
-                                navigationHelper.logout();
-                                break;
-                        }
-
-                        return true;
-                    }
-                });
+//        final NavigationHelper navigationHelper = new NavigationHelper(this);
+//        navigationView = findViewById(R.id.nav_view);
+//        navigationView.getMenu().getItem(3).setChecked(true);
+//        navigationView.setNavigationItemSelectedListener(
+//                new NavigationView.OnNavigationItemSelectedListener() {
+//                    @Override
+//                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+//                        // close drawer when item is tapped
+//                        drawerLayout.closeDrawers();
+//
+//                        switch (menuItem.getItemId()) {
+//                            case R.id.nav_camera:
+//                                navigationHelper.toCamera();
+//                                break;
+//                            case R.id.nav_goals:
+//                                navigationHelper.toGoals();
+//                                break;
+//                            case R.id.nav_feed:
+//                                navigationHelper.toFeed();
+//                                break;
+//                            case R.id.nav_notifications:
+//                                break;
+//                            case R.id.nav_logout:
+//                                navigationHelper.logout();
+//                                break;
+//                        }
+//
+//                        return true;
+//                    }
+//                });
 
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);

@@ -16,8 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.AddGoalActivity;
-import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
+import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.ParseFile;
@@ -73,7 +73,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                 if (!holder.addBtn.getTag().equals(R.drawable.check)) {
                     holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
                     holder.addBtn.setTag(R.drawable.check);
-                    if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
+                    if (requestActivityName.equals(MainActivity.class.getSimpleName())) {
                         addFriend(user);
                         Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
                     }
