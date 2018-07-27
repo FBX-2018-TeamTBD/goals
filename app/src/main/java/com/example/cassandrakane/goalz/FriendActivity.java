@@ -111,6 +111,7 @@ public class FriendActivity extends AppCompatActivity {
     }
 
     public void populateProfile() {
+        progressBar.setVisibility(View.VISIBLE);
         List<ParseObject> lGoals = user.getList("goals");
         completedGoals = 0;
         progressGoals = 0;
@@ -147,6 +148,7 @@ public class FriendActivity extends AppCompatActivity {
     }
 
     public void unfriend() {
+        progressBar.setVisibility(View.VISIBLE);
         final ParseUser me = ParseUser.getCurrentUser();
         List<ParseUser> arr = new ArrayList<>();
         try {
@@ -185,6 +187,7 @@ public class FriendActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         me.fetch();
+                        progressBar.setVisibility(View.INVISIBLE);
                         RemovedFriends remove = new RemovedFriends(user, me);
                         remove.saveInBackground();
                         finish();

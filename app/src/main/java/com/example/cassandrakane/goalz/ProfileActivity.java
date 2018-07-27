@@ -56,6 +56,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NavigationHelper;
+import utils.OnSwipeTouchListener;
 import utils.Util;
 
 public class ProfileActivity extends AppCompatActivity {

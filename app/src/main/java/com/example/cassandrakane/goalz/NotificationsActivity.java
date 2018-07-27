@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.NotificationsPagerAdapter;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NavigationHelper;
 import utils.Util;
 
 public class NotificationsActivity extends AppCompatActivity {
@@ -36,6 +38,7 @@ public class NotificationsActivity extends AppCompatActivity {
     List<Goal> incompleted;
 
     @BindView(R.id.nav_view) public NavigationView navigationView;
+    @BindView(R.id.progressBar) public ProgressBar progressBar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.pager) public ViewPager viewPager;
     @BindView(R.id.tablayout) TabLayout tabLayout;

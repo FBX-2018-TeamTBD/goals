@@ -182,14 +182,15 @@ public class SearchFriendsActivity extends AppCompatActivity {
         query2.findInBackground(new FindCallback<SentFriendRequests>() {
             @Override
             public void done(List<SentFriendRequests> objects, ParseException e) {
-                for (int i = 0; i < objects.size(); i++) {
-                    SentFriendRequests request = objects.get(i);
-                    try {
-                        friendNames.add(request.getParseUser("toUser").fetch().getUsername());
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        SentFriendRequests request = objects.get(i);
+                        try {
+                            friendNames.add(request.getParseUser("toUser").fetch().getUsername());
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
-
                 }
             }
         });
@@ -200,12 +201,14 @@ public class SearchFriendsActivity extends AppCompatActivity {
         query3.findInBackground(new FindCallback<SentFriendRequests>() {
             @Override
             public void done(List<SentFriendRequests> objects, ParseException e) {
-                for (int i = 0; i < objects.size(); i++) {
-                    SentFriendRequests request = objects.get(i);
-                    try {
-                        friendNames.add(request.getParseUser("fromUser").fetch().getUsername());
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        SentFriendRequests request = objects.get(i);
+                        try {
+                            friendNames.add(request.getParseUser("fromUser").fetch().getUsername());
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
             }

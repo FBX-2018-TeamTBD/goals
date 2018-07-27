@@ -1,4 +1,4 @@
-package com.example.cassandrakane.goalz;
+package utils;
 
 import android.content.Context;
 import android.view.GestureDetector;

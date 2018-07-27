@@ -47,6 +47,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NavigationHelper;
+import utils.OnSwipeTouchListener;
 import utils.Util;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;

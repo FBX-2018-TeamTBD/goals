@@ -23,8 +23,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
-import com.example.cassandrakane.goalz.NavigationHelper;
-import com.example.cassandrakane.goalz.NotificationHelper;
+import utils.NavigationHelper;
+import utils.NotificationHelper;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
@@ -60,7 +60,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     float endX = 0;
     boolean longClick = false;
     int startIndex = 0;
-    NavigationHelper navigationHelper = new NavigationHelper(((ProfileActivity) context));
+    NavigationHelper navigationHelper;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
         this.goals = gGoals;
@@ -72,6 +72,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+        navigationHelper = new NavigationHelper(((ProfileActivity) context));
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));

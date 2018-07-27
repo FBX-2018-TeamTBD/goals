@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.DataFetcher;
 
 public class LoginActivity extends AppCompatActivity {
 
