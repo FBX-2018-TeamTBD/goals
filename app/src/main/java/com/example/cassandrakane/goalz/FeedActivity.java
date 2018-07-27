@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -22,7 +21,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -47,8 +45,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NavigationHelper;
-import utils.OnSwipeTouchListener;
 import utils.Util;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
@@ -93,55 +89,55 @@ public class FeedActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
-        final NavigationHelper navigationHelper = new NavigationHelper(this);
-        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
-            @Override
-            public void onSwipeRight() {
-                navigationHelper.toGoals(false);
-            }
-        };
+//        final NavigationHelper navigationHelper = new NavigationHelper(m);
+//        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
+//            @Override
+//            public void onSwipeRight() {
+//                navigationHelper.toGoals(false);
+//            }
+//        };
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
         setSupportActionBar(toolbar);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(2).setChecked(true);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // close drawer when item is tapped
-                        drawerLayout.closeDrawers();
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//        navigationView.getMenu().getItem(2).setChecked(true);
+//        navigationView.setNavigationItemSelectedListener(
+//                new NavigationView.OnNavigationItemSelectedListener() {
+//                    @Override
+//                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+//                        // close drawer when item is tapped
+//                        drawerLayout.closeDrawers();
+//
+//                        switch (menuItem.getItemId()) {
+//                            case R.id.nav_camera:
+//                                navigationHelper.toCamera(false);
+//                                break;
+//                            case R.id.nav_goals:
+//                                navigationHelper.toGoals(false);
+//                                break;
+//                            case R.id.nav_feed:
+//                                break;
+//                            case R.id.nav_notifications:
+//                                navigationHelper.toNotifications(true);
+//                                break;
+//                            case R.id.nav_logout:
+//                                navigationHelper.logout();
+//                                break;
+//                        }
+//
+//                        return true;
+//                    }
+//                });
 
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_camera:
-                                navigationHelper.toCamera(false);
-                                break;
-                            case R.id.nav_goals:
-                                navigationHelper.toGoals(false);
-                                break;
-                            case R.id.nav_feed:
-                                break;
-                            case R.id.nav_notifications:
-                                navigationHelper.toNotifications(true);
-                                break;
-                            case R.id.nav_logout:
-                                navigationHelper.logout();
-                                break;
-                        }
-
-                        return true;
-                    }
-                });
-
-        ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
-        tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
-        tvFriends = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvFriends);
-        tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
-        tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
-
-        getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
+//        ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
+//        tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
+//        tvFriends = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvFriends);
+//        tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
+//        tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
+//
+//        getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
@@ -149,14 +145,14 @@ public class FeedActivity extends AppCompatActivity {
         rvFriends.setAdapter(friendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvFriends.addItemDecoration(itemDecor);
-        rvFriends.setOnTouchListener(onSwipeTouchListener);
+//        rvFriends.setOnTouchListener(onSwipeTouchListener);
 
         goals = new ArrayList<>();
         incompleted = new ArrayList<>();
 
         populateFriends();
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
-        Util.setNotifications(user, navigationView);
+//        Util.setNotifications(user, navigationView);
         progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 

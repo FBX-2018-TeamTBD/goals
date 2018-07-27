@@ -23,7 +23,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -56,8 +55,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NavigationHelper;
-import utils.OnSwipeTouchListener;
 import utils.Util;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -102,36 +99,36 @@ public class ProfileActivity extends AppCompatActivity {
         progressBar.setVisibility(ProgressBar.VISIBLE);
         setSupportActionBar(toolbar);
 
-        final NavigationHelper navigationHelper = new NavigationHelper(this);
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(1).setChecked(true);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // close drawer when item is tapped
-                        drawerLayout.closeDrawers();
-
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_camera:
-                                navigationHelper.toCamera(false);
-                                break;
-                            case R.id.nav_goals:
-                                break;
-                            case R.id.nav_feed:
-                                navigationHelper.toFeed(true);
-                                break;
-                            case R.id.nav_notifications:
-                                navigationHelper.toNotifications(true);
-                                break;
-                            case R.id.nav_logout:
-                                navigationHelper.logout();
-                                break;
-                        }
-
-                        return true;
-                    }
-                });
+//        final NavigationHelper navigationHelper = new NavigationHelper(this);
+//        navigationView = findViewById(R.id.nav_view);
+//        navigationView.getMenu().getItem(1).setChecked(true);
+//        navigationView.setNavigationItemSelectedListener(
+//                new NavigationView.OnNavigationItemSelectedListener() {
+//                    @Override
+//                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+//                        // close drawer when item is tapped
+//                        drawerLayout.closeDrawers();
+//
+//                        switch (menuItem.getItemId()) {
+//                            case R.id.nav_camera:
+//                                navigationHelper.toCamera(false);
+//                                break;
+//                            case R.id.nav_goals:
+//                                break;
+//                            case R.id.nav_feed:
+//                                navigationHelper.toFeed(true);
+//                                break;
+//                            case R.id.nav_notifications:
+//                                navigationHelper.toNotifications(true);
+//                                break;
+//                            case R.id.nav_logout:
+//                                navigationHelper.logout();
+//                                break;
+//                        }
+//
+//                        return true;
+//                    }
+//                });
 
         ivProfile = navigationView.getHeaderView(0).findViewById(R.id.ivProfile);
         tvUsername = navigationView.getHeaderView(0).findViewById(R.id.tvUsername);
@@ -139,25 +136,25 @@ public class ProfileActivity extends AppCompatActivity {
         tvProgress = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvProgress);
         tvCompleted = navigationView.getHeaderView(0).findViewById(R.id.info_layout).findViewById(R.id.tvCompleted);
 
-        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
-            @Override
-            public void onSwipeLeft() {
-                navigationHelper.toFeed(true);
-            }
-            @Override
-            public void onSwipeRight() {
-                navigationHelper.toCamera(false);
-            }
-        };
+//        OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
+//            @Override
+//            public void onSwipeLeft() {
+//                navigationHelper.toFeed(true);
+//            }
+//            @Override
+//            public void onSwipeRight() {
+//                navigationHelper.toCamera(false);
+//            }
+//        };
 
-        getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
+//        getWindow().getDecorView().getRootView().setOnTouchListener(onSwipeTouchListener);
 
         goals = new ArrayList<>();
         completed = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, true);
         rvGoals.setLayoutManager(new LinearLayoutManager(this));
         rvGoals.setAdapter(goalAdapter);
-        rvGoals.setOnTouchListener(onSwipeTouchListener);
+//        rvGoals.setOnTouchListener(onSwipeTouchListener);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

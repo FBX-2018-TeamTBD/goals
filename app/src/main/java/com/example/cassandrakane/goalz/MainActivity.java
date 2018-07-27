@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
 
-        final NavigationHelper navigationHelper = new NavigationHelper(this);
+        final NavigationHelper navigationHelper = new NavigationHelper(viewPager);
         navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(1).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
@@ -73,19 +73,19 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                navigationHelper.toCamera(true);
+                                navigationHelper.toCamera();
                                 break;
                             case R.id.nav_goals:
-                                navigationHelper.toGoals(true);
+                                navigationHelper.toGoals();
                                 break;
                             case R.id.nav_feed:
-                                navigationHelper.toFeed(true);
+                                navigationHelper.toFeed();
                                 break;
                             case R.id.nav_notifications:
-                                navigationHelper.toNotifications(true);
+                                // navigationHelper.toNotifications(true);
                                 break;
                             case R.id.nav_logout:
-                                navigationHelper.logout();
+                                navigationHelper.logout(MainActivity.this);
                                 break;
                         }
 

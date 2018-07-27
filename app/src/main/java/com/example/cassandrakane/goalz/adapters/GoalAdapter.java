@@ -84,7 +84,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        navigationHelper = new NavigationHelper(((MainActivity) context));
+        navigationHelper = new NavigationHelper(((MainActivity) context).viewPager);
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -120,11 +120,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    navigationHelper.toCamera(false);
+                    navigationHelper.toCamera();
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed(true);
+                    navigationHelper.toFeed();
                     startX = 0;
                     endX = 0;
                 }
@@ -162,11 +162,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    navigationHelper.toCamera(false);
+                    navigationHelper.toCamera();
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed(true);
+                    navigationHelper.toFeed();
                     startX = 0;
                     endX = 0;
                 }
