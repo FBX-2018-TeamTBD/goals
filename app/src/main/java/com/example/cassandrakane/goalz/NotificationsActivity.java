@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -42,6 +43,7 @@ public class NotificationsActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.pager) public ViewPager viewPager;
     @BindView(R.id.tablayout) TabLayout tabLayout;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class NotificationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notifications);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+        setSupportActionBar(toolbar);
 
         pagerAdapter = new NotificationsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
@@ -66,13 +71,13 @@ public class NotificationsActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                navigationHelper.toCamera();
+                                navigationHelper.toCamera(false);
                                 break;
                             case R.id.nav_goals:
-                                navigationHelper.toGoals();
+                                navigationHelper.toGoals(false);
                                 break;
                             case R.id.nav_feed:
-                                navigationHelper.toFeed();
+                                navigationHelper.toFeed(false);
                                 break;
                             case R.id.nav_notifications:
                                 break;

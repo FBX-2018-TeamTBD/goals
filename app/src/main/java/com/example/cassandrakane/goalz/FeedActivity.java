@@ -97,7 +97,7 @@ public class FeedActivity extends AppCompatActivity {
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(FeedActivity.this) {
             @Override
             public void onSwipeRight() {
-                navigationHelper.toGoals();
+                navigationHelper.toGoals(false);
             }
         };
 
@@ -116,15 +116,15 @@ public class FeedActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                navigationHelper.toCamera();
+                                navigationHelper.toCamera(false);
                                 break;
                             case R.id.nav_goals:
-                                navigationHelper.toGoals();
+                                navigationHelper.toGoals(false);
                                 break;
                             case R.id.nav_feed:
                                 break;
                             case R.id.nav_notifications:
-                                navigationHelper.toNotifications();
+                                navigationHelper.toNotifications(true);
                                 break;
                             case R.id.nav_logout:
                                 navigationHelper.logout();
@@ -157,6 +157,7 @@ public class FeedActivity extends AppCompatActivity {
         populateFriends();
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
         Util.setNotifications(user, navigationView);
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     @Override
@@ -183,7 +184,6 @@ public class FeedActivity extends AppCompatActivity {
             noFriendsPage.setVisibility(View.GONE);
         }
         friendAdapter.notifyDataSetChanged();
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 
     public void addFriend(View v) {

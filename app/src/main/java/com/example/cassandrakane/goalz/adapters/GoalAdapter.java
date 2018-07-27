@@ -23,8 +23,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
-import utils.NavigationHelper;
-import utils.NotificationHelper;
 import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
@@ -48,6 +46,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NavigationHelper;
+import utils.NotificationHelper;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
@@ -108,11 +108,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    navigationHelper.toCamera();
+                    navigationHelper.toCamera(false);
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed();
+                    navigationHelper.toFeed(true);
                     startX = 0;
                     endX = 0;
                 }
@@ -150,11 +150,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
-                    navigationHelper.toCamera();
+                    navigationHelper.toCamera(false);
                     startX = 0;
                     endX = 0;
                 } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed();
+                    navigationHelper.toFeed(true);
                     startX = 0;
                     endX = 0;
                 }

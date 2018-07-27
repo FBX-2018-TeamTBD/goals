@@ -114,15 +114,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                navigationHelper.toCamera();
+                                navigationHelper.toCamera(false);
                                 break;
                             case R.id.nav_goals:
                                 break;
                             case R.id.nav_feed:
-                                navigationHelper.toFeed();
+                                navigationHelper.toFeed(true);
                                 break;
                             case R.id.nav_notifications:
-                                navigationHelper.toNotifications();
+                                navigationHelper.toNotifications(true);
                                 break;
                             case R.id.nav_logout:
                                 navigationHelper.logout();
@@ -142,11 +142,11 @@ public class ProfileActivity extends AppCompatActivity {
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(ProfileActivity.this) {
             @Override
             public void onSwipeLeft() {
-                navigationHelper.toFeed();
+                navigationHelper.toFeed(true);
             }
             @Override
             public void onSwipeRight() {
-                navigationHelper.toCamera();
+                navigationHelper.toCamera(false);
             }
         };
 

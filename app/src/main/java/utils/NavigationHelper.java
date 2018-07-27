@@ -23,28 +23,28 @@ public class NavigationHelper {
         activity = act;
     }
 
-    public void toCamera() {
+    public void toCamera(boolean toRight) {
         Intent i = new Intent(activity, CameraActivity.class);
         activity.startActivity(i);
-        activity.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        animateTransition(toRight);
     }
 
-    public void toGoals() {
+    public void toGoals(boolean toRight) {
         Intent i = new Intent(activity, ProfileActivity.class);
         activity.startActivity(i);
-        activity.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        animateTransition(toRight);
     }
 
-    public void toFeed() {
+    public void toFeed(boolean toRight) {
         Intent i = new Intent(activity, FeedActivity.class);
         activity.startActivity(i);
-        activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        animateTransition(toRight);
     }
 
-    public void toNotifications() {
+    public void toNotifications(boolean toRight) {
         Intent i = new Intent(activity, NotificationsActivity.class);
         activity.startActivity(i);
-        activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        animateTransition(toRight);
     }
 
     public void logout() {
@@ -62,5 +62,13 @@ public class NavigationHelper {
         activity.startActivity(i);
         activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
         activity.finish();
+    }
+
+    public void animateTransition(boolean toRight) {
+        if (toRight) {
+            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        } else {
+            activity.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        }
     }
 }
