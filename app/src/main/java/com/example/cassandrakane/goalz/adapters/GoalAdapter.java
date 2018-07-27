@@ -168,6 +168,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
+                // check if all users have added here
                 if (!goal.getIsItemAdded()) {
                     goal.setStreak(0);
                 }
@@ -203,7 +204,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded()){
+        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
             holder.ivStar.setImageResource(R.drawable.clock);
         } else {
             holder.ivStar.setImageResource(R.drawable.star);
@@ -234,11 +235,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         ParseObject image = story.get(i);
                         List<ParseUser> users = image.getList("viewedBy");
                         if (users != null) {
-                            for (ParseUser user : users) {
-                                if (user.getObjectId().equals(currentUser.getObjectId())) {
-                                    seen = true;
-                                    break;
-                                }
+                            if (users.contains(currentUser)){
+                                seen = true;
                             }
                         }
                         if (!seen) {
