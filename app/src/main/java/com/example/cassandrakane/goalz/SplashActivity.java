@@ -35,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
                     dataFetcher = new DataFetcher(currentUser, SplashActivity.this);
+                    finish();
                 }  else {
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(i);

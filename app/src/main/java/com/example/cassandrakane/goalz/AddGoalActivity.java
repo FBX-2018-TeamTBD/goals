@@ -218,7 +218,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
                             notificationHelper.setReminder(finalGoal);
                             user.fetch();
-                            Intent data = new Intent(getApplicationContext(), ProfileActivity.class);
+                            Intent data = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(data);
                             progressBar.setVisibility(View.INVISIBLE);
                             finish();

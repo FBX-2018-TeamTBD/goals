@@ -38,10 +38,12 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
 
@@ -53,10 +55,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,9 +111,6 @@ public class CameraFragment extends Fragment {
 
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
-
-//    private List<Goal> goals;
-//    private Goal goal;
 
 //    ParseUser user;
 
@@ -172,27 +171,10 @@ public class CameraFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_camera, container, false);
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-//        ButterKnife.bind(this);
-
-
-//        if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
-//            goal = (Goal) Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
-//        } else {
-//            goal = null;
-//        }
-
-//        user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ivFade = view.findViewById(R.id.ivFade);
         textureView = view.findViewById(R.id.textureView);
@@ -213,7 +195,6 @@ public class CameraFragment extends Fragment {
         btnSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
                 switchCamera();
             }
         });
@@ -235,39 +216,6 @@ public class CameraFragment extends Fragment {
         });
 
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
 
     public void onLaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK,
@@ -325,7 +273,7 @@ public class CameraFragment extends Fragment {
                 }
 
             } else { // Result was a failure
-//                Toast.makeText(this, "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -460,7 +408,7 @@ public class CameraFragment extends Fragment {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-//                    Toast.makeText(CameraActivity.this, "Changed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Changed", Toast.LENGTH_SHORT).show();
                 }
             }, null);
         } catch (CameraAccessException e){
@@ -470,7 +418,7 @@ public class CameraFragment extends Fragment {
 
     private void updatePreview() {
         if (cameraDevice == null){
-//            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CaptureRequest.CONTROL_MODE_AUTO);
         try {
@@ -481,7 +429,7 @@ public class CameraFragment extends Fragment {
     }
 
 
-    private void openCamera() {
+    private void openCamera(int width, int height) {
         CameraManager manager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -489,7 +437,7 @@ public class CameraFragment extends Fragment {
             assert map != null;
             // check orientation based on device
             mTotalRotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
-            imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
+            imageDimension = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), width, height);
 
             // check realtime permission if run higher API 23
             if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
@@ -510,7 +458,7 @@ public class CameraFragment extends Fragment {
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
-            openCamera();
+            openCamera(i, i1);
 
         }
 
@@ -534,9 +482,9 @@ public class CameraFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Permission granted", Toast.LENGTH_SHORT).show();
             } else {
-//                Toast.makeText(this, "You can't use the camera without permission", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "You can't use the camera without permission", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         }
@@ -547,7 +495,7 @@ public class CameraFragment extends Fragment {
         super.onResume();
         startBackgroundThread();
         if (textureView.isAvailable()){
-            openCamera();
+            openCamera(textureView.getWidth(), textureView.getHeight());
         } else {
             textureView.setSurfaceTextureListener(textureListener);
         }
@@ -589,21 +537,36 @@ public class CameraFragment extends Fragment {
             cameraId = CAMERA_BACK;
             cameraDevice.close();
             reopenCamera();
-//            switchCameraButton.setImageResource(R.drawable.ic_camera_front);
-
         } else if (cameraId.equals(CAMERA_BACK)) {
             cameraId = CAMERA_FRONT;
             cameraDevice.close();
             reopenCamera();
-//            switchCameraButton.setImageResource(R.drawable.ic_camera_back);
         }
     }
 
     public void reopenCamera() {
         if (textureView.isAvailable()) {
-            openCamera();
+            openCamera(textureView.getWidth(), textureView.getHeight());
         } else {
             textureView.setSurfaceTextureListener(textureListener);
+        }
+    }
+
+    private static Size chooseOptimalSize(Size[] choices, int width, int height) {
+        // Collect the supported resolutions that are at least as big as the preview Surface
+        List<Size> bigEnough = new ArrayList<Size>();
+        for (Size option : choices) {
+            if (option.getHeight() == option.getWidth() * height / width &&
+                    option.getWidth() >= width && option.getHeight() >= height) {
+                bigEnough.add(option);
+            }
+        }
+        // Pick the smallest of those, assuming we found any
+        if (bigEnough.size() > 0) {
+            return Collections.min(bigEnough, new VideoActivity.CompareSizesByArea());
+        } else {
+            Log.e("MainActivity", "Couldn't find any suitable preview size");
+            return choices[0];
         }
     }
 

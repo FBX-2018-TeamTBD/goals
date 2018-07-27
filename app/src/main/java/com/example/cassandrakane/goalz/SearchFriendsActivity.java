@@ -107,7 +107,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
                 }
             });
         }
-        if (requestActivityName.equals(FeedActivity.class.getSimpleName())) {
+        if (requestActivityName.equals(MainActivity.class.getSimpleName())) {
             searched = getUsers();
             ivConfirmBackground.setVisibility(View.INVISIBLE);
             btnConfirm.setVisibility(View.INVISIBLE);

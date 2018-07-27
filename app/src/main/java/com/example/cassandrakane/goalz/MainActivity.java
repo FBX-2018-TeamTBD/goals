@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -58,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
-        // start on profile
         viewPager.setCurrentItem(1);
 
-        final NavigationHelper navigationHelper = new NavigationHelper(this);
+        final NavigationHelper navigationHelper = new NavigationHelper(viewPager);
         navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(1).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
@@ -73,19 +73,19 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                navigationHelper.toCamera(true);
+                                navigationHelper.toCamera();
                                 break;
                             case R.id.nav_goals:
-                                navigationHelper.toGoals(true);
+                                navigationHelper.toGoals();
                                 break;
                             case R.id.nav_feed:
-                                navigationHelper.toFeed(true);
+                                navigationHelper.toFeed();
                                 break;
                             case R.id.nav_notifications:
-                                navigationHelper.toNotifications(true);
+                                // navigationHelper.toNotifications(true);
                                 break;
                             case R.id.nav_logout:
-                                navigationHelper.logout();
+                                navigationHelper.logout(MainActivity.this);
                                 break;
                         }
 
@@ -111,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void refreshAsync(SwipeRefreshLayout swipeContainer) {
         Util.populateGoalsAsync(MainActivity.this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, completed, swipeContainer);
+    }
+
+    public void addGoal(View v) {
+        Intent i = new Intent(this, AddGoalActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
+    }
+
+    public void addFriend(View v) {
+        Intent i = new Intent(this, SearchFriendsActivity.class);
+        i.putExtra("requestActivity", this.getClass().getSimpleName());
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
     }
 
     public void openDrawer(View v) {

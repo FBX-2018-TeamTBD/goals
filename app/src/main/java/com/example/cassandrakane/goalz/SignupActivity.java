@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        Intent i = new Intent(SignupActivity.this, ProfileActivity.class);
+                        Intent i = new Intent(SignupActivity.this, MainActivity.class);
                         startActivity(i);
                         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                         finish();
