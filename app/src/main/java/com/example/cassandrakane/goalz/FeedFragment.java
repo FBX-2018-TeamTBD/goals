@@ -72,8 +72,15 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        ButterKnife.bind(getActivity());
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        ButterKnife.bind(this, view);
 
         final NavigationHelper navigationHelper = new NavigationHelper(getActivity());
         OnSwipeTouchListener onSwipeTouchListener = new OnSwipeTouchListener(getActivity()) {
@@ -87,27 +94,22 @@ public class FeedFragment extends Fragment {
 
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
-        rvFriends.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFriends.setAdapter(friendAdapter);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), HORIZONTAL);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
         rvFriends.addItemDecoration(itemDecor);
         rvFriends.setOnTouchListener(onSwipeTouchListener);
 
-        btnAdd2.setOnClickListener(new View.OnClickListener() {
+   /*     btnAdd2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addFriend();
             }
-        });
+        });*/
 
         populateFriends();
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        return view;
     }
 
     public void populateFriends() {
