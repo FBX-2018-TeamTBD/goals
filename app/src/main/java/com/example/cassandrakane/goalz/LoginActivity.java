@@ -78,9 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // transition to home screen
                     dataFetcher = new DataFetcher(user, LoginActivity.this);
-//                    Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
-//                    startActivity(i);
-//                    finish();
                     progressBar.setVisibility(View.GONE);
                     overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();
@@ -133,11 +130,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         currentUser.fetch();
-//                        dataFetcher = new DataFetcher(currentUser, LoginActivity.this);
-                        // transition to home screen
                         Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
                         startActivity(i);
                         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
+                        finish();
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }

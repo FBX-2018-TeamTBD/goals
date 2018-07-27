@@ -23,6 +23,7 @@ import com.example.cassandrakane.goalz.models.Video;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -62,14 +63,20 @@ public class GoalsListActivity extends AppCompatActivity {
         currentDate = new Date();
         ButterKnife.bind(this);
 
+        goals = new ArrayList<Goal>();
+        List<Goal> allGoals = ParseUser.getCurrentUser().getList("goals");
+        for (Goal goal : allGoals){
+            if (!goal.getCompleted()){
+                goals.add(goal);
+            }
+        }
         file = (File) getIntent().getSerializableExtra("image");
-        goals = (List) getIntent().getSerializableExtra("goals");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         caption = getIntent().getStringExtra("caption");
 
         parseVideos = new ArrayList<>();
 
-        if (goals != null && goals.size() != 0) {
+        if (goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
             rvGoals.setLayoutManager(new LinearLayoutManager(this));
             rvGoals.setAdapter(goalSimpleAdapter);
@@ -77,9 +84,7 @@ public class GoalsListActivity extends AppCompatActivity {
             noGoals.setVisibility(View.VISIBLE);
             btnConfirm.setVisibility(View.GONE);
         }
-        if (videos != null) {
-            mTasksRequired = videos.size();
-        }
+        mTasksRequired = videos != null ? videos.size() : 0;
     }
 
     public void addImage(View v) {
@@ -102,7 +107,7 @@ public class GoalsListActivity extends AppCompatActivity {
                 if (goal.isSelected()) {
                     selected += 1;
                     final ArrayList<ParseObject> story = goal.getStory();
-                    final Image image = new Image(parseFile, caption);
+                    final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser());
                     image.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -121,9 +126,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                         goal.saveInBackground(new SaveCallback() {
                                             @Override
                                             public void done(ParseException e) {
-                                                Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                startActivity(intent);
-                                                finish();
+                                                toProfile();
                                             }
                                         });
                                     } else {
@@ -135,16 +138,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                                 goal.saveInBackground(new SaveCallback() {
                                                     @Override
                                                     public void done(ParseException e) {
-                                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                        startActivity(intent);
-                                                        finish();
+                                                        toProfile();
                                                     }
                                                 });
                                             }
                                         } else {
-                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                            toProfile();
                                         }
                                     }
                                 }
@@ -169,7 +168,7 @@ public class GoalsListActivity extends AppCompatActivity {
                 parseFile.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        final Video videoFile = new Video(parseFile, caption, parseFileThumbnail);
+                        final Video videoFile = new Video(parseFile, caption, parseFileThumbnail, ParseUser.getCurrentUser());
                         parseVideos.add(videoFile);
                         videoFile.saveInBackground(new SaveCallback() {
                             @Override
@@ -221,9 +220,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-                                            Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                            toProfile();
                                         }
                                     });
                                 } else {
@@ -235,16 +232,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                    toProfile();
                                                 }
                                             });
                                         }
                                     } else {
-                                        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        toProfile();
                                     }
                                 }
                             }
@@ -253,7 +246,13 @@ public class GoalsListActivity extends AppCompatActivity {
         }
         if (selected == 0) {
             progressBar.setVisibility(View.INVISIBLE);
-//                                    Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void toProfile() {
+        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }

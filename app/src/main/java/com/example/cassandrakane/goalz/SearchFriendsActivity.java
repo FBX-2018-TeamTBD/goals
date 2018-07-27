@@ -149,10 +149,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
         List<ParseUser> friends = getFriends();
         List<ParseUser> pending = goal.getPendingUsers();
         for(int i = friends.size() - 1; i >= 0; i--) {
-            if (pending.contains(friends.get(i))) {
-                friends.remove(i);
-            }
-            if (friends.get(i).getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            if (pending.contains(friends.get(i)) || friends.get(i).getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                 friends.remove(i);
             }
         }

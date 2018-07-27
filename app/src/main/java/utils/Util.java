@@ -19,9 +19,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -137,20 +135,11 @@ public class Util {
 
     public static void populateGoals(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
         List<ParseObject> lGoals = user.getList("goals");
-//        } catch(ParseException e) {
-////            e.printStackTrace();
-////        }
         int completedGoals = 0;
         int progressGoals = 0;
         goals.clear();
         List<Goal> completed = new ArrayList<>();
-//        ParseObject.pinAllInBackground(arr);
         if (lGoals != null) {
-//            try {
-//                ParseObject.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
             for (int i = 0; i < lGoals.size(); i++) {
                 Goal g = (Goal) lGoals.get(i);
                 if (g.getCompleted()) {
@@ -175,20 +164,11 @@ public class Util {
 
     public static void populateGoalsAsync(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
         List<ParseObject> lGoals = user.getList("goals");
-//        } catch(ParseException e) {
-////            e.printStackTrace();
-////        }
         int completedGoals = 0;
         int progressGoals = 0;
         goals.clear();
         List<Goal> completed = new ArrayList<>();
-//        ParseObject.pinAllInBackground(arr);
         if (lGoals != null) {
-//            try {
-//                ParseObject.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
             for (int i = 0; i < lGoals.size(); i++) {
                 Goal g = (Goal) lGoals.get(i);
                 if (g.getCompleted()) {

@@ -48,6 +48,7 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.btnClose) ImageButton btnClose;
     @BindView(R.id.pbProgress) ProgressBar pbProgress;
     @BindView(R.id.tvCaption) TextView tvCaption;
+    @BindView(R.id.tvUsername) TextView tvUsername;
 
     private URL url;
     private File file;
@@ -213,6 +214,10 @@ public class StoryFragment extends Fragment {
                     setImage();
                     }
             }, 5000);
+        }
+        ParseUser user = object.getParseUser("user");
+        if (user != null) {
+            tvUsername.setText(user.getUsername());
         }
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }

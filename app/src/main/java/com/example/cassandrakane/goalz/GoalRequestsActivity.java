@@ -1,11 +1,10 @@
 package com.example.cassandrakane.goalz;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalRequestAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -26,7 +24,6 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +64,7 @@ public class GoalRequestsActivity extends AppCompatActivity {
         progressBar.setVisibility(ProgressBar.VISIBLE);
         setSupportActionBar(toolbar);
 
+        final NavigationHelper navigationHelper = new NavigationHelper(this);
         navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(4).setChecked(true);
         navigationView.setNavigationItemSelectedListener(
@@ -78,21 +76,21 @@ public class GoalRequestsActivity extends AppCompatActivity {
 
                         switch (menuItem.getItemId()) {
                             case R.id.nav_camera:
-                                toCamera();
+                                navigationHelper.toCamera();
                                 break;
                             case R.id.nav_goals:
-                                toGoals();
+                                navigationHelper.toGoals();
                                 break;
                             case R.id.nav_feed:
-                                toFeed();
+                                navigationHelper.toFeed();
                                 break;
                             case R.id.nav_friend_request:
-                                toFriendRequests();
+                                navigationHelper.toFriendRequests();
                                 break;
                             case R.id.nav_goal_request:
                                 break;
                             case R.id.nav_logout:
-                                logout();
+                                navigationHelper.logout();
                                 break;
                         }
 
@@ -150,40 +148,6 @@ public class GoalRequestsActivity extends AppCompatActivity {
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
-    }
-
-    public void toCamera() {
-        Intent i = new Intent(getApplicationContext(), CameraActivity.class);
-        i.putExtra("goals", (Serializable) incompleted);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void toGoals() {
-        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void toFeed() {
-        Intent i = new Intent(getApplicationContext(), FeedActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void toFriendRequests() {
-        Intent i = new Intent(getApplicationContext(), FriendRequestsActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
-    public void logout() {
-        ParseUser.logOut();
-        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_LONG);
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
-        finish();
     }
 
     public void openDrawer(View v) {

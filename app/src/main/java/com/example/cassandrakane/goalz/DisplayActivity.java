@@ -31,6 +31,7 @@ import com.example.cassandrakane.goalz.models.Video;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
@@ -61,7 +62,6 @@ public class DisplayActivity extends AppCompatActivity {
     @BindView(R.id.etCaption) EditText etCaption;
     @BindView(R.id.btnAddCaption) ImageButton btnAddCaption;
 
-    List<Goal> goals;
     ArrayList<ParseObject> parseVideos;
     ArrayList<File> videos;
     Goal goal;
@@ -101,8 +101,7 @@ public class DisplayActivity extends AppCompatActivity {
                             }
                         });
                         final ArrayList<ParseObject> story = goal.getStory();
-
-                        final Image image = new Image(parseFile, caption);
+                        final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser());
                         image.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -160,7 +159,7 @@ public class DisplayActivity extends AppCompatActivity {
                             parseFile.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    final Video videoFile = new Video(parseFile, caption, parseFileThumbnail);
+                                    final Video videoFile = new Video(parseFile, caption, parseFileThumbnail, ParseUser.getCurrentUser());
                                     parseVideos.add(videoFile);
                                     videoFile.saveInBackground(new SaveCallback() {
                                         @Override
@@ -190,7 +189,6 @@ public class DisplayActivity extends AppCompatActivity {
                         intent.putExtra("videos", (Serializable) videos);
                     }
                     intent.putExtra("caption", caption);
-                    intent.putExtra("goals", (Serializable) goals);
                     startActivity(intent);
                 }
             });
@@ -227,14 +225,10 @@ public class DisplayActivity extends AppCompatActivity {
 
         etCaption.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -255,7 +249,6 @@ public class DisplayActivity extends AppCompatActivity {
         });
 
 
-        goals = (List) getIntent().getSerializableExtra("goals");
         cameraId = getIntent().getStringExtra("cameraId");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         file = (File) getIntent().getSerializableExtra("image");
@@ -347,6 +340,7 @@ public class DisplayActivity extends AppCompatActivity {
 
     public void addToGoal(ArrayList<ParseObject> parseVideos){
         int selected = 0;
+        List<Goal> goals = ParseUser.getCurrentUser().getList("goals");
         for (final Goal goal : goals) {
             selected += 1;
             if (goal.isSelected()) {
@@ -399,9 +393,5 @@ public class DisplayActivity extends AppCompatActivity {
                 });
             }
         }
-//        if (selected == 0) {
-//            progressBar.setVisibility(View.INVISIBLE);
-////                                    Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
-//        }
     }
 }

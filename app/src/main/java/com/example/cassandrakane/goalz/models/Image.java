@@ -4,7 +4,6 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-
 import java.util.List;
 
 
@@ -15,10 +14,11 @@ public class Image extends ParseObject{
         super();
     }
 
-    public Image(ParseFile image, String caption) {
+    public Image(ParseFile image, String caption, ParseUser user) {
         super();
         setImage(image);
         setCaption(caption);
+        setUser(user);
     }
 
     public ParseFile getImage() {
@@ -38,4 +38,8 @@ public class Image extends ParseObject{
     public void setCaption(String caption) { put("caption", caption); }
 
     public void setViewedBy(List<ParseUser> viewedBy) { put("viewedBy", viewedBy); }
+
+    public void setUser(ParseUser user) {
+        put("user", user);
+    }
 }
