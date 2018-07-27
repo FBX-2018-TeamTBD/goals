@@ -34,11 +34,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".ProfileActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".FeedActivity" />
         <activity android:name=".CameraActivity" />
         <activity android:name=".DisplayActivity" />
@@ -84,8 +80,9 @@
         <activity android:name=".VideoActivity" />
         <activity
             android:name=".FriendsModalActivity"
-            android:theme="@style/AppTheme.PopupTheme"></activity>
-        <activity android:name=".NotificationsActivity"></activity>
+            android:theme="@style/AppTheme.PopupTheme" />
+        <activity android:name=".NotificationsActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

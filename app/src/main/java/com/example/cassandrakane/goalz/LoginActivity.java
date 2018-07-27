@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            Intent i = new Intent(this, ProfileActivity.class);
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
         }
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(i);
                         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                         finish();

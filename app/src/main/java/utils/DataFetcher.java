@@ -3,7 +3,7 @@ package utils;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.cassandrakane.goalz.ProfileActivity;
+import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,8 +30,8 @@ public class DataFetcher {
         user.pinInBackground();
         setUserGoals();
         setUserFriends();
-        if (!mContext.getClass().getSimpleName().equals(ProfileActivity.class.getSimpleName())) {
-            Intent i = new Intent(context, ProfileActivity.class);
+        if (!mContext.getClass().getSimpleName().equals(MainActivity.class.getSimpleName())) {
+            Intent i = new Intent(context, MainActivity.class);
             i.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
             context.startActivity(i);
         }

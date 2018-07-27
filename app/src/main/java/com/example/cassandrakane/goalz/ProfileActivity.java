@@ -326,7 +326,6 @@ public class ProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
-
     public void onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
