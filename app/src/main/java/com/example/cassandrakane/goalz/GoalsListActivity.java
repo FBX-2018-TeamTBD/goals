@@ -252,7 +252,7 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void toProfile() {
-        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+        Intent intent = new Intent(GoalsListActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

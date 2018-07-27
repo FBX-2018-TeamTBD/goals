@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
@@ -25,6 +26,7 @@ public class ProfileFragment extends Fragment {
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
+    @BindView(R.id.btnAdd) Button btnAdd;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     MainActivity mainActivity;
@@ -32,10 +34,6 @@ public class ProfileFragment extends Fragment {
 
     private List<Goal> goals;
     private GoalAdapter goalAdapter;
-
-//    private ParseFile imageFile;
-//    private String photoFileName;
-//    private File photoFile;
 
     public int completedGoals = 0;
     public int progressGoals = 0;
@@ -69,6 +67,13 @@ public class ProfileFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_red_light);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.addGoal(view);
+            }
+        });
 
         populateProfile();
 

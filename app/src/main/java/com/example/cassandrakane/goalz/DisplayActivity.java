@@ -121,7 +121,7 @@ public class DisplayActivity extends AppCompatActivity {
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    Intent intent = new Intent(DisplayActivity.this, ProfileActivity.class);
+                                                    Intent intent = new Intent(DisplayActivity.this, MainActivity.class);
                                                     startActivity(intent);
                                                 }
                                             });
@@ -134,13 +134,13 @@ public class DisplayActivity extends AppCompatActivity {
                                                     goal.saveInBackground(new SaveCallback() {
                                                         @Override
                                                         public void done(ParseException e) {
-                                                            Intent intent = new Intent(DisplayActivity.this, ProfileActivity.class);
+                                                            Intent intent = new Intent(DisplayActivity.this, MainActivity.class);
                                                             startActivity(intent);
                                                         }
                                                     });
                                                 }
                                             } else {
-                                                Intent intent = new Intent(DisplayActivity.this, ProfileActivity.class);
+                                                Intent intent = new Intent(DisplayActivity.this, MainActivity.class);
                                                 startActivity(intent);
                                             }
                                         }
@@ -364,7 +364,7 @@ public class DisplayActivity extends AppCompatActivity {
                             goal.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    Intent intent = new Intent(DisplayActivity.this, ProfileActivity.class);
+                                    Intent intent = new Intent(DisplayActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
@@ -378,14 +378,14 @@ public class DisplayActivity extends AppCompatActivity {
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-                                            Intent intent = new Intent(DisplayActivity.this, ProfileActivity.class);
+                                            Intent intent = new Intent(DisplayActivity.this, MainActivity.class);
                                             startActivity(intent);
                                             finish();
                                         }
                                     });
                                 }
                             } else {
-                                Intent intent = new Intent(DisplayActivity.this, ProfileActivity.class);
+                                Intent intent = new Intent(DisplayActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
                             }

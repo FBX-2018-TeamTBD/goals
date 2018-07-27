@@ -65,6 +65,30 @@
                 android:text="goals"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
+
+            <Button
+                style="@style/SelectableItemBackground"
+                android:id="@+id/btnAddGoal"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="60dp"
+                android:background="@drawable/add_goal"
+                android:backgroundTint="@color/white"
+                android:onClick="addGoal" />
+
+            <Button
+                style="@style/SelectableItemBackground"
+                android:id="@+id/btnAddFriend"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/add_friend"
+                android:backgroundTint="@color/white"
+                android:onClick="addFriend" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
