@@ -271,12 +271,6 @@ public class FeedActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-    }
-
     public void selectImage(View v) {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
