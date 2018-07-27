@@ -14,10 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import utils.DataFetcher;
-import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
-import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
@@ -30,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.DataFetcher;
 import utils.Util;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
@@ -93,8 +91,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         holder.rvStory.setLayoutManager(layoutManager);
         holder.rvStory.setAdapter(storyAdapter);
         holder.rvStory.setVisibility(View.GONE);
-
-        final MainActivity activity = (MainActivity) context;
 
         if (goals.size() != 0) {
             holder.ivMenu.setVisibility(View.VISIBLE);
