@@ -45,6 +45,9 @@ import java.util.List;
 
 public class VideoActivity extends AppCompatActivity {
 
+    public static final String CAMERA_FRONT = "1";
+    public static final String CAMERA_BACK = "0";
+
     private TextureView mTextureView;
     private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -96,9 +99,10 @@ public class VideoActivity extends AppCompatActivity {
     private HandlerThread mBackgroundHandlerThread;
     private Handler mBackgroundHandler;
 
-    private String mCameraId;
+    private String mCameraId = CAMERA_BACK;
     private boolean mIsRecording = false;
     private ImageButton mRecordImageButton;
+    private ImageButton btnSwap;
 
     private File mVideoFolder;
     private String mVideoFilename;
@@ -136,8 +140,9 @@ public class VideoActivity extends AppCompatActivity {
         videos = new ArrayList<>();
         mMediaRecorder = new MediaRecorder();
 
-        mTextureView = (TextureView) findViewById(R.id.textureView);
-        mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
+        mTextureView = findViewById(R.id.textureView);
+        mRecordImageButton = findViewById(R.id.videoOnlineImageButton);
+        btnSwap = findViewById(R.id.btnSwap);
 
         goals = (ArrayList) getIntent().getSerializableExtra("goals");
         mRecordImageButton.setOnTouchListener(new View.OnTouchListener() {
@@ -171,6 +176,13 @@ public class VideoActivity extends AppCompatActivity {
                     }
                 }
                 return true;
+            }
+        });
+
+        btnSwap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchCamera();
             }
         });
 
@@ -259,7 +271,10 @@ public class VideoActivity extends AppCompatActivity {
                     rotatedViewWidth = viewHeight;
                     rotatedViewHeight = viewWidth;
                 }
-                mCameraId = cameraId;
+                if (mCameraId == CAMERA_FRONT){
+                    mTotalRotation += 180;
+                }
+//                mCameraId = cameraId;
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedViewWidth, rotatedViewHeight);
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedViewWidth, rotatedViewHeight);
                 return;
@@ -477,6 +492,28 @@ public class VideoActivity extends AppCompatActivity {
                     }, null);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void reopenCamera() {
+        if (mTextureView.isAvailable()) {
+            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            connectCamera();
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        }
+    }
+
+    public void switchCamera() {
+        if (mCameraId.equals(CAMERA_FRONT)) {
+            mCameraId = CAMERA_BACK;
+            mCameraDevice.close();
+            reopenCamera();
+
+        } else if (mCameraId.equals(CAMERA_BACK)) {
+            mCameraId = CAMERA_FRONT;
+            mCameraDevice.close();
+            reopenCamera();
         }
     }
 }
