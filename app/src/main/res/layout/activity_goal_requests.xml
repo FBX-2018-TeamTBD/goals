@@ -23,7 +23,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/rvGoals"
+            android:layout_above="@+id/rvGoalRequests"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="-10dp"
             android:indeterminate="true"

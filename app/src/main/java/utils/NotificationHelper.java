@@ -1,4 +1,4 @@
-package com.example.cassandrakane.goalz;
+package utils;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.cassandrakane.goalz.NotificationReceiver;
+import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 
 public class NotificationHelper {

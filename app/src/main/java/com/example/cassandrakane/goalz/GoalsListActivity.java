@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NotificationHelper;
 
 public class GoalsListActivity extends AppCompatActivity {
 

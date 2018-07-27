@@ -14,7 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.cassandrakane.goalz.DataFetcher;
+import utils.DataFetcher;
 import com.example.cassandrakane.goalz.FeedActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;

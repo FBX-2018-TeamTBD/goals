@@ -29,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NavigationHelper;
 import utils.Util;
 
 public class FriendRequestsActivity extends AppCompatActivity {
@@ -118,7 +119,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
     }
 
     public void getFriendRequests() {
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         ParseQuery<SentFriendRequests> query = ParseQuery.getQuery("SentFriendRequests");
         query.include("toUser");
         query.include("fromUser");

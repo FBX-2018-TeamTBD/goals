@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NotificationHelper;
 
 public class AddGoalActivity extends AppCompatActivity {
 
@@ -164,11 +165,7 @@ public class AddGoalActivity extends AppCompatActivity {
             String str = "Shared with ";
             for (ParseUser friend : selectedFriends) {
                 try {
-                    if (friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        str = str + "me, ";
-                    } else {
-                        str = str + friend.fetch().getUsername() + ", ";
-                    }
+                    str = str + friend.fetch().getUsername() + ", ";
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
@@ -203,8 +200,8 @@ public class AddGoalActivity extends AppCompatActivity {
             user.put("goals", goals);
 
             ParseACL acl = user.getACL();
-            if (!acl.getPublicReadAccess()) {
-                acl.setPublicReadAccess(true);
+            if (!acl.getPublicWriteAccess()) {
+                acl.setPublicWriteAccess(true);
                 user.setACL(acl);
             }
             final Goal finalGoal = goal;
@@ -231,6 +228,7 @@ public class AddGoalActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(this, "Make sure to fill out each field!", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 

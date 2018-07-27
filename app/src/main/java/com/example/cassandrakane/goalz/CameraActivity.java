@@ -61,6 +61,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.OnSwipeTouchListener;
 
 import static com.example.cassandrakane.goalz.ProfileActivity.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE;
 

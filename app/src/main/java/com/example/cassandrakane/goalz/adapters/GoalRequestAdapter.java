@@ -16,6 +16,7 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.GetCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -85,9 +86,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
             String str = "Shared with ";
             for (ParseUser friend : selectedFriends) {
                 try {
-                    if (friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        str = str + "me, ";
-                    } else {
+                    if (!friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                         str = str + friend.fetch().getUsername() + ", ";
                     }
                 } catch(ParseException e) {
@@ -204,6 +203,11 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         goals.add(0, goal);
         currentUser.put("goals", goals);
         // move this user to the approved section of the shared goal
+        ParseACL acl = currentUser.getACL();
+        if (!acl.getPublicWriteAccess()) {
+            acl.setPublicWriteAccess(true);
+            currentUser.setACL(acl);
+        }
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

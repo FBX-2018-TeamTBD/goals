@@ -1,9 +1,16 @@
-package com.example.cassandrakane.goalz;
+package utils;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.CameraActivity;
+import com.example.cassandrakane.goalz.FeedActivity;
+import com.example.cassandrakane.goalz.FriendRequestsActivity;
+import com.example.cassandrakane.goalz.GoalRequestsActivity;
+import com.example.cassandrakane.goalz.LoginActivity;
+import com.example.cassandrakane.goalz.ProfileActivity;
+import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseUser;
 

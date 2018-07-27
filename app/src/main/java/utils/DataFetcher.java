@@ -1,8 +1,9 @@
-package com.example.cassandrakane.goalz;
+package utils;
 
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.cassandrakane.goalz.ProfileActivity;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
 import com.parse.ParseException;

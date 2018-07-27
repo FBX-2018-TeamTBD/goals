@@ -49,6 +49,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import utils.NotificationHelper;
 
 public class DisplayActivity extends AppCompatActivity {
 
