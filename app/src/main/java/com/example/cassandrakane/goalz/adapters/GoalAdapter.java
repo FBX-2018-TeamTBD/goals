@@ -80,7 +80,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        navigationHelper = new NavigationHelper(((MainActivity) context).viewPager);
+        navigationHelper = personal ? new NavigationHelper(((MainActivity) context).viewPager) : null;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
