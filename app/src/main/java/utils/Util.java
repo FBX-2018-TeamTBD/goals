@@ -17,14 +17,18 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -89,7 +93,49 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static void populateGoals(Context context, ParseUser user, TextView tvProgress,TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
+    public static void populateStoredGoals(Context context, ParseUser user, final TextView tvProgress, final TextView tvCompleted, final TextView tvFriends, TextView tvUsername, ImageView ivProfile, final List<Goal> goals, final List<Goal> incompleted) {
+        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
+        localQuery.fromLocalDatastore();
+        localQuery.whereEqualTo("user", user);
+        localQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null){
+                    int completedGoals = 0;
+                    int progressGoals = 0;
+                    goals.clear();
+                    for (int i=0; i <objects.size(); i++){
+                        Goal goal = (Goal) objects.get(i);
+
+                        if (goal.getCompleted()) {
+                            completedGoals += 1;
+                            goals.add(goal);
+                        } else {
+                            progressGoals += 1;
+                            goals.add(0, goal);
+                            incompleted.add(0, goal);
+                        }
+                    }
+                    tvProgress.setText(String.valueOf(progressGoals));
+                    tvCompleted.setText(String.valueOf(completedGoals));
+                }
+            }
+        });
+        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
+        localUserQuery.fromLocalDatastore();
+        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
+        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                tvFriends.setText(String.valueOf(objects.size()));
+            }
+        });
+
+        tvUsername.setText(user.getUsername());
+        //tvFriends.setText(String.valueOf(user.getList("friends").size()));
+    }
+
+    public static void populateGoals(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
         List<ParseObject> lGoals = user.getList("goals");
 //        } catch(ParseException e) {
 ////            e.printStackTrace();
@@ -113,6 +159,7 @@ public class Util {
                 } else {
                     progressGoals += 1;
                     goals.add(0, g);
+                    incompleted.add(0, g);
                 }
             }
             goals.addAll(completed);
@@ -126,6 +173,44 @@ public class Util {
         setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
     }
 
+    public static void populateGoalsAsync(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
+        List<ParseObject> lGoals = user.getList("goals");
+//        } catch(ParseException e) {
+////            e.printStackTrace();
+////        }
+        int completedGoals = 0;
+        int progressGoals = 0;
+        goals.clear();
+        List<Goal> completed = new ArrayList<>();
+//        ParseObject.pinAllInBackground(arr);
+        if (lGoals != null) {
+//            try {
+//                ParseObject.fetchAllIfNeeded(arr);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+            for (int i = 0; i < lGoals.size(); i++) {
+                Goal g = (Goal) lGoals.get(i);
+                if (g.getCompleted()) {
+                    completedGoals += 1;
+                    completed.add(0, g);
+                } else {
+                    progressGoals += 1;
+                    goals.add(0, g);
+                    incompleted.add(0, g);
+                }
+            }
+            goals.addAll(completed);
+            swipe.setRefreshing(false);
+        }
+
+        tvProgress.setText(String.valueOf(progressGoals));
+        tvCompleted.setText(String.valueOf(completedGoals));
+        tvFriends.setText(String.valueOf(user.getList("friends").size()));
+        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        ParseFile pfile = (ParseFile) user.get("image");
+        setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
+    }
 
     public static void setImageBitmap(Bitmap bitmap, Context context, ImageView ivProfile) {
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);

@@ -164,6 +164,9 @@ public class Goal extends ParseObject implements Parcelable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (friends == null) {
+            return new ArrayList<ParseUser>();
+        }
         return friends;
     }
 
@@ -174,6 +177,9 @@ public class Goal extends ParseObject implements Parcelable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (users == null) {
+            return new ArrayList<ParseUser>();
+        }
         return users;
     }
 
@@ -183,6 +189,9 @@ public class Goal extends ParseObject implements Parcelable {
             users = fetchIfNeeded().getList("pendingUsers");
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        if (users == null) {
+            return new ArrayList<ParseUser>();
         }
         return users;
     }
