@@ -16,7 +16,7 @@
     <string name="reminder_frequency">Reminder Frequency</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="sign_up">Sign up</string>
+    <string name="sign_up">Don\'t have an account? Create one!</string>
     <string name="_0_40">0/40</string>
     <string name="_0">0</string>
     <string name="_0_friends">0 friends</string>
@@ -39,4 +39,6 @@
     <string name="no_friend_requests_to_show">No friend requests to show</string>
     <string name="no_goal_requests_to_show">No goal requests to show</string>
     <string name="goal_requests">goal requests</string>
+    <string name="app_title">goals</string>
+    <string name="sign_me_up">Sign me up</string>
 </resources>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.FriendRequestsActivity;
 import com.example.cassandrakane.goalz.R;
@@ -148,6 +149,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                     try {
                         currentUser.fetch();
                         ((FriendRequestsActivity) context).tvFriends.setText(String.valueOf(Integer.parseInt(((FriendRequestsActivity) context).tvFriends.getText().toString()) + 1));
+                        Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
                         deleteSentRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.GoalRequestsActivity;
 import com.example.cassandrakane.goalz.R;
@@ -216,6 +217,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                         currentUser.fetch();
                         moveUser(goal);
                         ((GoalRequestsActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((GoalRequestsActivity) context).tvProgress.getText().toString()) + 1));
+                        Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
                         deleteGoalRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
