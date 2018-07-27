@@ -11,6 +11,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @ParseClassName("Goal")
 public class Goal extends ParseObject implements Parcelable {
@@ -25,7 +26,8 @@ public class Goal extends ParseObject implements Parcelable {
 
     public Goal(String title, String description, int duration, int frequency, int progress,
                 int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy,
-                List<ParseUser> friends, List<ParseUser> approvedUsers, List<ParseUser> pendingUsers) {
+                List<ParseUser> friends, List<ParseUser> approvedUsers, List<ParseUser> pendingUsers,
+                Map<String, String> userAdded) {
         super();
         setTitle(title);
         setDescription(description);
@@ -40,6 +42,7 @@ public class Goal extends ParseObject implements Parcelable {
         setFriends(friends);
         setApprovedUsers(approvedUsers);
         setPendingUsers(pendingUsers);
+        setUserAdded(userAdded);
     }
 
     public ArrayList<ParseObject> getStory() {
@@ -195,6 +198,12 @@ public class Goal extends ParseObject implements Parcelable {
         }
         return users;
     }
+
+    public Map<String, String> getUserAdded(){
+        return (Map) get("userAdded");
+    }
+
+    public void setUserAdded(Map<String, String> userAdded){ put("userAdded", userAdded); }
 
     public void setStory(ArrayList<ParseObject> story) {
         put("images", story);
