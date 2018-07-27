@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class GoalsListActivity extends AppCompatActivity {
 
     private int mTasksComplete = 0;
     private int mTasksRequired;
+    private boolean allAdded = true;
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -117,12 +119,16 @@ public class GoalsListActivity extends AppCompatActivity {
                         public void done(ParseException e) {
                             story.add(image);
                             goal.setStory(story);
-                            goal.setItemAdded(true);
-                            final Map<String, String> userAdded = goal.getUserAdded();
+//                            goal.setItemAdded(true);
+                            Map<String, String> userAdded = goal.getUserAdded();
+                            if (userAdded == null){
+                                userAdded = new HashMap<>();
+                            }
                             userAdded.put(currentUser.getObjectId(), "true");
                             for (String value : userAdded.values()) {
                                 if (value.equals("false")) {
-                                    goal.setItemAdded(false);
+//                                    goal.setItemAdded(false);
+                                    allAdded = false;
                                 }
                             }
 
@@ -134,19 +140,20 @@ public class GoalsListActivity extends AppCompatActivity {
                                     notificationHelper.cancelReminder(goal);
                                     notificationHelper.setReminder(goal);
 
-                                    if (goal.getIsItemAdded()) {
+                                    if (!goal.getIsItemAdded()) {
+                                        goal.setItemAdded(true);
                                         goal.setProgress(goal.getProgress() + 1);
                                         if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                             goal.setStreak(goal.getStreak() + 1);
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    toProfile();
+                                                    toMain();
                                                 }
                                             });
                                         }
                                     } else{
-                                        toProfile();
+                                        toMain();
                                     }
                                 }
                             });
@@ -222,7 +229,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                     goal.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-                                            toProfile();
+                                            toMain();
                                         }
                                     });
                                 } else {
@@ -234,12 +241,12 @@ public class GoalsListActivity extends AppCompatActivity {
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {
-                                                    toProfile();
+                                                    toMain();
                                                 }
                                             });
                                         }
                                     } else {
-                                        toProfile();
+                                        toMain();
                                     }
                                 }
                             }
@@ -251,8 +258,8 @@ public class GoalsListActivity extends AppCompatActivity {
         }
     }
 
-    public void toProfile() {
-        Intent intent = new Intent(GoalsListActivity.this, ProfileActivity.class);
+    public void toMain() {
+        Intent intent = new Intent(GoalsListActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
