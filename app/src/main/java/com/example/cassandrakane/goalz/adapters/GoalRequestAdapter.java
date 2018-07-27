@@ -67,12 +67,14 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((GoalRequestsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 addGoal(goal, position);
             }
         });
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((GoalRequestsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 removeUserfromFriends(goal, position);
             }
         });
@@ -107,6 +109,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
             } else {
                 ((GoalRequestsActivity) context).navigationView.getMenu().getItem(4).setTitle("goal requests");
             }
+            ((GoalRequestsActivity) context).progressBar.setVisibility(View.INVISIBLE);
         } catch (ParseException e) {
             e.printStackTrace();
         }

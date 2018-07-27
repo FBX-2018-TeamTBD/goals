@@ -49,7 +49,7 @@ public class GoalRequestsActivity extends AppCompatActivity {
     @BindView(R.id.rvGoalRequests) RecyclerView rvFriendRequests;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.progressBar) public ProgressBar progressBar;
     @BindView(R.id.nav_view) public NavigationView navigationView;
     @BindView(R.id.noGoalRequests) public RelativeLayout noGoalsPage;
 
@@ -121,6 +121,7 @@ public class GoalRequestsActivity extends AppCompatActivity {
     }
 
     public void getGoalRequests() {
+        progressBar.setVisibility(View.VISIBLE);
         ParseQuery<GoalRequests> query = ParseQuery.getQuery("GoalRequests");
         query.include("goal");
         query.whereEqualTo("user", user);

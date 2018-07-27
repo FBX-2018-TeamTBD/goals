@@ -69,12 +69,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((FriendRequestsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 addFriend(friend, position);
             }
         });
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((FriendRequestsActivity) context).progressBar.setVisibility(View.VISIBLE);
                 deleteSentRequest(position);
             }
         });
@@ -90,6 +92,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             } else {
                 ((FriendRequestsActivity) context).navigationView.getMenu().getItem(3).setTitle("Friend Requests");
             }
+            ((FriendRequestsActivity) context).progressBar.setVisibility(View.INVISIBLE);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -218,7 +218,7 @@ public class AddGoalActivity extends AppCompatActivity {
                             user.fetch();
                             Intent data = new Intent(getApplicationContext(), ProfileActivity.class);
                             startActivity(data);
-                            progressBar.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.INVISIBLE);
                             finish();
                         } catch (ParseException e1) {
                             e1.printStackTrace();

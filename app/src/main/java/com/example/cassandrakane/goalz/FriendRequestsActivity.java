@@ -49,7 +49,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
     @BindView(R.id.rvFriendRequests) RecyclerView rvFriendRequests;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.progressBar) public ProgressBar progressBar;
     @BindView(R.id.nav_view) public NavigationView navigationView;
     @BindView(R.id.noFriendRequests) public RelativeLayout noFriendsPage;
 
@@ -118,6 +118,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
     }
 
     public void getFriendRequests() {
+        progressBar.setVisibility(View.INVISIBLE);
         ParseQuery<SentFriendRequests> query = ParseQuery.getQuery("SentFriendRequests");
         query.include("toUser");
         query.include("fromUser");
