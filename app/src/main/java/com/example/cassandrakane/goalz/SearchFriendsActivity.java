@@ -94,7 +94,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
                     newPending.addAll(searchfriendAdapter.selectedFriends);
                     goal.setPendingUsers(newPending);
                     List<ParseUser> newFriends = goal.getFriends();
-                    newPending.addAll(searchfriendAdapter.selectedFriends);
+                    newFriends.addAll(searchfriendAdapter.selectedFriends);
                     goal.setFriends(newFriends);
                     goal.saveInBackground(new SaveCallback() {
                         @Override
