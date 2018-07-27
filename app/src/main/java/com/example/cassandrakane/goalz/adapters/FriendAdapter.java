@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import utils.DataFetcher;
-import com.example.cassandrakane.goalz.FeedActivity;
+
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;

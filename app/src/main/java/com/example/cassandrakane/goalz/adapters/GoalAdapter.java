@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.cassandrakane.goalz.CameraActivity;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
@@ -41,15 +40,12 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.parceler.Parcels;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -307,7 +303,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             break;
                         }
                     }
-                    // TODO ahh fix
                     if (context.getClass().isAssignableFrom(MainActivity.class)) {
                         MainActivity activity = (MainActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -333,16 +328,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 holder.ivStory.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
-                        Intent intent = new Intent(context, CameraActivity.class);
-                        List<Goal> uncompleteGoals = new ArrayList<>();
-                        for (Goal goal : goals){
-                            if (!goal.getCompleted()){
-                                uncompleteGoals.add(goal);
-                            }
-                        }
-                        intent.putExtra("goals", (Serializable) uncompleteGoals);
-                        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(finalGoal1));
-                        context.startActivity(intent);
+                        // TODO implement (go to camera fragment with finalGoal1 bundled)
                     }
                 });
             } else {
