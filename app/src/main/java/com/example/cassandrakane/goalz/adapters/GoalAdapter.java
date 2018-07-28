@@ -65,7 +65,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     ParseUser currentUser;
     float startX = 0;
     float endX = 0;
-    boolean longClick = false;
     int startIndex = 0;
     File tempFile;
     NavigationHelper navigationHelper;
@@ -112,7 +111,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
             @Override
             public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                Log.i("scroll", startX + " " + endX);
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
@@ -124,7 +122,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     startX = 0;
                     endX = 0;
                 }
-                return false;
+                return true;
             }
 
             @Override
@@ -154,7 +152,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
             @Override
             public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                Log.i("fling", startX + " " + endX);
                 startX = motionEvent.getX();
                 endX = motionEvent1.getX();
                 if (endX >= startX + 60) {
