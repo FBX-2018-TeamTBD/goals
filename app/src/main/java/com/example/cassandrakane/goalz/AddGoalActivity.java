@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NotificationHelper;
+import com.example.cassandrakane.goalz.utils.NotificationHelper;
 
 public class AddGoalActivity extends AppCompatActivity {
 

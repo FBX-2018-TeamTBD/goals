@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
+import com.example.cassandrakane.goalz.utils.Util;
 
 public class SignupActivity extends AppCompatActivity {
 

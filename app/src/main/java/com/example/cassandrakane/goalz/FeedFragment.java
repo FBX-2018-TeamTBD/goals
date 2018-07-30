@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,10 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
+import com.example.cassandrakane.goalz.adapters.StoryAdapter;
+import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.Util;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -29,9 +35,13 @@ public class FeedFragment extends Fragment {
     List<ParseUser> friends;
     FriendAdapter friendAdapter;
 
+    StoryAdapter storyAdapter;
+    List<Goal> goals;
+
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
     @BindView(R.id.btnAdd) Button btnAdd;
+    @BindView(R.id.rvStory) RecyclerView rvStory;
 
     ParseUser user = ParseUser.getCurrentUser();
 
@@ -50,6 +60,12 @@ public class FeedFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        goals = new ArrayList<>();
+        storyAdapter = new StoryAdapter(goals);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rvStory.setLayoutManager(layoutManager);
+        rvStory.setAdapter(storyAdapter);
+
         mainActivity = (MainActivity) getActivity();
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
@@ -66,6 +82,7 @@ public class FeedFragment extends Fragment {
         });
 
         populateFriends();
+        populateStories();
 
         return view;
     }
@@ -86,6 +103,44 @@ public class FeedFragment extends Fragment {
             noFriendsPage.setVisibility(View.GONE);
         }
         friendAdapter.notifyDataSetChanged();
+    }
+
+    public void populateStories() {
+        for (int i = 0; i < friends.size(); i++) {
+            try {
+                ParseUser friend = friends.get(i).fetch();
+                List<Goal> friendGoals = friend.getList("goals");
+                for (int j = 0; j < friendGoals.size(); j++) {
+                    Goal goal = friendGoals.get(j).fetch();
+                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0) {
+                        goals.add(goal);
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        animateStories();
+
+        if (goals.size() == 0) {
+            rvStory.setVisibility(View.GONE);
+        } else {
+            rvStory.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public void animateStories() {
+        rvStory.setVisibility(View.INVISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rvStory.setVisibility(View.VISIBLE);
+                rvStory.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
+            }
+        }, 100);
     }
 
 }

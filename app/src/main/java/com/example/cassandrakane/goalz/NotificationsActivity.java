@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.NotificationsPagerAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
 
 public class NotificationsActivity extends AppCompatActivity {
 

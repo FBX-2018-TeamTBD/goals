@@ -31,7 +31,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
+import com.example.cassandrakane.goalz.utils.Util;
 
 public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.ViewHolder> {
 

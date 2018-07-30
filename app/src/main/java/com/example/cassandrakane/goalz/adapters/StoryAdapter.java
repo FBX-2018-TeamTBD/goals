@@ -18,7 +18,6 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final StoryAdapter.ViewHolder holder, int position) {
         // get the data according to position
-        final ParseUser user = ParseUser.getCurrentUser();
         final Goal goal = mGoals.get(position);
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
@@ -62,11 +60,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ArrayList<String> imageUrls = goal.getStoryUrls();
                     MainActivity activity = (MainActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1, user)).commit();
+                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1, goal.getUser())).commit();
                     activity.toolbar.setVisibility(View.INVISIBLE);
                 }
             });

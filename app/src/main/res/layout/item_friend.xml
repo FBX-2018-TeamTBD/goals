@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="25dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    android:paddingTop="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
@@ -54,15 +56,6 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/poke"
         android:backgroundTint="@color/lightOrange" />-->
-
-    <ImageView
-        android:id="@+id/ivMenu"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentRight="true"
-        android:visibility="visible"
-        android:layout_marginTop="5dp"
-        app:srcCompat="@drawable/dropdown" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvStory"

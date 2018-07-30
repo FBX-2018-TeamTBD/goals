@@ -27,6 +27,8 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.NavigationHelper;
+import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -46,8 +48,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NavigationHelper;
-import utils.NotificationHelper;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
@@ -313,7 +313,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             if (personal) {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
+                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.large_add));
                 final Goal finalGoal1 = goal;
                 holder.ivStory.setOnClickListener(new View.OnClickListener(){
                     @Override

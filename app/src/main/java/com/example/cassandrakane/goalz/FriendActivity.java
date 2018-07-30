@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -31,7 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
 
 public class FriendActivity extends AppCompatActivity {
 
