@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -103,6 +104,7 @@ public class VideoActivity extends AppCompatActivity {
     private boolean mIsRecording = false;
     private ImageButton mRecordImageButton;
     private ImageButton btnSwap;
+    private ImageButton btnCamera;
 
     private File mVideoFolder;
     private String mVideoFilename;
@@ -134,6 +136,7 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_video);
 
         createVideoFolder();
@@ -141,8 +144,9 @@ public class VideoActivity extends AppCompatActivity {
         mMediaRecorder = new MediaRecorder();
 
         mTextureView = findViewById(R.id.textureView);
-        mRecordImageButton = findViewById(R.id.videoOnlineImageButton);
+        mRecordImageButton = findViewById(R.id.btnVideoCapture);
         btnSwap = findViewById(R.id.btnSwap);
+        btnCamera = findViewById(R.id.btnCamera);
 
         goals = (ArrayList) getIntent().getSerializableExtra("goals");
         mRecordImageButton.setOnTouchListener(new View.OnTouchListener() {
@@ -166,7 +170,7 @@ public class VideoActivity extends AppCompatActivity {
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                     if (mIsRecording) {
                         mIsRecording = false;
-                        mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_online));
+//                        mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_online));
                         mMediaRecorder.stop();
                         videos.add(videoFile);
                         Intent intent = new Intent(VideoActivity.this, DisplayActivity.class);
@@ -183,6 +187,13 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 switchCamera();
+            }
+        });
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -422,7 +433,7 @@ public class VideoActivity extends AppCompatActivity {
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 mIsRecording = true;
-                mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_busy));
+//                mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_busy));
                 try {
                     videoFile = createVideoFileName();
                 } catch (IOException e) {
@@ -438,7 +449,7 @@ public class VideoActivity extends AppCompatActivity {
             }
         } else {
             mIsRecording = true;
-            mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_busy));
+//            mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_busy));
             try {
                 videoFile = createVideoFileName();
             } catch (IOException e) {

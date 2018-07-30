@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,21 +14,35 @@
         android:layout_alignParentStart="true" />
 
     <ImageButton
-        android:id="@+id/videoOnlineImageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:id="@+id/btnVideoCapture"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp"
-        android:src="@android:drawable/presence_video_online" />
+        android:layout_marginBottom="40dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_video"
+        android:tint="#ffffff" />
+
+    <ImageButton
+        android:id="@+id/btnCamera"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="35dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/take_pic" />
 
     <ImageButton
         android:id="@+id/btnSwap"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:layout_alignBottom="@+id/videoOnlineImageButton"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="48dp"
+        android:layout_alignBottom="@+id/btnVideoCapture"
+        android:layout_alignStart="@+id/btnCamera"
         android:background="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/reverse_cam"

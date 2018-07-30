@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CameraActivity">
+    tools:context=".MainActivity">
 
     <TextureView
         android:id="@+id/textureView"
@@ -70,10 +70,10 @@
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/btnSwap"
-        android:layout_marginTop="25dp"
-        android:scaleType="fitCenter"
+        android:layout_marginTop="35dp"
         android:background="@null"
-        android:tint="#ffffff"
-        android:src="@drawable/ic_video" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_video"
+        android:tint="#ffffff" />
 
 </RelativeLayout>

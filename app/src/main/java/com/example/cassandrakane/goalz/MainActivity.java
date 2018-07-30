@@ -1,8 +1,10 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     ParseUser user;
     public int completedGoals = 0;
     public int progressGoals = 0;
+    Fragment fragment;
 
     @BindView(R.id.nav_view) public NavigationView navigationView;
     @BindView(R.id.progressBar) public ProgressBar progressBar;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
