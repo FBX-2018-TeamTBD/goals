@@ -54,7 +54,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginLeft="2dp"
             android:id="@+id/ivProfile"
-            app:srcCompat="@drawable/placeholder_profile"/>
+            app:srcCompat="@drawable/rounded_placeholder_profile"/>
     </android.support.v7.widget.CardView>
 
     <TextView
