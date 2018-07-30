@@ -93,6 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/ivFriends"
+                android:layout_marginTop="5dp"
                 android:layout_toLeftOf="@id/ivFriends"
                 android:layout_marginRight="5dp"
                 android:textColor="@color/black"
@@ -104,6 +105,7 @@
                 android:layout_height="20dp"
                 android:layout_alignRight="@+id/tvProgress"
                 android:layout_alignTop="@+id/tvTitle"
+                android:layout_marginTop="5dp"
                 android:tint="@color/lightOrange"
                 app:srcCompat="@drawable/friend" />
 

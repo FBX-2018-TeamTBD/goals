@@ -1,8 +1,12 @@
 package utils;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -15,10 +19,16 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,19 +45,22 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.cassandrakane.goalz.SignupActivity.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE;
+import static com.example.cassandrakane.goalz.SignupActivity.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE;
+
 public class Util {
 
+    public static File photoFile;
+
     public static void setImage(ParseUser user, ParseFile imageFile, Resources resources, ImageView ivProfile, float cornerRadius) {
-//        ParseFile imageFile = null;
-//        try {
-//            imageFile = user.fetch().getParseFile(parseKey);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         if (imageFile != null) {
             Bitmap bitmap = null;
             try {
@@ -62,6 +75,138 @@ public class Util {
         } else {
             ivProfile.setImageDrawable(resources.getDrawable(R.drawable.placeholder_profile));
         }
+    }
+
+    public static void hideKeyboard(View view, Context context) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void selectImage(final Activity context, final String photoFileName) {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals("Take Photo")) {
+                    onLaunchCamera(context, photoFileName);
+
+                } else if (items[item].equals("Choose from Library")) {
+                    onLaunchGallery(context);
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    public static void onLaunchCamera(Activity context, String photoFileName) {
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create a File reference to access to future access
+        photoFile = getPhotoFileUri(photoFileName, context);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        Uri fileProvider = FileProvider.getUriForFile(context, "com.fbu.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+        try {
+            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+            // So as long as the result is not null, it's safe to use the intent.
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int permissionCheck = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(context, new String[]{android.Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
+                }
+                // Start the image capture intent to take photo
+                context.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        } catch(SecurityException e) {
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int permissionCheck = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(context, new String[]{android.Manifest.permission.CAMERA}, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
+                }
+                // Start the image capture intent to take photo
+                context.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        }
+    }
+
+    public static void onLaunchGallery(Activity context) {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            context.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    public static void getImageFromCamera(Context context, ParseFile imageFile, ImageView ivProfile) {
+        String imagePath = photoFile.getAbsolutePath();
+        Bitmap bitmap = Util.scaleCenterCrop(BitmapFactory.decodeFile(imagePath), 80, 80);
+        // Configure byte output stream
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // Compress the image further
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(imagePath);
+            // Write the bytes of the bitmap to
+            try {
+                fos.write(bytes.toByteArray());
+                fos.close();
+                imageFile = new ParseFile(new File(imagePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            Log.i("asdf", "error");
+            e.printStackTrace();
+        }
+        setImageBitmap(bitmap, context, ivProfile);
+    }
+
+    public static void getImageFromGallery(Context context, Uri uri, ParseFile imageFile, ImageView ivProfile) {
+        File file = new File(getPath(context, uri));
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = Util.scaleCenterCrop(MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri), 80, 80);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Configure byte output stream
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // Compress the image further
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file.getAbsolutePath());
+            // Write the bytes of the bitmap to file
+            try {
+                fos.write(bytes.toByteArray());
+                fos.close();
+                imageFile = new ParseFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            Log.i("asdf", "error");
+            e.printStackTrace();
+        }
+        setImageBitmap(bitmap, context, ivProfile);
     }
 
     public static void setNotifications(ParseUser user, NavigationView navigationView) {
@@ -88,6 +233,7 @@ public class Util {
             navigationView.getMenu().getItem(3).setTitle("notifications");
         }
     }
+
     public static void populateStoredGoals(Context context, ParseUser user, final TextView tvProgress, final TextView tvCompleted, final TextView tvFriends, TextView tvUsername, ImageView ivProfile, final List<Goal> goals, final List<Goal> incompleted) {
         ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
         localQuery.fromLocalDatastore();
