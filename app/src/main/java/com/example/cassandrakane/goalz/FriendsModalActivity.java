@@ -2,32 +2,20 @@ package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.GoalFriendAdapter;
-import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.GoalRequests;
-import com.parse.ParseACL;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import org.parceler.Parcels;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +33,7 @@ public class FriendsModalActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.modal_friend);
 

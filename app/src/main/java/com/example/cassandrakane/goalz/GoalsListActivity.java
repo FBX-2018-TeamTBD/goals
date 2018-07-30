@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +52,7 @@ public class GoalsListActivity extends AppCompatActivity {
     Date currentDate;
     String caption;
     ParseUser currentUser;
+    Goal selectedGoal;
 
     private int mTasksComplete = 0;
     private int mTasksRequired;
@@ -62,6 +66,7 @@ public class GoalsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_goals_list);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -114,6 +119,7 @@ public class GoalsListActivity extends AppCompatActivity {
                     selected += 1;
                     final ArrayList<ParseObject> story = goal.getStory();
                     final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser());
+                    selectedGoal = goal;
                     image.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -142,16 +148,24 @@ public class GoalsListActivity extends AppCompatActivity {
                                     notificationHelper.setReminder(goal);
 
                                     if (!goal.getIsItemAdded()) {
-                                        goal.setItemAdded(true);
-                                        goal.setProgress(goal.getProgress() + 1);
-                                        if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
-                                            goal.setStreak(goal.getStreak() + 1);
-                                            goal.saveInBackground(new SaveCallback() {
-                                                @Override
-                                                public void done(ParseException e) {
-                                                    toMain();
-                                                }
-                                            });
+                                        if (allAdded) {
+                                            goal.setItemAdded(true);
+                                            goal.setProgress(goal.getProgress() + 1);
+                                            if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
+                                                goal.setStreak(goal.getStreak() + 1);
+                                                goal.saveInBackground(new SaveCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if (goal.getProgress() == goal.getDuration()){
+                                                            toCelebrateMain();
+                                                        } else {
+                                                            toMain();
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        } else{
+                                            toMain();
                                         }
                                     } else{
                                         toMain();
@@ -262,6 +276,13 @@ public class GoalsListActivity extends AppCompatActivity {
     public void toMain() {
         Intent intent = new Intent(GoalsListActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    public void toCelebrateMain(){
+        Intent intent = new Intent(GoalsListActivity.this, CelebrateActivity.class);
+        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(selectedGoal));
         startActivity(intent);
         finish();
     }
