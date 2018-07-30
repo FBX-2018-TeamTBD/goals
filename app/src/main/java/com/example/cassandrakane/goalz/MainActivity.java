@@ -28,8 +28,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NavigationHelper;
-import utils.Util;
+import com.example.cassandrakane.goalz.utils.NavigationHelper;
+import com.example.cassandrakane.goalz.utils.Util;
 
 public class MainActivity extends AppCompatActivity {
 

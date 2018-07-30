@@ -17,7 +17,7 @@ import com.parse.ParseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.DataFetcher;
+import com.example.cassandrakane.goalz.utils.DataFetcher;
 
 public class LoginActivity extends AppCompatActivity {
 

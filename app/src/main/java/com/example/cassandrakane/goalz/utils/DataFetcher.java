@@ -1,4 +1,4 @@
-package utils;
+package com.example.cassandrakane.goalz.utils;
 
 import android.content.Context;
 import android.content.Intent;

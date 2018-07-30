@@ -19,7 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
+import com.example.cassandrakane.goalz.utils.Util;
 
 public class GoalFriendAdapter extends RecyclerView.Adapter<GoalFriendAdapter.ViewHolder> {
 

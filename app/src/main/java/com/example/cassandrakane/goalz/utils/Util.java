@@ -1,4 +1,4 @@
-package utils;
+package com.example.cassandrakane.goalz.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -51,6 +51,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.cassandrakane.goalz.SignupActivity.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE;
@@ -73,7 +75,7 @@ public class Util {
             roundedBitmapDrawable.setAntiAlias(true);
             ivProfile.setImageDrawable(roundedBitmapDrawable);
         } else {
-            ivProfile.setImageDrawable(resources.getDrawable(R.drawable.placeholder_profile));
+            ivProfile.setImageDrawable(resources.getDrawable(R.drawable.rounded_placeholder_profile));
         }
     }
 
@@ -303,6 +305,12 @@ public class Util {
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         ParseFile pfile = (ParseFile) user.get("image");
         setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
+    }
+
+    public static Date yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal.getTime();
     }
 
     public static void populateGoalsAsync(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
