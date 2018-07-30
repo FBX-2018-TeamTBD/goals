@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,7 +27,10 @@ import com.parse.ParseUser;
 
 import java.io.File;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,9 +50,12 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
     @BindView(R.id.btnClose) ImageButton btnClose;
+    @BindView(R.id.btnInfo) ImageButton btnInfo;
+    @BindView(R.id.btnInfo2) ImageButton btnInfo2;
     @BindView(R.id.pbProgress) ProgressBar pbProgress;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvDateAdded) TextView tvDateAdded;
 
     private URL url;
     private File file;
@@ -84,6 +91,9 @@ public class StoryFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         setImage();
+
+//        tvUsername.setVisibility(View.GONE);
+//        tvDateAdded.setVisibility(View.GONE);
 
         btnLeft.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
@@ -129,6 +139,37 @@ public class StoryFragment extends Fragment {
                     friendActivity.cardView.setVisibility(View.VISIBLE);
                     friendActivity.btnBack.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnInfo.setVisibility(View.GONE);
+                tvUsername.setVisibility(View.INVISIBLE);
+                tvDateAdded.setVisibility(View.INVISIBLE);
+//                holder.rvStory.setVisibility(View.INVISIBLE);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvUsername.setVisibility(View.VISIBLE);
+                        tvDateAdded.setVisibility(View.VISIBLE);
+                        tvUsername.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
+                        tvDateAdded.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
+                    }
+                }, 100);
+                btnInfo2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnInfo2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnInfo2.setVisibility(View.GONE);
+                tvUsername.setVisibility(View.INVISIBLE);
+                tvDateAdded.setVisibility(View.INVISIBLE);
+                btnInfo.setVisibility(View.VISIBLE);
             }
         });
 
@@ -180,6 +221,13 @@ public class StoryFragment extends Fragment {
                     setImage();
                 }
             });
+            ParseUser user = object.getParseUser("user");
+            if (user != null) {
+                tvUsername.setText(user.getUsername());
+            }
+            DateFormat dateFormat = new SimpleDateFormat("mm//dd/yyyy");
+            Date createdAt = object.getCreatedAt();
+            tvDateAdded.setText(dateFormat.format(createdAt));
 
         } else {
             viewStory.setVisibility(View.GONE);
@@ -214,6 +262,9 @@ public class StoryFragment extends Fragment {
         if (user != null) {
             tvUsername.setText(user.getUsername());
         }
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date createdAt = object.getCreatedAt();
+        tvDateAdded.setText(dateFormat.format(createdAt));
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 }
