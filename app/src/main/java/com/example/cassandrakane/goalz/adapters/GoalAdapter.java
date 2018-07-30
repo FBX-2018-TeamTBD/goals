@@ -3,10 +3,7 @@ package com.example.cassandrakane.goalz.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,19 +27,15 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.Video;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -184,36 +177,36 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 // check if all users have added here
                 if (!goal.getIsItemAdded()) {
                     goal.setStreak(0);
-                    final ArrayList<ParseObject> story = goal.getStory();
-                    try{
-                        InputStream inputStream = context.getResources().openRawResource(R.raw.crying_gif);
-                        tempFile = File.createTempFile("pre", "suf");
-                        copyFile(inputStream, new FileOutputStream(tempFile));
-
-                        // Now some_file is tempFile .. do what you like
-                    } catch (IOException e) {
-                        throw new RuntimeException("Can't create temp file ", e);
-                    }
-                    final ParseFile videoFile = new ParseFile(tempFile);
-                    Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(tempFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
-                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                    thumbnail.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-                    byte[] imageByte = byteArrayOutputStream.toByteArray();
-                    final ParseFile parseFileThumbnail = new ParseFile("image_file.png",imageByte);
-                    parseFileThumbnail.saveInBackground();
-                    videoFile.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            final Video video = new Video(videoFile, "You did not update your goal story in time", parseFileThumbnail, currentUser);
-                            video.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    story.add(video);
-                                    goal.setStory(story);
-                                }
-                            });
-                        }
-                    });
+//                    final ArrayList<ParseObject> story = goal.getStory();
+//                    try{
+//                        InputStream inputStream = context.getResources().openRawResource(R.raw.crying_gif);
+//                        tempFile = File.createTempFile("pre", "suf");
+//                        copyFile(inputStream, new FileOutputStream(tempFile));
+//
+//                        // Now some_file is tempFile .. do what you like
+//                    } catch (IOException e) {
+//                        throw new RuntimeException("Can't create temp file ", e);
+//                    }
+//                    final ParseFile videoFile = new ParseFile(tempFile);
+//                    Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(tempFile.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+//                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+//                    thumbnail.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+//                    byte[] imageByte = byteArrayOutputStream.toByteArray();
+//                    final ParseFile parseFileThumbnail = new ParseFile("image_file.png",imageByte);
+//                    parseFileThumbnail.saveInBackground();
+//                    videoFile.saveInBackground(new SaveCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            final Video video = new Video(videoFile, "You did not update your goal story in time", parseFileThumbnail, currentUser);
+//                            video.saveInBackground(new SaveCallback() {
+//                                @Override
+//                                public void done(ParseException e) {
+//                                    story.add(video);
+//                                    goal.setStory(story);
+//                                }
+//                            });
+//                        }
+//                    });
                 }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);

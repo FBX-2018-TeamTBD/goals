@@ -25,7 +25,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,6 +178,11 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
             e.printStackTrace();
         }
         List<ParseUser> approved = goal.getApprovedUsers();
+        Map<String, String> userAdded = goal.getUserAdded();
+        if (userAdded == null){
+            userAdded = new HashMap<>();
+        }
+        userAdded.put(ParseUser.getCurrentUser().getObjectId(), "false");
         try {
             ParseObject.fetchAll(approved);
         } catch (ParseException e) {
@@ -183,6 +190,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
         }
         approved.add(ParseUser.getCurrentUser());
         goal.setApprovedUsers(approved);
+        goal.setUserAdded(userAdded);
         removeUserfromPending(goal);
     }
 

@@ -120,6 +120,7 @@ public class GoalsListActivity extends AppCompatActivity {
                             story.add(image);
                             goal.setStory(story);
 //                            goal.setItemAdded(true);
+//                            List<ParseUser> approvedUsers = goal.getApprovedUsers();
                             Map<String, String> userAdded = goal.getUserAdded();
                             if (userAdded == null){
                                 userAdded = new HashMap<>();
