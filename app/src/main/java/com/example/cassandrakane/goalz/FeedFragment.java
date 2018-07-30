@@ -106,6 +106,7 @@ public class FeedFragment extends Fragment {
     }
 
     public void populateStories() {
+        goals.clear();
         for (int i = 0; i < friends.size(); i++) {
             try {
                 ParseUser friend = friends.get(i).fetch();
@@ -122,6 +123,7 @@ public class FeedFragment extends Fragment {
             }
         }
         animateStories();
+        storyAdapter.notifyDataSetChanged();
 
         if (goals.size() == 0) {
             rvStory.setVisibility(View.GONE);

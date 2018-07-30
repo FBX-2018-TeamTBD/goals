@@ -78,7 +78,7 @@
                 android:layout_height="75dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@drawable/add_circle" />
+                app:srcCompat="@drawable/ic_placeholder_add" />
 
             <ImageView
                 android:id="@+id/ivStar"
@@ -87,7 +87,7 @@
                 android:layout_alignTop="@+id/tvTitle"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="3dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="4dp"
                 android:layout_toLeftOf="@+id/tvFriends"
                 android:tint="@color/lightOrange"
                 android:visibility="visible"
@@ -98,6 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/tvTitle"
+                android:layout_marginBottom="2dp"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@id/ivFriends"
                 android:fontFamily="@font/quicksand_medium"
@@ -111,7 +112,7 @@
                 android:layout_height="16dp"
                 android:layout_alignRight="@+id/tvProgress"
                 android:layout_alignTop="@+id/tvTitle"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:tint="@color/lightOrange"
                 app:srcCompat="@drawable/friend" />
 

@@ -36,7 +36,6 @@
         android:background="@color/orange"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:contentInsetStartWithNavigation="0dp"
-        android:elevation="10dp"
         android:fitsSystemWindows="false"
         android:layout_height="?attr/actionBarSize">
 
