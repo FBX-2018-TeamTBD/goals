@@ -132,11 +132,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                     NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
                                     notificationHelper.cancelReminder(finalGoal);
                                     goals.remove(finalGoal);
-                                    if (finalGoal.getCompleted()) {
-                                        ((MainActivity) context).tvProgress.setText(String.valueOf(((MainActivity) context).completedGoals - 1));
-                                    } else {
-                                        ((MainActivity) context).tvProgress.setText(String.valueOf(((MainActivity) context).progressGoals - 1));
-                                    }
                                     notificationHelper.cancelReminder(finalGoal);
                                     removeGoal(finalGoal.getObjectId());
                                 }
@@ -241,7 +236,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             holder.tvFriends.setText("");
-            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
+            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
             holder.ivFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -329,6 +324,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 .addToBackStack("transaction")
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();
+
                         activity.toolbar.setVisibility(View.INVISIBLE);
 //                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                     }
@@ -345,7 +341,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             if (personal) {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.large_add));
+                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_placeholder_add));
                 final Goal finalGoal1 = goal;
                 holder.ivStory.setOnClickListener(new View.OnClickListener(){
                     @Override

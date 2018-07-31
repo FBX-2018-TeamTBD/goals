@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -211,7 +210,8 @@ public class Util {
         setImageBitmap(bitmap, context, ivProfile);
     }
 
-    public static void setNotifications(ParseUser user, NavigationView navigationView) {
+    public static void setNotifications(ParseUser user) {
+        // TODO delete if unneccessary? where should notifs appear?
         ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
         query2.whereEqualTo("toUser", user);
         int count = 0;
@@ -227,12 +227,6 @@ public class Util {
             count += query3.count();
         } catch (ParseException e) {
             e.printStackTrace();
-        }
-
-        if(count > 0) {
-            navigationView.getMenu().getItem(3).setTitle("notifications (" + count + ")");
-        } else {
-            navigationView.getMenu().getItem(3).setTitle("notifications");
         }
     }
 
@@ -313,20 +307,16 @@ public class Util {
         return cal.getTime();
     }
 
-    public static void populateGoalsAsync(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
+    public static void populateGoalsAsync(ParseUser user, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
         List<ParseObject> lGoals = user.getList("goals");
-        int completedGoals = 0;
-        int progressGoals = 0;
         goals.clear();
         List<Goal> completed = new ArrayList<>();
         if (lGoals != null) {
             for (int i = 0; i < lGoals.size(); i++) {
                 Goal g = (Goal) lGoals.get(i);
                 if (g.getCompleted()) {
-                    completedGoals += 1;
                     completed.add(0, g);
                 } else {
-                    progressGoals += 1;
                     goals.add(0, g);
                     incompleted.add(0, g);
                 }
@@ -334,13 +324,6 @@ public class Util {
             goals.addAll(completed);
             swipe.setRefreshing(false);
         }
-
-        tvProgress.setText(String.valueOf(progressGoals));
-        tvCompleted.setText(String.valueOf(completedGoals));
-        tvFriends.setText(String.valueOf(user.getList("friends").size()));
-        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        ParseFile pfile = (ParseFile) user.get("image");
-        setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
     }
 
     public static void setImageBitmap(Bitmap bitmap, Context context, ImageView ivProfile) {

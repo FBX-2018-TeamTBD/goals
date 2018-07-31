@@ -63,7 +63,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     MainActivity activity = (MainActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, story.size() - 1, goal.getUser())).commit();
+                    fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, story.size() - 1, goal.getUser())).commit();
                     activity.toolbar.setVisibility(View.INVISIBLE);
                 }
             });

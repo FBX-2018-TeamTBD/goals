@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FeedFragment;
+import com.example.cassandrakane.goalz.NotificationsFragment;
 import com.example.cassandrakane.goalz.ProfileFragment;
 
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
@@ -20,13 +21,14 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
             case 0: return new CameraFragment();
             case 1: return new ProfileFragment();
             case 2: return new FeedFragment();
+            case 3: return new NotificationsFragment();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
             case 0: return "Camera";
             case 1: return "Profile";
             case 2: return "Feed";
+            case 3: return "Notifications";
             default: return null;
     }
     }

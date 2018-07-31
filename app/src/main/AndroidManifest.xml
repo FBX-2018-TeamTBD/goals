@@ -78,7 +78,6 @@
         <activity
             android:name=".FriendsModalActivity"
             android:theme="@style/AppTheme.PopupTheme" />
-        <activity android:name=".NotificationsActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".CelebrateActivity"></activity>
