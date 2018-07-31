@@ -18,6 +18,7 @@ import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -31,7 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -171,7 +171,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         currentUser.fetch();
                         moveUser(goal);
                         Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
-                        ((MainActivity) context).tvProgress.setText(String.valueOf(Integer.parseInt(((MainActivity) context).tvProgress.getText().toString()) + 1));
                         deleteGoalRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
@@ -282,7 +281,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     try {
                         currentUser.fetch();
                         Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
-                        ((MainActivity) context).tvFriends.setText(String.valueOf(Integer.parseInt(((MainActivity) context).tvFriends.getText().toString()) + 1));
                         deleteSentRequest(position);
                     } catch (ParseException e1) {
                         e1.printStackTrace();

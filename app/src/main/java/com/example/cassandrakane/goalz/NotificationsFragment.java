@@ -15,6 +15,8 @@ import com.example.cassandrakane.goalz.adapters.NotificationAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.utils.NavigationHelper;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -26,8 +28,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.NavigationHelper;
-import utils.Util;
 
 public class NotificationsFragment extends Fragment {
 
