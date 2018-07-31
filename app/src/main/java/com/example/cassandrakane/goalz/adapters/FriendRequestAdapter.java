@@ -109,7 +109,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
                         frag.noFriendsPage.setVisibility(View.VISIBLE);
                     }
                     NavigationView navigationView = ((NotificationsActivity) context).navigationView;
-                    Util.setNotifications(ParseUser.getCurrentUser(), navigationView);
+                    Util.setNotifications(ParseUser.getCurrentUser());
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();

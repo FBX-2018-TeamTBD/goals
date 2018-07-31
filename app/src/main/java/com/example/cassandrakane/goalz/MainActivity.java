@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         Util.populateGoals(this, user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
         ParseFile file = (ParseFile) user.get("image");
         Util.setImage(user, file, getResources(), ivProfile, 16.0f);
-        Util.setNotifications(user, navigationView);
+        Util.setNotifications(user);
     }
 
     public void refreshAsync(SwipeRefreshLayout swipeContainer) {

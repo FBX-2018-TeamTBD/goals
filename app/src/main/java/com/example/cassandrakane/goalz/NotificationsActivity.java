@@ -97,7 +97,7 @@ public class NotificationsActivity extends AppCompatActivity {
         incompleted = new ArrayList<>();
 
         Util.populateGoals(this, ParseUser.getCurrentUser(), tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
-        Util.setNotifications(ParseUser.getCurrentUser(), navigationView);
+        Util.setNotifications(ParseUser.getCurrentUser());
     }
 
     public void openDrawer(View v) {

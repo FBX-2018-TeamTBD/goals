@@ -33,7 +33,6 @@ import utils.Util;
 
 public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.ViewHolder> {
 
-
     private List<Goal> mGoals;
     private List<GoalRequests> requests;
     Context context;
@@ -124,7 +123,7 @@ public class GoalRequestAdapter extends RecyclerView.Adapter<GoalRequestAdapter.
                         frag.noGoalsPage.setVisibility(View.VISIBLE);
                     }
                     NavigationView navigationView = ((NotificationsActivity) context).navigationView;
-                    Util.setNotifications(ParseUser.getCurrentUser(), navigationView);
+                    Util.setNotifications(ParseUser.getCurrentUser());
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
