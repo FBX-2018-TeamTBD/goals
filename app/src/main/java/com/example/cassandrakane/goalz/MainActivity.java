@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.MainPagerAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.NavigationHelper;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -28,8 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.NavigationHelper;
-import com.example.cassandrakane.goalz.utils.Util;
 
 public class MainActivity extends AppCompatActivity {
 

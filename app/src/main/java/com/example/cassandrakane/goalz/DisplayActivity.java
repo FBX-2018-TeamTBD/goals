@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,7 @@ import android.widget.VideoView;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Video;
+import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -50,7 +52,8 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.NotificationHelper;
+
+import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class DisplayActivity extends AppCompatActivity {
 
@@ -72,6 +75,13 @@ public class DisplayActivity extends AppCompatActivity {
     int i;
     private int mTasksComplete = 0;
     private int mTasksRequired;
+
+    Float mLastTouchX;
+    Float mLastTouchY;
+    Float mPosX;
+    Float mPosY;
+
+    private int mActivePointerId = INVALID_POINTER_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +161,7 @@ public class DisplayActivity extends AppCompatActivity {
                             }
                         });
                     } else if (videos != null){
+                        mTasksRequired = videos != null ? videos.size() : 0;
                         for (final File video : videos){
                             Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(video.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
                             ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
@@ -248,6 +259,77 @@ public class DisplayActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     hideKeyboard(v);
                 }
+            }
+        });
+
+        etCaption.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN: {
+                        final int pointerIndex = motionEvent.getActionIndex();
+                        final float x = motionEvent.getX(pointerIndex);
+                        final float y = motionEvent.getY(pointerIndex);
+
+                        mLastTouchX = x;
+                        mLastTouchY = y;
+
+                        mActivePointerId = motionEvent.getPointerId(0);
+                        break;
+                    }
+
+                    case MotionEvent.ACTION_MOVE: {
+                        final int pointerIndex = motionEvent.findPointerIndex(mActivePointerId);
+
+                        final float x = motionEvent.getX(pointerIndex);
+                        final float y = motionEvent.getY(pointerIndex);
+
+                        // Calculate the distance moved
+                        final float dx = x - mLastTouchX;
+                        final float dy = y - mLastTouchY;
+
+                        mPosX = mLastTouchX;
+                        mPosY = mLastTouchY;
+
+                        mPosX += dx;
+                        mPosY += dy;
+
+//                        etCaption.invalidate();
+
+                        // Remember this touch position for the next move event
+                        mLastTouchX = x;
+                        mLastTouchY = y;
+
+                        etCaption.setX(mPosX);
+                        etCaption.setX(mPosY);
+
+                        break;
+                    }
+
+                    case MotionEvent.ACTION_UP: {
+                        mActivePointerId = INVALID_POINTER_ID;
+                        break;
+                    }
+
+                    case MotionEvent.ACTION_CANCEL: {
+                        mActivePointerId = INVALID_POINTER_ID;
+                        break;
+                    }
+
+                    case MotionEvent.ACTION_POINTER_UP: {
+                        final int pointerIndex = motionEvent.getActionIndex();
+                        final int pointerId = motionEvent.getPointerId(pointerIndex);
+
+                        if (pointerId == mActivePointerId){
+                            final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                            mLastTouchX = motionEvent.getX(newPointerIndex);
+                            mLastTouchY = motionEvent.getY(newPointerIndex);
+                            mActivePointerId = motionEvent.getPointerId(newPointerIndex);
+                        }
+                        break;
+                    }
+                }
+                return true;
             }
         });
 

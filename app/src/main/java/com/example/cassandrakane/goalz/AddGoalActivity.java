@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
+import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.NotificationHelper;
 
 public class AddGoalActivity extends AppCompatActivity {
 
@@ -202,7 +202,7 @@ public class AddGoalActivity extends AppCompatActivity {
                     selectedFriends, approved, pendingFriends, usersAdded);
             List<ParseObject> goals = user.getList("goals");
             sendGoalRequest(goal, pendingFriends);
-            goals.add(goal);
+            goals.add(0, goal);
             goal.pinInBackground();
             user.put("goals", goals);
 

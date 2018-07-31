@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.support.transition.Transition;
+import android.support.transition.TransitionInflater;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
+import com.example.cassandrakane.goalz.ProfileFragment;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -271,34 +274,63 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
 
         if (imageUrls.size() > 0) {
+            for (int i =0; i<story.size(); i++){
+                boolean seen = false;
+                ParseObject image = story.get(i);
+                List<ParseUser> users = image.getList("viewedBy");
+                if (users != null) {
+                    if (users.contains(currentUser)){
+                        seen = true;
+                    }
+                }
+                if (!seen) {
+                    startIndex = i;
+                    break;
+                }
+            }
+
             Glide.with(context)
-                    .load(imageUrls.get(imageUrls.size() - 1))
+                    .load(imageUrls.get(startIndex))
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.ivStory);
 
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    for (int i =0; i<story.size(); i++){
-                        boolean seen = false;
-                        ParseObject image = story.get(i);
-                        List<ParseUser> users = image.getList("viewedBy");
-                        if (users != null) {
-                            if (users.contains(currentUser)){
-                                seen = true;
-                            }
-                        }
-                        if (!seen) {
-                            startIndex = i;
-                            break;
-                        }
-                    }
+
                     if (context.getClass().isAssignableFrom(MainActivity.class)) {
                         MainActivity activity = (MainActivity) context;
-                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+//                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+//                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+//                        activity.toolbar.setVisibility(View.INVISIBLE);
+                        ProfileFragment fragmentOne = new ProfileFragment();
+                        StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
+                        Transition changeTransform = TransitionInflater.from(context).
+                                inflateTransition(R.transition.change_image_transform);
+                        Transition changeBoundsTransform = TransitionInflater.from(context).
+                                inflateTransition(R.transition.change_bounds);
+                        Transition explodeTransform = TransitionInflater.from(context).
+                                inflateTransition(android.R.transition.fade);
+
+//                        fragmentTwo.setSharedElementEnterTransition(new DetailsTransition());
+//                        fragmentTwo.setEnterTransition(new Fade());
+//                        fragmentTwo.setExitTransition(new Fade());
+//                        fragmentTwo.setSharedElementReturnTransition(new DetailsTransition());
+
+                        fragmentOne.setSharedElementReturnTransition(changeTransform);
+                        fragmentOne.setExitTransition(explodeTransform);
+
+                        fragmentTwo.setSharedElementEnterTransition(changeTransform);
+                        fragmentTwo.setEnterTransition(explodeTransform);
+
+                        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.drawer_layout, fragmentTwo)
+                                .addToBackStack("transaction")
+                                .addSharedElement(holder.ivStory, "story");
+                        ft.commit();
                         activity.toolbar.setVisibility(View.INVISIBLE);
+//                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                         FriendActivity activity = (FriendActivity) context;
