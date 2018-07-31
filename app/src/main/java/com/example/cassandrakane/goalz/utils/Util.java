@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -210,25 +209,24 @@ public class Util {
         setImageBitmap(bitmap, context, ivProfile);
     }
 
-    public static void setNotifications(ParseUser user) {
-        // TODO delete if unneccessary? where should notifs appear?
-        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
-        query2.whereEqualTo("toUser", user);
-        int count = 0;
-        try {
-            count += query2.count();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
-        query3.whereEqualTo("user", user);
-        try {
-            count += query3.count();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void setNotifications(ParseUser user) {
+//        ParseQuery<SentFriendRequests> query2 = ParseQuery.getQuery("SentFriendRequests");
+//        query2.whereEqualTo("toUser", user);
+//        int count = 0;
+//        try {
+//            count += query2.count();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ParseQuery<SentFriendRequests> query3 = ParseQuery.getQuery("GoalRequests");
+//        query3.whereEqualTo("user", user);
+//        try {
+//            count += query3.count();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void populateStoredGoals(Context context, ParseUser user, final TextView tvProgress, final TextView tvCompleted, final TextView tvFriends, TextView tvUsername, ImageView ivProfile, final List<Goal> goals, final List<Goal> incompleted) {
         ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
@@ -272,7 +270,7 @@ public class Util {
         //tvFriends.setText(String.valueOf(user.getList("friends").size()));
     }
 
-    public static void populateGoals(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
+    public static void populateNotificationsHeader(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
         List<ParseObject> lGoals = user.getList("goals");
         int completedGoals = 0;
         int progressGoals = 0;

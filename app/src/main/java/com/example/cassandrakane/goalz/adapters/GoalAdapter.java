@@ -320,7 +320,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         fragmentTwo.setEnterTransition(explodeTransform);
 
                         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.drawer_layout, fragmentTwo)
+                                .replace(R.id.root_layout, fragmentTwo)
                                 .addToBackStack("transaction")
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();

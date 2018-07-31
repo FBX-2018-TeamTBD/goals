@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.MainActivity;
+import com.example.cassandrakane.goalz.NotificationsFragment;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -43,13 +44,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<ParseUser> mFriends;
     private List<SentFriendRequests> friendRequests;
     Context context;
+    NotificationsFragment notificationsFragment;
 
-    public NotificationAdapter(List<TextNotification> texts, List<Goal> goals, List<GoalRequests> goalReq, List<ParseUser> friends, List<SentFriendRequests> friendReq) {
+    public NotificationAdapter(List<TextNotification> texts, List<Goal> goals,
+                               List<GoalRequests> goalReq, List<ParseUser> friends,
+                               List<SentFriendRequests> friendReq, NotificationsFragment notifFrag) {
         this.mTextNotifications = texts;
         this.mGoals = goals;
         this.goalRequests = goalReq;
         this.mFriends = friends;
         this.friendRequests = friendReq;
+        this.notificationsFragment = notifFrag;
     }
 
     @NonNull
@@ -98,6 +103,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View view) {
                         ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
                         addGoal(goal, updatedPos);
+                        notificationsFragment.setNotificationHeader();
                         ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -127,6 +133,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View view) {
                         ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
                         addFriend(friend, updatedPos2);
+                        notificationsFragment.setNotificationHeader();
                         ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -186,7 +193,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     object.delete();
                     object.saveInBackground();
                     mTextNotifications.remove(position);
-                    Util.setNotifications(ParseUser.getCurrentUser());
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -260,7 +266,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //                        frag.noGoalsPage.setVisibility(View.VISIBLE);
 //                    }
 //                    NavigationView navigationView = ((NotificationsActivity) context).navigationView;
-                    Util.setNotifications(ParseUser.getCurrentUser());
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -355,7 +360,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //                        frag.noFriendsPage.setVisibility(View.VISIBLE);
 //                    }
 //                    NavigationView navigationView = ((MainActivity) context).navigationView;
-                    Util.setNotifications(ParseUser.getCurrentUser());
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();

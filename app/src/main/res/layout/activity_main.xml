@@ -18,7 +18,7 @@
         android:layout_below="@+id/toolbar"
         android:layout_marginBottom="-10dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/black"
+        android:indeterminateTint="@color/darkOrange"
         android:visibility="invisible" />
 
     <android.support.v7.widget.Toolbar
