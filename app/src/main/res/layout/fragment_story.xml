@@ -8,16 +8,18 @@
     tools:context=".StoryFragment">
 
     <ImageView
-        android:id="@+id/ivImage"
+        android:id="@+id/ivStory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:transitionName="story" />
 
     <VideoView
         android:id="@+id/viewStory"
         android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:transitionName="story"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"

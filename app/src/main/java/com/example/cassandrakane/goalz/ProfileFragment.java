@@ -94,7 +94,7 @@ public class ProfileFragment extends Fragment {
                     completed.add(0, goal);
                 } else {
                     progressGoals += 1;
-                    goals.add(0, goal);
+                    goals.add(goal);
                 }
             }
             goals.addAll(completed);

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,7 +46,7 @@ public class StoryFragment extends Fragment {
     private int mIndex;
     private ParseUser currentUser;
 
-    @BindView(R.id.ivImage) ImageView ivImage;
+    @BindView(R.id.ivStory) ImageView ivImage;
     @BindView(R.id.viewStory) VideoView viewStory;
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
@@ -145,7 +146,7 @@ public class StoryFragment extends Fragment {
         btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnInfo.setVisibility(View.GONE);
+
                 tvUsername.setVisibility(View.INVISIBLE);
                 tvDateAdded.setVisibility(View.INVISIBLE);
 //                holder.rvStory.setVisibility(View.INVISIBLE);
@@ -153,23 +154,84 @@ public class StoryFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        int fromLoc[] = new int[2];
+                        btnInfo.getLocationOnScreen(fromLoc);
+                        float startX = fromLoc[0];
+                        float startY = fromLoc[1];
+                        Animation infoAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.info_slide_left);
                         tvUsername.setVisibility(View.VISIBLE);
                         tvDateAdded.setVisibility(View.VISIBLE);
+                        btnInfo.startAnimation(infoAnimation);
                         tvUsername.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
                         tvDateAdded.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
+
+                        infoAnimation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                btnInfo.setVisibility(View.GONE);
+                                btnInfo2.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+
                     }
                 }, 100);
-                btnInfo2.setVisibility(View.VISIBLE);
             }
         });
 
         btnInfo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnInfo2.setVisibility(View.GONE);
-                tvUsername.setVisibility(View.INVISIBLE);
-                tvDateAdded.setVisibility(View.INVISIBLE);
-                btnInfo.setVisibility(View.VISIBLE);
+                Animation detailAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_back);
+                Animation infoAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.info_slide_right);
+                tvUsername.startAnimation(detailAnimation);
+                tvDateAdded.startAnimation(detailAnimation);
+                btnInfo2.startAnimation(infoAnimation);
+
+                detailAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        tvUsername.setVisibility(View.INVISIBLE);
+                        tvDateAdded.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                infoAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        btnInfo.setVisibility(View.VISIBLE);
+                        btnInfo2.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
         });
 
