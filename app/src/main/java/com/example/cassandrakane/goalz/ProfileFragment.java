@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
@@ -26,7 +25,6 @@ public class ProfileFragment extends Fragment {
 
     @BindView(R.id.rvGoals) RecyclerView rvGoals;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
-    @BindView(R.id.btnAdd) Button btnAdd;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     MainActivity mainActivity;
@@ -60,20 +58,13 @@ public class ProfileFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mainActivity.refreshAsync(swipeContainer);
+                populateProfile();
             }
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
                 android.R.color.holo_green_light,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_red_light);
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainActivity.addGoal(view);
-            }
-        });
 
         populateProfile();
 
@@ -98,6 +89,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
             goals.addAll(completed);
+            swipeContainer.setRefreshing(false);
         }
         if (completedGoals == 0 && progressGoals == 0) {
             noGoalPage.setVisibility(View.VISIBLE);

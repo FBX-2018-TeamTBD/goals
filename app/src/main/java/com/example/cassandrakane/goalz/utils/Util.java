@@ -328,13 +328,6 @@ public class Util {
             goals.addAll(completed);
             swipe.setRefreshing(false);
         }
-
-        tvProgress.setText(String.valueOf(progressGoals));
-        tvCompleted.setText(String.valueOf(completedGoals));
-        tvFriends.setText(String.valueOf(user.getList("friends").size()));
-        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
-        ParseFile pfile = (ParseFile) user.get("image");
-        setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
     }
 
     public static void setImageBitmap(Bitmap bitmap, Context context, ImageView ivProfile) {

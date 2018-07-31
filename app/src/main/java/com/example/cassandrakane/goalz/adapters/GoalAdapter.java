@@ -72,7 +72,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        navigationHelper = personal ? new NavigationHelper(((MainActivity) context).viewPager) : null;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -129,11 +128,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                     NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
                                     notificationHelper.cancelReminder(finalGoal);
                                     goals.remove(finalGoal);
-                                    if (finalGoal.getCompleted()) {
-                                        ((MainActivity) context).tvProgress.setText(String.valueOf(((MainActivity) context).completedGoals - 1));
-                                    } else {
-                                        ((MainActivity) context).tvProgress.setText(String.valueOf(((MainActivity) context).progressGoals - 1));
-                                    }
                                     notificationHelper.cancelReminder(finalGoal);
                                     removeGoal(finalGoal.getObjectId());
                                 }
@@ -298,7 +292,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
-                        activity.toolbar.setVisibility(View.INVISIBLE);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                         FriendActivity activity = (FriendActivity) context;
