@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
+import com.example.cassandrakane.goalz.utils.Util;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -47,6 +48,7 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_signup);
 
         ButterKnife.bind(this);

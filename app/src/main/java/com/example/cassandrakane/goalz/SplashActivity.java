@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,7 @@ import android.view.WindowManager;
 
 import com.parse.ParseUser;
 
-import utils.DataFetcher;
+import com.example.cassandrakane.goalz.utils.DataFetcher;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash);
         currentUser = ParseUser.getCurrentUser();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

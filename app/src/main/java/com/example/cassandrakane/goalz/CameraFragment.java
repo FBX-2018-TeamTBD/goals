@@ -292,7 +292,7 @@ public class CameraFragment extends Fragment {
             }
 
             // capture image with custom size
-            int width = 1440;
+            int width = 1920;
             int height = 1080;
 
 //            if (jpegSizes != null && jpegSizes.length > 0){

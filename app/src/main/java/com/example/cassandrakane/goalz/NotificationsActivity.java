@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.NotificationsPagerAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -23,7 +25,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.Util;
 
 public class NotificationsActivity extends AppCompatActivity {
 
@@ -46,6 +47,7 @@ public class NotificationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_notifications);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);

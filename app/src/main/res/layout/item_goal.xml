@@ -5,33 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
         card_view:cardCornerRadius="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/ivStory"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="16dp"
                 android:layout_toRightOf="@+id/ivStory"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/title"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvDescription"
@@ -40,9 +43,11 @@
                 android:layout_alignLeft="@id/tvTitle"
                 android:layout_below="@+id/tvTitle"
                 android:layout_marginTop="6dp"
+                android:layout_toRightOf="@id/tvStreak"
                 android:fontFamily="@font/quicksand_regular"
                 android:text="@string/description"
-                android:textColor="@color/grey" />
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvProgress"
@@ -50,9 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/tvDescription"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/_0_40"
                 android:textColor="@color/black" />
@@ -61,51 +64,55 @@
                 android:id="@+id/tvStreak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/tvProgress"
-                android:layout_alignLeft="@+id/ivProfile"
-                android:layout_marginLeft="20dp"
+                android:layout_alignTop="@+id/tvFriends"
+                android:layout_toLeftOf="@id/ivStar"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/_0"
                 android:textColor="@color/black"
-                android:text="@string/_0" />
+                android:textSize="16sp" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
                 android:id="@+id/ivStory"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
+                style="@style/SelectableItemBackground"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                app:srcCompat="@drawable/add_circle" />
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_placeholder_add" />
 
             <ImageView
                 android:id="@+id/ivStar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_toRightOf="@+id/tvStreak"
-                android:layout_alignTop="@+id/tvStreak"
-                android:layout_marginLeft="5dp"
-                android:visibility="invisible"
+                android:layout_alignTop="@+id/tvTitle"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="4dp"
+                android:layout_toLeftOf="@+id/tvFriends"
                 android:tint="@color/lightOrange"
+                android:visibility="visible"
                 app:srcCompat="@drawable/star" />
 
             <TextView
                 android:id="@+id/tvFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ivFriends"
-                android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@id/ivFriends"
+                android:layout_alignBottom="@+id/tvTitle"
+                android:layout_marginBottom="2dp"
                 android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/ivFriends"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/_0"
                 android:textColor="@color/black"
-                android:text="@string/_0" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/ivFriends"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_alignRight="@+id/tvProgress"
                 android:layout_alignTop="@+id/tvTitle"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="6dp"
                 android:tint="@color/lightOrange"
                 app:srcCompat="@drawable/friend" />
 

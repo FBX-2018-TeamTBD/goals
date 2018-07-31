@@ -30,11 +30,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="58dp"
-        android:textColor="#ffffff"
+        android:text="TextView"
         android:textAlignment="center"
-        android:background="#CB000000"
-        android:visibility="gone"
-        android:text="TextView" />
+        android:textSize="22sp"
+        android:fontFamily="@font/quicksand_medium"
+        android:textColor="#ffffff"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -68,8 +69,23 @@
         android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:fontFamily="@font/quicksand_medium"
+        android:text="Username"
+        android:visibility="invisible"
         android:textColor="@color/white"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvDateAdded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvUsername"
+        android:layout_below="@+id/tvUsername"
+        android:layout_weight="1"
+        android:fontFamily="@font/quicksand_medium"
+        android:visibility="invisible"
+        android:text="Date Added"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
 
     <ImageButton
         android:id="@+id/btnClose"
@@ -82,6 +98,27 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/btnInfo"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignEnd="@+id/tvDateAdded"
+        android:layout_alignTop="@+id/tvUsername"
+        android:background="@null"
+        android:src="@drawable/info_button"
+        android:tint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/btnInfo2"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignTop="@+id/tvUsername"
+        android:layout_toStartOf="@+id/tvUsername"
+        android:background="@null"
+        android:src="@drawable/info_button"
+        android:visibility="invisible"
+        android:tint="@color/white" />
 
     <ProgressBar
         android:id="@+id/pbProgress"
