@@ -160,7 +160,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
     public void sendGoalRequest(Goal goal, List<ParseUser> pending) {
         for (int i = 0; i < pending.size(); i++) {
             Log.i("sdf", pending.get(i).getUsername());
-            GoalRequests request = new GoalRequests(pending.get(i), (Goal) goal);
+            GoalRequests request = new GoalRequests(pending.get(i), ParseUser.getCurrentUser(), (Goal) goal);
             request.saveInBackground();
         }
     }

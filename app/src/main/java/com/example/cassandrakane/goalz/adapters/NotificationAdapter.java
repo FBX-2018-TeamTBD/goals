@@ -220,7 +220,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         currentUser.fetch();
                         moveUser(goal);
                         Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
-                        deleteGoalRequest(position);
+                        deleteGoalRequest(position, true);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
@@ -248,13 +248,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         removeUserfromPending(goal);
     }
 
-    public void deleteGoalRequest(final int position) {
+    public void deleteGoalRequest(final int position, final boolean sendNotif) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("GoalRequests");
         query.whereEqualTo("objectId", goalRequests.get(position).getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
                 try {
+                    GoalRequests request = (GoalRequests) object;
+                    ParseUser fromUser = request.getFromUser();
+                    if (sendNotif && fromUser != null) {
+                        String textNotification = String.format("%s accepted your goal request!", ParseUser.getCurrentUser().fetchIfNeeded().getUsername());
+                        sendTextNotification(textNotification, fromUser);
+                    }
                     object.delete();
                     object.saveInBackground();
                     goalRequests.remove(position);
@@ -306,7 +312,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         friends.remove(ParseUser.getCurrentUser());
         goal.setFriends(friends);
         goal.saveInBackground();
-        deleteGoalRequest(position);
+        deleteGoalRequest(position, false);
         removeUserfromPending(goal);
     }
 
