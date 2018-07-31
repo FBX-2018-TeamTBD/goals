@@ -96,7 +96,7 @@ public class DataFetcher {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (goal.getCompleted()) {
+                if (goal != null && goal.getCompleted()) {
                     friendGoals.add(goal);
                 } else {
                     friendGoals.add(0, goal);

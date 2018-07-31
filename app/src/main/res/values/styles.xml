@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryDark">@color/darkOrange</item>
         <item name="colorAccent">@color/orange</item>
+        <!-- specify shared element enter and exit transitions -->
+        <!--<item name="android:windowSharedElementEnterTransition">@transition/change_bounds</item>-->
+        <!--<item name="android:windowSharedElementExitTransition">@transition/change_bounds</item>-->
     </style>
 
     <style name="ProgressBarStyle">

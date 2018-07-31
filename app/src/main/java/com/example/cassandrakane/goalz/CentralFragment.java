@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.example.cassandrakane.goalz.utils.HorizontalPagerAdapter;
-import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseUser;
 
 import butterknife.BindView;
@@ -61,7 +60,6 @@ public class CentralFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
 
         user = ParseUser.getCurrentUser();
-        Util.setNotifications(user);
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override

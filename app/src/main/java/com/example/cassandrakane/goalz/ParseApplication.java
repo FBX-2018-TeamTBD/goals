@@ -8,6 +8,7 @@ import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.TextNotification;
 import com.example.cassandrakane.goalz.models.Video;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
@@ -29,6 +30,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(ApprovedFriendRequests.class);
         ParseObject.registerSubclass(RemovedFriends.class);
         ParseObject.registerSubclass(GoalRequests.class);
+        ParseObject.registerSubclass(TextNotification.class);
         ParseObject.registerSubclass(Video.class);
 
         // Use for troubleshooting -- remove this line for production
