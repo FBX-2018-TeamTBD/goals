@@ -32,11 +32,10 @@ public class NavigationHelper {
         viewPager.setCurrentItem(2);
     }
 
-//    public void toNotifications(boolean toRight) {
-//        Intent i = new Intent(activity, NotificationsActivity.class);
-//        activity.startActivity(i);
-//        animateTransition(toRight);
-//    }
+    public void toNotifications() {
+        // TODO update when notifications fragment moved
+        viewPager.setCurrentItem(4);
+    }
 
     public void logout(Activity activity) {
         List<Goal> goals = ParseUser.getCurrentUser().getList("goals");
@@ -55,11 +54,4 @@ public class NavigationHelper {
         activity.finish();
     }
 
-//    public void animateTransition(boolean toRight) {
-//        if (toRight) {
-//            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-//        } else {
-//            activity.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-//        }
-//    }
 }

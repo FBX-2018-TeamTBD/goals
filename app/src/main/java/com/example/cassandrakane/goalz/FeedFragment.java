@@ -68,7 +68,6 @@ public class FeedFragment extends Fragment {
         rvStory.setLayoutManager(layoutManager);
         rvStory.setAdapter(storyAdapter);
 
-        mainActivity = (MainActivity) getActivity();
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
         rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));

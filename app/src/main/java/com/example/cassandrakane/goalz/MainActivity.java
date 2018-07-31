@@ -5,17 +5,18 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
+import com.example.cassandrakane.goalz.utils.EventBus;
 import com.example.cassandrakane.goalz.utils.VerticalPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     // Start page index. 0 - top page, 1 - central page, 2 - bottom page.
     private static final int CENTRAL_PAGE_INDEX = 1;
@@ -31,7 +32,7 @@ public class MainActivity extends FragmentActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
-        centralFragment = new CentralFragment();
+        centralFragment = (CentralFragment) getSupportFragmentManager().findFragmentById(R.id.main_central_fragment);
 
         snapPageWhenLayoutIsReady(verticalPager, CENTRAL_PAGE_INDEX);
     }
@@ -74,4 +75,15 @@ public class MainActivity extends FragmentActivity {
         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getInstance().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        EventBus.getInstance().unregister(this);
+        super.onPause();
+    }
 }

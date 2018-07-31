@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.example.cassandrakane.goalz.adapters.MainPagerAdapter;
+import com.example.cassandrakane.goalz.utils.HorizontalPagerAdapter;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseUser;
 
@@ -23,12 +23,15 @@ public class CentralFragment extends Fragment {
     ParseUser user;
 
     @BindView(R.id.progressBar) public ProgressBar progressBar;
-    @BindView(R.id.pager) public ViewPager viewPager;
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.btnAddFriend) public Button btnAddFriend;
     @BindView(R.id.btnAddGoal) public Button btnAddGoal;
+    @BindView(R.id.horizontal_pager) ViewPager horizontalPager;
 
-    public MainPagerAdapter pagerAdapter;
+    Fragment profileFragment;
+    CameraFragment cameraFragment;
+    FeedFragment feedFragment;
+
     private MainActivity mainActivity;
 
     public CentralFragment() {
@@ -48,9 +51,12 @@ public class CentralFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        pagerAdapter = new MainPagerAdapter(getActivity().getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(1);
+        profileFragment = new ProfileFragment();
+        cameraFragment = new CameraFragment();
+        feedFragment = new FeedFragment();
+
+        horizontalPager.setAdapter(new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity()));
+        horizontalPager.setCurrentItem(1);
 
         mainActivity = (MainActivity) getActivity();
 

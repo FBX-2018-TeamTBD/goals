@@ -307,20 +307,16 @@ public class Util {
         return cal.getTime();
     }
 
-    public static void populateGoalsAsync(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
+    public static void populateGoalsAsync(ParseUser user, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
         List<ParseObject> lGoals = user.getList("goals");
-        int completedGoals = 0;
-        int progressGoals = 0;
         goals.clear();
         List<Goal> completed = new ArrayList<>();
         if (lGoals != null) {
             for (int i = 0; i < lGoals.size(); i++) {
                 Goal g = (Goal) lGoals.get(i);
                 if (g.getCompleted()) {
-                    completedGoals += 1;
                     completed.add(0, g);
                 } else {
-                    progressGoals += 1;
                     goals.add(0, g);
                     incompleted.add(0, g);
                 }

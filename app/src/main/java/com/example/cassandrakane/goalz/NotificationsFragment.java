@@ -43,6 +43,7 @@ public class NotificationsFragment extends Fragment {
     List<Goal> completed;
     List<Goal> incompleted;
 
+    CentralFragment centralFragment;
 
     @BindView(R.id.tvProgress) TextView tvProgress;
     @BindView(R.id.tvCompleted) TextView tvCompleted;
@@ -62,11 +63,13 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mainActivity = (MainActivity) getActivity();
+        super.onAttach(mainActivity.getBaseContext());
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         ButterKnife.bind(this, view);
 
         ParseUser user = ParseUser.getCurrentUser();
-        mainActivity = (MainActivity) getActivity();
         goals = new ArrayList<>();
         completed = new ArrayList<>();
         incompleted = new ArrayList<>();
@@ -76,7 +79,7 @@ public class NotificationsFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavigationHelper navigationHelper = new NavigationHelper(mainActivity.centralFragment.viewPager);
+                NavigationHelper navigationHelper = new NavigationHelper(mainActivity.centralFragment.horizontalPager);
                 navigationHelper.logout(mainActivity);
             }
         });
