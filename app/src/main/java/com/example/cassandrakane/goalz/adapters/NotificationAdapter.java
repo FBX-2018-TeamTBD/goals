@@ -80,6 +80,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View view) {
                         ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
                         addGoal(goal, position);
+                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 goalRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +88,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View view) {
                         ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
                         removeUserfromFriends(goal, position);
+                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;
@@ -107,6 +109,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View view) {
                         ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
                         addFriend(friend, updatedPos);
+                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 friendRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +117,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View view) {
                         ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
                         deleteSentRequest(updatedPos);
+                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;
@@ -189,11 +193,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             e.printStackTrace();
         }
         List<ParseUser> approved = goal.getApprovedUsers();
-        try {
-            ParseObject.fetchAll(approved);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ParseObject.fetchAll(approved);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         approved.add(ParseUser.getCurrentUser());
         goal.setApprovedUsers(approved);
         removeUserfromPending(goal);
@@ -233,11 +237,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             e.printStackTrace();
         }
         List<ParseUser> pending = goal.getPendingUsers();
-        try {
-            ParseObject.fetchAll(pending);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ParseObject.fetchAll(pending);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         pending.remove(ParseUser.getCurrentUser());
         goal.setPendingUsers(pending);
         goal.saveInBackground();
@@ -250,11 +254,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             e.printStackTrace();
         }
         List<ParseUser> friends = goal.getFriends();
-        try {
-            ParseObject.fetchAll(friends);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ParseObject.fetchAll(friends);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         friends.remove(ParseUser.getCurrentUser());
         goal.setFriends(friends);
         goal.saveInBackground();
