@@ -292,7 +292,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         MainActivity activity = (MainActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
                         activity.toolbar.setVisibility(View.INVISIBLE);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {

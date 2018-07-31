@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:visibility="gone"
         android:indeterminate="true"
-        android:indeterminateTint="@android:color/background_dark" />
+        android:indeterminateTint="@color/darkOrange" />
 
     <EditText
         android:id="@+id/tvUsername"
