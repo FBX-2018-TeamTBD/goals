@@ -131,7 +131,7 @@ public class StoryFragment extends Fragment {
                 if (activity.getClass().isAssignableFrom(MainActivity.class)) {
                     MainActivity mainActivity = (MainActivity) activity;
                     mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-                    mainActivity.toolbar.setVisibility(View.VISIBLE);
+                    mainActivity.centralFragment.toolbar.setVisibility(View.VISIBLE);
                 }
                 if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
                     FriendActivity friendActivity = (FriendActivity) activity;

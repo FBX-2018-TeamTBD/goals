@@ -80,9 +80,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 textViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
                         deleteNotification(position);
-                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;
@@ -101,18 +101,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 goalRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
                         addGoal(goal, updatedPos);
                         notificationsFragment.setNotificationHeader();
-                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 goalRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
                         removeUserfromFriends(goal, updatedPos);
-                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;
@@ -131,18 +131,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 friendRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
                         addFriend(friend, updatedPos2);
                         notificationsFragment.setNotificationHeader();
-                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 friendRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).progressBar.setVisibility(View.VISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
                         deleteSentRequest(updatedPos2);
-                        ((MainActivity) context).progressBar.setVisibility(View.INVISIBLE);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;

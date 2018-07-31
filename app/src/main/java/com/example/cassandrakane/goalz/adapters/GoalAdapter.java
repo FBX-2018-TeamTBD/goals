@@ -62,7 +62,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     float startX = 0;
     float endX = 0;
     int startIndex = 0;
-    File tempFile;
     NavigationHelper navigationHelper;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
@@ -75,7 +74,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        navigationHelper = personal ? new NavigationHelper(((MainActivity) context).viewPager) : null;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -325,7 +323,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();
 
-                        activity.toolbar.setVisibility(View.INVISIBLE);
+                        activity.centralFragment.toolbar.setVisibility(View.INVISIBLE);
 //                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {
