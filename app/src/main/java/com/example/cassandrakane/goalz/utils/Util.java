@@ -105,7 +105,6 @@ public class Util {
         builder.show();
     }
 
-
     public static void onLaunchCamera(Activity context, String photoFileName) {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
