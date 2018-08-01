@@ -633,12 +633,6 @@ public class VerticalPager extends ViewGroup {
         }
     }
 
-    public void scrollDown() {
-        if (mNextPage == INVALID_SCREEN && mCurrentPage < getChildCount() - 1 && mScroller.isFinished()) {
-            snapToPage(mCurrentPage + 1);
-        }
-    }
-
     public int getScreenForView(View v) {
         int result = -1;
         if (v != null) {

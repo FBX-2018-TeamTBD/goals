@@ -45,6 +45,6 @@
         android:fontFamily="@font/quicksand_medium"
         android:text="friends"
         android:textColor="@color/orange"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
 </RelativeLayout>

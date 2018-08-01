@@ -25,7 +25,7 @@ public class CentralFragment extends Fragment {
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.btnAddFriend) public Button btnAddFriend;
     @BindView(R.id.btnAddGoal) public Button btnAddGoal;
-    @BindView(R.id.horizontal_pager) ViewPager horizontalPager;
+    @BindView(R.id.horizontal_pager) public ViewPager horizontalPager;
 
     Fragment profileFragment;
     CameraFragment cameraFragment;

@@ -76,7 +76,7 @@ public class HorizontalViewPager extends ViewPager {
          */
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            return Math.abs(distanceX) > Math.abs(distanceY);
+            return Math.abs(distanceX + 60) > Math.abs(distanceY);
         }
 
     }

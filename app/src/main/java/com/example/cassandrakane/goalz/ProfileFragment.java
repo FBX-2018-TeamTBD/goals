@@ -52,8 +52,10 @@ public class ProfileFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, true);
-        rvGoals.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvGoals.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rvGoals.setAdapter(goalAdapter);
+
+        rvGoals.setNestedScrollingEnabled(true);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

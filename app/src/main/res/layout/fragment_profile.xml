@@ -1,6 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,12 +9,17 @@
         android:layout_marginTop="3dp"
         android:layout_below="@+id/toolbar" >
 
+        <ScrollView
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvGoals"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
+        </ScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -24,7 +27,6 @@
         android:id="@+id/noGoals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
         android:visibility="gone"
         android:layout_marginTop="10dp" >
 

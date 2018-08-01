@@ -40,7 +40,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -85,6 +84,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         final Goal goal = goals.get(position);
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
+
+        MainActivity activity = (MainActivity) context;
+
+        navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
 
         final Goal finalGoal = goal;
         final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
@@ -229,21 +232,24 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 public void onClick(View view) {
                     Intent i = new Intent(context, FriendsModalActivity.class);
                     i.putExtra(Goal.class.getSimpleName(), goal);
+                    i.putExtra("personal", personal);
                     context.startActivity(i);
                 }
             });
         } else {
             holder.tvFriends.setText("");
-            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
-            holder.ivFriends.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(context, SearchFriendsActivity.class);
-                    i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
-                    i.putExtra(Goal.class.getSimpleName(), goal);
-                    context.startActivity(i);
-                }
-            });
+            if (!personal) {
+                holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
+                holder.ivFriends.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(context, SearchFriendsActivity.class);
+                        i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
+                        i.putExtra(Goal.class.getSimpleName(), goal);
+                        context.startActivity(i);
+                    }
+                });
+            }
         }
 
         if (goal.getCompleted()) {

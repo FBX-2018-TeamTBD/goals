@@ -15,7 +15,6 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tablayout"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="-10dp"
         android:indeterminate="true"
@@ -70,11 +69,10 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-
     <com.example.cassandrakane.goalz.utils.HorizontalViewPager
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
         android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/horizontal_pager">
     </com.example.cassandrakane.goalz.utils.HorizontalViewPager>
 
