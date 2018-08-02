@@ -2,7 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +30,11 @@ public class ProfileFragment extends Fragment {
 
     private List<Goal> goals;
     private GoalAdapter goalAdapter;
-    public LinearLayoutManager linearLayout;
 
     public int completedGoals = 0;
     public int progressGoals = 0;
 
     public ProfileFragment() {
-        linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class ProfileFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, true);
-        rvGoals.setLayoutManager(linearLayout);
+        rvGoals.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvGoals.setAdapter(goalAdapter);
 
         populateProfile();

@@ -196,7 +196,7 @@ public class AddGoalActivity extends AppCompatActivity {
             selectedFriends.add(ParseUser.getCurrentUser());
             List<ParseUser> approved = new ArrayList<>();
             approved.add(ParseUser.getCurrentUser());
-            Goal goal = new Goal(etTitle.getText().toString(), etDescription.getText().toString(),
+            Goal goal = new Goal(etTitle.getText().toString(),
                     Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
                     selectedFriends, approved, pendingFriends, usersAdded);
