@@ -46,6 +46,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -85,87 +86,89 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
 
-        MainActivity activity = (MainActivity) context;
+        if (personal) {
+            MainActivity activity = (MainActivity) context;
 
-        navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
+            navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
 
-        final Goal finalGoal = goal;
-        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent motionEvent) {
-                return true;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                startX = motionEvent.getX();
-                endX = motionEvent1.getX();
-                if (endX >= startX + 60) {
-                    navigationHelper.toCamera();
-                    startX = 0;
-                    endX = 0;
-                } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed();
-                    startX = 0;
-                    endX = 0;
+            final Goal finalGoal = goal;
+            final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
+                @Override
+                public boolean onDown(MotionEvent motionEvent) {
+                    return true;
                 }
-                return true;
-            }
 
-            @Override
-            public void onLongPress(MotionEvent motionEvent) {
-                if (Math.abs(endX - startX) < 10) {
-                    new AlertDialog.Builder(context)
-                            .setTitle(R.string.delete_goal)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
-                                    notificationHelper.cancelReminder(finalGoal);
-                                    goals.remove(finalGoal);
-                                    notificationHelper.cancelReminder(finalGoal);
-                                    removeGoal(finalGoal.getObjectId());
-                                }
-                            })
-                            .setNegativeButton(R.string.no, null)
-                            .show();
+                @Override
+                public void onShowPress(MotionEvent motionEvent) {
+
                 }
-            }
 
-            @Override
-            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                startX = motionEvent.getX();
-                endX = motionEvent1.getX();
-                if (endX >= startX + 60) {
-                    navigationHelper.toCamera();
-                    startX = 0;
-                    endX = 0;
-                } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed();
-                    startX = 0;
-                    endX = 0;
+                @Override
+                public boolean onSingleTapUp(MotionEvent motionEvent) {
+                    return false;
                 }
-                return false;
-            }
 
-        });
+                @Override
+                public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                    startX = motionEvent.getX();
+                    endX = motionEvent1.getX();
+                    if (endX >= startX + 60) {
+                        navigationHelper.toCamera();
+                        startX = 0;
+                        endX = 0;
+                    } else if (startX >= endX + 50) {
+                        navigationHelper.toFeed();
+                        startX = 0;
+                        endX = 0;
+                    }
+                    return true;
+                }
 
-        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return gestureDetector.onTouchEvent(motionEvent);
-            }
-        });
+                @Override
+                public void onLongPress(MotionEvent motionEvent) {
+                    if (Math.abs(endX - startX) < 10) {
+                        new AlertDialog.Builder(context)
+                                .setTitle(R.string.delete_goal)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
+                                        notificationHelper.cancelReminder(finalGoal);
+                                        goals.remove(finalGoal);
+                                        notificationHelper.cancelReminder(finalGoal);
+                                        removeGoal(finalGoal.getObjectId());
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    }
+                }
+
+                @Override
+                public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                    startX = motionEvent.getX();
+                    endX = motionEvent1.getX();
+                    if (endX >= startX + 60) {
+                        navigationHelper.toCamera();
+                        startX = 0;
+                        endX = 0;
+                    } else if (startX >= endX + 50) {
+                        navigationHelper.toFeed();
+                        startX = 0;
+                        endX = 0;
+                    }
+                    return false;
+                }
+
+            });
+
+            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+        }
 
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
@@ -173,6 +176,20 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 // check if all users have added here
                 if (!goal.getIsItemAdded()) {
                     goal.setStreak(0);
+
+                    // stores the objectId of users who lost a streak
+                    ArrayList<String> streakLostBy = new ArrayList<>();
+                    Map<String, String> userAdded = goal.getUserAdded();
+
+                    if (userAdded != null) {
+                        for (Map.Entry<String, String> entry : userAdded.entrySet()) {
+                            String userId = entry.getKey();
+                            String value = entry.getValue();
+                            if (value.equals("false")) {
+                                streakLostBy.add(userId);
+                            }
+                        }
+                    }
 //                    final ArrayList<ParseObject> story = goal.getStory();
 //                    try{
 //                        InputStream inputStream = context.getResources().openRawResource(R.raw.crying_gif);
@@ -238,7 +255,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             holder.tvFriends.setText("");
-            if (!personal) {
+            if (personal) {
                 holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
                 holder.ivFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -249,6 +266,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         context.startActivity(i);
                     }
                 });
+            } else {
+                holder.ivFriends.setImageDrawable(null);
             }
         }
 
@@ -324,7 +343,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         fragmentTwo.setEnterTransition(explodeTransform);
 
                         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.root_layout, fragmentTwo)
+                                .replace(R.id.main_central_fragment, fragmentTwo)
                                 .addToBackStack("transaction")
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();

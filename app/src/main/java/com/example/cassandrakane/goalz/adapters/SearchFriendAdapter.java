@@ -20,6 +20,7 @@ import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -28,7 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.Util;
 
 public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapter.ViewHolder> implements Filterable {
 
@@ -59,7 +59,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
         holder.tvUsername.setText(user.getUsername());
 
         ParseFile image = (ParseFile) user.get("image");
-        Util.setImage(user, image, context.getResources(), holder.ivProfile, 8.0f);
+        Util.setImage(image, context.getResources(), holder.ivProfile, 20.0f);
         if (selectedFriends.contains(user)) {
             holder.addBtn.setBackground(context.getDrawable(R.drawable.check));
             holder.addBtn.setTag(R.drawable.check);

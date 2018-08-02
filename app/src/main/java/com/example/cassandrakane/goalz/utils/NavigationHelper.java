@@ -8,6 +8,10 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.LoginActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -45,6 +49,25 @@ public class NavigationHelper {
                 notificationHelper.cancelReminder(goal);
             }
         }
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Goal");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                ParseObject.unpinAllInBackground(objects);
+            }
+        });
+
+        ParseQuery<ParseUser> queryTwo = ParseUser.getQuery();
+        queryTwo.fromLocalDatastore();
+        queryTwo.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                ParseObject.unpinAllInBackground(objects);
+            }
+        });
+
         ParseUser.logOut();
         Toast.makeText(activity, "Successfully logged out.", Toast.LENGTH_LONG);
         Intent i = new Intent(activity, LoginActivity.class);

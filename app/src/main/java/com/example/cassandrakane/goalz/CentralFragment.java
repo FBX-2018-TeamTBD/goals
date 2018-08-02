@@ -13,6 +13,9 @@ import android.widget.ProgressBar;
 import com.example.cassandrakane.goalz.utils.HorizontalPagerAdapter;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,6 +34,8 @@ public class CentralFragment extends Fragment {
     CameraFragment cameraFragment;
     FeedFragment feedFragment;
 
+    public List<Fragment> pages;
+
     private MainActivity mainActivity;
 
     public CentralFragment() {
@@ -40,6 +45,14 @@ public class CentralFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pages = new ArrayList<>();
+        profileFragment = new ProfileFragment();
+        cameraFragment = new CameraFragment();
+        feedFragment = new FeedFragment();
+
+        pages.add(cameraFragment);
+        pages.add(profileFragment);
+        pages.add(feedFragment);
     }
 
     @Override
@@ -50,11 +63,7 @@ public class CentralFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        profileFragment = new ProfileFragment();
-        cameraFragment = new CameraFragment();
-        feedFragment = new FeedFragment();
-
-        horizontalPager.setAdapter(new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity()));
+        horizontalPager.setAdapter(new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), pages));
         horizontalPager.setCurrentItem(1);
 
         mainActivity = (MainActivity) getActivity();

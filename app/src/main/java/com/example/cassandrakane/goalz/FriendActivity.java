@@ -81,7 +81,7 @@ public class FriendActivity extends AppCompatActivity {
         rvGoals.setAdapter(goalAdapter);
 
         ParseFile file = (ParseFile) user.get("image");
-        Util.setImage(user, file, getResources(), ivProfile, 16.0f);
+        Util.setImage(file, getResources(), ivProfile, 38.0f);
         user.unpinInBackground();
 
         user.pinInBackground("friends");
@@ -103,7 +103,7 @@ public class FriendActivity extends AppCompatActivity {
         });
 
         ParseFile pfile = (ParseFile) user.get("image");
-        Util.setImage(user, pfile, getResources(), ivProfile, 16.0f);
+        Util.setImage(pfile, getResources(), ivProfile, 40.0f);
         populateProfile();
     }
 

@@ -29,7 +29,7 @@ public class Image extends ParseObject{
         return getString("caption");
     }
 
-    public List<ParseUser> getViewdBy() { return getList("viewedBy"); }
+    public List<ParseUser> getViewedBy() { return getList("viewedBy"); }
 
     public void setImage(ParseFile image) {
         put("image", image);

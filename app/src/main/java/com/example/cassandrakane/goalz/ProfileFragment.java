@@ -2,7 +2,6 @@ package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,20 +22,22 @@ import butterknife.ButterKnife;
 
 public class ProfileFragment extends Fragment {
 
-    @BindView(R.id.rvGoals) RecyclerView rvGoals;
+    @BindView(R.id.rvGoals) public RecyclerView rvGoals;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     MainActivity mainActivity;
     private ParseUser user = ParseUser.getCurrentUser();
 
     private List<Goal> goals;
     private GoalAdapter goalAdapter;
+    public LinearLayoutManager linearLayout;
 
     public int completedGoals = 0;
     public int progressGoals = 0;
 
-    public ProfileFragment() { }
+    public ProfileFragment() {
+        linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,21 +53,8 @@ public class ProfileFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, true);
-        rvGoals.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rvGoals.setLayoutManager(linearLayout);
         rvGoals.setAdapter(goalAdapter);
-
-        rvGoals.setNestedScrollingEnabled(true);
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                populateProfile();
-            }
-        });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_blue_light,
-                android.R.color.holo_red_light);
 
         populateProfile();
 
@@ -91,7 +79,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
             goals.addAll(completed);
-            swipeContainer.setRefreshing(false);
         }
         if (completedGoals == 0 && progressGoals == 0) {
             noGoalPage.setVisibility(View.VISIBLE);

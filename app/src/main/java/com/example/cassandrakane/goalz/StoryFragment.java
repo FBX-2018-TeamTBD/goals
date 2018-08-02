@@ -1,6 +1,5 @@
 package com.example.cassandrakane.goalz;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -127,19 +126,37 @@ public class StoryFragment extends Fragment {
                 if (mHandler != null) {
                     mHandler.removeCallbacks(runnable);
                 }
-                Activity activity = getActivity();
-                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
-                    MainActivity mainActivity = (MainActivity) activity;
-                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-                    mainActivity.centralFragment.toolbar.setVisibility(View.VISIBLE);
-                }
-                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
-                    FriendActivity friendActivity = (FriendActivity) activity;
-                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
-                    friendActivity.cardView.setVisibility(View.VISIBLE);
-                    friendActivity.btnBack.setVisibility(View.VISIBLE);
-                }
+
+                View toolbar = getActivity().findViewById(R.id.toolbar);
+                toolbar.setVisibility(View.VISIBLE);
+                getActivity().onBackPressed();
+
+//                Activity activity = getActivity();
+//                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
+//                    MainActivity mainActivity = (MainActivity) activity;
+//                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+//                    mainActivity.toolbar.setVisibility(View.VISIBLE);
+//                }
+//                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
+//                    FriendActivity friendActivity = (FriendActivity) activity;
+//                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+//                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
+//                    friendActivity.cardView.setVisibility(View.VISIBLE);
+//                    friendActivity.btnBack.setVisibility(View.VISIBLE);
+//                }
+//                Activity activity = getActivity();
+//                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
+//                    MainActivity mainActivity = (MainActivity) activity;
+//                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+//                    mainActivity.centralFragment.toolbar.setVisibility(View.VISIBLE);
+//                }
+//                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
+//                    FriendActivity friendActivity = (FriendActivity) activity;
+//                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+//                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
+//                    friendActivity.cardView.setVisibility(View.VISIBLE);
+//                    friendActivity.btnBack.setVisibility(View.VISIBLE);
+//                }
             }
         });
 
@@ -320,7 +337,12 @@ public class StoryFragment extends Fragment {
                     }
             }, 5000);
         }
-        ParseUser user = object.getParseUser("user");
+        ParseUser user = null;
+        try {
+            user = object.getParseUser("user").fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (user != null) {
             tvUsername.setText(user.getUsername());
         }

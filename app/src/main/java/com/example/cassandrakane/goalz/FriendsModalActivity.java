@@ -49,7 +49,7 @@ public class FriendsModalActivity extends Activity {
         getWindow().setLayout(width, height);
 
         goal = getIntent().getParcelableExtra(Goal.class.getSimpleName());
-        personal = getIntent().getParcelableExtra("personal");
+        personal = getIntent().getBooleanExtra("personal", true);
 
         goalFriends = goal.getApprovedUsers();
         goalFriends.remove(ParseUser.getCurrentUser());
