@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,35 +11,148 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <RelativeLayout
-        android:id="@+id/noGoals"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
         android:visibility="gone"
-        android:layout_marginTop="10dp" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvNone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/btnAdd2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/quicksand"
-            android:text="@string/no_goals"
-            android:textAlignment="center"
-            android:textColor="@color/orange"
-            android:textSize="25sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
-        <Button
-            style="@style/SelectableItemBackground"
-            android:id="@+id/btnAdd"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/add_goal"
-            android:backgroundTint="@color/orange" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/motivation_1" />
 
-    </RelativeLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.56"
+                app:srcCompat="@color/orange" />
+
+            <TextView
+                android:layout_width="157dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="27dp"
+                android:text="This is some text that will describe my app and give the user some context and to what they should do first."
+                android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse" />
+
+            <Button
+                android:id="@+id/btnAdd_1"
+                style="@style/SelectableItemBackground"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="40dp"
+                android:layout_marginEnd="33dp"
+                android:background="@drawable/add_goal"
+                android:backgroundTint="@color/white" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/motivation_4" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:alpha="0.56"
+                app:srcCompat="@color/orange" />
+
+            <TextView
+                android:layout_width="157dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="87dp"
+                android:layout_marginStart="30dp"
+                android:text="This is some text that will describe my app and give the user some context and to what they should do first."
+                android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse" />
+
+            <Button
+                style="@style/SelectableItemBackground"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="38dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/add_goal"
+                android:backgroundTint="@color/white" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/motivation_3" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.56"
+                app:srcCompat="@color/orange" />
+
+            <TextView
+                android:layout_width="157dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="48dp"
+                android:layout_marginStart="40dp"
+                android:text="This is some text that will describe my app and give the user some context and to what they should do first."
+                android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse" />
+
+            <Button
+                style="@style/SelectableItemBackground"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="40dp"
+                android:layout_marginEnd="33dp"
+                android:background="@drawable/add_goal"
+                android:backgroundTint="@color/white" />
+
+
+        </RelativeLayout>
+
+    </ViewFlipper>
 
 </RelativeLayout>
