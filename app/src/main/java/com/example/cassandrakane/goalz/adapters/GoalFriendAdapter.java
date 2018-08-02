@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -19,7 +20,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.Util;
 
 public class GoalFriendAdapter extends RecyclerView.Adapter<GoalFriendAdapter.ViewHolder> {
 
@@ -44,7 +44,7 @@ public class GoalFriendAdapter extends RecyclerView.Adapter<GoalFriendAdapter.Vi
         holder.tvUsername.setText(user.getUsername());
 
         ParseFile image = (ParseFile) user.get("image");
-        Util.setImage(user, image, context.getResources(), holder.ivProfile, 8.0f);
+        Util.setImage(image, context.getResources(), holder.ivProfile, 20.0f);
 
         //set item click here
         holder.itemView.setOnClickListener(new View.OnClickListener() {

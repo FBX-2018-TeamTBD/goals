@@ -60,7 +60,7 @@ public class Util {
 
     public static File photoFile;
 
-    public static void setImage(ParseUser user, ParseFile imageFile, Resources resources, ImageView ivProfile, float cornerRadius) {
+    public static void setImage(ParseFile imageFile, Resources resources, ImageView ivProfile, float cornerRadius) {
         if (imageFile != null) {
             Bitmap bitmap = null;
             try {
@@ -295,7 +295,7 @@ public class Util {
         tvFriends.setText(String.valueOf(user.getList("friends").size()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         ParseFile pfile = (ParseFile) user.get("image");
-        setImage(user, pfile, context.getResources(), ivProfile, 16.0f);
+        setImage(pfile, context.getResources(), ivProfile, 45.0f);
     }
 
     public static Date yesterday() {
@@ -325,7 +325,7 @@ public class Util {
 
     public static void setImageBitmap(Bitmap bitmap, Context context, ImageView ivProfile) {
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-        roundedBitmapDrawable.setCornerRadius(16.0f);
+        roundedBitmapDrawable.setCornerRadius(38.0f);
         roundedBitmapDrawable.setAntiAlias(true);
         ivProfile.setImageDrawable(roundedBitmapDrawable);
     }

@@ -43,7 +43,7 @@
         android:id="@+id/cardview"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:cardCornerRadius="16dp"
+        app:cardCornerRadius="40dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         app:cardBackgroundColor="@color/orange"
