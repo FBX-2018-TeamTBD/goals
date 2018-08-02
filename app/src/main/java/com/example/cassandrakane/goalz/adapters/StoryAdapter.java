@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,11 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -55,7 +60,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         if (imageUrls.size() > 0) {
             Glide.with(context)
                     .load(imageUrls.get(imageUrls.size() - 1))
-                    .apply(RequestOptions.circleCropTransform())
+                    .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,6 +71,18 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, story.size() - 1, goal.getUser())).commit();
                 }
             });
+        }
+
+        ParseFile file = (ParseFile) goal.getUser().get("image");
+        if (file != null) {
+            try {
+                Glide.with(context)
+                        .load(Uri.fromFile(file.getFile()))
+                        .apply(new RequestOptions().centerCrop())
+                        .into(holder.ivProfile);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         holder.tvTitle.setText(goal.getTitle());
     }
@@ -80,6 +97,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.ivStory) ImageView ivStory;
+        @BindView(R.id.ivProfile) ImageView ivProfile;
 
         public ViewHolder(View itemView) {
             super(itemView);

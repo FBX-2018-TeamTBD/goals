@@ -127,8 +127,6 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
 
-                View toolbar = getActivity().findViewById(R.id.toolbar);
-                toolbar.setVisibility(View.VISIBLE);
                 getActivity().onBackPressed();
 
 //                Activity activity = getActivity();

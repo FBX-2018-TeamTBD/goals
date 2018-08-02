@@ -72,7 +72,7 @@
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/_0"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="9dp"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -110,7 +110,7 @@
             android:layout_alignBottom="@+id/ivStory"
             android:layout_alignRight="@id/ivStory"
             android:layout_marginBottom="9dp"
-            android:layout_marginRight="6dp"
+            android:layout_marginRight="9dp"
             android:tint="@color/white"
             android:clickable="true"
             android:focusable="true"
