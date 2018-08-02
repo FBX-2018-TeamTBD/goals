@@ -68,6 +68,9 @@ import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
+import com.example.cassandrakane.goalz.MainActivity;
+import com.example.cassandrakane.goalz.ProfileFragment;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -134,6 +137,8 @@ public class VerticalPager extends ViewGroup {
 
     private Set<OnScrollListener> mListeners = new HashSet<OnScrollListener>();
 
+    private MainActivity mainActivity;
+
     /**
      * Used to inflate the Workspace from XML.
      *
@@ -167,6 +172,8 @@ public class VerticalPager extends ViewGroup {
     private void init(Context context) {
         mScroller = new Scroller(getContext(), new DecelerateInterpolator());
         mCurrentPage = 0;
+
+        mainActivity = (MainActivity) context;
 
         final ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledTouchSlop();
@@ -366,10 +373,6 @@ public class VerticalPager extends ViewGroup {
          * intercept this motion.
          */
         final int action = ev.getAction();
-        if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
-            // Log.d(TAG, "onInterceptTouchEvent::shortcut=true");
-            return true;
-        }
 
         final float y = ev.getY();
         final float x = ev.getX();
@@ -382,6 +385,14 @@ public class VerticalPager extends ViewGroup {
                  */
                 if (mTouchState == TOUCH_STATE_REST) {
                     checkStartScroll(x, y);
+                }
+
+                if (ev.getY() < mLastMotionY && mCurrentPage == 1) {
+                    return false;
+                }
+
+                if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getChildAt(0).getTop() < 0) {
+                    return false;
                 }
 
                 break;
@@ -405,6 +416,11 @@ public class VerticalPager extends ViewGroup {
                 clearChildrenCache();
                 mTouchState = TOUCH_STATE_REST;
                 break;
+        }
+
+        if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
+            // Log.d(TAG, "onInterceptTouchEvent::shortcut=true");
+            return true;
         }
 
         /*
@@ -530,7 +546,6 @@ public class VerticalPager extends ViewGroup {
                         for (int i = 0; i < count; i++) {
                             final View child = getChildAt(i);
                             if (child.getTop() < getScrollY() && child.getBottom() > getScrollY() + pageHeight) {
-                                // we're inside a page, fling that bitch
                                 mNextPage = i;
                                 mScroller.fling(getScrollX(), getScrollY(), 0, -velocityY, 0, 0, child.getTop(),
                                         child.getBottom() - getHeight());
