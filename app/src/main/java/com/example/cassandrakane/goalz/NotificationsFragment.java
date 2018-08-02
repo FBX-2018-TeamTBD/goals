@@ -15,11 +15,11 @@ import com.example.cassandrakane.goalz.adapters.NotificationAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.models.TextNotification;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -34,6 +34,7 @@ public class NotificationsFragment extends Fragment {
     MainActivity mainActivity;
 
     NotificationAdapter notificationAdapter;
+    List<TextNotification> textNotifications;
     List<Goal> goalRequests;
     List<GoalRequests> allGoalRequests;
     List<ParseUser> friendRequests;
@@ -43,6 +44,7 @@ public class NotificationsFragment extends Fragment {
     List<Goal> completed;
     List<Goal> incompleted;
 
+    CentralFragment centralFragment;
 
     @BindView(R.id.tvProgress) TextView tvProgress;
     @BindView(R.id.tvCompleted) TextView tvCompleted;
@@ -62,37 +64,60 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mainActivity = (MainActivity) getActivity();
+        super.onAttach(mainActivity.getBaseContext());
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         ButterKnife.bind(this, view);
 
         ParseUser user = ParseUser.getCurrentUser();
-        mainActivity = (MainActivity) getActivity();
+
         goals = new ArrayList<>();
         completed = new ArrayList<>();
         incompleted = new ArrayList<>();
-        Util.populateGoals(getContext(), user, tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
-        Util.setImage(user, (ParseFile) user.get("image"), getResources(), ivProfile, 16.0f);
+        setNotificationHeader();
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavigationHelper navigationHelper = new NavigationHelper(mainActivity.viewPager);
+                NavigationHelper navigationHelper = new NavigationHelper(mainActivity.centralFragment.horizontalPager);
                 navigationHelper.logout(mainActivity);
             }
         });
 
+        textNotifications = new ArrayList<>();
         goalRequests = new ArrayList<>();
         allGoalRequests = new ArrayList<>();
         friendRequests = new ArrayList<>();
         allFriendRequests = new ArrayList<>();
-        notificationAdapter = new NotificationAdapter(goalRequests, allGoalRequests, friendRequests, allFriendRequests);
+        notificationAdapter = new NotificationAdapter(textNotifications, goalRequests, allGoalRequests, friendRequests, allFriendRequests, this);
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
         rvNotifications.setAdapter(notificationAdapter);
 
+        getTextNotifications();
         getGoalRequests();
         getFriendRequests();
 
         return view;
+    }
+
+    public void getTextNotifications() {
+        ParseQuery<TextNotification> query = ParseQuery.getQuery("TextNotification");
+        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<TextNotification>() {
+            @Override
+            public void done(List<TextNotification> objects, ParseException e) {
+                textNotifications.clear();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        TextNotification notif = objects.get(i);
+                        textNotifications.add(notif);
+                    }
+                }
+                notificationAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     public void getGoalRequests() {
@@ -146,5 +171,9 @@ public class NotificationsFragment extends Fragment {
                 notificationAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void setNotificationHeader() {
+        Util.populateNotificationsHeader(getContext(), ParseUser.getCurrentUser(), tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
     }
 }

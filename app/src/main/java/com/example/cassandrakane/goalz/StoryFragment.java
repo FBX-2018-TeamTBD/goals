@@ -126,6 +126,7 @@ public class StoryFragment extends Fragment {
                 if (mHandler != null) {
                     mHandler.removeCallbacks(runnable);
                 }
+
                 View toolbar = getActivity().findViewById(R.id.toolbar);
                 toolbar.setVisibility(View.VISIBLE);
                 getActivity().onBackPressed();
@@ -135,6 +136,19 @@ public class StoryFragment extends Fragment {
 //                    MainActivity mainActivity = (MainActivity) activity;
 //                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
 //                    mainActivity.toolbar.setVisibility(View.VISIBLE);
+//                }
+//                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
+//                    FriendActivity friendActivity = (FriendActivity) activity;
+//                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+//                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
+//                    friendActivity.cardView.setVisibility(View.VISIBLE);
+//                    friendActivity.btnBack.setVisibility(View.VISIBLE);
+//                }
+//                Activity activity = getActivity();
+//                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
+//                    MainActivity mainActivity = (MainActivity) activity;
+//                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
+//                    mainActivity.centralFragment.toolbar.setVisibility(View.VISIBLE);
 //                }
 //                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
 //                    FriendActivity friendActivity = (FriendActivity) activity;

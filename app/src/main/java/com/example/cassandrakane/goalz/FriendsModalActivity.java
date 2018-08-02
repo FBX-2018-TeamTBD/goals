@@ -29,6 +29,7 @@ public class FriendsModalActivity extends Activity {
     GoalFriendAdapter goalFriendAdapter;
     List<ParseUser> goalFriends;
     Goal goal;
+    Boolean personal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,8 @@ public class FriendsModalActivity extends Activity {
         getWindow().setLayout(width, height);
 
         goal = getIntent().getParcelableExtra(Goal.class.getSimpleName());
+        personal = getIntent().getBooleanExtra("personal", true);
+
         goalFriends = goal.getApprovedUsers();
         goalFriends.remove(ParseUser.getCurrentUser());
         goalFriendAdapter = new GoalFriendAdapter(goalFriends);
@@ -55,6 +58,10 @@ public class FriendsModalActivity extends Activity {
         rvGoalFriends.setAdapter(goalFriendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvGoalFriends.addItemDecoration(itemDecor);
+
+        if (!personal) {
+            btnAdd.setVisibility(View.GONE);
+        }
     }
 
     public void goBack(View v) {

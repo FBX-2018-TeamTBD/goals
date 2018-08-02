@@ -34,7 +34,7 @@
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/btnAdd"/>
+        android:layout_below="@id/btnBack"/>
 
     <TextView
         android:id="@+id/tvTitle"
@@ -45,6 +45,6 @@
         android:fontFamily="@font/quicksand_medium"
         android:text="friends"
         android:textColor="@color/orange"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
 </RelativeLayout>

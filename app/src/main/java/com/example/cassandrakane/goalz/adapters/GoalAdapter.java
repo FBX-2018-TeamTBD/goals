@@ -40,7 +40,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -63,7 +62,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     float startX = 0;
     float endX = 0;
     int startIndex = 0;
-    File tempFile;
     NavigationHelper navigationHelper;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
@@ -76,7 +74,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        navigationHelper = personal ? new NavigationHelper(((MainActivity) context).viewPager) : null;
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -89,83 +86,89 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
 
-        final Goal finalGoal = goal;
-        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent motionEvent) {
-                return true;
-            }
+        if (personal) {
+            MainActivity activity = (MainActivity) context;
 
-            @Override
-            public void onShowPress(MotionEvent motionEvent) {
+            navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
 
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                startX = motionEvent.getX();
-                endX = motionEvent1.getX();
-                if (endX >= startX + 60) {
-                    navigationHelper.toCamera();
-                    startX = 0;
-                    endX = 0;
-                } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed();
-                    startX = 0;
-                    endX = 0;
+            final Goal finalGoal = goal;
+            final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
+                @Override
+                public boolean onDown(MotionEvent motionEvent) {
+                    return true;
                 }
-                return true;
-            }
 
-            @Override
-            public void onLongPress(MotionEvent motionEvent) {
-                if (Math.abs(endX - startX) < 10) {
-                    new AlertDialog.Builder(context)
-                            .setTitle(R.string.delete_goal)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
-                                    notificationHelper.cancelReminder(finalGoal);
-                                    goals.remove(finalGoal);
-                                    notificationHelper.cancelReminder(finalGoal);
-                                    removeGoal(finalGoal.getObjectId());
-                                }
-                            })
-                            .setNegativeButton(R.string.no, null)
-                            .show();
+                @Override
+                public void onShowPress(MotionEvent motionEvent) {
+
                 }
-            }
 
-            @Override
-            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                startX = motionEvent.getX();
-                endX = motionEvent1.getX();
-                if (endX >= startX + 60) {
-                    navigationHelper.toCamera();
-                    startX = 0;
-                    endX = 0;
-                } else if (startX >= endX + 50) {
-                    navigationHelper.toFeed();
-                    startX = 0;
-                    endX = 0;
+                @Override
+                public boolean onSingleTapUp(MotionEvent motionEvent) {
+                    return false;
                 }
-                return false;
-            }
 
-        });
+                @Override
+                public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                    startX = motionEvent.getX();
+                    endX = motionEvent1.getX();
+                    if (endX >= startX + 60) {
+                        navigationHelper.toCamera();
+                        startX = 0;
+                        endX = 0;
+                    } else if (startX >= endX + 50) {
+                        navigationHelper.toFeed();
+                        startX = 0;
+                        endX = 0;
+                    }
+                    return true;
+                }
 
-        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return gestureDetector.onTouchEvent(motionEvent);
-            }
-        });
+                @Override
+                public void onLongPress(MotionEvent motionEvent) {
+                    if (Math.abs(endX - startX) < 10) {
+                        new AlertDialog.Builder(context)
+                                .setTitle(R.string.delete_goal)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
+                                        notificationHelper.cancelReminder(finalGoal);
+                                        goals.remove(finalGoal);
+                                        notificationHelper.cancelReminder(finalGoal);
+                                        removeGoal(finalGoal.getObjectId());
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    }
+                }
+
+                @Override
+                public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                    startX = motionEvent.getX();
+                    endX = motionEvent1.getX();
+                    if (endX >= startX + 60) {
+                        navigationHelper.toCamera();
+                        startX = 0;
+                        endX = 0;
+                    } else if (startX >= endX + 50) {
+                        navigationHelper.toFeed();
+                        startX = 0;
+                        endX = 0;
+                    }
+                    return false;
+                }
+
+            });
+
+            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+        }
 
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
@@ -246,21 +249,26 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 public void onClick(View view) {
                     Intent i = new Intent(context, FriendsModalActivity.class);
                     i.putExtra(Goal.class.getSimpleName(), goal);
+                    i.putExtra("personal", personal);
                     context.startActivity(i);
                 }
             });
         } else {
             holder.tvFriends.setText("");
-            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
-            holder.ivFriends.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(context, SearchFriendsActivity.class);
-                    i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
-                    i.putExtra(Goal.class.getSimpleName(), goal);
-                    context.startActivity(i);
-                }
-            });
+            if (personal) {
+                holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
+                holder.ivFriends.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(context, SearchFriendsActivity.class);
+                        i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
+                        i.putExtra(Goal.class.getSimpleName(), goal);
+                        context.startActivity(i);
+                    }
+                });
+            } else {
+                holder.ivFriends.setImageDrawable(null);
+            }
         }
 
         if (goal.getCompleted()) {
@@ -340,7 +348,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();
 
-                        activity.toolbar.setVisibility(View.INVISIBLE);
+                        activity.centralFragment.toolbar.setVisibility(View.INVISIBLE);
 //                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {
