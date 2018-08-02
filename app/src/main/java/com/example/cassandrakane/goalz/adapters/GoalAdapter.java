@@ -47,6 +47,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -172,6 +173,20 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 // check if all users have added here
                 if (!goal.getIsItemAdded()) {
                     goal.setStreak(0);
+
+                    // stores the objectId of users who lost a streak
+                    ArrayList<String> streakLostBy = new ArrayList<>();
+                    Map<String, String> userAdded = goal.getUserAdded();
+
+                    if (userAdded != null) {
+                        for (Map.Entry<String, String> entry : userAdded.entrySet()) {
+                            String userId = entry.getKey();
+                            String value = entry.getValue();
+                            if (value.equals("false")) {
+                                streakLostBy.add(userId);
+                            }
+                        }
+                    }
 //                    final ArrayList<ParseObject> story = goal.getStory();
 //                    try{
 //                        InputStream inputStream = context.getResources().openRawResource(R.raw.crying_gif);
@@ -320,7 +335,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         fragmentTwo.setEnterTransition(explodeTransform);
 
                         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.drawer_layout, fragmentTwo)
+                                .replace(R.id.root_layout, fragmentTwo)
                                 .addToBackStack("transaction")
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();

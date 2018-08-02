@@ -14,6 +14,19 @@
         android:layout_alignParentStart="true" />
 
     <ImageButton
+        android:id="@+id/btnSwap"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="57dp"
+        android:layout_marginStart="43dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_outline_switch_camera_24px"
+        android:tint="#ffffff" />
+
+    <ImageButton
         android:id="@+id/btnVideoCapture"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -22,30 +35,19 @@
         android:layout_marginBottom="40dp"
         android:background="@null"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_video"
+        android:src="@drawable/camera_btn"
         android:tint="#ffffff" />
 
     <ImageButton
         android:id="@+id/btnCamera"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btnSwap"
+        android:layout_marginEnd="43dp"
         android:background="@null"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/take_pic" />
-
-    <ImageButton
-        android:id="@+id/btnSwap"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_alignBottom="@+id/btnVideoCapture"
-        android:layout_alignStart="@+id/btnCamera"
-        android:background="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/reverse_cam"
-        android:tint="#ffffff" />
+        android:tint="#ffffff"
+        app:srcCompat="@drawable/ic_outline_photo_camera_24px" />
 
 </RelativeLayout>

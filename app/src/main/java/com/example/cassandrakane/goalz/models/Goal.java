@@ -47,11 +47,11 @@ public class Goal extends ParseObject implements Parcelable {
 
     public ArrayList<ParseObject> getStory() {
         List<ParseObject> arr = null;
-        try {
-            arr = fetchIfNeeded().getList("images");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+        arr = getList("images");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         ArrayList<ParseObject> story = new ArrayList<>();
         if (arr != null) {
             for (int i = 0; i < arr.size(); i++) {
@@ -75,75 +75,75 @@ public class Goal extends ParseObject implements Parcelable {
     }
 
     public String getTitle() {
-        try {
-            return fetchIfNeeded().getString("title");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
+//        try {
+        return getString("title");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return "";
     }
 
     public String getDescription() {
-        try {
-            return fetchIfNeeded().getString("description");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
+//        try {
+            return getString("description");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return "";
     }
 
     public int getDuration() {
-        try {
-            return fetchIfNeeded().getInt("duration");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+//        try {
+            return getInt("duration");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
     public int getFrequency() {
-        try {
-            return fetchIfNeeded().getInt("frequency");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+//        try {
+            return getInt("frequency");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
     public int getProgress() {
-        try {
-            return fetchIfNeeded().getInt("progress");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+//        try {
+            return getInt("progress");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
     public int getStreak() {
-        try {
-            return fetchIfNeeded().getInt("streak");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+//        try {
+            return getInt("streak");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
     public ParseUser getUser() {
-        try {
-            return fetchIfNeeded().getParseUser("user");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+//        try {
+            return getParseUser("user");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     public Date getUpdateStoryBy(){
-        try {
-            return fetchIfNeeded().getDate("updateBy");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return new Date();
+//        try {
+            return getDate("updateBy");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return new Date();
     }
 
     public int getIntId() {
@@ -152,21 +152,21 @@ public class Goal extends ParseObject implements Parcelable {
     }
 
     public boolean getIsItemAdded() {
-        try {
-            return fetchIfNeeded().getBoolean("itemAdded");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
+//        try {
+            return getBoolean("itemAdded");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
     }
 
     public List<ParseUser> getFriends() {
         List<ParseUser> friends = null;
-        try {
-            friends = fetchIfNeeded().getList("friends");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+            friends = getList("friends");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         if (friends == null) {
             return new ArrayList<ParseUser>();
         }
@@ -175,11 +175,11 @@ public class Goal extends ParseObject implements Parcelable {
 
     public List<ParseUser> getApprovedUsers() {
         List<ParseUser> users = null;
-        try {
-            users = fetchIfNeeded().getList("approvedUsers");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+            users = getList("approvedUsers");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         if (users == null) {
             return new ArrayList<ParseUser>();
         }
@@ -188,11 +188,11 @@ public class Goal extends ParseObject implements Parcelable {
 
     public List<ParseUser> getPendingUsers() {
         List<ParseUser> users = null;
-        try {
-            users = fetchIfNeeded().getList("pendingUsers");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+            users = getList("pendingUsers");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         if (users == null) {
             return new ArrayList<ParseUser>();
         }
