@@ -18,56 +18,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="-10dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/darkOrange" />
-
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:id="@+id/toolbar"
-        android:background="@color/orange"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:contentInsetStartWithNavigation="0dp"
-        android:fitsSystemWindows="false"
-        android:layout_height="?attr/actionBarSize">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/quicksand_medium"
-                android:gravity="center"
-                android:text="goals"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <Button
-                style="@style/SelectableItemBackground"
-                android:id="@+id/btnAddGoal"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/add_goal"
-                android:backgroundTint="@color/white"  />
-
-            <Button
-                style="@style/SelectableItemBackground"
-                android:id="@+id/btnAddFriend"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/add_friend"
-                android:backgroundTint="@color/white"  />
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+        android:indeterminateTint="@color/darkOrange"
+        android:visibility="invisible"/>
 
     <com.example.cassandrakane.goalz.utils.HorizontalViewPager
         android:layout_below="@+id/toolbar"
@@ -75,6 +27,5 @@
         android:layout_height="match_parent"
         android:id="@+id/horizontal_pager">
     </com.example.cassandrakane.goalz.utils.HorizontalViewPager>
-
 
 </RelativeLayout>

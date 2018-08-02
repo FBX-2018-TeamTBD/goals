@@ -348,7 +348,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();
 
-                        activity.centralFragment.toolbar.setVisibility(View.INVISIBLE);
 //                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                     }
                     if (context.getClass().isAssignableFrom(FriendActivity.class)) {

@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/noFriends"
@@ -84,6 +85,19 @@
                 android:fontFamily="@font/quicksand_medium"
                 android:textSize="20sp"
                 android:text="friends" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/btnAddFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="20dp"
+                android:src="@drawable/add_friend"
+                android:background="@drawable/ripple_oval"
+                android:tint="@color/white"
+                app:fabSize="normal" />
 
         </RelativeLayout>
 

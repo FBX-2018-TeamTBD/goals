@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
 public class ProfileFragment extends Fragment {
 
     @BindView(R.id.rvGoals) public RecyclerView rvGoals;
+    @BindView(R.id.btnAddGoal) public FloatingActionButton btnAddGoal;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
 
     MainActivity mainActivity;
@@ -57,6 +59,13 @@ public class ProfileFragment extends Fragment {
         rvGoals.setAdapter(goalAdapter);
 
         populateProfile();
+
+        btnAddGoal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.addGoal(view);
+            }
+        });
 
         return view;
     }

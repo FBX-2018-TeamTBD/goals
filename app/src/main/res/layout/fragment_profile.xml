@@ -1,14 +1,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/text_bar"
+        android:layout_marginTop="13dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="20dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/quicksand_medium"
+        android:textSize="20sp"
+        android:text="my goals" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoals"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvLabel"
+        android:paddingBottom="8dp"
+        android:paddingTop="7dp">
 
     </android.support.v7.widget.RecyclerView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAddGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/add_goal"
+        android:background="@drawable/ripple_oval"
+        android:tint="@color/white"
+        app:fabSize="normal" />
+
+    <!--<ImageView-->
+        <!--android:id="@+id/ivConfirmBackground"-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignStart="@+id/btnAddGoal"-->
+        <!--android:layout_alignTop="@+id/btnAddGoal"-->
+        <!--android:tint="@color/orange"-->
+        <!--app:srcCompat="@drawable/circle" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/btnAddGoal"-->
+        <!--style="@style/SelectableItemBackground"-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:padding="15dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_marginEnd="30dp"-->
+        <!--android:background="@color/transparent"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:tint="@color/white"-->
+        <!--app:srcCompat="@drawable/add_goal" />-->
 
     <RelativeLayout
         android:id="@+id/noGoals"
