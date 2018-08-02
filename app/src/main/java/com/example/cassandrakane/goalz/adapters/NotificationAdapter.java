@@ -190,8 +190,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             @Override
             public void done(ParseObject object, ParseException e) {
                 try {
-                    object.delete();
-                    object.saveInBackground();
+                    if (object != null) {
+                        object.delete();
+                        object.saveInBackground();
+                    }
                     mTextNotifications.remove(position);
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
