@@ -295,7 +295,7 @@ public class Util {
         tvFriends.setText(String.valueOf(user.getList("friends").size()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         ParseFile pfile = (ParseFile) user.get("image");
-        setImage(pfile, context.getResources(), ivProfile, 45.0f);
+        setImage(pfile, context.getResources(), ivProfile, 40.0f);
     }
 
     public static Date yesterday() {

@@ -320,7 +320,12 @@ public class StoryFragment extends Fragment {
                     }
             }, 5000);
         }
-        ParseUser user = object.getParseUser("user");
+        ParseUser user = null;
+        try {
+            user = object.getParseUser("user").fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (user != null) {
             tvUsername.setText(user.getUsername());
         }

@@ -103,7 +103,7 @@ public class FriendActivity extends AppCompatActivity {
         });
 
         ParseFile pfile = (ParseFile) user.get("image");
-        Util.setImage(pfile, getResources(), ivProfile, 45.0f);
+        Util.setImage(pfile, getResources(), ivProfile, 40.0f);
         populateProfile();
     }
 
