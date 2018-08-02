@@ -11,13 +11,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.cassandrakane.goalz.utils.DataFetcher;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.DataFetcher;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // transition to home screen
                     dataFetcher = new DataFetcher(user, LoginActivity.this);
+                    Util.updateFriends();
                     progressBar.setVisibility(View.GONE);
                     overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
                     Toast.makeText(LoginActivity.this, "Welcome, " + username + "!", Toast.LENGTH_LONG).show();

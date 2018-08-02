@@ -3,14 +3,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/text_bar"
+        android:layout_marginTop="13dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="20dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/quicksand_medium"
+        android:textSize="20sp"
+        android:text="my goals" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoals"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvLabel"
+        android:paddingBottom="8dp"
+        android:paddingTop="7dp">
 
     </android.support.v7.widget.RecyclerView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAddGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/add_goal"
+        android:background="@drawable/ripple_oval"
+        android:tint="@color/white"
+        app:fabSize="normal" />
 
     <ViewFlipper
         android:id="@+id/viewFlipper"

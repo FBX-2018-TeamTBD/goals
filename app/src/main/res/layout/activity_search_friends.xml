@@ -19,6 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Button
+                style="@style/SelectableItemBackground"
+                android:id="@+id/btnBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/cancel"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/white"
+                android:onClick="goBack" />
+
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
@@ -56,7 +67,7 @@
         android:layout_alignStart="@+id/btnConfirm"
         android:layout_alignTop="@+id/btnConfirm"
         android:visibility="invisible"
-        app:srcCompat="@drawable/check_circle_background" />
+        app:srcCompat="@drawable/circle" />
 
     <ImageButton
         android:id="@+id/btnConfirm"

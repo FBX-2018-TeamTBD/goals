@@ -74,7 +74,6 @@ public class DataFetcher {
         userFriends = user.getList("friends");
         ParseObject.unpinAllInBackground(userFriends);
         ParseObject.pinAllInBackground(userFriends);
-
         friendGoals = new ArrayList<>();
         for (ParseUser friend : userFriends){
             getFriendGoals(friend);

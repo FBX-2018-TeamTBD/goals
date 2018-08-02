@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
@@ -295,7 +296,7 @@ public class Util {
         tvFriends.setText(String.valueOf(user.getList("friends").size()));
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
         ParseFile pfile = (ParseFile) user.get("image");
-        setImage(pfile, context.getResources(), ivProfile, 45.0f);
+        setImage(pfile, context.getResources(), ivProfile, 40.0f);
     }
 
     public static Date yesterday() {
@@ -322,6 +323,50 @@ public class Util {
             swipe.setRefreshing(false);
         }
     }
+
+    public static void updateFriends() {
+        final List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
+        ParseQuery<ApprovedFriendRequests> query = ParseQuery.getQuery("ApprovedFriendRequests");
+        query.whereEqualTo("fromUser", ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<ApprovedFriendRequests>() {
+            @Override
+            public void done(List<ApprovedFriendRequests> objects, ParseException e) {
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ParseUser newFriend = objects.get(i).getParseUser("toUser");
+                        friends.add(newFriend);
+                        try {
+                            objects.get(i).delete();
+                            objects.get(i).saveInBackground();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+        ParseQuery<ApprovedFriendRequests> query2 = ParseQuery.getQuery("RemovedRequests");
+        query2.whereEqualTo("removedFriend", ParseUser.getCurrentUser());
+        query2.findInBackground(new FindCallback<ApprovedFriendRequests>() {
+            @Override
+            public void done(List<ApprovedFriendRequests> objects, ParseException e) {
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        ParseUser removedFriend = objects.get(i).getParseUser("remover");
+                        friends.remove(removedFriend);
+                        try {
+                            objects.get(i).delete();
+                            objects.get(i).saveInBackground();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+        ParseUser.getCurrentUser().put("friends", friends);
+    }
+
 
     public static void setImageBitmap(Bitmap bitmap, Context context, ImageView ivProfile) {
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
