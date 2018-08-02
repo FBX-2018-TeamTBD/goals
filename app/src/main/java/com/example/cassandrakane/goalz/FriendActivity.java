@@ -39,10 +39,10 @@ public class FriendActivity extends AppCompatActivity {
     @BindView(R.id.ivProfile) public ImageView ivProfile;
     @BindView(R.id.btnBack) public Button btnBack;
     @BindView(R.id.cardview) public CardView cardView;
+    @BindView(R.id.btnUnfriend) public Button btnUnfriend;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.info_layout) View relativeLayout;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
-    @BindView(R.id.btnUnfriend) Button btnUnfriend;
 
     TextView tvProgress;
     TextView tvCompleted;

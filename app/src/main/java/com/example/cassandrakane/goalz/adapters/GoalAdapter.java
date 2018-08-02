@@ -194,6 +194,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         }
                     }
 
+
                     sendTextNotifications(goal, streakLostBy);
 
 //                    final ArrayList<ParseObject> story = goal.getStory();
@@ -364,6 +365,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);
+                        activity.btnUnfriend.setVisibility(View.INVISIBLE);
                     }
                 }
             });
@@ -462,6 +464,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             } else {
                 text += String.format("%s, ", username);
             }
+        }
+        if (users.size() == 0) {
+            text += "Someone ";
         }
         text += "forgot to post.";
         return text;
