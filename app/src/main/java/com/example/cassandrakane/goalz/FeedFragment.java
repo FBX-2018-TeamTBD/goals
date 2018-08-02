@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +44,6 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.btnAddFriend) FloatingActionButton btnAddFriend;
     @BindView(R.id.btnAdd) Button btnAdd;
     @BindView(R.id.rvStory) RecyclerView rvStory;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     ParseUser user = ParseUser.getCurrentUser();
 
@@ -76,17 +74,6 @@ public class FeedFragment extends Fragment {
         rvFriends.setAdapter(friendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
         rvFriends.addItemDecoration(itemDecor);
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshAsync();
-            }
-        });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_blue_light,
-                android.R.color.holo_red_light);
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +131,6 @@ public class FeedFragment extends Fragment {
                         goals.add(goal);
                     }
                 }
-                swipeContainer.setRefreshing(false);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

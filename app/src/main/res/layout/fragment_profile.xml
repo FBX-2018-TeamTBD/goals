@@ -39,6 +39,7 @@
         android:src="@drawable/add_goal"
         android:background="@drawable/ripple_oval"
         android:tint="@color/white"
+        android:elevation="10dp"
         app:fabSize="normal" />
 
     <ViewFlipper
