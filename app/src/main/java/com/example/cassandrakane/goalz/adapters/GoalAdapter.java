@@ -30,8 +30,10 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.TextNotification;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -178,7 +180,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     goal.setStreak(0);
 
                     // stores the objectId of users who lost a streak
-                    ArrayList<String> streakLostBy = new ArrayList<>();
+                    ArrayList<ParseUser> streakLostBy = new ArrayList<>();
                     Map<String, String> userAdded = goal.getUserAdded();
 
                     if (userAdded != null) {
@@ -186,10 +188,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             String userId = entry.getKey();
                             String value = entry.getValue();
                             if (value.equals("false")) {
-                                streakLostBy.add(userId);
+                                ParseUser user = getParseUserFromId(userId);
+                                streakLostBy.add(user);
                             }
                         }
                     }
+
+                    sendTextNotifications(goal, streakLostBy);
+
 //                    final ArrayList<ParseObject> story = goal.getStory();
 //                    try{
 //                        InputStream inputStream = context.getResources().openRawResource(R.raw.crying_gif);
@@ -413,6 +419,52 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             }
         });
+    }
+
+    public ParseUser getParseUserFromId(String id) {
+        final ParseUser[] user = {null};
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", id);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (objects != null && objects.size() > 0) {
+                    user[0] = objects.get(0);
+                }
+            }
+        });
+        return user[0];
+    }
+
+    public void sendTextNotifications(Goal goal, List<ParseUser> users) {
+        String text = getTextNotificationString(goal.getTitle(), users);
+        List<ParseUser> friends = goal.getFriends();
+        for (ParseUser friend : friends) {
+            TextNotification notification = new TextNotification(text, friend);
+            notification.saveInBackground();
+        }
+    }
+
+    public String getTextNotificationString(String goalTitle, List<ParseUser> users) {
+        String text = String.format("Oh no! You lost your streak for \"%s\"! ", goalTitle);
+        for (int i = 0; i < users.size(); i++) {
+            ParseUser user = users.get(i);
+            String username = "";
+            try {
+                username = user.fetchIfNeeded().getUsername();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (i == users.size() - 1) {
+                text += String.format("%s ", username);
+            } else if (i == users.size() - 2){
+                text += String.format("%s and ", username);
+            } else {
+                text += String.format("%s, ", username);
+            }
+        }
+        text += "forgot to post.";
+        return text;
     }
 
     @Override
