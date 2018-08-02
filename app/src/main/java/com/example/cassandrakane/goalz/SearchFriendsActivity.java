@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,7 +31,6 @@ import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +55,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_friends);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.bind(this);
 
         String requestActivityName = getIntent().getStringExtra("requestActivity");
@@ -228,6 +230,10 @@ public class SearchFriendsActivity extends AppCompatActivity {
             }
         });
         return users;
+    }
+
+    public void goBack(View v) {
+        onBackPressed();
     }
 
     @Override

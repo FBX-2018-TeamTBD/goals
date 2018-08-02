@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -41,6 +42,7 @@ public class FeedFragment extends Fragment {
 
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
+    @BindView(R.id.btnAddFriend) FloatingActionButton btnAddFriend;
     @BindView(R.id.btnAdd) Button btnAdd;
     @BindView(R.id.rvStory) RecyclerView rvStory;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
@@ -59,8 +61,8 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-
         ButterKnife.bind(this, view);
+        mainActivity = (MainActivity) getActivity();
 
         goals = new ArrayList<>();
         storyAdapter = new StoryAdapter(goals);
@@ -85,6 +87,13 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_red_light);
+
+        btnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.addFriend(view);
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override

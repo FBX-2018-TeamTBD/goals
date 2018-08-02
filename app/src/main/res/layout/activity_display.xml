@@ -38,32 +38,24 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" />
 
-    <ImageView
-        android:id="@+id/ivConfirmBackground"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignStart="@+id/btnConfirm"
-        android:layout_alignTop="@+id/btnConfirm"
-        app:srcCompat="@drawable/check_circle_background" />
-
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnConfirm"
-        style="@style/SelectableItemBackground"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@color/transparent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/check_circle" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/check"
+        android:background="@drawable/ripple_oval"
+        android:tint="@color/white"
+        app:fabSize="normal" />
 
     <ImageButton
         android:id="@+id/btnAddCaption"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignEnd="@+id/ivConfirmBackground"
+        android:layout_alignEnd="@+id/btnConfirm"
         android:layout_alignTop="@+id/btnBack"
         android:background="@null"
         android:scaleType="fitXY"

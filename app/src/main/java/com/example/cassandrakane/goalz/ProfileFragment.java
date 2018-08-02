@@ -1,13 +1,15 @@
 package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.view.animation.AnimationUtils;
+import android.widget.ViewFlipper;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -23,7 +25,9 @@ import butterknife.ButterKnife;
 public class ProfileFragment extends Fragment {
 
     @BindView(R.id.rvGoals) public RecyclerView rvGoals;
-    @BindView(R.id.noGoals) RelativeLayout noGoalPage;
+    @BindView(R.id.viewFlipper) ViewFlipper viewFlipper;
+    @BindView(R.id.btnAddGoal) public FloatingActionButton btnAddGoal;
+
 
     MainActivity mainActivity;
     private ParseUser user = ParseUser.getCurrentUser();
@@ -56,6 +60,20 @@ public class ProfileFragment extends Fragment {
 
         populateProfile();
 
+        viewFlipper.setAutoStart(true);
+        viewFlipper.setFlipInterval(5000);
+        viewFlipper.startFlipping();
+
+        viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.in_from_right));
+        viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.out_from_left));
+
+        btnAddGoal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.addGoal(view);
+            }
+        });
+
         return view;
     }
 
@@ -79,9 +97,9 @@ public class ProfileFragment extends Fragment {
             goals.addAll(completed);
         }
         if (completedGoals == 0 && progressGoals == 0) {
-            noGoalPage.setVisibility(View.VISIBLE);
+            viewFlipper.setVisibility(View.VISIBLE);
         } else {
-            noGoalPage.setVisibility(View.GONE);
+            viewFlipper.setVisibility(View.GONE);
         }
         goalAdapter.notifyDataSetChanged();
     }

@@ -29,6 +29,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
@@ -105,6 +106,7 @@ public class VideoActivity extends AppCompatActivity {
     private ImageButton mRecordImageButton;
     private ImageButton btnSwap;
     private ImageButton btnCamera;
+    private ImageView ivCircle;
 
     private File mVideoFolder;
     private String mVideoFilename;
@@ -147,12 +149,14 @@ public class VideoActivity extends AppCompatActivity {
         mRecordImageButton = findViewById(R.id.btnVideoCapture);
         btnSwap = findViewById(R.id.btnSwap);
         btnCamera = findViewById(R.id.btnCamera);
+        ivCircle = findViewById(R.id.ivCircle);
 
         goals = (ArrayList) getIntent().getSerializableExtra("goals");
         mRecordImageButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    ivCircle.setVisibility(View.VISIBLE);
                     checkWriteStoragePermission();
                     final Handler handler = new Handler();
                     handler.postDelayed(runnable = new Runnable() {
@@ -169,6 +173,7 @@ public class VideoActivity extends AppCompatActivity {
                 }
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                     if (mIsRecording) {
+                        ivCircle.setVisibility(View.GONE);
                         mIsRecording = false;
 //                        mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_online));
                         mMediaRecorder.stop();
