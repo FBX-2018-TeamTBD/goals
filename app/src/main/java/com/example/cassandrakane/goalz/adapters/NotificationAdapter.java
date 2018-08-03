@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.NotificationsFragment;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
@@ -85,9 +84,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 textViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         deleteTextNotification(position);
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;
@@ -114,26 +113,26 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 goalRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         addGoal(goal, updatedPos);
                         notificationsFragment.setNotificationHeader();
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 goalRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         removeUserfromFriends(goal, updatedPos);
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 goalRequestViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         removeUserfromFriends(goal, updatedPos);
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;
@@ -154,26 +153,26 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 friendRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         addFriend(friend, updatedPos2);
                         notificationsFragment.setNotificationHeader();
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 friendRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         deleteSentRequest(updatedPos2);
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 friendRequestViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.VISIBLE);
                         deleteSentRequest(updatedPos2);
-                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                        notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
                 break;

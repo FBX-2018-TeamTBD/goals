@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +55,7 @@ public class NotificationsFragment extends Fragment {
     @BindView(R.id.ivProfile) ImageView ivProfile;
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.rvNotifications) public RecyclerView rvNotifications;
+    @BindView(R.id.progressBar) public ProgressBar progressBar;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.no_notifications) RelativeLayout noNotifications;
 

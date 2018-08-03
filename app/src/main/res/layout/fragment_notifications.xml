@@ -8,17 +8,15 @@
     tools:context=".NotificationsFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
         android:id="@+id/swipeContainer"
-        android:layout_alignParentStart="true"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <RelativeLayout
                 android:id="@+id/header"
                 android:layout_width="match_parent"
@@ -62,9 +60,9 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/quicksand_medium"
                     android:text="@string/username"
-                    android:textSize="18dp"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
 
                 <RelativeLayout
                     android:id="@+id/info_layout"
@@ -156,16 +154,27 @@
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvNotifications"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/tvNotifications"
-            android:background="@color/white" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tvNotifications"
+                android:background="@color/white" />
 
         </RelativeLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-10dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/white"
+        android:visibility="invisible" />
 
     <RelativeLayout
         android:id="@+id/no_notifications"
