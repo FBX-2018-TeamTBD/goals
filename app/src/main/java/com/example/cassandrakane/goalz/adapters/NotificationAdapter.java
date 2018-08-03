@@ -91,9 +91,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 GoalRequestViewHolder goalRequestViewHolder = (GoalRequestViewHolder) holder;
                 Goal goal2 = null;
                 try {
-                    goal2 = mGoals.get(updatedPos).fetchIfNeeded();
-                    goalRequestViewHolder.tvGoalTitle.setText(goal2.getTitle());
-                    goalRequestViewHolder.tvGoalUsers.setText(getSharedFriendsListString(goal2.getFriends()));
+                    if (mGoals.get(updatedPos) != null) {
+                        goal2 = mGoals.get(updatedPos).fetchIfNeeded();
+                        goalRequestViewHolder.tvGoalTitle.setText(goal2.getTitle());
+                        goalRequestViewHolder.tvGoalUsers.setText(getSharedFriendsListString(goal2.getFriends()));
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

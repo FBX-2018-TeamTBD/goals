@@ -134,7 +134,11 @@ public class NotificationsFragment extends Fragment {
                     for (int i = 0; i < objects.size(); i++) {
                         GoalRequests request = objects.get(i);
                         try {
-                            goalRequests.add(((Goal) request.getParseObject("goal").fetch()));
+                            Goal goal = (Goal) request.getParseObject("goal");
+                            if (goal != null) {
+                                goal.fetch();
+                            }
+                            goalRequests.add(goal);
                             allGoalRequests.add(request);
                         } catch (ParseException e1) {
                             e1.printStackTrace();

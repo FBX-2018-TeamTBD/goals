@@ -92,7 +92,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         currentUser = ParseUser.getCurrentUser();
 
         if (personal) {
-            MainActivity activity = (MainActivity) context;
+            final MainActivity activity = (MainActivity) context;
 
             navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
 
@@ -196,6 +196,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             }
                         }
                     }
+
 
                     sendTextNotifications(goal, streakLostBy);
 
@@ -366,15 +367,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);
+                        activity.btnUnfriend.setVisibility(View.INVISIBLE);
                     }
                 }
             });
         } else {
             if (personal) {
-                Glide.with(context)
+                /*Glide.with(context)
                         .load(R.drawable.placeholder)
                         .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);
+                        .into(holder.ivStory);*/
                 final Goal finalGoal1 = goal;
                 holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -470,6 +472,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             } else {
                 text += String.format("%s, ", username);
             }
+        }
+        if (users.size() == 0) {
+            text += "Someone ";
         }
         text += "forgot to post.";
         return text;

@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.SearchFriendAdapter;
-import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
@@ -43,7 +42,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
     List<ParseUser> searched;
     SearchFriendAdapter searchfriendAdapter;
-    AddGoalForm form;
 
     @BindView(R.id.searchView) SearchView searchView;
     @Nullable @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -60,28 +58,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String requestActivityName = getIntent().getStringExtra("requestActivity");
-        form = Parcels.unwrap(getIntent().getParcelableExtra("form"));
         List<ParseUser> selectedUsers = new ArrayList<ParseUser>();
-        if (form != null && form.getSelectedFriends() != null) {
-            selectedUsers = form.getSelectedFriends();
-        }
 
-        if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
-            searched = getFriends();
-            ivConfirmBackground.setVisibility(View.VISIBLE);
-            btnConfirm.setVisibility(View.VISIBLE);
-
-            btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
-                    form.setSelectedFriends(searchfriendAdapter.selectedFriends);
-                    i.putExtra("form", Parcels.wrap(form));
-                    startActivity(i);
-                    finish();
-                }
-            });
-        }
         if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
             final Goal goal = getIntent().getParcelableExtra(Goal.class.getSimpleName());
 
@@ -238,11 +216,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (form != null) {
-            Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
-            i.putExtra("form", Parcels.wrap(form));
-            startActivity(i);
-        }
         finish();
     }
 }

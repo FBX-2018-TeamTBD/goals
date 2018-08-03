@@ -43,7 +43,7 @@
         android:layout_alignTop="@+id/ivStory"
         android:layout_marginRight="-10dp"
         android:layout_marginTop="-2dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:srcCompat="@drawable/check_circle" />
 
 </RelativeLayout>

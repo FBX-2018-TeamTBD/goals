@@ -1,4 +1,4 @@
-package com.example.cassandrakane.goalz.utils;
+package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,7 @@ public class HorizontalPagerAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
     private List<Fragment> mPages;
+    public int pageNum = 1;
 
     public HorizontalPagerAdapter(FragmentManager fragmentManager, Context context, List<Fragment> pages) {
         super(fragmentManager);
@@ -21,11 +22,18 @@ public class HorizontalPagerAdapter extends FragmentPagerAdapter {
      @Override
     public Fragment getItem(int position) {
          switch (position){
-             case 0: return mPages.get(0);
-             case 1: return mPages.get(1);
-             case 2: return mPages.get(2);
+             case 0:
+                 return mPages.get(0);
+             case 1:
+                 return mPages.get(1);
+             case 2:
+                 return mPages.get(2);
              default: return null;
          }
+    }
+
+    public int getPageNum() {
+        return pageNum;
     }
 
     @Override

@@ -5,18 +5,20 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cassandrakane.goalz.models.AddGoalForm;
+import com.example.cassandrakane.goalz.adapters.ShareFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
@@ -25,8 +27,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,17 +42,19 @@ public class AddGoalActivity extends AppCompatActivity {
 
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.etTitle) EditText etTitle;
-    @BindView(R.id.etDescription) EditText etDescription;
-    @BindView(R.id.etDuration) EditText etDuration;
     @BindView(R.id.rbDay) RadioButton rbDay;
     @BindView(R.id.rbWeek) RadioButton rbWeek;
     @BindView(R.id.rbMonth) RadioButton rbMonth;
-    @BindView(R.id.btnShare) Button btnShare;
     @BindView(R.id.tvShareFriends) TextView tvShareFriends;
+    @BindView(R.id.sbDuration) SeekBar sbDuration;
+    @BindView(R.id.tvDuration) TextView tvDuration;
+    @BindView(R.id.rvShareFriends) RecyclerView rvShareFriends;
 
     Date currentDate;
     int frequency;
-    List<ParseUser> selectedFriends = new ArrayList<ParseUser>();
+    List<ParseUser> selectedFriends = new ArrayList<>();
+    List<ParseUser> shareFriends = new ArrayList<>();
+    ShareFriendAdapter shareFriendAdapter;
 
     ParseUser user;
 
@@ -65,34 +67,22 @@ public class AddGoalActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.bind(this);
 
-        AddGoalForm form = Parcels.unwrap(getIntent().getParcelableExtra("form"));
-        if (form != null) {
-            etTitle.setText(form.getTitle());
-            etDescription.setText(form.getDescription());
-            etDuration.setText(form.getDuration());
-            if (form.getFrequency() == getResources().getInteger(R.integer.FREQUENCY_DAILY)) {
-                rbDay.setChecked(true);
-            }
-            if (form.getFrequency() == getResources().getInteger(R.integer.FREQUENCY_WEEKLY)) {
-                rbWeek.setChecked(true);
-            }
-            if (form.getFrequency() == getResources().getInteger(R.integer.FREQUENCY_MONTHLY)) {
-                rbMonth.setChecked(true);
-            }
-            frequency = form.getFrequency();
-            selectedFriends = form.getSelectedFriends();
-            tvShareFriends.setText(getSharedFriendsListString());
-        }
-
         user = ParseUser.getCurrentUser();
+        try {
+            shareFriends = user.fetch().getList("friends");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        shareFriendAdapter = new ShareFriendAdapter(shareFriends);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvShareFriends.setLayoutManager(layoutManager);
+        rvShareFriends.setAdapter(shareFriendAdapter);
 
         try {
             user = user.fetch();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        Log.i("sdf", "" + user.getACL().getPublicReadAccess());
 
         etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -103,33 +93,20 @@ public class AddGoalActivity extends AppCompatActivity {
             }
         });
 
-        etDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        sbDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tvDuration.setText("How many days will it take? " + seekBar.getProgress());
             }
-        });
 
-        etDuration.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
             }
-        });
 
-        btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), SearchFriendsActivity.class);
-                AddGoalForm currentForm = getCurrentForm();
-                i.putExtra("form", Parcels.wrap(currentForm));
-                i.putExtra("requestActivity", AddGoalActivity.class.getSimpleName());
-                startActivity(i);
-                finish();
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
@@ -160,25 +137,6 @@ public class AddGoalActivity extends AppCompatActivity {
         hideKeyboard(v);
     }
 
-    public AddGoalForm getCurrentForm() {
-        return new AddGoalForm(etTitle.getText().toString(), etDescription.getText().toString(), etDuration.getText().toString(), frequency, selectedFriends);
-    }
-
-    public String getSharedFriendsListString() {
-        if (selectedFriends.size() > 0) {
-            String str = "Shared with ";
-            for (ParseUser friend : selectedFriends) {
-                try {
-                    str = str + friend.fetch().getUsername() + ", ";
-                } catch(ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            return str.substring(0, str.length() - 2);
-        }
-        return "";
-    }
-
     public void goBack(View v) {
         finish();
     }
@@ -189,6 +147,7 @@ public class AddGoalActivity extends AppCompatActivity {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
             List<ParseUser> pendingFriends = new ArrayList<>();
+            selectedFriends = shareFriendAdapter.selectedFriends;
             Map<String, String> usersAdded = new HashMap<String, String>(){{
                 put(user.getObjectId(), "false");
             }};
@@ -197,7 +156,7 @@ public class AddGoalActivity extends AppCompatActivity {
             List<ParseUser> approved = new ArrayList<>();
             approved.add(ParseUser.getCurrentUser());
             Goal goal = new Goal(etTitle.getText().toString(),
-                    Integer.parseInt(etDuration.getText().toString()), frequency, 0, 0,
+                    sbDuration.getProgress(), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
                     selectedFriends, approved, pendingFriends, usersAdded);
             List<ParseObject> goals = user.getList("goals");

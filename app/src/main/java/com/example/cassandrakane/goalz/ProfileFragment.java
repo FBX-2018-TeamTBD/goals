@@ -76,7 +76,6 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
-
     public void populateProfile() {
         List<ParseObject> lGoals = user.getList("goals");
         completedGoals = 0;

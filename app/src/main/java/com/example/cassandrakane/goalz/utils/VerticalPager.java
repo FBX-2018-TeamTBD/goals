@@ -383,12 +383,29 @@ public class VerticalPager extends ViewGroup {
                  * mIsBeingDragged == false, otherwise the shortcut would have caught it. Check whether the user has moved
                  * far enough from his original down touch.
                  */
+
                 if (mTouchState == TOUCH_STATE_REST) {
                     checkStartScroll(x, y);
                 }
 
+                if (mCurrentPage == 2) {
+                    return false;
+                }
+
+                if (mainActivity.centralFragment.horizontalPager.getCurrentItem() == 0 || mainActivity.centralFragment.horizontalPager.getCurrentItem() == 2) {
+                    return false;
+                }
+
                 if (ev.getY() < mLastMotionY && mCurrentPage == 1) {
                     return false;
+                }
+
+                if (ev.getY() > mLastMotionY && mCurrentPage == 0) {
+                    return false;
+                }
+
+                if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getAdapter().getItemCount() == 0) {
+                    return true;
                 }
 
                 if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getChildAt(0).getTop() < 0) {
