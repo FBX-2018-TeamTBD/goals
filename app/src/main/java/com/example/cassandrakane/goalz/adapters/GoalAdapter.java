@@ -173,6 +173,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     return gestureDetector.onTouchEvent(motionEvent);
                 }
             });
+
+            holder.btnStory.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+
         }
 
         Date updateBy = goal.getUpdateStoryBy();
@@ -385,10 +393,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-               /* Glide.with(context)
+                Glide.with(context)
                         .load(R.drawable.placeholder)
                         .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);*/
+                        .into(holder.ivStory);
             }
         }
     }
