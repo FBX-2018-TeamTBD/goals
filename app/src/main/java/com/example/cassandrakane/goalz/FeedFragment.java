@@ -153,23 +153,23 @@ public class FeedFragment extends Fragment {
     public void populateStories() {
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
-            try {
-                ParseUser friend = friends.get(i).fetch();
+//            try {
+                ParseUser friend = friends.get(i);
                 List<Goal> friendGoals = friend.getList("goals");
                 for (int j = 0; j < friendGoals.size(); j++) {
-                    Goal goal = friendGoals.get(j).fetch();
+                    Goal goal = friendGoals.get(j);
                     if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
                             && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
                         goals.add(goal);
                         correspondingFriends.add(friend);
                     }
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
             swipeContainer.setRefreshing(false);
         }
-        animateStories();
+//        animateStories();
         storyAdapter.notifyDataSetChanged();
 
         if (goals.size() == 0) {

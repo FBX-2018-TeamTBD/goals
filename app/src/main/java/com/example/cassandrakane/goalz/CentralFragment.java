@@ -65,29 +65,29 @@ public class CentralFragment extends Fragment {
         horizontalPager.setAdapter(horizontalPagerAdapter);
         horizontalPager.setCurrentItem(1);
 
-        horizontalPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Fragment fragment = ((HorizontalPagerAdapter)horizontalPager.getAdapter()).getFragment(i);
-
-                if (i ==1 && fragment != null)
-                {
-                    fragment.onResume();
-                } else if (i == 2 && fragment != null){
-                    fragment.onResume();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
+//        horizontalPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int i, float v, int i1) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int i) {
+//                Fragment fragment = ((HorizontalPagerAdapter)horizontalPager.getAdapter()).getFragment(i);
+//
+//                if (i ==1 && fragment != null)
+//                {
+//                    fragment.onResume();
+//                } else if (i == 2 && fragment != null){
+//                    fragment.onResume();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int i) {
+//
+//            }
+//        });
 
         mainActivity = (MainActivity) getActivity();
 
