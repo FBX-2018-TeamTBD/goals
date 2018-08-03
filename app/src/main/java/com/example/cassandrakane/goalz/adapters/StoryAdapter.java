@@ -33,6 +33,7 @@ import butterknife.ButterKnife;
 public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> {
     private List<Goal> mGoals;
     private List<ParseUser> friends;
+    int startIndex = 0;
     Context context;
 
     public StoryAdapter(List<Goal> goals, List<ParseUser> friends) {
@@ -60,8 +61,28 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
         if (imageUrls.size() > 0) {
+
+            for (int i =0; i<story.size(); i++){
+                boolean seen = false;
+                ParseObject image = story.get(i);
+                List<ParseUser> users = image.getList("viewedBy");
+                if (users != null) {
+                    if (users.contains(ParseUser.getCurrentUser())){
+                        seen = true;
+                    }
+                }
+                if (!seen) {
+                    startIndex = i;
+                    // TODO - show blue dot under story
+                    holder.ivDot.setVisibility(View.VISIBLE);
+                    break;
+                } else {
+                    holder.ivDot.setVisibility(View.GONE);
+                }
+            }
+
             Glide.with(context)
-                    .load(imageUrls.get(imageUrls.size() - 1))
+                    .load(imageUrls.get(startIndex))
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +91,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     MainActivity activity = (MainActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, story.size() - 1, goal.getUser())).commit();
+                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
                 }
             });
         }
@@ -93,6 +114,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivProfile) ImageView ivProfile;
+        @BindView(R.id.ivDot) ImageView ivDot;
 
         public ViewHolder(View itemView) {
             super(itemView);

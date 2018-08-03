@@ -15,6 +15,7 @@ import android.widget.ViewFlipper;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -31,6 +32,7 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.btnAddGoal) public FloatingActionButton btnAddGoal;
     @BindView(R.id.btnCamera) ImageButton btnCamera;
     @BindView(R.id.btnFeed) ImageButton btnFeed;
+    @BindView(R.id.btnRefresh) ImageButton btnRefresh;
 
     MainActivity mainActivity;
     private ParseUser user = ParseUser.getCurrentUser();
@@ -89,6 +91,14 @@ public class ProfileFragment extends Fragment {
                 navigationHelper.toFeed();
             }
         });
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                networkPopulateProfile();
+            }
+        });
+
         return view;
     }
     @Override
@@ -125,4 +135,36 @@ public class ProfileFragment extends Fragment {
         goalAdapter.notifyDataSetChanged();
     }
 
+    public void networkPopulateProfile(){
+        List<ParseObject> arr = new ArrayList<>();
+        goals.clear();
+        try {
+            arr = user.fetch().getList("goals");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (arr != null) {
+            try {
+                ParseObject.fetchAllIfNeeded(arr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < arr.size(); i++) {
+                Goal goal = null;
+                try {
+                    goal = arr.get(i).fetch();
+                } catch(ParseException e) {
+                    e.printStackTrace();
+                }
+                if (goal.getCompleted()) {
+                    goals.add(goal);
+                } else {
+                    goals.add(0, goal);
+                }
+            }
+        }
+        ParseObject.unpinAllInBackground(goals);
+        ParseObject.pinAllInBackground(goals);
+    }
 }

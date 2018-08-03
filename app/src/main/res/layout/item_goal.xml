@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:layout_marginTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="270dp"
@@ -79,11 +79,10 @@
             android:id="@+id/ivStar"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignBottom="@+id/ivStory"
-            android:layout_toRightOf="@+id/tvStreak"
+            android:layout_alignBottom="@+id/tvProgress"
+            android:layout_toEndOf="@+id/tvStreak"
             android:tint="@color/white"
             android:visibility="visible"
-            android:layout_marginBottom="11dp"
             app:srcCompat="@drawable/star" />
 
         <TextView

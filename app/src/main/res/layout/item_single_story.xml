@@ -52,18 +52,29 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+            android:layout_width="101dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ivStory"
-            android:layout_marginBottom="6dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/title"
             android:textAlignment="center"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
+        <ImageView
+            android:id="@+id/ivDot"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tvTitle"
+            android:layout_marginTop="11dp"
+            android:tint="@color/orange"
+            card_view:srcCompat="@drawable/dot" />
+
     </RelativeLayout>
+
 </android.support.v7.widget.CardView>

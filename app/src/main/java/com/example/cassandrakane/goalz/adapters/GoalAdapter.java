@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
@@ -111,7 +110,73 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
                 @Override
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
-                    return false;
+
+                    final ArrayList<String> imageUrls = goal.getStoryUrls();
+                    final ArrayList<ParseObject> story = goal.getStory();
+
+                    if (imageUrls.size() > 0) {
+                        for (int i =0; i<story.size(); i++){
+                            boolean seen = false;
+                            ParseObject image = story.get(i);
+                            List<ParseUser> users = image.getList("viewedBy");
+                            if (users != null) {
+                                if (users.contains(currentUser)){
+                                    seen = true;
+                                }
+                            }
+                            if (!seen) {
+                                startIndex = i;
+                                // TODO - show blue dot under story
+                                break;
+                            }
+                        }
+                        if (context.getClass().isAssignableFrom(MainActivity.class)) {
+                            MainActivity activity = (MainActivity) context;
+//                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+//                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+//                        activity.toolbar.setVisibility(View.INVISIBLE);
+                            ProfileFragment fragmentOne = new ProfileFragment();
+                            StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
+                            Transition changeTransform = TransitionInflater.from(context).
+                                    inflateTransition(R.transition.change_image_transform);
+                            Transition changeBoundsTransform = TransitionInflater.from(context).
+                                    inflateTransition(R.transition.change_bounds);
+                            Transition explodeTransform = TransitionInflater.from(context).
+                                    inflateTransition(android.R.transition.fade);
+
+//                        fragmentTwo.setSharedElementEnterTransition(new DetailsTransition());
+//                        fragmentTwo.setEnterTransition(new Fade());
+//                        fragmentTwo.setExitTransition(new Fade());
+//                        fragmentTwo.setSharedElementReturnTransition(new DetailsTransition());
+
+                            fragmentOne.setSharedElementReturnTransition(changeTransform);
+                            fragmentOne.setExitTransition(explodeTransform);
+
+                            fragmentTwo.setSharedElementEnterTransition(changeTransform);
+                            fragmentTwo.setEnterTransition(explodeTransform);
+
+                            FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.main_central_fragment, fragmentTwo)
+                                    .addToBackStack("transaction")
+                                    .addSharedElement(holder.ivStory, "story");
+                            ft.commit();
+
+//                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
+                        }
+                        if (context.getClass().isAssignableFrom(FriendActivity.class)) {
+                            FriendActivity activity = (FriendActivity) context;
+                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                            fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+                            activity.ivProfile.setVisibility(View.INVISIBLE);
+                            activity.cardView.setVisibility(View.INVISIBLE);
+                            activity.btnBack.setVisibility(View.INVISIBLE);
+                            activity.btnUnfriend.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                    return true;
                 }
 
                 @Override
@@ -383,11 +448,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
-            if (personal) {
-                /*Glide.with(context)
+        /*    if (personal) {
+                *//*Glide.with(context)
                         .load(R.drawable.placeholder)
                         .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);*/
+                        .into(holder.ivStory);*//*
                 final Goal finalGoal1 = goal;
                 holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -402,11 +467,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                /*Glide.with(context)
+                *//*Glide.with(context)
                         .load(R.drawable.placeholder)
                         .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);*/
-            }
+                        .into(holder.ivStory);*//*
+            }*/
         }
     }
 
