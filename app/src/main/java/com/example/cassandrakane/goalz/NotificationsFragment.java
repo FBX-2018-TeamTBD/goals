@@ -119,6 +119,12 @@ public class NotificationsFragment extends Fragment {
         getGoalRequests();
         getFriendRequests();
 
+        if(allGoalRequests.size() == 0 && allFriendRequests.size() == 0) {
+            noNotifications.setVisibility(View.VISIBLE);
+        } else {
+            noNotifications.setVisibility(View.GONE);
+        }
+
         return view;
     }
 

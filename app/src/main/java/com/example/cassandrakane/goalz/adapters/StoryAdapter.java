@@ -96,6 +96,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
                 }
             });
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity activity = (MainActivity) context;
+                    final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                    FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, goal.getUser())).commit();
+                }
+            });
         }
 
         ParseFile file = (ParseFile) friends.get(position).get("image");
@@ -117,6 +126,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivProfile) ImageView ivProfile;
         @BindView(R.id.ivDot) ImageView ivDot;
+        @BindView(R.id.gradient) View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
