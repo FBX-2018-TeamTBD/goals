@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,24 +42,24 @@ public class HorizontalPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Object obj = super.instantiateItem(container, position);
-        if (obj instanceof Fragment) {
-            // record the fragment tag here.
-            Fragment f = (Fragment) obj;
-            String tag = f.getTag();
-            mFragmentTags.put(position, tag);
-        }
-        return obj;
-    }
+//    @Override
+//    public Object instantiateItem(ViewGroup container, int position) {
+//        Object obj = super.instantiateItem(container, position);
+//        if (obj instanceof Fragment) {
+//            // record the fragment tag here.
+//            Fragment f = (Fragment) obj;
+//            String tag = f.getTag();
+//            mFragmentTags.put(position, tag);
+//        }
+//        return obj;
+//    }
 
-    public Fragment getFragment(int position) {
-        String tag = mFragmentTags.get(position);
-        if (tag == null)
-            return null;
-        return mFragmentManager.findFragmentByTag(tag);
-    }
+//    public Fragment getFragment(int position) {
+//        String tag = mFragmentTags.get(position);
+//        if (tag == null)
+//            return null;
+//        return mFragmentManager.findFragmentByTag(tag);
+//    }
 
 //    @Override
 //    public int getItemPosition(@NonNull Object object) {
