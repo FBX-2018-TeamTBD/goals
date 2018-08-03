@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.NotificationsFragment;
 import com.example.cassandrakane.goalz.R;
@@ -79,6 +78,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case 0:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
                 textViewHolder.tvText.setText(mTextNotifications.get(position).getText());
+                ParseFile image = mTextNotifications.get(position).getImage();
+                if (image != null) {
+                    Util.setImage(image, context.getResources(), textViewHolder.ivImage, R.color.orange);
+                }
                 textViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -100,11 +103,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         text = "<b>" + fromUser.fetchIfNeeded().getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
                     }
                     goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
-                    List<String> storyUrls = goal2.getStoryUrls();
-                    if (storyUrls.size() > 0) {
-                        Glide.with(context)
-                                .load(storyUrls.get(storyUrls.size() - 1))
-                                .into(goalRequestViewHolder.ivStory);
+                    List<ParseObject> story = goal2.getStory();
+                    if (story.size() > 0) {
+                        Util.setImage(story.get(story.size() - 1).getParseFile("image"), context.getResources(), goalRequestViewHolder.ivStory, R.color.orange);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -292,7 +293,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ParseUser fromUser = request.getFromUser();
                     if (sendNotif && fromUser != null) {
                         String textNotification = String.format("%s accepted your goal request!", ParseUser.getCurrentUser().fetchIfNeeded().getUsername());
-                        sendTextNotification(textNotification, fromUser);
+                        List<ParseObject> story = mGoals.get(position).getStory();
+                        ParseFile image = null;
+                        if (story.size() > 0) {
+                            image = story.get(story.size() - 1).getParseFile("image");
+                        }
+                        sendTextNotification(textNotification, fromUser, image);
                     }
                     object.delete();
                     object.saveInBackground();
@@ -370,7 +376,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
                         deleteSentRequest(position);
                         String textNotification = String.format("%s accepted your friend request!", currentUser.fetchIfNeeded().getUsername());
-                        sendTextNotification(textNotification, user);
+                        ParseFile profilePicture = currentUser.getParseFile("image");
+                        sendTextNotification(textNotification, user, profilePicture);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
@@ -407,8 +414,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    public void sendTextNotification(String text, ParseUser user) {
-        TextNotification notification = new TextNotification(text, user);
+    public void sendTextNotification(String text, ParseUser user, ParseFile image) {
+        TextNotification notification = new TextNotification(text, user, image);
         notification.saveInBackground();
     }
 
@@ -440,6 +447,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class TextViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvText) TextView tvText;
+        @BindView(R.id.ivImage) ImageView ivImage;
         @BindView(R.id.btnClose) ImageButton btnClose;
 
         public TextViewHolder(View itemView) {

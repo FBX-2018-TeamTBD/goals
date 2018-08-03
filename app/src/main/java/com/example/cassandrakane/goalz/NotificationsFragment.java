@@ -165,17 +165,12 @@ public class NotificationsFragment extends Fragment {
                             Goal goal = (Goal) request.getParseObject("goal");
                             if (goal != null) {
                                 goal.fetch();
+                                noNotifications.setVisibility(View.GONE);
                             }
                             goalRequests.add(goal);
                             allGoalRequests.add(request);
-
                         } catch (ParseException e1) {
                             e1.printStackTrace();
-                        }
-                        Goal goal = (Goal) request.getParseObject("goal");
-                        if (goal != null) {
-                            goalRequests.add(goal);
-                            noNotifications.setVisibility(View.GONE);
                         }
                         allGoalRequests.add(request);
                     }
