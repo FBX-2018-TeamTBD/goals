@@ -150,4 +150,15 @@
 
     </ViewFlipper>
 
+    <ImageButton
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvLabel"
+        android:layout_alignEnd="@+id/btnAddGoal"
+        android:layout_marginBottom="6dp"
+        android:background="@null"
+        android:tint="@color/orange"
+        app:srcCompat="@drawable/ic_round_refresh_24px" />
+
 </RelativeLayout>
