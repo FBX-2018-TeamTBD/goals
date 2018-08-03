@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.activity_main_vertical_pager) VerticalPager verticalPager;
     public CentralFragment centralFragment;
+    public NotificationsFragment notificationsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         centralFragment = (CentralFragment) getSupportFragmentManager().findFragmentById(R.id.main_central_fragment);
+        notificationsFragment = (NotificationsFragment) getSupportFragmentManager().findFragmentById(R.id.main_top_fragment);
 
         snapPageWhenLayoutIsReady(verticalPager, CENTRAL_PAGE_INDEX);
     }

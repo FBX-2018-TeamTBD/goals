@@ -52,7 +52,7 @@ public class NotificationsFragment extends Fragment {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.ivProfile) ImageView ivProfile;
     @BindView(R.id.btnLogout) Button btnLogout;
-    @BindView(R.id.rvNotifications) RecyclerView rvNotifications;
+    @BindView(R.id.rvNotifications) public RecyclerView rvNotifications;
 
     public NotificationsFragment() { }
 
