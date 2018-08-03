@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +19,7 @@ import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.ParseException;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -78,14 +77,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 
         ParseFile file = (ParseFile) friends.get(position).get("image");
         if (file != null) {
-            try {
-                Glide.with(context)
-                        .load(Uri.fromFile(file.getFile()))
-                        .apply(new RequestOptions().centerCrop())
-                        .into(holder.ivProfile);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Util.setImage(file, context.getResources(), holder.ivProfile, R.color.white);
         }
         holder.tvTitle.setText(goal.getTitle());
     }

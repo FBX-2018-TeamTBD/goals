@@ -149,7 +149,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
 
                 ParseFile pfile = (ParseFile) friend.get("image");
-                Util.setImage(pfile, context.getResources(), friendRequestViewHolder.ivProfile, 40.0f);
+                Util.setImage(pfile, context.getResources(), friendRequestViewHolder.ivProfile, R.color.orange);
                 friendRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

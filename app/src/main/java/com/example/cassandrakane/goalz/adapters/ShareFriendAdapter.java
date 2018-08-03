@@ -3,7 +3,6 @@ package com.example.cassandrakane.goalz.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -62,6 +60,9 @@ public class ShareFriendAdapter extends RecyclerView.Adapter<ShareFriendAdapter.
         holder.tvUsername.setText(friend.getUsername());
         ParseFile file = (ParseFile) friend.get("image");
         if (file != null) {
+            Util.setImage(file, context.getResources(), holder.ivProfile, R.color.orange);
+        }
+   /*     if (file != null) {
             try {
                 Glide.with(context)
                         .load(Uri.fromFile(file.getFile()))
@@ -70,7 +71,7 @@ public class ShareFriendAdapter extends RecyclerView.Adapter<ShareFriendAdapter.
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override

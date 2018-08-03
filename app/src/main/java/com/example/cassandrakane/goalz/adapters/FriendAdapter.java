@@ -55,7 +55,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             e.printStackTrace();
         }
         ParseFile file = (ParseFile) friend.get("image");
-        Util.setImage(file, context.getResources(), holder.ivProfile, 30.0f);
+        Util.setImage(file, context.getResources(), holder.ivProfile, R.color.orange);
         holder.ivProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
