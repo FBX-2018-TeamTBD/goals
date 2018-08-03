@@ -70,7 +70,7 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/button_border"
         android:fontFamily="@font/quicksand_regular"
-        android:onClick="signup"
+        android:onClick="signUp"
         android:padding="15dp"
         android:text="@string/sign_me_up"
         android:textAllCaps="false"

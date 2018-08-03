@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.NotificationsFragment;
 import com.example.cassandrakane.goalz.R;
@@ -81,7 +83,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View view) {
                         ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
-                        deleteNotification(position);
+                        deleteTextNotification(position);
                         ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -91,10 +93,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 GoalRequestViewHolder goalRequestViewHolder = (GoalRequestViewHolder) holder;
                 Goal goal2 = null;
                 try {
-                    if (mGoals.get(updatedPos) != null) {
-                        goal2 = mGoals.get(updatedPos).fetchIfNeeded();
-                        goalRequestViewHolder.tvGoalTitle.setText(goal2.getTitle());
-                        goalRequestViewHolder.tvGoalUsers.setText(getSharedFriendsListString(goal2.getFriends()));
+                    goal2 = mGoals.get(updatedPos).fetchIfNeeded();
+                    String text = goal2.getTitle();
+                    ParseUser fromUser = goalRequests.get(updatedPos).getFromUser();
+                    if (fromUser != null) {
+                        text = "<b>" + fromUser.fetchIfNeeded().getUsername() + "</b> added you to their goal, <b>\"" + goal2.getTitle() + "\"</b>";
+                    }
+                    goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
+                    List<String> storyUrls = goal2.getStoryUrls();
+                    if (storyUrls.size() > 0) {
+                        Glide.with(context)
+                                .load(storyUrls.get(storyUrls.size() - 1))
+                                .into(goalRequestViewHolder.ivStory);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -117,13 +127,23 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
+                goalRequestViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        removeUserfromFriends(goal, updatedPos);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
                 break;
             case 2:
                 final int updatedPos2 = position - mTextNotifications.size() - mGoals.size();
                 FriendRequestViewHolder friendRequestViewHolder = (FriendRequestViewHolder) holder;
                 final ParseUser friend = mFriends.get(updatedPos2);
                 try {
-                    friendRequestViewHolder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
+                    String sourceString = "<b>" + friend.fetchIfNeeded().getUsername() + "</b> " +
+                            " added you as a friend!";
+                    friendRequestViewHolder.tvUsername.setText(Html.fromHtml(sourceString));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -140,6 +160,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
                 friendRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
+                        deleteSentRequest(updatedPos2);
+                        ((MainActivity) context).centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+                friendRequestViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ((MainActivity) context).centralFragment.progressBar.setVisibility(View.VISIBLE);
@@ -185,7 +213,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return "";
     }
 
-    public void deleteNotification(final int position) {
+    public void deleteTextNotification(final int position) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TextNotification");
         query.whereEqualTo("objectId", mTextNotifications.get(position).getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -197,6 +225,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         object.saveInBackground();
                     }
                     mTextNotifications.remove(position);
+
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -385,9 +414,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class GoalRequestViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvGoalTitle) TextView tvGoalTitle;
-        @BindView(R.id.tvGoalUsers) TextView tvGoalUsers;
+        @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.btnConfirm) Button btnConfirm;
         @BindView(R.id.btnDelete) Button btnDelete;
+        @BindView(R.id.btnClose) ImageButton btnClose;
 
         public GoalRequestViewHolder(View itemView) {
             super(itemView);
@@ -400,6 +430,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.ivProfile) ImageView ivProfile;
         @BindView(R.id.btnConfirm) Button btnConfirm;
         @BindView(R.id.btnDelete) Button btnDelete;
+        @BindView(R.id.btnClose) ImageButton btnClose;
 
         public FriendRequestViewHolder(View itemView) {
             super(itemView);

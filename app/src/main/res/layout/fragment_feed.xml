@@ -33,69 +33,78 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
+        android:id="@+id/swipeContainer"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvStory"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvStory"
-            android:paddingBottom="8dp"
-            android:paddingTop="7dp" />
+            android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvFriends"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/tvFriends" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvStory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvStory"
+                android:paddingBottom="8dp"
+                android:paddingTop="7dp" />
 
-        <TextView
-            android:id="@+id/tvStory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/text_bar"
-            android:layout_marginTop="13dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="6dp"
-            android:paddingLeft="20dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/quicksand_medium"
-            android:textSize="20sp"
-            android:text="stories" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvFriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/tvFriends" />
 
-        <TextView
-            android:id="@+id/tvFriends"
-            android:background="@drawable/text_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rvStory"
-            android:layout_marginTop="10dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="6dp"
-            android:paddingLeft="20dp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/quicksand_medium"
-            android:textSize="20sp"
-            android:text="friends" />
+            <TextView
+                android:id="@+id/tvStory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/text_bar"
+                android:layout_marginTop="13dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="20dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/quicksand_medium"
+                android:textSize="20sp"
+                android:text="stories" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnAddFriend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="20dp"
-            android:src="@drawable/add_friend"
-            android:background="@drawable/ripple_oval"
-            android:tint="@color/white"
-            android:elevation="10dp"
-            app:fabSize="normal" />
+            <TextView
+                android:id="@+id/tvFriends"
+                android:background="@drawable/text_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rvStory"
+                android:layout_marginTop="10dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="20dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/quicksand_medium"
+                android:textSize="20sp"
+                android:text="friends" />
 
-    </RelativeLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/btnAddFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="20dp"
+                android:src="@drawable/add_friend"
+                android:background="@drawable/ripple_oval"
+                android:tint="@color/white"
+                android:elevation="10dp"
+                app:fabSize="normal" />
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

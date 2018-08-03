@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
@@ -140,6 +141,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                         NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
                                         notificationHelper.cancelReminder(finalGoal);
                                         goals.remove(finalGoal);
+                                        finalGoal.unpinInBackground();
                                         notificationHelper.cancelReminder(finalGoal);
                                         removeGoal(finalGoal.getObjectId());
                                     }
@@ -320,6 +322,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
                 if (!seen) {
                     startIndex = i;
+                    // TODO - show blue dot under story
                     break;
                 }
             }
@@ -389,7 +392,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
-                        // TODO implement (go to camera fragment with finalGoal1 bundled)
+                        if (context.getClass().isAssignableFrom(MainActivity.class)) {
+                            MainActivity activity = (MainActivity) context;
+                            CameraFragment cameraFragment = CameraFragment.newInstance(finalGoal1);
+                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                            fragTransStory.add(R.id.main_central_fragment, cameraFragment).commit();
+                        }
                     }
                 });
             } else {
@@ -468,10 +477,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         for (int i = 0; i < users.size(); i++) {
             ParseUser user = users.get(i);
             String username = "";
-            try {
-                username = user.fetchIfNeeded().getUsername();
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (user != null) {
+                try {
+                    username = user.fetchIfNeeded().getUsername();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             if (i == users.size() - 1) {
                 text += String.format("%s ", username);

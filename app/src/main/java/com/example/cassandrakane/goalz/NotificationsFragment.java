@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.NotificationAdapter;
@@ -40,6 +41,7 @@ public class NotificationsFragment extends Fragment {
     List<GoalRequests> allGoalRequests;
     List<ParseUser> friendRequests;
     List<SentFriendRequests> allFriendRequests;
+    Integer notificationCount = 0;
 
     List<Goal> goals;
     List<Goal> completed;
@@ -53,6 +55,7 @@ public class NotificationsFragment extends Fragment {
     @BindView(R.id.btnLogout) Button btnLogout;
     @BindView(R.id.rvNotifications) public RecyclerView rvNotifications;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.no_notifications) RelativeLayout noNotifications;
 
     public NotificationsFragment() { }
 
@@ -131,6 +134,7 @@ public class NotificationsFragment extends Fragment {
                     for (int i = 0; i < objects.size(); i++) {
                         TextNotification notif = objects.get(i);
                         textNotifications.add(notif);
+                        noNotifications.setVisibility(View.GONE);
                     }
                 }
                 notificationAdapter.notifyDataSetChanged();
@@ -158,9 +162,16 @@ public class NotificationsFragment extends Fragment {
                             }
                             goalRequests.add(goal);
                             allGoalRequests.add(request);
+
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
+                        Goal goal = (Goal) request.getParseObject("goal");
+                        if (goal != null) {
+                            goalRequests.add(goal);
+                            noNotifications.setVisibility(View.GONE);
+                        }
+                        allGoalRequests.add(request);
                     }
                 }
                 notificationAdapter.notifyDataSetChanged();
@@ -185,6 +196,7 @@ public class NotificationsFragment extends Fragment {
                         try {
                             friendRequests.add(request.getParseUser("fromUser").fetch());
                             allFriendRequests.add(request);
+                            noNotifications.setVisibility(View.GONE);
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }

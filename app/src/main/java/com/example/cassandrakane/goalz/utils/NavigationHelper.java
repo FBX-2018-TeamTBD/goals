@@ -69,7 +69,7 @@ public class NavigationHelper {
             }
         });
 
-        ParseUser.logOutInBackground(new LogOutCallback() {
+        ParseUser.getCurrentUser().logOutInBackground(new LogOutCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {

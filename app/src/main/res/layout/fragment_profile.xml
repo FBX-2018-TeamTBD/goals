@@ -75,21 +75,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="33dp"
                 android:layout_marginTop="27dp"
-                android:text="This is some text that will describe my app and give the user some context and to what they should do first."
+                android:text="This is some text that will describe my app and give the user some context as to what they should do first."
                 android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse" />
-
-            <Button
-                android:id="@+id/btnAdd_1"
-                style="@style/SelectableItemBackground"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="40dp"
-                android:layout_marginEnd="33dp"
-                android:background="@drawable/add_goal"
-                android:backgroundTint="@color/white" />
-
 
         </RelativeLayout>
 
@@ -122,20 +109,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="87dp"
                 android:layout_marginStart="30dp"
-                android:text="This is some text that will describe my app and give the user some context and to what they should do first."
+                android:text="This is some text that will describe my app and give the user some context as to what they should do first."
                 android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse" />
-
-            <Button
-                style="@style/SelectableItemBackground"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="38dp"
-                android:layout_marginEnd="42dp"
-                android:background="@drawable/add_goal"
-                android:backgroundTint="@color/white" />
-
 
         </RelativeLayout>
 
@@ -166,20 +141,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="48dp"
                 android:layout_marginStart="40dp"
-                android:text="This is some text that will describe my app and give the user some context and to what they should do first."
+                android:text="This is some text that will describe my app and give the user some context as to what they should do first."
                 android:textAppearance="@style/TextAppearance.AppCompat.Small.Inverse" />
-
-            <Button
-                style="@style/SelectableItemBackground"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="40dp"
-                android:layout_marginEnd="33dp"
-                android:background="@drawable/add_goal"
-                android:backgroundTint="@color/white" />
-
 
         </RelativeLayout>
 
