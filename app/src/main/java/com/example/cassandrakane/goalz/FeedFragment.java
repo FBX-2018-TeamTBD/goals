@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,8 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
 
 public class FeedFragment extends Fragment {
 
@@ -79,8 +76,6 @@ public class FeedFragment extends Fragment {
         friendAdapter = new FriendAdapter(friends, suggestedFriends);
         rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFriends.setAdapter(friendAdapter);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
-        rvFriends.addItemDecoration(itemDecor);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
