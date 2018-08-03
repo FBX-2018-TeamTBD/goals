@@ -157,7 +157,6 @@ public class FeedFragment extends Fragment {
             }
             swipeContainer.setRefreshing(false);
         }
-        animateStories();
         storyAdapter.notifyDataSetChanged();
 
         if (goals.size() == 0) {
