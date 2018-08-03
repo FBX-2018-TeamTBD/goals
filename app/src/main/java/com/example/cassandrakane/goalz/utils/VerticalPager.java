@@ -60,6 +60,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -397,6 +398,8 @@ public class VerticalPager extends ViewGroup {
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisible = layoutManager.findLastVisibleItemPosition();
                 boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+
+                Log.i("sdf", ""+lastVisible);
 
                 if (ev.getY() < mLastMotionY && mCurrentPage == 0 && totalItemCount > 0 && endHasBeenReached) {
                     return false;
