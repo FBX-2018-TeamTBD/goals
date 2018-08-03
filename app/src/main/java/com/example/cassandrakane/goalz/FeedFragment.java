@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
@@ -101,13 +99,6 @@ public class FeedFragment extends Fragment {
             }
         });
 
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View view) {
-////                mainActivity.addFriend(view);
-////            }
-////        });
-
         populateFriends();
         populateStories();
 
@@ -115,8 +106,16 @@ public class FeedFragment extends Fragment {
     }
 
     public void refreshAsync() {
-        populateFriends();
-        populateStories();
+        friends.clear();
+        List<ParseUser> userFriends = new ArrayList<>();
+        userFriends = user.getList("friends");
+        friends.addAll(userFriends);
+
+        ParseObject.unpinAllInBackground(friends);
+        ParseObject.pinAllInBackground(friends);
+
+        friendAdapter.notifyDataSetChanged();
+        getFriendGoals();
     }
 
     @Override
@@ -174,17 +173,17 @@ public class FeedFragment extends Fragment {
     }
 
 
-    public void animateStories() {
-        rvStory.setVisibility(View.INVISIBLE);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rvStory.setVisibility(View.VISIBLE);
-                rvStory.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
-            }
-        }, 100);
-    }
+//    public void animateStories() {
+//        rvStory.setVisibility(View.INVISIBLE);
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                rvStory.setVisibility(View.VISIBLE);
+//                rvStory.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
+//            }
+//        }, 100);
+//    }
 
     public void populateSuggestedFriends(){
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -206,5 +205,29 @@ public class FeedFragment extends Fragment {
                 friendAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void getFriendGoals() {
+        goals.clear();
+        for (int i = 0; i < friends.size(); i++) {
+            try {
+                ParseUser friend = friends.get(i).fetch();
+                List<Goal> friendGoals = friend.fetch().getList("goals");
+                for (int j = 0; j < friendGoals.size(); j++) {
+                    Goal goal = friendGoals.get(j).fetch();
+                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+                        goals.add(goal);
+                        correspondingFriends.add(friend);
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            swipeContainer.setRefreshing(false);
+        }
+        storyAdapter.notifyDataSetChanged();
+        ParseObject.unpinAllInBackground(goals);
+        ParseObject.pinAllInBackground(goals);
     }
 }
