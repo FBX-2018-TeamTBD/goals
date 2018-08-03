@@ -12,7 +12,7 @@
         android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="222dp"
         app:srcCompat="@drawable/app_icon"
         tools:layout_editor_absoluteX="175dp"
         tools:layout_editor_absoluteY="266dp" />
@@ -20,10 +20,10 @@
     <ProgressBar
         android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="137dp"
+        android:layout_width="186dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivIcon"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="253dp"
         android:indeterminate="true" />
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -19,16 +18,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.VideoView;
 
 import com.example.cassandrakane.goalz.models.Goal;
@@ -266,79 +261,6 @@ public class DisplayActivity extends AppCompatActivity {
             }
         });
 
-//        etCaption.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                switch (motionEvent.getAction()){
-//                    case MotionEvent.ACTION_DOWN: {
-//                        final int pointerIndex = motionEvent.getActionIndex();
-//                        final float x = motionEvent.getX(pointerIndex);
-//                        final float y = motionEvent.getY(pointerIndex);
-//
-//                        mLastTouchX = x;
-//                        mLastTouchY = y;
-//
-//                        mActivePointerId = motionEvent.getPointerId(0);
-//                        break;
-//                    }
-//
-//                    case MotionEvent.ACTION_MOVE: {
-//                        final int pointerIndex = motionEvent.findPointerIndex(mActivePointerId);
-//
-//                        final float x = motionEvent.getX(pointerIndex);
-//                        final float y = motionEvent.getY(pointerIndex);
-//
-//                        // Calculate the distance moved
-//                        final float dx = x - mLastTouchX;
-//                        final float dy = y - mLastTouchY;
-//
-//                        mPosX = mLastTouchX;
-//                        mPosY = mLastTouchY;
-//
-//                        mPosX += dx;
-//                        mPosY += dy;
-//
-////                        etCaption.invalidate();
-//
-//                        // Remember this touch position for the next move event
-//                        mLastTouchX = x;
-//                        mLastTouchY = y;
-//
-//                        break;
-//                    }
-//
-//                    case MotionEvent.ACTION_UP: {
-////                        mActivePointerId = INVALID_POINTER_ID;
-//                        final int pointerIndex = motionEvent.getActionIndex();
-//                        final int pointerId = motionEvent.getPointerId(pointerIndex);
-//
-//                        if (pointerId == mActivePointerId){
-////                            final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-//                            mLastTouchX = motionEvent.getX(pointerIndex);
-//                            mLastTouchY = motionEvent.getY(pointerIndex);
-//                            mActivePointerId = motionEvent.getPointerId(pointerIndex);
-//
-//                            etCaption.setX(mLastTouchX);
-//                            etCaption.setY(-mLastTouchY);
-//                        }
-//                        break;
-//                    }
-//
-//                    case MotionEvent.ACTION_CANCEL: {
-//                        mActivePointerId = INVALID_POINTER_ID;
-//                        break;
-//                    }
-//
-//                    case MotionEvent.ACTION_POINTER_UP: {
-//
-//                        break;
-//                    }
-//                }
-//                return true;
-//            }
-//        });
-
-
         cameraId = getIntent().getStringExtra("cameraId");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         file = (File) getIntent().getSerializableExtra("image");
@@ -482,57 +404,6 @@ public class DisplayActivity extends AppCompatActivity {
                     }
                 });
             }
-        }
-    }
-
-    private final class MyTouchListener implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                ClipData data = ClipData.newPlainText("", "");
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                        view);
-                view.startDrag(data, shadowBuilder, view, 0);
-                view.setVisibility(View.INVISIBLE);
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    class MyDragListener implements View.OnDragListener {
-//        Drawable enterShape = getResources().getDrawable(
-//                R.drawable.shape_droptarget);
-//        Drawable normalShape = getResources().getDrawable(R.drawable.shape);
-
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            int action = event.getAction();
-            switch (event.getAction()) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    // do nothing
-                    break;
-//                case DragEvent.ACTION_DRAG_ENTERED:
-//                    v.setBackgroundDrawable(enterShape);
-//                    break;
-//                case DragEvent.ACTION_DRAG_EXITED:
-//                    v.setBackgroundDrawable(normalShape);
-//                    break;
-                case DragEvent.ACTION_DROP:
-                    // Dropped, reassign View to ViewGroup
-                    View view = (View) event.getLocalState();
-                    ViewGroup owner = (ViewGroup) view.getParent();
-                    owner.removeView(view);
-                    LinearLayout container = (LinearLayout) v;
-                    container.addView(view);
-                    view.setVisibility(View.VISIBLE);
-                    break;
-//                case DragEvent.ACTION_DRAG_ENDED:
-//                    v.setBackgroundDrawable(normalShape);
-                default:
-                    break;
-            }
-            return true;
         }
     }
 }
