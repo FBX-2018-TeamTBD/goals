@@ -59,7 +59,7 @@ public class ShareFriendAdapter extends RecyclerView.Adapter<ShareFriendAdapter.
             e.printStackTrace();
         }
 
-        holder.tvTitle.setText(friend.getUsername());
+        holder.tvUsername.setText(friend.getUsername());
         ParseFile file = (ParseFile) friend.get("image");
         if (file != null) {
             try {
@@ -81,7 +81,7 @@ public class ShareFriendAdapter extends RecyclerView.Adapter<ShareFriendAdapter.
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivProfile) ImageView ivProfile;
         @BindView(R.id.ivCheck) ImageView ivCheck;
 

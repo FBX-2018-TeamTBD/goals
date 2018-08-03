@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,8 +27,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
 public class FeedFragment extends Fragment {
 
@@ -70,10 +68,8 @@ public class FeedFragment extends Fragment {
 
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
-        rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
         rvFriends.setAdapter(friendAdapter);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), HORIZONTAL);
-        rvFriends.addItemDecoration(itemDecor);
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
