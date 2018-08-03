@@ -9,6 +9,7 @@ import com.example.cassandrakane.goalz.LoginActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.FindCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -41,7 +42,7 @@ public class NavigationHelper {
         viewPager.setCurrentItem(4);
     }
 
-    public void logout(Activity activity) {
+    public void logout(final Activity activity) {
         List<Goal> goals = ParseUser.getCurrentUser().getList("goals");
         NotificationHelper notificationHelper = new NotificationHelper(activity);
         if (goals != null) {
@@ -68,13 +69,21 @@ public class NavigationHelper {
             }
         });
 
-        ParseUser.logOut();
-        Toast.makeText(activity, "Successfully logged out.", Toast.LENGTH_LONG);
-        Intent i = new Intent(activity, LoginActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(i);
-        activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
-        activity.finish();
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(activity, "Successfully logged out.", Toast.LENGTH_LONG);
+                    Intent i = new Intent(activity, LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(i);
+                    activity.overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom);
+                    activity.finish();
+                } else {}
+                e.printStackTrace();
+            }
+        });
+
     }
 
 }
