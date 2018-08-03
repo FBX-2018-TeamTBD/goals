@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ViewFlipper;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -27,7 +29,8 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.rvGoals) public RecyclerView rvGoals;
     @BindView(R.id.viewFlipper) ViewFlipper viewFlipper;
     @BindView(R.id.btnAddGoal) public FloatingActionButton btnAddGoal;
-
+    @BindView(R.id.btnCamera) ImageButton btnCamera;
+    @BindView(R.id.btnFeed) ImageButton btnFeed;
 
     MainActivity mainActivity;
     private ParseUser user = ParseUser.getCurrentUser();
@@ -73,7 +76,19 @@ public class ProfileFragment extends Fragment {
                 mainActivity.addGoal(view);
             }
         });
-
+        final NavigationHelper navigationHelper = new NavigationHelper(mainActivity.centralFragment.horizontalPager);
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationHelper.toCamera();
+            }
+        });
+        btnFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationHelper.toFeed();
+            }
+        });
         return view;
     }
     @Override

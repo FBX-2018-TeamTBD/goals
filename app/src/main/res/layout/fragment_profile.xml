@@ -33,14 +33,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="end|bottom"
-        android:layout_margin="20dp"
-        android:src="@drawable/add_goal"
+        android:layout_marginBottom="25dp"
         android:background="@drawable/ripple_oval"
-        android:tint="@color/white"
         android:elevation="10dp"
-        app:fabSize="normal" />
+        android:src="@drawable/add_goal"
+        android:tint="@color/white"
+        app:fabCustomSize="60dp" />
+
+    <ImageButton
+        android:id="@+id/btnCamera"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="27dp"
+        android:layout_marginLeft="25dp"
+        android:background="@drawable/icon_shadow"
+        android:foreground="@drawable/camera_filled"
+        android:foregroundTint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/btnFeed"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="27dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/icon_shadow"
+        android:foreground="@drawable/people"
+        android:foregroundTint="@color/white" />
 
     <ViewFlipper
         android:id="@+id/viewFlipper"
