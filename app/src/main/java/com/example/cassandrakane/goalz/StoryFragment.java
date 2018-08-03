@@ -120,6 +120,7 @@ public class StoryFragment extends Fragment {
             }
         });
 
+        final StoryFragment storyFragment = this;
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,9 +128,10 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
 
-//                View toolbar = getActivity().findViewById(R.id.toolbar);
-//                toolbar.setVisibility(View.VISIBLE);
-                getActivity().onBackPressed();
+
+                getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
+                // TODO include animation?
+//                activity.onBackPressed();
 
 //                Activity activity = getActivity();
 //                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
@@ -137,13 +139,13 @@ public class StoryFragment extends Fragment {
 //                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
 //                    mainActivity.toolbar.setVisibility(View.VISIBLE);
 //                }
-//                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
-//                    FriendActivity friendActivity = (FriendActivity) activity;
-//                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-//                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
-//                    friendActivity.cardView.setVisibility(View.VISIBLE);
-//                    friendActivity.btnBack.setVisibility(View.VISIBLE);
-//                }
+                if (getActivity().getClass().isAssignableFrom(FriendActivity.class)) {
+                    FriendActivity friendActivity = (FriendActivity) getActivity();
+                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
+                    friendActivity.cardView.setVisibility(View.VISIBLE);
+                    friendActivity.btnBack.setVisibility(View.VISIBLE);
+                    friendActivity.btnUnfriend.setVisibility(View.VISIBLE);
+                }
 //                Activity activity = getActivity();
 //                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
 //                    MainActivity mainActivity = (MainActivity) activity;
@@ -333,12 +335,7 @@ public class StoryFragment extends Fragment {
                     }
             }, 5000);
         }
-        ParseUser user = null;
-        try {
-            user = object.getParseUser("user").fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ParseUser user = object.getParseUser("user");
         if (user != null) {
             tvUsername.setText(user.getUsername());
         }

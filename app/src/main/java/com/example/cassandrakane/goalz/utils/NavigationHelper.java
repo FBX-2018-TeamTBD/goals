@@ -68,7 +68,7 @@ public class NavigationHelper {
             }
         });
 
-        ParseUser.logOut();
+        ParseUser.getCurrentUser().logOut();
         Toast.makeText(activity, "Successfully logged out.", Toast.LENGTH_LONG);
         Intent i = new Intent(activity, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
