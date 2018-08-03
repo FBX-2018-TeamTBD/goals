@@ -195,6 +195,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         object.saveInBackground();
                     }
                     mTextNotifications.remove(position);
+
                     notifyDataSetChanged();
                 } catch (ParseException e1) {
                     e1.printStackTrace();

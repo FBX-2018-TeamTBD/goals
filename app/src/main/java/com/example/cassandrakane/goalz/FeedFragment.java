@@ -19,7 +19,6 @@ import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.adapters.StoryAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -113,6 +112,14 @@ public class FeedFragment extends Fragment {
         populateStories();
     }
 
+    @Override
+    public void onResume() {
+        //do the data changes
+        super.onResume();
+        populateFriends();
+        populateStories();
+    }
+
     public void populateFriends() {
         List<ParseUser> arr = null;
         arr = user.getList("friends");
@@ -134,20 +141,16 @@ public class FeedFragment extends Fragment {
     public void populateStories() {
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
-            try {
-                ParseUser friend = friends.get(i).fetch();
-                List<Goal> friendGoals = friend.getList("goals");
-                for (int j = 0; j < friendGoals.size(); j++) {
-                    Goal goal = friendGoals.get(j).fetch();
-                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0) {
-                        goals.add(goal);
-                    }
+            ParseUser friend = friends.get(i);
+            List<Goal> friendGoals = friend.getList("goals");
+            for (int j = 0; j < friendGoals.size(); j++) {
+                Goal goal = friendGoals.get(j);
+                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0) {
+                    goals.add(goal);
                 }
-                swipeContainer.setRefreshing(false);
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
+            swipeContainer.setRefreshing(false);
         }
         animateStories();
         storyAdapter.notifyDataSetChanged();

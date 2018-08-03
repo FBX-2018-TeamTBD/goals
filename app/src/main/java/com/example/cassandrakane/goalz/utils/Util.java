@@ -175,7 +175,10 @@ public class Util {
             Log.i("asdf", "error");
             e.printStackTrace();
         }
+
         setImageBitmap(bitmap, context, ivProfile);
+        imageFile = new ParseFile(photoFile);
+        imageFile.saveInBackground();
     }
 
     public static void getImageFromGallery(Context context, Uri uri, ParseFile imageFile, ImageView ivProfile) {
