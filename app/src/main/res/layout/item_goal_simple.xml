@@ -1,49 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true" >
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_centerHorizontal="true"
+    style="@style/SelectableItemBackground"
+    android:clickable="true">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/ivStory"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        android:text="Goal"
-        android:fontFamily="@font/quicksand"
-        android:textAppearance="@android:style/TextAppearance.Large" />
-
-    <ImageView
-        android:id="@+id/ivStory"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/tools"
+        android:id="@+id/card_view"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="15dp"
-        app:srcCompat="@drawable/add_circle" />
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardPreventCornerOverlap="false"
+        card_view:cardElevation="10dp">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/ivStory"
-        android:background="@color/lightGrey" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/ivStory"
+                android:transitionName="story"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_alignBottom="@+id/ivStory"
+                android:background="@drawable/gradient" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/ivStory"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/title"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
 
     <ImageView
         android:id="@+id/ivCheck"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignEnd="@+id/ivStory"
-        android:layout_alignTop="@+id/ivStory"
-        android:layout_marginRight="-10dp"
-        android:layout_marginTop="-2dp"
-        android:visibility="visible"
+        android:layout_alignEnd="@+id/card_view"
+        android:layout_alignTop="@+id/card_view"
+        android:layout_marginRight="-18dp"
+        android:layout_marginTop="-8dp"
+        android:visibility="invisible"
         app:srcCompat="@drawable/check_circle" />
 
 </RelativeLayout>

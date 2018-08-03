@@ -206,8 +206,6 @@ public class Util {
             Log.i("asdf", "error");
             e.printStackTrace();
         }
-
-        imageFile = new ParseFile(photoFile);
         setImage(imageFile, context.getResources(), ivProfile, R.color.orange);
         imageFile.saveInBackground();
     }
@@ -241,7 +239,7 @@ public class Util {
             e.printStackTrace();
         }
         setImage(imageFile, context.getResources(), ivProfile, R.color.orange);
-
+        imageFile.saveInBackground();
     }
 
 //    public static void setNotifications(ParseUser user) {

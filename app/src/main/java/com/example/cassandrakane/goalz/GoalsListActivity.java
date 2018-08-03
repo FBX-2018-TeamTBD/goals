@@ -7,7 +7,7 @@ import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +21,7 @@ import com.example.cassandrakane.goalz.adapters.GoalSimpleAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Video;
+import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -40,7 +41,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.NotificationHelper;
 
 public class GoalsListActivity extends AppCompatActivity {
 
@@ -89,7 +89,7 @@ public class GoalsListActivity extends AppCompatActivity {
 
         if (goals.size() != 0) {
             goalSimpleAdapter = new GoalSimpleAdapter(goals);
-            rvGoals.setLayoutManager(new LinearLayoutManager(this));
+            rvGoals.setLayoutManager(new GridLayoutManager(this, 3));
             rvGoals.setAdapter(goalSimpleAdapter);
         } else {
             noGoals.setVisibility(View.VISIBLE);
