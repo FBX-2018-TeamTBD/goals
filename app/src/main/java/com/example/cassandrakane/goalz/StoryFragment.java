@@ -128,6 +128,7 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
 
+
                 getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
                 // TODO include animation?
 //                activity.onBackPressed();
@@ -172,10 +173,6 @@ public class StoryFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        int fromLoc[] = new int[2];
-                        btnInfo.getLocationOnScreen(fromLoc);
-                        float startX = fromLoc[0];
-                        float startY = fromLoc[1];
                         Animation infoAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.info_slide_left);
                         tvUsername.setVisibility(View.VISIBLE);
                         tvDateAdded.setVisibility(View.VISIBLE);

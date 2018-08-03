@@ -63,18 +63,18 @@
 
     <TextView
         android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_alignTop="@+id/btnClose"
+        android:layout_marginEnd="1dp"
+        android:layout_marginTop="0dp"
         android:layout_weight="1"
         android:fontFamily="@font/quicksand_medium"
         android:text="Username"
-        android:visibility="invisible"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/tvDateAdded"
@@ -84,10 +84,10 @@
         android:layout_below="@+id/tvUsername"
         android:layout_weight="1"
         android:fontFamily="@font/quicksand_medium"
-        android:visibility="invisible"
         android:text="Date Added"
         android:textColor="@color/white"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/btnClose"
@@ -105,8 +105,9 @@
         android:id="@+id/btnInfo"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignEnd="@+id/tvDateAdded"
-        android:layout_alignTop="@+id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btnClose"
+        android:layout_marginEnd="20dp"
         android:background="@null"
         android:src="@drawable/info_button"
         android:tint="@color/white" />
@@ -115,12 +116,13 @@
         android:id="@+id/btnInfo2"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_alignTop="@+id/tvUsername"
-        android:layout_toStartOf="@+id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btnClose"
+        android:layout_marginEnd="101dp"
         android:background="@null"
         android:src="@drawable/info_button"
-        android:visibility="invisible"
-        android:tint="@color/white" />
+        android:tint="@color/white"
+        android:visibility="invisible" />
 
     <ProgressBar
         android:id="@+id/pbProgress"

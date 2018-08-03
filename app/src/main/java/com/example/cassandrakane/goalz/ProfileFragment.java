@@ -79,6 +79,13 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        //do the data changes
+        super.onResume();
+        populateProfile();
+    }
+
     public void populateProfile() {
         List<ParseObject> lGoals = user.getList("goals");
         completedGoals = 0;

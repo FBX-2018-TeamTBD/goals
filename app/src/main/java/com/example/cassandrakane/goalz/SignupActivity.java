@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.cassandrakane.goalz.utils.Util;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -75,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void signup(View v) {
+    public void signUp(View v) {
         // Create the ParseUser
         final ParseUser user = new ParseUser();
         // Set core properties
