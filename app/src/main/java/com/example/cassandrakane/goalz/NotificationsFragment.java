@@ -133,12 +133,11 @@ public class NotificationsFragment extends Fragment {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
                         GoalRequests request = objects.get(i);
-                        try {
-                            goalRequests.add(((Goal) request.getParseObject("goal").fetch()));
-                            allGoalRequests.add(request);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
+                        Goal goal = (Goal) request.getParseObject("goal");
+                        if (goal != null) {
+                            goalRequests.add(goal);
                         }
+                        allGoalRequests.add(request);
                     }
                 }
                 notificationAdapter.notifyDataSetChanged();

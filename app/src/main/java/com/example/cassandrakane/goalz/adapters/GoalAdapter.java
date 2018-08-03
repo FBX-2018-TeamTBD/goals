@@ -452,10 +452,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         for (int i = 0; i < users.size(); i++) {
             ParseUser user = users.get(i);
             String username = "";
-            try {
-                username = user.fetchIfNeeded().getUsername();
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (user != null) {
+                try {
+                    username = user.fetchIfNeeded().getUsername();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             if (i == users.size() - 1) {
                 text += String.format("%s ", username);
