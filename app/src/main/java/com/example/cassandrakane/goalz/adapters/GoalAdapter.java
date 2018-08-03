@@ -17,10 +17,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
@@ -90,7 +93,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         currentUser = ParseUser.getCurrentUser();
 
         if (personal) {
-            MainActivity activity = (MainActivity) context;
+            final MainActivity activity = (MainActivity) context;
 
             navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
 
@@ -172,6 +175,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     return gestureDetector.onTouchEvent(motionEvent);
                 }
             });
+
+            holder.btnStory.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+
         }
 
         Date updateBy = goal.getUpdateStoryBy();
@@ -239,7 +250,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         holder.tvTitle.setText(goal.getTitle());
-        holder.tvDescription.setText(goal.getDescription());
         holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
@@ -253,7 +263,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getApprovedUsers().size() > 1) {
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
             holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.friend));
-            holder.ivFriends.setOnClickListener(new View.OnClickListener() {
+            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, FriendsModalActivity.class);
@@ -266,7 +276,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setText("");
             if (personal) {
                 holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
-                holder.ivFriends.setOnClickListener(new View.OnClickListener() {
+                holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent i = new Intent(context, SearchFriendsActivity.class);
@@ -284,7 +294,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
@@ -319,10 +329,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
-                    .apply(RequestOptions.circleCropTransform())
+                    .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
 
-            holder.ivStory.setOnClickListener(new View.OnClickListener() {
+            holder.btnStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -374,9 +384,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             });
         } else {
             if (personal) {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_placeholder_add));
+                /*Glide.with(context)
+                        .load(R.drawable.placeholder)
+                        .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
+                        .into(holder.ivStory);*/
                 final Goal finalGoal1 = goal;
-                holder.ivStory.setOnClickListener(new View.OnClickListener(){
+                holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view){
                         if (context.getClass().isAssignableFrom(MainActivity.class)) {
@@ -389,7 +402,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                holder.ivStory.setImageDrawable(context.getResources().getDrawable(R.drawable.placeholder_friend));
+                /*Glide.with(context)
+                        .load(R.drawable.placeholder)
+                        .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
+                        .into(holder.ivStory);*/
             }
         }
     }
@@ -422,9 +438,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             @Override
             public void done(ParseObject object, ParseException e) {
                 try {
-                    object.delete();
-                    object.saveInBackground();
-                    notifyDataSetChanged();
+                    if (object != null) {
+                        object.delete();
+                        object.saveInBackground();
+                        notifyDataSetChanged();
+                    }
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
@@ -491,13 +509,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvTitle) TextView tvTitle;
-        @BindView(R.id.tvDescription) TextView tvDescription;
         @BindView(R.id.tvStreak) TextView tvStreak;
         @BindView(R.id.tvProgress) TextView tvProgress;
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivStar) ImageView ivStar;
         @BindView(R.id.ivFriends) ImageView ivFriends;
         @BindView(R.id.tvFriends) TextView tvFriends;
+        @BindView(R.id.btnStory) Button btnStory;
+        @BindView(R.id.btnFriends) Button btnFriends;
 
         public ViewHolder(View itemView) {
             super(itemView);

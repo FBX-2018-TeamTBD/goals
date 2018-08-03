@@ -97,7 +97,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     String text = goal2.getTitle();
                     ParseUser fromUser = goalRequests.get(updatedPos).getFromUser();
                     if (fromUser != null) {
-                        text = "<b>" + fromUser.fetchIfNeeded().getUsername() + "</b> added you to their goal, <b>\"" + goal2.getTitle() + "\"</b>";
+                        text = "<b>" + fromUser.fetchIfNeeded().getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
                     }
                     goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
                     List<String> storyUrls = goal2.getStoryUrls();
@@ -149,7 +149,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
 
                 ParseFile pfile = (ParseFile) friend.get("image");
-                Util.setImage(pfile, context.getResources(), friendRequestViewHolder.ivProfile, 40.0f);
+                Util.setImage(pfile, context.getResources(), friendRequestViewHolder.ivProfile, R.color.orange);
                 friendRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

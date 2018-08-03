@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -77,11 +77,11 @@ public class FriendActivity extends AppCompatActivity {
 
         goals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, false);
-        rvGoals.setLayoutManager(new LinearLayoutManager(this));
+        rvGoals.setLayoutManager(new GridLayoutManager(this, 2));
         rvGoals.setAdapter(goalAdapter);
 
         ParseFile file = (ParseFile) user.get("image");
-        Util.setImage(file, getResources(), ivProfile, 38.0f);
+        Util.setImage(file, getResources(), ivProfile, R.color.orange);
         user.unpinInBackground();
 
         user.pinInBackground("friends");
@@ -102,8 +102,6 @@ public class FriendActivity extends AppCompatActivity {
             }
         });
 
-        ParseFile pfile = (ParseFile) user.get("image");
-        Util.setImage(pfile, getResources(), ivProfile, 40.0f);
         populateProfile();
     }
 

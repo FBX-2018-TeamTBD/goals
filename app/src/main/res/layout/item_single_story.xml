@@ -1,25 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:padding="10dp"
-    android:layout_height="wrap_content">
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="10dp"
+    android:layout_width="120dp"
+    android:layout_height="150dp"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardPreventCornerOverlap="false"
+    card_view:cardElevation="10dp">
 
-    <ImageView
-        android:id="@+id/ivStory"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/placeholder_friend" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivStory"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="@font/quicksand"
-        android:layout_marginTop="5dp"
-        android:text="" />
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/ivStory"
+            android:transitionName="story"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/SelectableItemBackground"
+            android:src="@drawable/placeholder" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignBottom="@+id/ivStory"
+            android:clickable="true"
+            android:background="@drawable/gradient" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/mini_cardview"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:elevation="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/tvTitle"
+            android:background="@color/white"
+            card_view:cardCornerRadius="17dp" >
+
+            <ImageView
+                style="@style/SelectableItemBackground"
+                android:id="@+id/ivProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_placeholder_profile"
+                app:srcCompat="@drawable/rounded_placeholder_profile" />
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ivStory"
+            android:layout_marginBottom="6dp"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/quicksand_medium"
+            android:text="@string/title"
+            android:textAlignment="center"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

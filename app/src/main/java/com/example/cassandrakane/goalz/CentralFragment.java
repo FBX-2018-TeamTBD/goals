@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.cassandrakane.goalz.utils.HorizontalPagerAdapter;
+import com.example.cassandrakane.goalz.adapters.HorizontalPagerAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -29,7 +29,10 @@ public class CentralFragment extends Fragment {
     CameraFragment cameraFragment;
     FeedFragment feedFragment;
 
+    public int pageNum = 1;
+
     public List<Fragment> pages;
+    private HorizontalPagerAdapter horizontalPagerAdapter;
 
     private MainActivity mainActivity;
 
@@ -58,7 +61,8 @@ public class CentralFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        horizontalPager.setAdapter(new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), pages));
+        horizontalPagerAdapter = new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), pages);
+        horizontalPager.setAdapter(horizontalPagerAdapter);
         horizontalPager.setCurrentItem(1);
 
         horizontalPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

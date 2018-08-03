@@ -213,7 +213,6 @@ public class CameraFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
     }
 
     public void onLaunchGallery() {

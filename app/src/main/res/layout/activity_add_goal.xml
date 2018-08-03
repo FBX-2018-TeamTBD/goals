@@ -77,7 +77,7 @@
 
             <EditText
                 android:id="@+id/etTitle"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
@@ -87,41 +87,14 @@
                 android:hint="@string/what_s_your_goal"
                 android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/etDescription"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etTitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:fontFamily="@font/quicksand_regular"
-                android:hint="@string/description"
-                android:inputType="textPersonName"
-                android:lines="3"
-                android:maxLength="140" />
-
-            <EditText
-                android:id="@+id/etDuration"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etDescription"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:fontFamily="@font/quicksand_regular"
-                android:hint="@string/duration"
-                android:inputType="number"
-                android:lines="3"
-                android:maxLength="140" />
 
             <TextView
                 android:id="@+id/tvFrequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/etDuration"
-                android:layout_below="@+id/etDuration"
-                android:layout_marginTop="20dp"
+                android:layout_alignLeft="@id/sbDuration"
+                android:layout_below="@+id/sbDuration"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/reminder_frequency"
                 android:textSize="18sp" />
@@ -130,7 +103,7 @@
                 android:id="@+id/rgFrequency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/etDuration"
+                android:layout_alignLeft="@id/sbDuration"
                 android:layout_below="@id/tvFrequency"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
@@ -163,28 +136,51 @@
                     android:textSize="16sp" />
             </RadioGroup>
 
-            <Button
-                android:id="@+id/btnShare"
+            <TextView
+                android:id="@+id/tvDuration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/etTitle"
-                android:layout_below="@+id/rgFrequency"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_border"
-                android:text="share"
-                android:fontFamily="@font/quicksand_regular"
-                android:shadowRadius="10.0"
-                android:textColor="@color/orange" />
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/etTitle"
+                android:text="How many days will it take? 50"
+                android:layout_alignLeft="@id/etTitle"
+                android:fontFamily="@font/quicksand_medium"
+                android:textSize="18sp"
+                android:layout_marginTop="30dp" />
+
+            <SeekBar
+                android:id="@+id/sbDuration"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/tvDuration"
+                android:max="101"
+                android:min="1"
+                android:progress="50"
+                android:layout_marginTop="10dp" />
 
             <TextView
-                android:id="@+id/tvShareFriends"
-                android:layout_width="229dp"
-                android:layout_height="48dp"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
-                android:layout_toEndOf="@+id/btnShare"
+                android:id="@+id/tvShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/rgFrequency"
+                android:text="Share with friends"
+                android:layout_alignLeft="@id/etTitle"
                 android:fontFamily="@font/quicksand_medium"
-                android:gravity="center_vertical" />
+                android:textSize="18sp"
+                android:layout_marginTop="30dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvShareFriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvShare"
+                android:layout_alignStart="@id/tvShare"
+                android:layout_alignEnd="@+id/etTitle"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" />
 
         </RelativeLayout>
 

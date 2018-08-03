@@ -58,6 +58,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -383,15 +384,39 @@ public class VerticalPager extends ViewGroup {
                  * mIsBeingDragged == false, otherwise the shortcut would have caught it. Check whether the user has moved
                  * far enough from his original down touch.
                  */
+
                 if (mTouchState == TOUCH_STATE_REST) {
                     checkStartScroll(x, y);
+                }
+
+                if (mCurrentPage == 2) {
+                    return false;
+                }
+
+                LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(mainActivity.notificationsFragment.rvNotifications.getLayoutManager());
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
+                boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+
+                if (ev.getY() < mLastMotionY && mCurrentPage == 0 && totalItemCount > 0 && endHasBeenReached) {
+                    return false;
+                }
+
+                if (mainActivity.centralFragment.horizontalPager.getCurrentItem() == 0 || mainActivity.centralFragment.horizontalPager.getCurrentItem() == 2) {
+                    return false;
                 }
 
                 if (ev.getY() < mLastMotionY && mCurrentPage == 1) {
                     return false;
                 }
 
-                if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getChildAt(0).getTop() < 0) {
+                if (ev.getY() > mLastMotionY && mCurrentPage == 0) {
+                    return false;
+                }
+
+                if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals != null
+                        && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getAdapter().getItemCount() > 0
+                        && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getChildAt(0).getTop() < 0) {
                     return false;
                 }
 

@@ -2,6 +2,7 @@ package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,15 +47,14 @@ public class NotificationsFragment extends Fragment {
     List<Goal> completed;
     List<Goal> incompleted;
 
-    CentralFragment centralFragment;
-
     @BindView(R.id.tvProgress) TextView tvProgress;
     @BindView(R.id.tvCompleted) TextView tvCompleted;
     @BindView(R.id.tvFriends) TextView tvFriends;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.ivProfile) ImageView ivProfile;
     @BindView(R.id.btnLogout) Button btnLogout;
-    @BindView(R.id.rvNotifications) RecyclerView rvNotifications;
+    @BindView(R.id.rvNotifications) public RecyclerView rvNotifications;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
     @BindView(R.id.no_notifications) RelativeLayout noNotifications;
 
     public NotificationsFragment() { }
@@ -87,6 +87,24 @@ public class NotificationsFragment extends Fragment {
                 navigationHelper.logout(mainActivity);
             }
         });
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                getTextNotifications();
+                getGoalRequests();
+                getFriendRequests();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_red_light);
 
         textNotifications = new ArrayList<>();
         goalRequests = new ArrayList<>();
@@ -138,7 +156,11 @@ public class NotificationsFragment extends Fragment {
                     for (int i = 0; i < objects.size(); i++) {
                         GoalRequests request = objects.get(i);
                         try {
-                            goalRequests.add(((Goal) request.getParseObject("goal").fetch()));
+                            Goal goal = (Goal) request.getParseObject("goal");
+                            if (goal != null) {
+                                goal.fetch();
+                            }
+                            goalRequests.add(goal);
                             allGoalRequests.add(request);
 
                         } catch (ParseException e1) {
@@ -179,6 +201,7 @@ public class NotificationsFragment extends Fragment {
                             e1.printStackTrace();
                         }
                     }
+                    swipeContainer.setRefreshing(false);
                 }
                 notificationAdapter.notifyDataSetChanged();
             }

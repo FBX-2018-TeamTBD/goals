@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
+import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
 
 public class FeedFragment extends Fragment {
 
@@ -41,6 +42,7 @@ public class FeedFragment extends Fragment {
 
     StoryAdapter storyAdapter;
     List<Goal> goals;
+    List<ParseUser> correspondingFriends;
 
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
@@ -67,7 +69,8 @@ public class FeedFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
 
         goals = new ArrayList<>();
-        storyAdapter = new StoryAdapter(goals);
+        correspondingFriends = new ArrayList<>();
+        storyAdapter = new StoryAdapter(goals, correspondingFriends);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvStory.setLayoutManager(layoutManager);
         rvStory.setAdapter(storyAdapter);
@@ -89,6 +92,12 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_red_light);
+
+
+        friends = new ArrayList<>();
+        friendAdapter = new FriendAdapter(friends, suggestedFriends);
+            rvFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        rvFriends.setAdapter(friendAdapter);
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,14 +153,19 @@ public class FeedFragment extends Fragment {
     public void populateStories() {
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
-            ParseUser friend = friends.get(i);
-            List<Goal> friendGoals = friend.getList("goals");
-            for (int j = 0; j < friendGoals.size(); j++) {
-                Goal goal = friendGoals.get(j);
-                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0) {
-                    goals.add(goal);
+            try {
+                ParseUser friend = friends.get(i).fetch();
+                List<Goal> friendGoals = friend.getList("goals");
+                for (int j = 0; j < friendGoals.size(); j++) {
+                    Goal goal = friendGoals.get(j).fetch();
+                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+                        goals.add(goal);
+                        correspondingFriends.add(friend);
+                    }
                 }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
             swipeContainer.setRefreshing(false);
         }

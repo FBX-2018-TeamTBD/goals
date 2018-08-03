@@ -70,7 +70,6 @@ public class NotificationHelper {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, goal.getObjectId())
                 .setSmallIcon(R.mipmap.ic_app_round)
                 .setContentTitle(goal.getTitle())
-                .setContentText(goal.getDescription())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setAutoCancel(true);

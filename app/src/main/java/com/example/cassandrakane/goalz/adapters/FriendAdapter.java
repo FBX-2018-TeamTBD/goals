@@ -76,7 +76,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     e.printStackTrace();
                 }
                 final ParseFile file = (ParseFile) friend.get("image");
-                Util.setImage(file, context.getResources(), viewHolder.ivProfile, 27.0f);
+                Util.setImage(file, context.getResources(), viewHolder.ivProfile, R.color.orange);
                 viewHolder.ivProfile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -99,7 +99,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     e.printStackTrace();
                 }
                 ParseFile file1 = (ParseFile) friend1.get("image");
-                Util.setImage(file1, context.getResources(), viewHolder1.ivProfile, 27.0f);
+                Util.setImage(file1, context.getResources(), viewHolder1.ivProfile, R.color.orange);
                 viewHolder1.ivProfile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -116,6 +116,19 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                 });
                 break;
+//=======
+//        try {
+//            holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        ParseFile file = (ParseFile) friend.get("image");
+//        Util.setImage(file, context.getResources(), holder.ivProfile, R.color.orange);
+//        holder.ivProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                toFriendActivity(friend);
+//>>>>>>> d8e1b54b3538aaad641d924a53debaf3a8196e2c
             }
 
     }
@@ -146,7 +159,6 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivProfile) ImageView ivProfile;
-        @BindView(R.id.rvStory) RecyclerView rvStory;
 
         public ViewHolder(View itemView) {
             super(itemView);

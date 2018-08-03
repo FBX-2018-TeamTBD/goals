@@ -36,27 +36,29 @@
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeContainer"
-        android:visibility="gone"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:id="@+id/swipeContainer"
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvStory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvStory"
-            android:paddingBottom="8dp"
-            android:paddingTop="7dp" />
+                android:id="@+id/rvStory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvStory"
+                android:paddingBottom="8dp"
+                android:paddingTop="7dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_below="@+id/tvFriends" />
 
             <TextView
@@ -100,6 +102,7 @@
                 android:src="@drawable/add_friend"
                 android:background="@drawable/ripple_oval"
                 android:tint="@color/white"
+                android:elevation="10dp"
                 app:fabSize="normal" />
 
         </RelativeLayout>

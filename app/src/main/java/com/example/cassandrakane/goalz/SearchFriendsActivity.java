@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cassandrakane.goalz.adapters.SearchFriendAdapter;
-import com.example.cassandrakane.goalz.models.AddGoalForm;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
@@ -43,7 +43,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
     List<ParseUser> searched;
     SearchFriendAdapter searchfriendAdapter;
-    AddGoalForm form;
 
     @BindView(R.id.searchView) SearchView searchView;
     @Nullable @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -60,28 +59,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String requestActivityName = getIntent().getStringExtra("requestActivity");
-        form = Parcels.unwrap(getIntent().getParcelableExtra("form"));
         List<ParseUser> selectedUsers = new ArrayList<ParseUser>();
-        if (form != null && form.getSelectedFriends() != null) {
-            selectedUsers = form.getSelectedFriends();
-        }
 
-        if (requestActivityName.equals(AddGoalActivity.class.getSimpleName())) {
-            searched = getFriends();
-            ivConfirmBackground.setVisibility(View.VISIBLE);
-            btnConfirm.setVisibility(View.VISIBLE);
-
-            btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
-                    form.setSelectedFriends(searchfriendAdapter.selectedFriends);
-                    i.putExtra("form", Parcels.wrap(form));
-                    startActivity(i);
-                    finish();
-                }
-            });
-        }
         if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
             final Goal goal = getIntent().getParcelableExtra(Goal.class.getSimpleName());
 
@@ -115,10 +94,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
             btnConfirm.setVisibility(View.INVISIBLE);
         }
         searchfriendAdapter = new SearchFriendAdapter(searched, selectedUsers, requestActivityName);
-        rvSearched.setLayoutManager(new LinearLayoutManager(this));
+        rvSearched.setLayoutManager(new GridLayoutManager(this, 3));
         rvSearched.setAdapter(searchfriendAdapter);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
-        rvSearched.addItemDecoration(itemDecor);
 
         TextView searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         Typeface typeface = getResources().getFont(R.font.quicksand_regular);
@@ -238,11 +215,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (form != null) {
-            Intent i = new Intent(getApplicationContext(), AddGoalActivity.class);
-            i.putExtra("form", Parcels.wrap(form));
-            startActivity(i);
-        }
         finish();
     }
 }

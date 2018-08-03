@@ -24,13 +24,12 @@ public class Goal extends ParseObject implements Parcelable {
         super();
     }
 
-    public Goal(String title, String description, int duration, int frequency, int progress,
+    public Goal(String title, int duration, int frequency, int progress,
                 int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy,
                 List<ParseUser> friends, List<ParseUser> approvedUsers, List<ParseUser> pendingUsers,
                 Map<String, String> userAdded) {
         super();
         setTitle(title);
-        setDescription(description);
         setDuration(duration);
         setFrequency(frequency);
         setProgress(progress);
@@ -77,15 +76,6 @@ public class Goal extends ParseObject implements Parcelable {
     public String getTitle() {
 //        try {
         return getString("title");
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return "";
-    }
-
-    public String getDescription() {
-//        try {
-            return getString("description");
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
@@ -211,10 +201,6 @@ public class Goal extends ParseObject implements Parcelable {
 
     public void setTitle(String title) {
         put("title", title);
-    }
-
-    public void setDescription(String description) {
-        put("description", description);
     }
 
     public void setDuration(int duration) {
