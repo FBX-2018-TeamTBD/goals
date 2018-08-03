@@ -36,6 +36,7 @@ public class FeedFragment extends Fragment {
 
     StoryAdapter storyAdapter;
     List<Goal> goals;
+    List<ParseUser> correspondingFriends;
 
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
@@ -61,7 +62,8 @@ public class FeedFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
 
         goals = new ArrayList<>();
-        storyAdapter = new StoryAdapter(goals);
+        correspondingFriends = new ArrayList<>();
+        storyAdapter = new StoryAdapter(goals, correspondingFriends);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvStory.setLayoutManager(layoutManager);
         rvStory.setAdapter(storyAdapter);
@@ -125,6 +127,7 @@ public class FeedFragment extends Fragment {
                     if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
                             && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0) {
                         goals.add(goal);
+                        correspondingFriends.add(friend);
                     }
                 }
             } catch (ParseException e) {

@@ -78,6 +78,14 @@ public class AddGoalActivity extends AppCompatActivity {
         rvShareFriends.setLayoutManager(layoutManager);
         rvShareFriends.setAdapter(shareFriendAdapter);
 
+        if (shareFriends.size() == 0) {
+            tvShareFriends.setVisibility(View.GONE);
+            rvShareFriends.setVisibility(View.GONE);
+        } else {
+            tvShareFriends.setVisibility(View.VISIBLE);
+            rvShareFriends.setVisibility(View.VISIBLE);
+        }
+
         try {
             user = user.fetch();
         } catch (ParseException e) {

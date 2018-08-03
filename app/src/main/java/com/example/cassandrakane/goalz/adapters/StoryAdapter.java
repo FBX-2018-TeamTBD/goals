@@ -23,6 +23,7 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,12 @@ import butterknife.ButterKnife;
 
 public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> {
     private List<Goal> mGoals;
+    private List<ParseUser> friends;
     Context context;
 
-    public StoryAdapter(List<Goal> goals) {
+    public StoryAdapter(List<Goal> goals, List<ParseUser> friends) {
         this.mGoals = goals;
+        this.friends = friends;
     }
 
     // for each row, inflate the layout and cache references into ViewHolder
@@ -73,7 +76,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             });
         }
 
-        ParseFile file = (ParseFile) goal.getUser().get("image");
+        ParseFile file = (ParseFile) friends.get(position).get("image");
         if (file != null) {
             try {
                 Glide.with(context)
