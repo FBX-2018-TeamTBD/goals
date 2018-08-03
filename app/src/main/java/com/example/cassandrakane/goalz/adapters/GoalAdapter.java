@@ -438,9 +438,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             @Override
             public void done(ParseObject object, ParseException e) {
                 try {
-                    object.delete();
-                    object.saveInBackground();
-                    notifyDataSetChanged();
+                    if (object != null) {
+                        object.delete();
+                        object.saveInBackground();
+                        notifyDataSetChanged();
+                    }
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
