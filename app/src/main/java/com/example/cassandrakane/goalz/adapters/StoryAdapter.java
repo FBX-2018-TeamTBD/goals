@@ -91,7 +91,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     MainActivity activity = (MainActivity) context;
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, goal.getUser())).commit();
+                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
                 }
             });
             holder.view.setOnClickListener(new View.OnClickListener() {
