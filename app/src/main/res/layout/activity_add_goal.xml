@@ -137,16 +137,6 @@
             </RadioGroup>
 
             <TextView
-                android:id="@+id/tvShareFriends"
-                android:layout_width="229dp"
-                android:layout_height="48dp"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="20dp"
-                android:layout_toEndOf="@+id/btnShare"
-                android:fontFamily="@font/quicksand_medium"
-                android:gravity="center_vertical" />
-
-            <TextView
                 android:id="@+id/tvDuration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

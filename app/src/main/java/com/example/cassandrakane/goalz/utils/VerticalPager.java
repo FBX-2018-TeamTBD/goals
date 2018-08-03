@@ -414,7 +414,9 @@ public class VerticalPager extends ViewGroup {
                     return false;
                 }
 
-                if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getAdapter().getItemCount() > 0 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getChildAt(0).getTop() < 0) {
+                if (ev.getY() > mLastMotionY && mCurrentPage == 1 && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals != null
+                        && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getAdapter().getItemCount() > 0
+                        && ((ProfileFragment) mainActivity.centralFragment.pages.get(1)).rvGoals.getChildAt(0).getTop() < 0) {
                     return false;
                 }
 

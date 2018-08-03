@@ -393,10 +393,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                Glide.with(context)
+                /*Glide.with(context)
                         .load(R.drawable.placeholder)
                         .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);
+                        .into(holder.ivStory);*/
             }
         }
     }

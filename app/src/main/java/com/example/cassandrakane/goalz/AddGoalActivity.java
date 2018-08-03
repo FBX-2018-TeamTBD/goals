@@ -45,10 +45,10 @@ public class AddGoalActivity extends AppCompatActivity {
     @BindView(R.id.rbDay) RadioButton rbDay;
     @BindView(R.id.rbWeek) RadioButton rbWeek;
     @BindView(R.id.rbMonth) RadioButton rbMonth;
-    @BindView(R.id.tvShareFriends) TextView tvShareFriends;
     @BindView(R.id.sbDuration) SeekBar sbDuration;
     @BindView(R.id.tvDuration) TextView tvDuration;
     @BindView(R.id.rvShareFriends) RecyclerView rvShareFriends;
+    @BindView(R.id.tvShare) TextView tvShare;
 
     Date currentDate;
     int frequency;
@@ -79,17 +79,11 @@ public class AddGoalActivity extends AppCompatActivity {
         rvShareFriends.setAdapter(shareFriendAdapter);
 
         if (shareFriends.size() == 0) {
-            tvShareFriends.setVisibility(View.GONE);
+            tvShare.setVisibility(View.GONE);
             rvShareFriends.setVisibility(View.GONE);
         } else {
-            tvShareFriends.setVisibility(View.VISIBLE);
+            tvShare.setVisibility(View.VISIBLE);
             rvShareFriends.setVisibility(View.VISIBLE);
-        }
-
-        try {
-            user = user.fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
         etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
