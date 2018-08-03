@@ -25,6 +25,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.VISIBLE;
+
 public class ProfileFragment extends Fragment {
 
     @BindView(R.id.rvGoals) public RecyclerView rvGoals;
@@ -128,7 +130,7 @@ public class ProfileFragment extends Fragment {
             goals.addAll(completed);
         }
         if (completedGoals == 0 && progressGoals == 0) {
-            viewFlipper.setVisibility(View.VISIBLE);
+            viewFlipper.setVisibility(VISIBLE);
         } else {
             viewFlipper.setVisibility(View.GONE);
         }
@@ -136,6 +138,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void networkPopulateProfile(){
+        mainActivity.centralFragment.progressBar.setVisibility(VISIBLE);
         List<ParseObject> arr = new ArrayList<>();
         goals.clear();
         try {
@@ -166,5 +169,6 @@ public class ProfileFragment extends Fragment {
         }
         ParseObject.unpinAllInBackground(goals);
         ParseObject.pinAllInBackground(goals);
+        mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
     }
 }

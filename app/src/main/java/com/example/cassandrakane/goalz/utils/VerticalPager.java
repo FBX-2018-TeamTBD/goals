@@ -398,8 +398,6 @@ public class VerticalPager extends ViewGroup {
                 int lastVisible = layoutManager.findLastVisibleItemPosition();
                 boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
 
-
-
                 if (ev.getY() < mLastMotionY && mCurrentPage == 0 && totalItemCount > 0 && endHasBeenReached) {
                     return false;
                 }
