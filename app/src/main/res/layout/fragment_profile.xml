@@ -24,6 +24,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tvLabel"
         android:paddingBottom="8dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:paddingTop="7dp">
 
     </android.support.v7.widget.RecyclerView>
