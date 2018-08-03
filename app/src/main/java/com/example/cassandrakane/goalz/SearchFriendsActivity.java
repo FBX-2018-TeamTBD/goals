@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -93,10 +94,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
             btnConfirm.setVisibility(View.INVISIBLE);
         }
         searchfriendAdapter = new SearchFriendAdapter(searched, selectedUsers, requestActivityName);
-        rvSearched.setLayoutManager(new LinearLayoutManager(this));
+        rvSearched.setLayoutManager(new GridLayoutManager(this, 3));
         rvSearched.setAdapter(searchfriendAdapter);
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
-        rvSearched.addItemDecoration(itemDecor);
 
         TextView searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         Typeface typeface = getResources().getFont(R.font.quicksand_regular);
