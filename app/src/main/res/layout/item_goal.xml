@@ -126,5 +126,16 @@
             android:background="@color/transparent"
             android:text="" />
 
+        <ImageButton
+            android:id="@+id/ibAdd"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="73dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            card_view:srcCompat="@drawable/add_circle" />
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -273,6 +273,19 @@ public class StoryFragment extends Fragment {
         });
 
         return view;
+
+        /*
+        final Reaction reaction = new Reaction(type, user);
+        reaction.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                List<ParseObject> reactions = object.getList("reactions");
+                reactions.add(reaction);
+                object.setReactions(reactions);
+                object.saveInBackground();
+            }
+        });
+        */
     }
 
     public void setImage(){

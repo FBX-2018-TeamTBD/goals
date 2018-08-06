@@ -20,7 +20,6 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -89,8 +88,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) context;
-                    ImageView ivDot = ((MainActivity) context).findViewById(R.id.ivDot);
-                    ivDot.setVisibility(View.GONE);
+                    holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
@@ -100,17 +98,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) context;
+                    holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, goal.getUser())).commit();
+                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
                 }
             });
         }
 
-        ParseFile file = (ParseFile) friends.get(position).get("image");
-        if (file != null) {
-            Util.setImage(file, context.getResources(), holder.ivProfile, R.color.white);
-        }
+        Util.setImage(friends.get(position).getParseFile("image"), context.getResources(), holder.ivProfile, R.color.white);
         holder.tvTitle.setText(goal.getTitle());
     }
 

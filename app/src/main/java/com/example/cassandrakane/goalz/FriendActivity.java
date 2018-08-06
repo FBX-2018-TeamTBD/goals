@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -43,6 +44,7 @@ public class FriendActivity extends AppCompatActivity {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.info_layout) View relativeLayout;
     @BindView(R.id.noGoals) RelativeLayout noGoalPage;
+    @BindView(R.id.btnMessage) public Button btnMessage;
 
     TextView tvProgress;
     TextView tvCompleted;
@@ -80,7 +82,7 @@ public class FriendActivity extends AppCompatActivity {
         rvGoals.setLayoutManager(new GridLayoutManager(this, 2));
         rvGoals.setAdapter(goalAdapter);
 
-        ParseFile file = (ParseFile) user.get("image");
+        ParseFile file = user.getParseFile("image");
         Util.setImage(file, getResources(), ivProfile, R.color.orange);
         user.unpinInBackground();
 
@@ -99,6 +101,15 @@ public class FriendActivity extends AppCompatActivity {
                         })
                         .setNegativeButton(R.string.no, null)
                         .show();
+            }
+        });
+
+        btnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FriendActivity.this, ChatActivity.class);
+                i.putExtra(ParseUser.class.getSimpleName(), user);
+                startActivity(i);
             }
         });
 

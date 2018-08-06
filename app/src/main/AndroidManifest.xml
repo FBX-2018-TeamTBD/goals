@@ -80,7 +80,8 @@
             android:theme="@style/AppTheme.PopupTheme" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".CelebrateActivity"></activity>
+        <activity android:name=".CelebrateActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

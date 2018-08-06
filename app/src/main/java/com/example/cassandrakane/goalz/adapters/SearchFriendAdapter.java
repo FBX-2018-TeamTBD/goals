@@ -59,7 +59,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
         final ParseUser user = filteredList.get(position);
         holder.tvUsername.setText(user.getUsername());
 
-        ParseFile image = (ParseFile) user.get("image");
+        ParseFile image = user.getParseFile("image");
         Util.setImage(image, context.getResources(), holder.ivProfile, R.color.orange);
     }
 
