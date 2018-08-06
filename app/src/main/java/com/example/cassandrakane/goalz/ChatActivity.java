@@ -6,8 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.example.cassandrakane.goalz.adapters.ChatAdapter;
 import com.example.cassandrakane.goalz.models.Message;
@@ -36,6 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.etMessage) EditText etMessage;
     @BindView(R.id.btSend) Button btSend;
     @BindView(R.id.rvChat) RecyclerView rvChat;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
     ParseUser toUser;
@@ -45,9 +49,13 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.bind(this);
 
         toUser = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
+        TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
+        toolbarTitle.setText(toUser.getUsername());
 
         setupMessagePosting();
 
@@ -156,5 +164,8 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    public void goBack(View view) {
+        finish();
+    }
 }
 

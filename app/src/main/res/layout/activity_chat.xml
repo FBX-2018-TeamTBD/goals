@@ -1,17 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:background="@color/orange"
+        app:theme="@style/AppTheme"
+        android:elevation="10dp"
+        android:layout_height="?attr/actionBarSize">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                style="@style/SelectableItemBackground"
+                android:id="@+id/btnBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/cancel"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/white"
+                android:onClick="goBack" />
+
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="chat"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvChat"
         android:transcriptMode="alwaysScroll"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_above="@+id/rlSend"
+        android:layout_below="@id/toolbar"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
     <RelativeLayout
         android:id="@+id/rlSend"
         android:layout_alignParentBottom="true"
@@ -21,25 +57,28 @@
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:layout_height="wrap_content" >
+
         <EditText
             android:id="@+id/etMessage"
-            android:layout_toLeftOf="@+id/btSend"
-            android:layout_alignBottom="@+id/btSend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btSend"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btSend"
             android:gravity="top"
-            android:inputType="textShortMessage"
             android:imeOptions="actionSend"
-            />
+            android:inputType="textShortMessage" />
+
         <Button
             android:id="@+id/btSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingRight="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:text="Send"
-            android:textSize="18sp" >
-        </Button>
+            android:layout_marginRight="15dp"
+            android:background="@drawable/send_pic"
+            android:backgroundTint="@color/orange"
+            android:gravity="center"
+            android:textSize="18sp"/>
     </RelativeLayout>
 </RelativeLayout>
