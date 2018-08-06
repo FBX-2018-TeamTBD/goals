@@ -82,7 +82,7 @@ public class FriendActivity extends AppCompatActivity {
         rvGoals.setLayoutManager(new GridLayoutManager(this, 2));
         rvGoals.setAdapter(goalAdapter);
 
-        ParseFile file = (ParseFile) user.get("image");
+        ParseFile file = user.getParseFile("image");
         Util.setImage(file, getResources(), ivProfile, R.color.orange);
         user.unpinInBackground();
 
@@ -108,6 +108,7 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(FriendActivity.this, ChatActivity.class);
+                i.putExtra(ParseUser.class.getSimpleName(), user);
                 startActivity(i);
             }
         });

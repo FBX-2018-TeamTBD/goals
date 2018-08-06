@@ -7,26 +7,29 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Video;
+import com.example.cassandrakane.goalz.views.ReactionView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.io.File;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,11 +59,12 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
+    @BindView(R.id.btnReaction) LinearLayout btnReaction;
+    @BindView(R.id.root) RelativeLayout rootLayout;
 
-    private URL url;
-    private File file;
     private Runnable runnable;
     private Handler mHandler;
+    private ReactionView rv;
 
     public StoryFragment() { }
 
@@ -94,6 +98,27 @@ public class StoryFragment extends Fragment {
 
 //        tvUsername.setVisibility(View.GONE);
 //        tvDateAdded.setVisibility(View.GONE);
+
+        btnReaction.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (rv != null) {
+                            rootLayout.removeView(rv);
+                        }
+                        rv = new ReactionView(getActivity());
+                        rootLayout.addView(rv);
+                        /**
+                         * stop story from moving
+                         */
+                        return true; // if you want to handle the touch event
+                    case MotionEvent.ACTION_UP:
+                        return true; // if you want to handle the touch event
+                }
+                return false;
+            }
+        });
 
         btnLeft.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setBackgroundColor(Color.TRANSPARENT);

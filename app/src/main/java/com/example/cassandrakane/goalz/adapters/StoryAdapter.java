@@ -20,7 +20,6 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -107,10 +106,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             });
         }
 
-        ParseFile file = (ParseFile) friends.get(position).get("image");
-        if (file != null) {
-            Util.setImage(file, context.getResources(), holder.ivProfile, R.color.white);
-        }
+        Util.setImage(friends.get(position).getParseFile("image"), context.getResources(), holder.ivProfile, R.color.white);
         holder.tvTitle.setText(goal.getTitle());
     }
 
