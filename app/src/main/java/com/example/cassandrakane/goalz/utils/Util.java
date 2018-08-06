@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -378,11 +379,11 @@ public class Util {
                 }
             }
         });
-        ParseQuery<ApprovedFriendRequests> query2 = ParseQuery.getQuery("RemovedRequests");
+        ParseQuery<RemovedFriends> query2 = ParseQuery.getQuery("RemovedRequests");
         query2.whereEqualTo("removedFriend", ParseUser.getCurrentUser());
-        query2.findInBackground(new FindCallback<ApprovedFriendRequests>() {
+        query2.findInBackground(new FindCallback<RemovedFriends>() {
             @Override
-            public void done(List<ApprovedFriendRequests> objects, ParseException e) {
+            public void done(List<RemovedFriends> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
                         ParseUser removedFriend = objects.get(i).getParseUser("remover");

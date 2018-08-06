@@ -40,6 +40,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -51,7 +52,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -258,22 +258,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     goal.setStreak(0);
 
                     // stores the objectId of users who lost a streak
-                    ArrayList<ParseUser> streakLostBy = new ArrayList<>();
-                    Map<String, String> userAdded = goal.getUserAdded();
-
-                    if (userAdded != null) {
-                        for (Map.Entry<String, String> entry : userAdded.entrySet()) {
-                            String userId = entry.getKey();
-                            String value = entry.getValue();
-                            if (value.equals("false")) {
-                                ParseUser user = getParseUserFromId(userId);
-                                streakLostBy.add(user);
-                            }
-                        }
-                    }
-
-
-                    sendTextNotifications(goal, streakLostBy);
+//                    ArrayList<ParseUser> streakLostBy = new ArrayList<>();
+//                    Map<String, String> userAdded = goal.getUserAdded();
+//
+//                    if (userAdded != null) {
+//                        for (Map.Entry<String, String> entry : userAdded.entrySet()) {
+//                            String userId = entry.getKey();
+//                            String value = entry.getValue();
+//                            if (value.equals("false")) {
+//                                ParseUser user = getParseUserFromId(userId);
+//                                streakLostBy.add(user);
+//                            }
+//                        }
+//                    }
+//
+//
+//                    sendTextNotifications(goal, streakLostBy);
 
                 }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
@@ -504,7 +504,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         String text = getTextNotificationString(goal.getTitle(), users);
         List<ParseUser> friends = goal.getFriends();
         for (ParseUser friend : friends) {
-            TextNotification notification = new TextNotification(text, friend);
+            ParseFile image = null;
+            if (goal.getStory().size() > 0) {
+                image = goal.getStory().get(goal.getStory().size() - 1).getParseFile("image");
+            }
+            TextNotification notification = new TextNotification(text, friend, image);
             notification.saveInBackground();
         }
     }

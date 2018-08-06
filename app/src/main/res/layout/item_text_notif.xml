@@ -38,14 +38,13 @@
         android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_toRightOf="@+id/card_view"
         android:fontFamily="@font/quicksand"
         android:text="text"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="18sp" />
 
     <ImageButton
         android:id="@+id/btnClose"

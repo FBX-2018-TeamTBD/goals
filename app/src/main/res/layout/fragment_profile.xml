@@ -35,8 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="25dp"
         android:background="@drawable/ripple_oval"
@@ -47,27 +46,25 @@
 
     <ImageButton
         android:id="@+id/btnCamera"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="27dp"
-        android:layout_marginLeft="25dp"
-        android:background="@drawable/icon_shadow"
-        android:foreground="@drawable/camera_filled"
-        android:foregroundTint="@color/white" />
+        android:layout_marginLeft="60dp"
+        android:background="@drawable/camera_filled"
+        android:backgroundTint="@color/orange" />
 
     <ImageButton
         android:id="@+id/btnFeed"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="27dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/icon_shadow"
-        android:foreground="@drawable/people"
-        android:foregroundTint="@color/white" />
+        android:layout_marginRight="60dp"
+        android:background="@drawable/people"
+        android:backgroundTint="@color/orange" />
 
     <ViewFlipper
         android:id="@+id/viewFlipper"
@@ -180,7 +177,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvLabel"
-        android:layout_alignEnd="@+id/btnAddGoal"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="8dp"
         android:background="@null"
         android:tint="@color/orange"

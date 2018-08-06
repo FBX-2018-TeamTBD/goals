@@ -399,7 +399,7 @@ public class VerticalPager extends ViewGroup {
                 boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
 
                 if (ev.getY() < mLastMotionY && mCurrentPage == 0 && totalItemCount > 0 && endHasBeenReached) {
-                    return false;
+                    return true;
                 }
 
                 if (mainActivity.centralFragment.horizontalPager.getCurrentItem() == 0 || mainActivity.centralFragment.horizontalPager.getCurrentItem() == 2) {
