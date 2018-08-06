@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -362,6 +363,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             }
 
+            holder.ibAdd.setVisibility(View.GONE);
+
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
@@ -556,6 +559,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
         @BindView(R.id.btnFriends) Button btnFriends;
+        @BindView(R.id.ibAdd) ImageButton ibAdd;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Message;
 import com.example.cassandrakane.goalz.utils.Util;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -53,7 +55,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        Util.setImage(message.getUser().getParseFile("image"), mContext.getResources(), profileView, R.color.orange);
+        ParseFile image = null;
+        try {
+            image = message.getUser().fetchIfNeeded().getParseFile("image");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (image != null){
+            Util.setImage(image, mContext.getResources(), profileView, R.color.orange);
+        }
         holder.body.setText(message.getBody());
     }
 

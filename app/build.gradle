@@ -58,7 +58,7 @@ dependencies {
     // for vertical viewpager
     implementation files('libs/otto-1.3.8.jar')
     // Messaging
-    implementation 'com.parse:parse-livequery-android:1.0.4'
+    implementation 'com.parse:parse-livequery-android:1.0.6'
 }
 
 apply plugin: 'com.google.gms.google-services'
