@@ -28,6 +28,16 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="15dp" />
 
+    <Button
+        android:id="@+id/btnMessage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/btnUnfriend"
+        android:backgroundTint="@color/orange"
+        android:layout_below="@+id/btnBack"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/message" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
@@ -39,41 +49,42 @@
         android:indeterminate="true"
         android:indeterminateTint="@android:color/background_dark" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardview"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:cardCornerRadius="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        app:cardBackgroundColor="@color/orange"
-        android:elevation="10dp">
-        <ImageView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:id="@+id/ivProfile"
-            app:srcCompat="@drawable/rounded_placeholder_profile"/>
-    </android.support.v7.widget.CardView>
-
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/cardview"
-        android:fontFamily="@font/quicksand_medium"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/quicksand_medium"
         android:text="@string/username"
         android:textAlignment="center"
         android:textColor="@color/black" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:elevation="10dp"
+        app:cardBackgroundColor="@color/orange"
+        app:cardCornerRadius="40dp">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/rounded_placeholder_profile" />
+    </android.support.v7.widget.CardView>
 
     <RelativeLayout
         android:id="@+id/info_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvUsername"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tvProgress"
@@ -88,9 +99,9 @@
             android:id="@+id/ivProgress"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_toRightOf="@+id/tvProgress"
             android:layout_alignTop="@id/tvProgress"
             android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvProgress"
             android:tint="@color/lightOrange"
             app:srcCompat="@drawable/progress" />
 
@@ -110,9 +121,9 @@
             android:id="@+id/ivCompleted"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_toRightOf="@+id/tvCompleted"
             android:layout_alignTop="@id/tvCompleted"
             android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvCompleted"
             android:tint="@color/lightOrange"
             app:srcCompat="@drawable/complete" />
 
@@ -132,42 +143,41 @@
             android:id="@+id/ivFriends"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_toRightOf="@+id/tvFriends"
             android:layout_alignTop="@id/tvFriends"
             android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvFriends"
             android:tint="@color/lightOrange"
             app:srcCompat="@drawable/friends" />
 
     </RelativeLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/info_layout"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" />
 
     <RelativeLayout
         android:id="@+id/noGoals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/info_layout"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvNone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
             android:fontFamily="@font/quicksand"
             android:text="@string/no_friend_goals"
+            android:textAlignment="center"
             android:textColor="@color/orange"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="100dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 
