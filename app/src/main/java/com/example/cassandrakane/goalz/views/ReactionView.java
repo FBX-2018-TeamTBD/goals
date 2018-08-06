@@ -117,6 +117,9 @@ public class ReactionView extends View {
     }
 
     private void onDeselect() {
+        /**
+         * use selectedIndex
+         */
         deselectAnimation.prepare();
         startAnimation(deselectAnimation);
     }

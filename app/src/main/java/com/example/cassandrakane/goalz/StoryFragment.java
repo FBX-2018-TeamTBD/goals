@@ -109,6 +109,9 @@ public class StoryFragment extends Fragment {
                         }
                         rv = new ReactionView(getActivity());
                         rootLayout.addView(rv);
+                        /**
+                         * stop story from moving
+                         */
                         return true; // if you want to handle the touch event
                     case MotionEvent.ACTION_UP:
                         return true; // if you want to handle the touch event
