@@ -6,7 +6,11 @@ import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.Image;
+<<<<<<< HEAD
 import com.example.cassandrakane.goalz.models.Message;
+=======
+import com.example.cassandrakane.goalz.models.Reaction;
+>>>>>>> 6f0b082b18257bb3eec05af4fe2a0265de7af8dc
 import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.example.cassandrakane.goalz.models.TextNotification;
@@ -34,6 +38,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(TextNotification.class);
         ParseObject.registerSubclass(Video.class);
         ParseObject.registerSubclass(Message.class);
+        ParseObject.registerSubclass(Reaction.class);
 
         // Use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);

@@ -76,6 +76,7 @@
             android:layout_alignStart="@+id/tvTitle"
             android:layout_marginTop="11dp"
             android:tint="@color/orange"
+            android:visibility="gone"
             card_view:srcCompat="@drawable/dot" />
 
     </RelativeLayout>

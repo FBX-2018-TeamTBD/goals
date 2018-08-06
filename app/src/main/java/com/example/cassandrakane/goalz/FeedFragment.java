@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.adapters.StoryAdapter;
+import com.example.cassandrakane.goalz.adapters.SuggestedFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.FindCallback;
@@ -34,15 +35,17 @@ public class FeedFragment extends Fragment {
     List<ParseUser> friends;
     List<ParseUser> suggestedFriends;
     FriendAdapter friendAdapter;
+    SuggestedFriendAdapter suggestedFriendAdapter;
 
     StoryAdapter storyAdapter;
     List<Goal> goals;
     List<ParseUser> correspondingFriends;
 
     @BindView(R.id.rvFriends) RecyclerView rvFriends;
+    @BindView(R.id.rvSuggestedFriends) RecyclerView rvSuggestedFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
+    @BindView(R.id.friendsPage) RelativeLayout friendsPage;
     @BindView(R.id.btnAddFriend) FloatingActionButton btnAddFriend;
-//    @BindView(R.id.btnAdd) Button btnAdd;
     @BindView(R.id.rvStory) RecyclerView rvStory;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
@@ -65,15 +68,17 @@ public class FeedFragment extends Fragment {
 
         goals = new ArrayList<>();
         correspondingFriends = new ArrayList<>();
+        suggestedFriends = new ArrayList<>();
+
         storyAdapter = new StoryAdapter(goals, correspondingFriends);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvStory.setLayoutManager(layoutManager);
         rvStory.setAdapter(storyAdapter);
 
-        friends = new ArrayList<>();
-        friendAdapter = new FriendAdapter(friends, suggestedFriends);
-        rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvFriends.setAdapter(friendAdapter);
+//        friends = new ArrayList<>();
+//        friendAdapter = new FriendAdapter(friends);
+//        rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+//        rvFriends.setAdapter(friendAdapter);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -88,7 +93,7 @@ public class FeedFragment extends Fragment {
 
 
         friends = new ArrayList<>();
-        friendAdapter = new FriendAdapter(friends, suggestedFriends);
+        friendAdapter = new FriendAdapter(friends);
             rvFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
         rvFriends.setAdapter(friendAdapter);
 
@@ -138,6 +143,11 @@ public class FeedFragment extends Fragment {
 
         if (friends.size() == 0) {
             noFriendsPage.setVisibility(View.VISIBLE);
+            friendsPage.setVisibility(View.GONE);
+            suggestedFriendAdapter = new SuggestedFriendAdapter(suggestedFriends);
+            rvSuggestedFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            rvSuggestedFriends.setAdapter(suggestedFriendAdapter);
+            populateSuggestedFriends();
         } else {
             noFriendsPage.setVisibility(View.GONE);
         }
@@ -147,21 +157,19 @@ public class FeedFragment extends Fragment {
     public void populateStories() {
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
-//            try {
-                ParseUser friend = friends.get(i);
-                List<Goal> friendGoals = friend.getList("goals");
-                for (int j = 0; j < friendGoals.size(); j++) {
-                    Goal goal = friendGoals.get(j);
-                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
-                        goals.add(goal);
-                        correspondingFriends.add(friend);
-                    }
+            ParseUser friend = friends.get(i);
+            List<Goal> friendGoals = friend.getList("goals");
+            for (int j = 0; j < friendGoals.size(); j++) {
+                Goal goal = friendGoals.get(j);
+                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+                    goals.add(goal);
+                    correspondingFriends.add(friend);
                 }
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-            swipeContainer.setRefreshing(false);
+            }
+
+        swipeContainer.setRefreshing(false);
+
         }
         storyAdapter.notifyDataSetChanged();
 
@@ -172,18 +180,6 @@ public class FeedFragment extends Fragment {
         }
     }
 
-
-//    public void animateStories() {
-//        rvStory.setVisibility(View.INVISIBLE);
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                rvStory.setVisibility(View.VISIBLE);
-//                rvStory.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
-//            }
-//        }, 100);
-//    }
 
     public void populateSuggestedFriends(){
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -196,13 +192,7 @@ public class FeedFragment extends Fragment {
                 }
                 ParseObject.unpinAllInBackground(objects);
                 ParseObject.pinAllInBackground(objects);
-
-//                if (friends.size() == 0) {
-//                    noFriendsPage.setVisibility(View.VISIBLE);
-//                } else {
-//                    noFriendsPage.setVisibility(View.GONE);
-//                }
-                friendAdapter.notifyDataSetChanged();
+                suggestedFriendAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -14,11 +14,12 @@ public class Image extends ParseObject{
         super();
     }
 
-    public Image(ParseFile image, String caption, ParseUser user) {
+    public Image(ParseFile image, String caption, ParseUser user, List<ParseObject> reactions) {
         super();
         setImage(image);
         setCaption(caption);
         setUser(user);
+        setReactions(reactions);
     }
 
     public ParseFile getImage() {
@@ -42,4 +43,6 @@ public class Image extends ParseObject{
     public void setUser(ParseUser user) {
         put("user", user);
     }
+
+    public void setReactions(List<ParseObject> reactions) { put("reactions", reactions); }
 }
