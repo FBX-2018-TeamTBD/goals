@@ -78,9 +78,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
                 textViewHolder.tvText.setText(mTextNotifications.get(position).getText());
                 ParseFile image = mTextNotifications.get(position).getImage();
-                if (image != null) {
-                    Util.setImage(image, context.getResources(), textViewHolder.ivImage, R.color.orange);
-                }
+                Util.setImage(image, context.getResources(), textViewHolder.ivImage, R.color.orange);
                 textViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -148,7 +146,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     e.printStackTrace();
                 }
 
-                ParseFile pfile = (ParseFile) friend.get("image");
+                ParseFile pfile = friend.getParseFile("image");
                 Util.setImage(pfile, context.getResources(), friendRequestViewHolder.ivProfile, R.color.orange);
                 friendRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override

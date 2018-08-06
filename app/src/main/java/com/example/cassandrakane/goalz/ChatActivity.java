@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,44 +22,35 @@ import com.parse.SubscriptionHandling;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ChatActivity extends AppCompatActivity {
     static final String TAG = ChatActivity.class.getSimpleName();
     static final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
 
-    static final String USER_ID_KEY = "userId";
+    static final String USER_KEY = "user";
     static final String BODY_KEY = "body";
 
-    EditText etMessage;
-    Button btSend;
-    RecyclerView rvChat;
+    @BindView(R.id.etMessage) EditText etMessage;
+    @BindView(R.id.btSend) Button btSend;
+    @BindView(R.id.rvChat) RecyclerView rvChat;
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
     boolean mFirstLoad;
-
-    final int POLL_INTERVAL = 1000; // milliseconds
-    final Handler myHandler = new Handler();  // android.os.Handler
-    Runnable mRefreshMessagesRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Log.d("ChatActivity", "test handler");
-            refreshMessages();
-            myHandler.postDelayed(this, POLL_INTERVAL);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        ButterKnife.bind(this);
         setupMessagePosting();
-
-//        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
-        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+        // parseQuery.whereEqualTo(USER_KEY, ParseUser.getCurrentUser());
 
         // Connect to Parse server
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
@@ -81,14 +71,12 @@ public class ChatActivity extends AppCompatActivity {
                         });
                     }
                 });
+
+        refreshMessages();
     }
 
     // Setup button event handler which posts the entered message to Parse
     void setupMessagePosting() {
-        // Find the text field and button
-        etMessage = (EditText) findViewById(R.id.etMessage);
-        btSend = (Button) findViewById(R.id.btSend);
-        rvChat = (RecyclerView) findViewById(R.id.rvChat);
         mMessages = new ArrayList<>();
         mFirstLoad = true;
         final ParseUser user = ParseUser.getCurrentUser();

@@ -43,7 +43,7 @@ public class GoalFriendAdapter extends RecyclerView.Adapter<GoalFriendAdapter.Vi
         final ParseUser user = goalFriends.get(position);
         holder.tvUsername.setText(user.getUsername());
 
-        ParseFile image = (ParseFile) user.get("image");
+        ParseFile image = user.getParseFile("image");
         Util.setImage(image, context.getResources(), holder.ivProfile, R.color.orange);
 
         //set item click here

@@ -12,11 +12,13 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Message;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Message> mMessages;
@@ -55,15 +57,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        ParseFile image = null;
-        try {
-            image = message.getUser().fetchIfNeeded().getParseFile("image");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (image != null){
-            Util.setImage(image, mContext.getResources(), profileView, R.color.orange);
-        }
+        ParseFile image = message.getUser().getParseFile("image");
+        Util.setImage(image, mContext.getResources(), profileView, R.color.orange);
         holder.body.setText(message.getBody());
     }
 
@@ -73,15 +68,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageOther;
-        ImageView imageMe;
-        TextView body;
+
+        @BindView(R.id.ivProfileOther) ImageView imageOther;
+        @BindView(R.id.ivProfileMe) ImageView imageMe;
+        @BindView(R.id.tvBody) TextView body;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
-            imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
-            body = (TextView)itemView.findViewById(R.id.tvBody);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
