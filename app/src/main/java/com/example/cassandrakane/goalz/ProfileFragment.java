@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ViewFlipper;
@@ -26,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.view.View.VISIBLE;
+import static com.parse.Parse.getApplicationContext;
 
 public class ProfileFragment extends Fragment {
 
@@ -74,6 +76,8 @@ public class ProfileFragment extends Fragment {
         viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.in_from_right));
         viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.out_from_left));
 
+        final Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+
         btnAddGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,6 +101,7 @@ public class ProfileFragment extends Fragment {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnRefresh.startAnimation(animation);
                 networkPopulateProfile();
             }
         });
@@ -130,9 +135,11 @@ public class ProfileFragment extends Fragment {
             goals.addAll(completed);
         }
         if (completedGoals == 0 && progressGoals == 0) {
-            viewFlipper.setVisibility(VISIBLE);
+            viewFlipper.setVisibility(View.VISIBLE);
+            btnRefresh.setVisibility(View.GONE);
         } else {
             viewFlipper.setVisibility(View.GONE);
+            btnRefresh.setVisibility(View.VISIBLE);
         }
         goalAdapter.notifyDataSetChanged();
     }
@@ -170,5 +177,6 @@ public class ProfileFragment extends Fragment {
         ParseObject.unpinAllInBackground(goals);
         ParseObject.pinAllInBackground(goals);
         mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
+//        btnRefresh.clearAnimation();
     }
 }

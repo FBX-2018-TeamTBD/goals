@@ -89,8 +89,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) context;
-                    ImageView ivDot = ((MainActivity) context).findViewById(R.id.ivDot);
-                    ivDot.setVisibility(View.GONE);
+                    holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
@@ -100,9 +99,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) context;
+                    holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, goal.getUser())).commit();
+                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
                 }
             });
         }

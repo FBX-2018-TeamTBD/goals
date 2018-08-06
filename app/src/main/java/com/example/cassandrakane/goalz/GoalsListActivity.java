@@ -118,7 +118,8 @@ public class GoalsListActivity extends AppCompatActivity {
                 if (goal.isSelected()) {
                     selected += 1;
                     final ArrayList<ParseObject> story = goal.getStory();
-                    final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser());
+                    List<ParseObject> reactions = new ArrayList<>();
+                    final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser(), reactions);
                     selectedGoal = goal;
                     image.saveInBackground(new SaveCallback() {
                         @Override
@@ -192,7 +193,8 @@ public class GoalsListActivity extends AppCompatActivity {
                 parseFile.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        final Video videoFile = new Video(parseFile, caption, parseFileThumbnail, ParseUser.getCurrentUser());
+                        List<ParseObject> reactions = new ArrayList<>();
+                        final Video videoFile = new Video(parseFile, caption, parseFileThumbnail, ParseUser.getCurrentUser(), reactions);
                         parseVideos.add(videoFile);
                         videoFile.saveInBackground(new SaveCallback() {
                             @Override

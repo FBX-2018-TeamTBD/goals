@@ -6,6 +6,7 @@ import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.example.cassandrakane.goalz.models.TextNotification;
@@ -32,6 +33,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(GoalRequests.class);
         ParseObject.registerSubclass(TextNotification.class);
         ParseObject.registerSubclass(Video.class);
+        ParseObject.registerSubclass(Reaction.class);
 
         // Use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);

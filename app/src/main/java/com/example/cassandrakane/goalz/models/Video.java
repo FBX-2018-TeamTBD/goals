@@ -14,12 +14,13 @@ public class Video extends ParseObject {
         super();
     }
 
-    public Video(ParseFile video, String caption, ParseFile thumbnail, ParseUser user) {
+    public Video(ParseFile video, String caption, ParseFile thumbnail, ParseUser user, List<ParseObject> reactions) {
         super();
         setVideo(video);
         setCaption(caption);
         setThumbnail(thumbnail);
         setUser(user);
+        setReactions(reactions);
     }
 
     public ParseFile getVideo() {
@@ -43,4 +44,7 @@ public class Video extends ParseObject {
     }
 
     public void setViewedBy(List<ParseUser> viewedBy) { put("viewedBy", viewedBy); }
+
+    public void setReactions(List<ParseObject> reactions) {put("reactions", reactions); }
+
 }
