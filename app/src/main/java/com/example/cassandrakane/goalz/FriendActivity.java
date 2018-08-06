@@ -108,6 +108,7 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(FriendActivity.this, ChatActivity.class);
+                i.putExtra(ParseUser.class.getSimpleName(), user);
                 startActivity(i);
             }
         });

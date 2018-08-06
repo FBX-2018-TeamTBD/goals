@@ -44,7 +44,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Message message = mMessages.get(position);
-        final boolean isMe = message.getUser() != null && message.getUser() == mUser;
+        final boolean isMe = message.getFromUser() != null && message.getFromUser() == mUser;
 
         if (isMe) {
             holder.imageMe.setVisibility(View.VISIBLE);
@@ -57,7 +57,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        ParseFile image = message.getUser().getParseFile("image");
+        ParseFile image = message.getFromUser().getParseFile("image");
         Util.setImage(image, mContext.getResources(), profileView, R.color.orange);
         holder.body.setText(message.getBody());
     }
