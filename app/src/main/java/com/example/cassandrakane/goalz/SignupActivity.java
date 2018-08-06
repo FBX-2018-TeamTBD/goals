@@ -42,7 +42,7 @@ public class SignupActivity extends AppCompatActivity {
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
 
     private ParseFile imageFile;
-    private String photoFileName;
+    private String photoFileName = "profilephoto.jpg";
     private File photoFile;
 
     @Override

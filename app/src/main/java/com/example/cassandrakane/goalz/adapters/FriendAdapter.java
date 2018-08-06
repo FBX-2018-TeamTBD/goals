@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
-import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.utils.DataFetcher;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -33,11 +31,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final List<ParseUser> friends;
     private final List<ParseUser> suggestedFriends;
     Context context;
-    StoryAdapter storyAdapter;
-    List<Goal> goals;
-    List<Goal> friendGoals;
     List<ParseUser> selectedFriends;
-    DataFetcher dataFetcher;
 
     public FriendAdapter(List<ParseUser> friends, List<ParseUser> suggestedFriends) {
         this.friends = friends;
@@ -116,19 +110,6 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                 });
                 break;
-//=======
-//        try {
-//            holder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        ParseFile file = (ParseFile) friend.get("image");
-//        Util.setImage(file, context.getResources(), holder.ivProfile, R.color.orange);
-//        holder.ivProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                toFriendActivity(friend);
-//>>>>>>> d8e1b54b3538aaad641d924a53debaf3a8196e2c
             }
 
     }
