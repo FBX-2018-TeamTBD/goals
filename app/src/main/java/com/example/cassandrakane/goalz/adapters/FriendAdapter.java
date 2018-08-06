@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
-import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.utils.DataFetcher;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -29,11 +27,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private final List<ParseUser> friends;
     Context context;
-    StoryAdapter storyAdapter;
-    List<Goal> goals;
-    List<Goal> friendGoals;
     List<ParseUser> selectedFriends;
-    DataFetcher dataFetcher;
 
     public FriendAdapter(List<ParseUser> friends) {
         this.friends = friends;

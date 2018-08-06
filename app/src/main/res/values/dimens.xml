@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="label_width">56dp</dimen>
+    <dimen name="label_height">24dp</dimen>
+
+</resources>
