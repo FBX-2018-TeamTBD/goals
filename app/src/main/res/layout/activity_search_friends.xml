@@ -61,27 +61,18 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <ImageView
-        android:id="@+id/ivConfirmBackground"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignStart="@+id/btnConfirm"
-        android:layout_alignTop="@+id/btnConfirm"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/circle" />
-
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnConfirm"
-        style="@style/SelectableItemBackground"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@color/transparent"
-        android:scaleType="fitXY"
+        android:layout_gravity="end|bottom"
+        android:background="@drawable/ripple_oval"
+        android:src="@drawable/check"
+        android:tint="@color/white"
+        app:fabSize="normal"
         android:visibility="invisible"
-        app:srcCompat="@drawable/check_circle" />
+        android:layout_margin="25dp" />
 
 </RelativeLayout>

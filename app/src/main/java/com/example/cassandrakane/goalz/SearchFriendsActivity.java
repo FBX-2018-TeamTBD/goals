@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -47,8 +48,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
     @BindView(R.id.searchView) SearchView searchView;
     @Nullable @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.rvSearched) RecyclerView rvSearched;
-    @BindView(R.id.ivConfirmBackground) ImageView ivConfirmBackground;
-    @BindView(R.id.btnConfirm) ImageButton btnConfirm;
+    @BindView(R.id.btnConfirm) FloatingActionButton btnConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
             final Goal goal = getIntent().getParcelableExtra(Goal.class.getSimpleName());
 
             searched = getNonPendingFriends(goal);
-            ivConfirmBackground.setVisibility(View.VISIBLE);
             btnConfirm.setVisibility(View.VISIBLE);
 
             btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +89,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
         }
         if (requestActivityName.equals(MainActivity.class.getSimpleName())) {
             searched = getUsers();
-            ivConfirmBackground.setVisibility(View.INVISIBLE);
             btnConfirm.setVisibility(View.INVISIBLE);
         }
         searchfriendAdapter = new SearchFriendAdapter(searched, selectedUsers, requestActivityName);

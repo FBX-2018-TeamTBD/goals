@@ -23,6 +23,7 @@ import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.example.cassandrakane.goalz.views.ReactionView;
@@ -36,6 +37,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -74,6 +76,12 @@ public class StoryFragment extends Fragment {
     private ReactionView rv;
 
     private ParseObject object;
+
+    private Integer thumbsCount = 0;
+    private Integer goalsCount = 0;
+    private Integer clapCount = 0;
+    private Integer okCount = 0;
+    private Integer bumpCount = 0;
 
     public StoryFragment() { }
 
@@ -304,12 +312,25 @@ public class StoryFragment extends Fragment {
     }
 
     public void setImage(){
+
+        thumbsCount = 0;
+        goalsCount = 0;
+        clapCount = 0;
+        okCount = 0;
+        bumpCount = 0;
+
         if (mIndex < 0) {
             mIndex = mStory.size() - 1;
         } else if (mIndex >= mStory.size()) {
             mIndex = 0;
         }
         object = mStory.get(mIndex);
+
+        ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+        ivReaction.setColorFilter(Color.argb(255, 255, 255, 255));
+        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
+
+        tvReaction.setText("Like");
 
         if (object.get("video") != null){
             viewStory.setVisibility(View.VISIBLE);
@@ -357,19 +378,27 @@ public class StoryFragment extends Fragment {
                 Integer reactionCount = reactions.size();
                 tvReactionCount.setText(Integer.toString(reactionCount));
 
+                setReaction(reactions);
+
                 if (reactionCount != 0){
+                    ivAllReactions.clearColorFilter();
                     btnTotalReactions.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
                             Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
                             intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
                             if (mHandler != null) {
                                 mHandler.removeCallbacks(runnable);
                             }
                             getActivity().startActivity(intent);
                         }
                     });
+                } else {
+                    btnTotalReactions.setOnClickListener(null);
                 }
+
             }
 
             ParseUser user = object.getParseUser("user");
@@ -417,27 +446,33 @@ public class StoryFragment extends Fragment {
                     setImage();
                     }
             }, 5000);
-        }
 
-        final List<ParseObject> reactions = object.getList("reactions");
-        if (reactions != null) {
-            Integer reactionCount = reactions.size();
-            tvReactionCount.setText(Integer.toString(reactionCount));
+            final List<ParseObject> reactions = object.getList("reactions");
+            if (reactions != null) {
+                Integer reactionCount = reactions.size();
+                tvReactionCount.setText(Integer.toString(reactionCount));
 
-            if (reactionCount != 0) {
-                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                        intent.putExtra("reactions", (Serializable) reactions);
-                        if (mHandler != null) {
-                            mHandler.removeCallbacks(runnable);
+                setReaction(reactions);
+
+                if (reactionCount != 0) {
+                    ivAllReactions.clearColorFilter();
+                    btnTotalReactions.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
+                            }
+                            getActivity().startActivity(intent);
                         }
-                        getActivity().startActivity(intent);
-                    }
-                });
+                    });
+                } else {
+                    btnTotalReactions.setOnClickListener(null);
+                }
             }
-
         }
 
         ParseUser user = object.getParseUser("user");
@@ -448,5 +483,69 @@ public class StoryFragment extends Fragment {
         Date createdAt = object.getCreatedAt();
         tvDateAdded.setText(dateFormat.format(createdAt));
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
+    }
+
+    public void setReaction(List<ParseObject> reactions){
+        for (ParseObject reaction : reactions){
+            Reaction reactionObject = (Reaction) reaction;
+            String type = null;
+            try {
+                type = reactionObject.fetchIfNeeded().getString("type");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            switch (type) {
+                case "thumbs":
+                    thumbsCount += 1;
+                    break;
+                case "goals":
+                    goalsCount += 1;
+                    break;
+                case "clap":
+                    clapCount += 1;
+                    break;
+                case "ok":
+                    okCount += 1;
+                    break;
+                case "bump":
+                    bumpCount += 1;
+                    break;
+                default:
+                    break;
+            }
+
+            try {
+                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
+                    ivReaction.clearColorFilter();
+                    switch (type) {
+                        case "thumbs":
+                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
+                            tvReaction.setText("Liked");
+                            break;
+                        case "goals":
+                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+                            tvReaction.setText("Liked");
+                            break;
+                        case "clap":
+                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
+                            tvReaction.setText("Liked");
+                            break;
+                        case "ok":
+                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
+                            tvReaction.setText("Liked");
+                            break;
+                        case "bump":
+                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
+                            tvReaction.setText("Liked");
+                            break;
+                        default:
+                            ivReaction.setVisibility(View.GONE);
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
