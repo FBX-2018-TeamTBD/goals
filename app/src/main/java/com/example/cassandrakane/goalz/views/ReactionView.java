@@ -131,6 +131,9 @@ public class ReactionView extends View {
         /**
          * use selectedIndex
          */
+        fragment.ivReaction.clearColorFilter();
+        Integer count = Integer.parseInt(fragment.tvReactionCount.getText().toString()) + 1;
+        fragment.tvReactionCount.setText(Integer.toString(count));
         switch (selectedIndex) {
             case 0:
                 type = "thumbs";
