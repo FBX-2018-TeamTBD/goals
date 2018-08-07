@@ -49,10 +49,11 @@ public class ReactionView extends View {
         }
     };
 
-    public ReactionView(Context context, StoryFragment frag) {
+    public ReactionView(Context context, StoryFragment frag, ParseObject object) {
         super(context);
         this.context = context;
         fragment = frag;
+        mObject = object;
         init();
     }
 
@@ -140,18 +141,28 @@ public class ReactionView extends View {
         switch (selectedIndex) {
             case 0:
                 type = "thumbs";
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
+                fragment.tvReaction.setText("Liked");
                 break;
             case 1:
                 type = "goals";
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
+                fragment.tvReaction.setText("Liked");
                 break;
             case 2:
                 type = "clap";
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
+                fragment.tvReaction.setText("Liked");
                 break;
             case 3:
                 type = "ok";
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
+                fragment.tvReaction.setText("Liked");
                 break;
             case 4:
                 type = "bump";
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
+                fragment.tvReaction.setText("Liked");
                 break;
             default:
                 type = "";
@@ -195,25 +206,6 @@ public class ReactionView extends View {
             }
         }
 
-        switch(selectedIndex) {
-            case 0:
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
-                fragment.tvReaction.setText("Liked");
-            case 1:
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
-                fragment.tvReaction.setText("Liked");
-            case 2:
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
-                fragment.tvReaction.setText("Liked");
-            case 3:
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
-                fragment.tvReaction.setText("Liked");
-            case 4:
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
-                fragment.tvReaction.setText("Liked");
-            default:
-                break;
-        }
         deselectAnimation.prepare();
         startAnimation(deselectAnimation);
     }
