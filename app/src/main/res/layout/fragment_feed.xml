@@ -65,7 +65,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="end|bottom"
-                android:layout_margin="20dp"
+                android:layout_margin="25dp"
                 android:background="@drawable/ripple_oval"
                 android:elevation="10dp"
                 android:src="@drawable/add_friend"

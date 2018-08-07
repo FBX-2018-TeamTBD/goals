@@ -152,6 +152,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:tint="@color/white"
+        android:id="@+id/ivReaction"
         android:src="@drawable/thumbs_react"/>
 
     <TextView
@@ -161,6 +162,7 @@
         android:layout_marginLeft="8dp"
         android:textColor="@color/white"
         android:fontFamily="@font/quicksand_medium"
+        android:id="@+id/tvReaction"
         android:textSize="18dp"
         android:text="Like"
         />

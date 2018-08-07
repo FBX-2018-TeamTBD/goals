@@ -81,6 +81,7 @@
             android:layout_height="20dp"
             android:layout_alignBottom="@+id/tvProgress"
             android:layout_toEndOf="@+id/tvStreak"
+            android:layout_marginLeft="2dp"
             android:tint="@color/white"
             android:visibility="visible"
             app:srcCompat="@drawable/star" />

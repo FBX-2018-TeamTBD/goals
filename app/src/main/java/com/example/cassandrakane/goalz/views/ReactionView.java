@@ -12,6 +12,7 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
+import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.utils.Constants;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -39,15 +40,19 @@ public class ReactionView extends View {
     private SelectingAnimation selectingAnimation;
     private DeselectAnimation deselectAnimation;
 
+    private StoryFragment fragment;
+    private Context context;
+
     private Runnable runnable = new Runnable() {
         @Override public void run() {
             invalidate();
         }
     };
 
-    public ReactionView(Context context, ParseObject object) {
+    public ReactionView(Context context, StoryFragment frag) {
         super(context);
-        mObject = object;
+        this.context = context;
+        fragment = frag;
         init();
     }
 
@@ -190,6 +195,25 @@ public class ReactionView extends View {
             }
         }
 
+        switch(selectedIndex) {
+            case 0:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
+                fragment.tvReaction.setText("Liked");
+            case 1:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
+                fragment.tvReaction.setText("Liked");
+            case 2:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
+                fragment.tvReaction.setText("Liked");
+            case 3:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
+                fragment.tvReaction.setText("Liked");
+            case 4:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
+                fragment.tvReaction.setText("Liked");
+            default:
+                break;
+        }
         deselectAnimation.prepare();
         startAnimation(deselectAnimation);
     }

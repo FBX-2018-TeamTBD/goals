@@ -58,6 +58,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="@string/username"
+        android:textSize="18sp"
         android:textAlignment="center"
         android:textColor="@color/black" />
 
@@ -156,8 +157,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/info_layout"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp" />
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingTop="10dp" />
 
     <RelativeLayout
         android:id="@+id/noGoals"

@@ -194,23 +194,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mTextNotifications.size() + mGoals.size() + mFriends.size();
     }
 
-    public String getSharedFriendsListString(List<ParseUser> selectedFriends) {
-        if (selectedFriends.size() > 0) {
-            String str = "Shared with ";
-            for (ParseUser friend : selectedFriends) {
-                try {
-                    if (!friend.fetch().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        str = str + friend.fetch().getUsername() + ", ";
-                    }
-                } catch(ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            return str.substring(0, str.length() - 2);
-        }
-        return "";
-    }
-
     public void deleteTextNotification(final int position) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TextNotification");
         query.whereEqualTo("objectId", mTextNotifications.get(position).getObjectId());

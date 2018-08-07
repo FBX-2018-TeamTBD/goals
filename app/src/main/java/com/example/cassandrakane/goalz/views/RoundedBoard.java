@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 
 import com.example.cassandrakane.goalz.utils.Constants;
 import com.example.cassandrakane.goalz.utils.DisplayUtil;
@@ -19,7 +18,7 @@ public class RoundedBoard {
 
     static final float LEFT = DisplayUtil.dpToPx(16);
 
-    static final float BOTTOM = DisplayUtil.dpToPx(780);
+    static final float BOTTOM = DisplayUtil.dpToPx(760);
 
     static final float TOP = BOTTOM - HEIGHT;
 
@@ -55,8 +54,6 @@ public class RoundedBoard {
     void setCurrentHeight(float newHeight) {
         height = newHeight;
         y = BOTTOM - height;
-        Log.i("sdf", ""+y);
-        Log.i("bsd", ""+BOTTOM);
     }
 
     void draw(Canvas canvas) {

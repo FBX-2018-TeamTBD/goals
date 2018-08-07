@@ -25,6 +25,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context mContext;
     private ParseUser mUser;
 
+    private String lastMessageSent = "blank";
+
     public ChatAdapter(Context context, ParseUser user, List<Message> messages) {
         mMessages = messages;
         this.mUser = user;
@@ -50,11 +52,33 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.imageMe.setVisibility(View.VISIBLE);
             holder.imageOther.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            holder.body.setBackground(mContext.getDrawable(R.drawable.rounded_sent_message));
+            holder.body.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.leftSpace.setVisibility(View.VISIBLE);
+            holder.rightSpace.setVisibility(View.GONE);
+            holder.ivMarginRight.setVisibility(View.GONE);
         } else {
             holder.imageOther.setVisibility(View.VISIBLE);
             holder.imageMe.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            holder.body.setBackground(mContext.getDrawable(R.drawable.rounded_received_message));
+            holder.body.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.leftSpace.setVisibility(View.GONE);
+            holder.rightSpace.setVisibility(View.VISIBLE);
+            holder.ivMarginLeft.setVisibility(View.GONE);
         }
+
+        if (!lastMessageSent.equals("blank") && message.getFromUser().getUsername().equals(lastMessageSent)) {
+            if (isMe) {
+                holder.imageMe.setVisibility(View.GONE);
+                holder.ivMarginRight.setVisibility(View.VISIBLE);
+            } else {
+                holder.imageOther.setVisibility(View.GONE);
+                holder.ivMarginLeft.setVisibility(View.VISIBLE);
+            }
+        }
+
+        lastMessageSent = message.getFromUser().getUsername();
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
         ParseFile image = message.getFromUser().getParseFile("image");
@@ -72,6 +96,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         @BindView(R.id.ivProfileOther) ImageView imageOther;
         @BindView(R.id.ivProfileMe) ImageView imageMe;
         @BindView(R.id.tvBody) TextView body;
+        @BindView(R.id.left_space) View leftSpace;
+        @BindView(R.id.right_space) View rightSpace;
+        @BindView(R.id.ivMarginLeft) ImageView ivMarginLeft;
+        @BindView(R.id.ivMarginRight) ImageView ivMarginRight;
 
         public ViewHolder(View itemView) {
             super(itemView);

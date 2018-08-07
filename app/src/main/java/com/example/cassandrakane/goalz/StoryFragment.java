@@ -23,6 +23,7 @@ import android.widget.VideoView;
 import com.bumptech.glide.Glide;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Video;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.example.cassandrakane.goalz.views.ReactionView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -60,6 +61,8 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
     @BindView(R.id.btnReaction) LinearLayout btnReaction;
+    @BindView(R.id.ivReaction) public ImageView ivReaction;
+    @BindView(R.id.tvReaction) public TextView tvReaction;
     @BindView(R.id.root) RelativeLayout rootLayout;
 
     private Runnable runnable;
@@ -91,6 +94,12 @@ public class StoryFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Util.storyMode = true;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_story, container, false);
@@ -109,7 +118,8 @@ public class StoryFragment extends Fragment {
                         if (rv != null) {
                             rootLayout.removeView(rv);
                         }
-                        rv = new ReactionView(getActivity(), object);
+
+                        rv = new ReactionView(getActivity(), StoryFragment.this);
                         rootLayout.addView(rv);
                         /**
                          * stop story from moving
@@ -158,6 +168,7 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
 
+                Util.storyMode = false;
 
                 getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
                 // TODO include animation?

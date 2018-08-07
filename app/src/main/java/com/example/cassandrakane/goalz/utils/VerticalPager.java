@@ -402,6 +402,10 @@ public class VerticalPager extends ViewGroup {
                     return true;
                 }
 
+                if (Util.storyMode) {
+                    return false;
+                }
+
                 if (mainActivity.centralFragment.horizontalPager.getCurrentItem() == 0 || mainActivity.centralFragment.horizontalPager.getCurrentItem() == 2) {
                     return false;
                 }

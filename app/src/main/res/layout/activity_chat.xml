@@ -44,10 +44,12 @@
         android:transcriptMode="alwaysScroll"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
         android:layout_above="@+id/rlSend"
         android:layout_below="@id/toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <RelativeLayout
         android:id="@+id/rlSend"
         android:layout_alignParentBottom="true"
@@ -61,12 +63,18 @@
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignBottom="@+id/btSend"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/btSend"
             android:gravity="top"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:paddingTop="6dp"
+            android:hint="Write a message..."
+            android:fontFamily="@font/quicksand"
+            android:background="@drawable/rounded_textview"
             android:imeOptions="actionSend"
             android:inputType="textShortMessage" />
 
@@ -76,6 +84,7 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/send_pic"
             android:backgroundTint="@color/orange"
             android:gravity="center"
