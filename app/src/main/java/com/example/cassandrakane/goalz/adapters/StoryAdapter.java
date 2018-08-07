@@ -59,7 +59,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         final Goal goal = mGoals.get(position);
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
-        if (story.size() > 0) {
+        if (story.size() > 0 && imageUrls.size() > 0) {
 
             for (int i = 0; i < story.size(); i++){
                 boolean seen = false;
