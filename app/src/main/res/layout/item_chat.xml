@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/ivMarginLeft"
         android:layout_width="64dp"
-        android:layout_height="20dp"
+        android:layout_height="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="3dp"
@@ -44,7 +44,7 @@
         android:paddingLeft="14dp"
         android:background="@drawable/rounded_sent_message"
         android:text="hello"
-        android:textSize="18sp" />
+        android:textSize="17sp" />
 
     <View
         android:id="@+id/right_space"
@@ -65,7 +65,7 @@
     <ImageView
         android:id="@+id/ivMarginRight"
         android:layout_width="64dp"
-        android:layout_height="20dp"
+        android:layout_height="10dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="6dp"
