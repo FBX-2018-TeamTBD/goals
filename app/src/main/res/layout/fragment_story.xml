@@ -167,7 +167,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/btnReaction"
-        android:layout_marginLeft="315dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
         android:padding="8dp">
 
         <TextView
