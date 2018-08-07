@@ -15,6 +15,7 @@ import com.example.cassandrakane.goalz.adapters.GoalFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,8 +53,10 @@ public class FriendsModalActivity extends Activity {
         personal = getIntent().getBooleanExtra("personal", true);
 
         goalFriends = goal.getApprovedUsers();
-        goalFriends.remove(ParseUser.getCurrentUser());
-        goalFriendAdapter = new GoalFriendAdapter(goalFriends);
+        List<ParseUser> copyFriends = new ArrayList<>();
+        copyFriends.addAll(goalFriends);
+        copyFriends.remove(ParseUser.getCurrentUser());
+        goalFriendAdapter = new GoalFriendAdapter(copyFriends);
         rvGoalFriends.setLayoutManager(new LinearLayoutManager(this));
         rvGoalFriends.setAdapter(goalFriendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);

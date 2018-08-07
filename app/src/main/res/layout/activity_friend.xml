@@ -58,6 +58,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="@string/username"
+        android:textSize="18sp"
         android:textAlignment="center"
         android:textColor="@color/black" />
 

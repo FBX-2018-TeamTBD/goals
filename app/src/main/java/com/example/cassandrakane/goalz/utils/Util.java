@@ -62,6 +62,7 @@ import static com.example.cassandrakane.goalz.SignupActivity.GALLERY_IMAGE_ACTIV
 public class Util {
 
     public static File photoFile;
+    public static boolean storyMode = false;
 
     public static void setImage(ParseFile imageFile, Resources resources, ImageView ivProfile, int color) {
         if (imageFile != null) {

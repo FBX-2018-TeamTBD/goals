@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.utils.Constants;
 
 import java.util.Arrays;
@@ -28,14 +29,19 @@ public class ReactionView extends View {
     private SelectingAnimation selectingAnimation;
     private DeselectAnimation deselectAnimation;
 
+    private StoryFragment fragment;
+    private Context context;
+
     private Runnable runnable = new Runnable() {
         @Override public void run() {
             invalidate();
         }
     };
 
-    public ReactionView(Context context) {
+    public ReactionView(Context context, StoryFragment frag) {
         super(context);
+        this.context = context;
+        fragment = frag;
         init();
     }
 
@@ -120,6 +126,25 @@ public class ReactionView extends View {
         /**
          * use selectedIndex
          */
+        switch(selectedIndex) {
+            case 0:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
+                fragment.tvReaction.setText("Liked");
+            case 1:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
+                fragment.tvReaction.setText("Liked");
+            case 2:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
+                fragment.tvReaction.setText("Liked");
+            case 3:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
+                fragment.tvReaction.setText("Liked");
+            case 4:
+                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
+                fragment.tvReaction.setText("Liked");
+            default:
+                break;
+        }
         deselectAnimation.prepare();
         startAnimation(deselectAnimation);
     }
