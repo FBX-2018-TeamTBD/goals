@@ -47,7 +47,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="-10dp"
         android:indeterminate="true"
-        android:indeterminateTint="@android:color/background_dark" />
+        android:indeterminateTint="@color/darkOrange" />
 
     <TextView
         android:id="@+id/tvUsername"

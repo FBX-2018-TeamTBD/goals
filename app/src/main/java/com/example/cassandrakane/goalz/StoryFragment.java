@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +65,9 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.btnReaction) LinearLayout btnReaction;
     @BindView(R.id.ivReaction) public ImageView ivReaction;
     @BindView(R.id.tvReaction) public TextView tvReaction;
+    @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
+    @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
+    @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
     @BindView(R.id.root) RelativeLayout rootLayout;
 
     private Runnable runnable;
@@ -119,7 +124,7 @@ public class StoryFragment extends Fragment {
                             rootLayout.removeView(rv);
                         }
 
-                        rv = new ReactionView(getActivity(), StoryFragment.this);
+                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
                         rootLayout.addView(rv);
                         /**
                          * stop story from moving
@@ -306,18 +311,21 @@ public class StoryFragment extends Fragment {
             mIndex = 0;
         }
         object = mStory.get(mIndex);
-        List<ParseUser> viewedBy = object.getList("viewedBy");
-        if (viewedBy == null){
-            viewedBy = new ArrayList<>();
-        }
-        if (!viewedBy.contains(currentUser)) {
-            viewedBy.add(currentUser);
-        }
+
         if (object.get("video") != null){
             viewStory.setVisibility(View.VISIBLE);
             Video videoObject = (Video) object;
-            videoObject.setViewedBy(viewedBy);
-            videoObject.saveInBackground();
+
+            List<ParseUser> viewedBy = object.getList("viewedBy");
+            if (viewedBy == null){
+                viewedBy = new ArrayList<>();
+            }
+            if (!viewedBy.contains(currentUser)) {
+                viewedBy.add(currentUser);
+                videoObject.setViewedBy(viewedBy);
+                videoObject.saveInBackground();
+            }
+
             ParseFile video = (ParseFile) object.get("video");
 
             String caption = (String) object.get("caption");
@@ -344,6 +352,27 @@ public class StoryFragment extends Fragment {
                     setImage();
                 }
             });
+
+            final List<ParseObject> reactions = object.getList("reactions");
+            if (reactions != null) {
+                Integer reactionCount = reactions.size();
+                tvReactionCount.setText(Integer.toString(reactionCount));
+
+                if (reactionCount != 0){
+                    btnTotalReactions.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
+                            }
+                            getActivity().startActivity(intent);
+                        }
+                    });
+                }
+            }
+
             ParseUser user = object.getParseUser("user");
             if (user != null) {
                 tvUsername.setText(user.getUsername());
@@ -355,8 +384,17 @@ public class StoryFragment extends Fragment {
         } else {
             viewStory.setVisibility(View.GONE);
             Image imageObject = (Image) object;
-            imageObject.setViewedBy(viewedBy);
-            imageObject.saveInBackground();
+
+            List<ParseUser> viewedBy = object.getList("viewedBy");
+            if (viewedBy == null){
+                viewedBy = new ArrayList<>();
+            }
+            if (!viewedBy.contains(currentUser)) {
+                viewedBy.add(currentUser);
+                imageObject.setViewedBy(viewedBy);
+                imageObject.saveInBackground();
+            }
+
             ParseFile image = (ParseFile) object.get("image");
 
             String caption = (String) object.get("caption");
@@ -381,6 +419,28 @@ public class StoryFragment extends Fragment {
                     }
             }, 5000);
         }
+
+        final List<ParseObject> reactions = object.getList("reactions");
+        if (reactions != null) {
+            Integer reactionCount = reactions.size();
+            tvReactionCount.setText(Integer.toString(reactionCount));
+
+            if (reactionCount != 0) {
+                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                        intent.putExtra("reactions", (Serializable) reactions);
+                        if (mHandler != null) {
+                            mHandler.removeCallbacks(runnable);
+                        }
+                        getActivity().startActivity(intent);
+                    }
+                });
+            }
+
+        }
+
         ParseUser user = object.getParseUser("user");
         if (user != null) {
             tvUsername.setText(user.getUsername());
