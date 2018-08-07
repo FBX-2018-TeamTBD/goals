@@ -81,7 +81,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/send_pic"
+                android:background="@drawable/check"
                 android:backgroundTint="@color/white"
                 android:onClick="addImage" />
         </RelativeLayout>

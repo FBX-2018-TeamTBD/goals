@@ -180,6 +180,7 @@ public class StoryFragment extends Fragment {
                     friendActivity.cardView.setVisibility(View.VISIBLE);
                     friendActivity.btnBack.setVisibility(View.VISIBLE);
                     friendActivity.btnUnfriend.setVisibility(View.VISIBLE);
+                    friendActivity.btnMessage.setVisibility(View.VISIBLE);
                 }
 //                Activity activity = getActivity();
 //                if (activity.getClass().isAssignableFrom(MainActivity.class)) {

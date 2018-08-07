@@ -417,6 +417,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);
                         activity.btnUnfriend.setVisibility(View.INVISIBLE);
+                        activity.btnMessage.setVisibility(View.INVISIBLE);
                     }
                 }
             });

@@ -16,8 +16,10 @@ import android.widget.ViewFlipper;
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.view.View.VISIBLE;
 import static com.parse.Parse.getApplicationContext;
 
 public class ProfileFragment extends Fragment {
@@ -116,67 +117,158 @@ public class ProfileFragment extends Fragment {
     }
 
     public void populateProfile() {
-        List<ParseObject> lGoals = user.getList("goals");
-        completedGoals = 0;
-        progressGoals = 0;
-        goals.clear();
-        List<Goal> completed = new ArrayList<>();
-        if (lGoals != null) {
-            for (int i = 0; i < lGoals.size(); i++) {
-                Goal goal = (Goal) lGoals.get(i);
-                if (goal.getCompleted()) {
-                    completedGoals += 1;
-                    completed.add(0, goal);
-                } else {
-                    progressGoals += 1;
-                    goals.add(goal);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Goal");
+        query.whereEqualTo("approvedUsers", user);
+        query.orderByAscending("updateBy");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                completedGoals = 0;
+                progressGoals = 0;
+                goals.clear();
+                List<Goal> completed = new ArrayList<>();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        Goal goal = (Goal) objects.get(i);
+                        if (goal.getCompleted()) {
+                            completedGoals += 1;
+                            completed.add(0, goal);
+                        } else {
+                            progressGoals += 1;
+                            goals.add(goal);
+                        }
+                    }
                 }
+                goals.addAll(completed);
+                if (completedGoals == 0 && progressGoals == 0) {
+                    viewFlipper.setVisibility(View.VISIBLE);
+                    btnRefresh.setVisibility(View.GONE);
+                } else {
+                    viewFlipper.setVisibility(View.GONE);
+                    btnRefresh.setVisibility(View.VISIBLE);
+                }
+
+                goalAdapter.notifyDataSetChanged();
+                btnRefresh.clearAnimation();
+                ParseObject.unpinAllInBackground(goals);
+                ParseObject.pinAllInBackground(goals);
+                mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
             }
-            goals.addAll(completed);
-        }
-        if (completedGoals == 0 && progressGoals == 0) {
-            viewFlipper.setVisibility(View.VISIBLE);
-            btnRefresh.setVisibility(View.GONE);
-        } else {
-            viewFlipper.setVisibility(View.GONE);
-            btnRefresh.setVisibility(View.VISIBLE);
-        }
-        goalAdapter.notifyDataSetChanged();
+        });
+//        List<ParseObject> lGoals = user.getList("goals");
+//        completedGoals = 0;
+//        progressGoals = 0;
+//        goals.clear();
+//        List<Goal> completed = new ArrayList<>();
+//        if (lGoals != null) {
+//            for (int i = 0; i < lGoals.size(); i++) {
+//                Goal goal = (Goal) lGoals.get(i);
+//                if (goal.getCompleted()) {
+//                    completedGoals += 1;
+//                    completed.add(0, goal);
+//                } else {
+//                    progressGoals += 1;
+//                    goals.add(goal);
+//                }
+//            }
+//            goals.addAll(completed);
+//        }
+//        if (completedGoals == 0 && progressGoals == 0) {
+//            viewFlipper.setVisibility(View.VISIBLE);
+//            btnRefresh.setVisibility(View.GONE);
+//        } else {
+//            viewFlipper.setVisibility(View.GONE);
+//            btnRefresh.setVisibility(View.VISIBLE);
+//        }
+//        goalAdapter.notifyDataSetChanged();
     }
 
     public void networkPopulateProfile(){
-        mainActivity.centralFragment.progressBar.setVisibility(VISIBLE);
-        List<ParseObject> arr = new ArrayList<>();
-        goals.clear();
-        try {
-            arr = user.fetch().getList("goals");
-        } catch(ParseException e) {
-            e.printStackTrace();
-        }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Goal");
+        query.whereEqualTo("approvedUsers", user);
+        query.orderByAscending("updateBy");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                completedGoals = 0;
+                progressGoals = 0;
+                goals.clear();
+                List<Goal> completed = new ArrayList<>();
+                if (objects != null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        Goal goal = (Goal) objects.get(i);
+                        if (goal.getCompleted()) {
+                            completedGoals += 1;
+                            completed.add(0, goal);
+                        } else {
+                            progressGoals += 1;
+                            goals.add(goal);
+                        }
+                    }
+                }
+                goals.addAll(completed);
+            if (completedGoals == 0 && progressGoals == 0) {
+                viewFlipper.setVisibility(View.VISIBLE);
+                btnRefresh.setVisibility(View.GONE);
+            } else {
+                viewFlipper.setVisibility(View.GONE);
+                btnRefresh.setVisibility(View.VISIBLE);
+            }
 
-        if (arr != null) {
-            try {
-                ParseObject.fetchAllIfNeeded(arr);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            goalAdapter.notifyDataSetChanged();
+            btnRefresh.clearAnimation();
+            ParseObject.unpinAllInBackground(goals);
+            ParseObject.pinAllInBackground(goals);
+            mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
             }
-            for(int i = 0; i < arr.size(); i++) {
-                Goal goal = null;
-                try {
-                    goal = arr.get(i).fetch();
-                } catch(ParseException e) {
-                    e.printStackTrace();
-                }
-                if (goal.getCompleted()) {
-                    goals.add(goal);
-                } else {
-                    goals.add(0, goal);
-                }
-            }
-        }
-        ParseObject.unpinAllInBackground(goals);
-        ParseObject.pinAllInBackground(goals);
-        mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
+        });
+//        mainActivity.centralFragment.progressBar.setVisibility(VISIBLE);
+//        List<ParseObject> arr = new ArrayList<>();
+//        completedGoals = 0;
+//        progressGoals = 0;
+//        goals.clear();
+//        List<Goal> completed = new ArrayList<>();
+//        try {
+//            arr = user.fetch().getList("goals");
+//        } catch(ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (arr != null) {
+//            try {
+//                ParseObject.fetchAllIfNeeded(arr);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            for(int i = 0; i < arr.size(); i++) {
+//                Goal goal = null;
+//                try {
+//                    goal = arr.get(i).fetch();
+//                } catch(ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                if (goal.getCompleted()) {
+//                    completedGoals += 1;
+//                    completed.add(0, goal);
+//                } else {
+//                    progressGoals += 1;
+//                    goals.add(goal);
+//                }
+//            }
+//            goals.addAll(completed);
+//        }
+//        if (completedGoals == 0 && progressGoals == 0) {
+//            viewFlipper.setVisibility(View.VISIBLE);
+//            btnRefresh.setVisibility(View.GONE);
+//        } else {
+//            viewFlipper.setVisibility(View.GONE);
+//            btnRefresh.setVisibility(View.VISIBLE);
+//        }
+//        goalAdapter.notifyDataSetChanged();
 //        btnRefresh.clearAnimation();
+//        ParseObject.unpinAllInBackground(goals);
+//        ParseObject.pinAllInBackground(goals);
+//        mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
     }
 }

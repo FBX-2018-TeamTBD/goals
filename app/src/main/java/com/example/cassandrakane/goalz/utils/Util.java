@@ -81,7 +81,7 @@ public class Util {
     public static RoundedBitmapDrawable createRoundedBitmapDrawableWithBorder(Resources mResources, Bitmap bitmap, int color){
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
-        int borderWidthHalf = 10; // In pixels
+        int borderWidthHalf = bitmap.getWidth() / 15; // In pixels
         int bitmapRadius = Math.min(bitmapWidth,bitmapHeight)/2;
 
         int bitmapSquareWidth = Math.min(bitmapWidth,bitmapHeight);
@@ -102,7 +102,7 @@ public class Util {
 
         canvas.drawCircle(canvas.getWidth()/2, canvas.getWidth()/2, newBitmapSquareWidth/2, borderPaint);
 
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mResources,roundedBitmap);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mResources, roundedBitmap);
 
         roundedBitmapDrawable.setCornerRadius(bitmapRadius);
 
