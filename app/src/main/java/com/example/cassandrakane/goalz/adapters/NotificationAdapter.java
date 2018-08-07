@@ -102,7 +102,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
                     List<ParseObject> story = goal2.getStory();
                     if (story.size() > 0) {
-                        Util.setImage(story.get(story.size() - 1).getParseFile("image"), context.getResources(), goalRequestViewHolder.ivStory, R.color.orange);
+                        Util.setImage(story.get(story.size() - 1).fetchIfNeeded().getParseFile("image"), context.getResources(), goalRequestViewHolder.ivStory, R.color.orange);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
