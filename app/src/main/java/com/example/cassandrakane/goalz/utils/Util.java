@@ -81,7 +81,7 @@ public class Util {
     public static RoundedBitmapDrawable createRoundedBitmapDrawableWithBorder(Resources mResources, Bitmap bitmap, int color){
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
-        int borderWidthHalf = bitmap.getWidth() / 15; // In pixels
+        int borderWidthHalf = (int) (bitmap.getWidth() / 15.5); // In pixels
         int bitmapRadius = Math.min(bitmapWidth,bitmapHeight)/2;
 
         int bitmapSquareWidth = Math.min(bitmapWidth,bitmapHeight);

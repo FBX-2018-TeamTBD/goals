@@ -270,7 +270,7 @@ public class DisplayActivity extends AppCompatActivity {
             image = BitmapFactory.decodeFile(file.getAbsolutePath());
             image = rotateBitmapOrientation(file.getAbsolutePath());
 
-            if (cameraId.equals("1")) {
+            if (cameraId != null && cameraId.equals("1")) {
                 try {
                     //create a file to write bitmap data
                     file = new File(Environment.getExternalStorageDirectory() + "/" + UUID.randomUUID().toString() + "1.jpg");
@@ -325,7 +325,7 @@ public class DisplayActivity extends AppCompatActivity {
         if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
         // Rotate Bitmap
         Matrix matrix = new Matrix();
-        if (cameraId.equals("1")){
+        if (cameraId != null && cameraId.equals("1")){
             rotationAngle += 180;
         }
         matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
