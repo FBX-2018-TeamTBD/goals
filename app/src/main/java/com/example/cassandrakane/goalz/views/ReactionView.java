@@ -9,8 +9,16 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Reaction;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Constants;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +33,9 @@ public class ReactionView extends View {
     private List<Emotion> emotions;
     public int selectedIndex = -1;
 
+    private String type;
+    private ParseObject mObject;
+
     private SelectingAnimation selectingAnimation;
     private DeselectAnimation deselectAnimation;
 
@@ -34,8 +45,9 @@ public class ReactionView extends View {
         }
     };
 
-    public ReactionView(Context context) {
+    public ReactionView(Context context, ParseObject object) {
         super(context);
+        mObject = object;
         init();
     }
 
@@ -120,6 +132,64 @@ public class ReactionView extends View {
         /**
          * use selectedIndex
          */
+        switch (selectedIndex) {
+            case 0:
+                type = "thumbs";
+                break;
+            case 1:
+                type = "goals";
+                break;
+            case 2:
+                type = "clap";
+                break;
+            case 3:
+                type = "ok";
+                break;
+            case 4:
+                type = "bump";
+                break;
+            default:
+                type = "";
+
+        }
+
+        if (!type.equals("")) {
+
+            if (mObject.get("video") != null) {
+                final Video parseObject = (Video) mObject;
+                final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
+                reaction.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        List<ParseObject> reactions = parseObject.getList("reactions");
+                        if (reactions == null) {
+                            reactions = new ArrayList<>();
+                        }
+
+                        reactions.add(reaction);
+                        parseObject.setReactions(reactions);
+                        parseObject.saveInBackground();
+                    }
+                });
+            } else {
+                final Image parseObject = (Image) mObject;
+                final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
+                reaction.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        List<ParseObject> reactions = parseObject.getList("reactions");
+                        if (reactions == null) {
+                            reactions = new ArrayList<>();
+                        }
+
+                        reactions.add(reaction);
+                        parseObject.setReactions(reactions);
+                        parseObject.saveInBackground();
+                    }
+                });
+            }
+        }
+
         deselectAnimation.prepare();
         startAnimation(deselectAnimation);
     }
