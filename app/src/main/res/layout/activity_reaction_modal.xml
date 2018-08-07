@@ -23,6 +23,8 @@
         android:layout_above="@+id/rvReactions"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="-47dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:padding="8dp">
 
         <LinearLayout

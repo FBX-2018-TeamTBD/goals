@@ -105,7 +105,8 @@ public class ReactionView extends View {
             case MotionEvent.ACTION_MOVE:
                 for (int i = 0; i < emotions.size(); i++) {
                     if (event.getX() > emotions.get(i).x &&
-                            event.getX() < emotions.get(i).x + emotions.get(i).size) {
+                            event.getX() < emotions.get(i).x + emotions.get(i).size &&
+                            event.getY() > 700 && event.getY() < 780) {
                         onSelect(i);
                         break;
                     }

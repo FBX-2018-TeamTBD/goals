@@ -18,7 +18,7 @@ public class RoundedBoard {
 
     static final float LEFT = DisplayUtil.dpToPx(16);
 
-    static final float BOTTOM = DisplayUtil.dpToPx(760);
+    static final float BOTTOM = DisplayUtil.dpToPx(780);
 
     static final float TOP = BOTTOM - HEIGHT;
 
