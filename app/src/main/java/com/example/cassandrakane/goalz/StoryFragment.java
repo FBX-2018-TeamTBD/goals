@@ -331,6 +331,8 @@ public class StoryFragment extends Fragment {
         ivReaction.setColorFilter(Color.argb(255, 255, 255, 255));
         ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
 
+        tvReaction.setText("Like");
+
         if (object.get("video") != null){
             viewStory.setVisibility(View.VISIBLE);
             Video videoObject = (Video) object;
@@ -445,34 +447,33 @@ public class StoryFragment extends Fragment {
                     setImage();
                     }
             }, 5000);
-        }
 
-        final List<ParseObject> reactions = object.getList("reactions");
-        if (reactions != null) {
-            Integer reactionCount = reactions.size();
-            tvReactionCount.setText(Integer.toString(reactionCount));
+            final List<ParseObject> reactions = object.getList("reactions");
+            if (reactions != null) {
+                Integer reactionCount = reactions.size();
+                tvReactionCount.setText(Integer.toString(reactionCount));
 
-            setReaction(reactions);
+                setReaction(reactions);
 
-            if (reactionCount != 0) {
-                ivAllReactions.clearColorFilter();
-                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
-                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                        intent.putExtra("reactions", (Serializable) reactions);
-                        intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                        if (mHandler != null) {
-                            mHandler.removeCallbacks(runnable);
+                if (reactionCount != 0) {
+                    ivAllReactions.clearColorFilter();
+                    btnTotalReactions.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
+                            }
+                            getActivity().startActivity(intent);
                         }
-                        getActivity().startActivity(intent);
-                    }
-                });
-            } else {
-                btnTotalReactions.setOnClickListener(null);
+                    });
+                } else {
+                    btnTotalReactions.setOnClickListener(null);
+                }
             }
-
         }
 
         ParseUser user = object.getParseUser("user");
