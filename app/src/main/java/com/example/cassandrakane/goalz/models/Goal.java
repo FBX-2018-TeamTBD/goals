@@ -73,6 +73,24 @@ public class Goal extends ParseObject implements Parcelable {
         return imageUrls;
     }
 
+    public void setReactions(List<ParseObject> reactions) { put("allReactions", reactions); }
+
+    public List<ParseObject> getReactions() {
+        List<ParseObject> arr = null;
+//        try {
+        arr = getList("allReactions");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        ArrayList<ParseObject> reacts = new ArrayList<>();
+        if (arr != null) {
+            for (int i = 0; i < arr.size(); i++) {
+                reacts.add(arr.get(i));
+            }
+        }
+        return reacts;
+    }
+
     public String getTitle() {
 //        try {
         return getString("title");

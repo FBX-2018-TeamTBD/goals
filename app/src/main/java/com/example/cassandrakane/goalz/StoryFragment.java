@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
@@ -83,6 +84,8 @@ public class StoryFragment extends Fragment {
     private Integer okCount = 0;
     private Integer bumpCount = 0;
 
+    public static Goal goal;
+
     public StoryFragment() { }
 
     public static StoryFragment newInstance(ArrayList<ParseObject> story, int index, ParseUser currentUser) {
@@ -131,7 +134,7 @@ public class StoryFragment extends Fragment {
                             rootLayout.removeView(rv);
                         }
 
-                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
+                        rv = new ReactionView(getActivity(), StoryFragment.this, object, goal);
                         rootLayout.addView(rv);
                         /**
                          * stop story from moving
@@ -330,8 +333,6 @@ public class StoryFragment extends Fragment {
         ivReaction.setColorFilter(Color.argb(255, 255, 255, 255));
         ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
 
-        tvReaction.setText("Like");
-
         if (object.get("video") != null){
             viewStory.setVisibility(View.VISIBLE);
             Video videoObject = (Video) object;
@@ -521,23 +522,18 @@ public class StoryFragment extends Fragment {
                     switch (type) {
                         case "thumbs":
                             ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
-                            tvReaction.setText("Liked");
                             break;
                         case "goals":
                             ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-                            tvReaction.setText("Liked");
                             break;
                         case "clap":
                             ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
-                            tvReaction.setText("Liked");
                             break;
                         case "ok":
                             ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
-                            tvReaction.setText("Liked");
                             break;
                         case "bump":
                             ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
-                            tvReaction.setText("Liked");
                             break;
                         default:
                             ivReaction.setVisibility(View.GONE);
