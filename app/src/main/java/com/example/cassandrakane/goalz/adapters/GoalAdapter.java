@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -122,7 +121,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
         holder.tvThumb.setText(String.valueOf(thumbs));
         holder.tvClap.setText(String.valueOf(claps));
-        holder.tvGoals.setText(String.valueOf(goaled));
+        holder.tvGoals.setText(String.valueOf(goals));
         holder.tvOk.setText(String.valueOf(oks));
         holder.tvBump.setText(String.valueOf(bumps));
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
@@ -473,9 +472,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
-            holder.ibAdd.setVisibility(View.VISIBLE);
             if (personal) {
-                holder.ibAdd.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
+                holder.ibAdd.setVisibility(View.VISIBLE);
+                holder.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        navigationHelper.toCamera();
+                    }
+                });
                 final Goal finalGoal1 = goal;
                 holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -490,7 +494,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                holder.ibAdd.setImageDrawable(null);
+                holder.ibAdd.setVisibility(View.GONE);
             }
         }
     }
@@ -631,7 +635,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
         @BindView(R.id.btnFriends) Button btnFriends;
-        @BindView(R.id.ibAdd) ImageButton ibAdd;
+        @BindView(R.id.ibAdd) Button ibAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
         @BindView(R.id.reaction_view) RelativeLayout reactionView;
         @BindView(R.id.tvThumb) TextView tvThumb;
