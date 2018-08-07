@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
@@ -83,6 +84,8 @@ public class StoryFragment extends Fragment {
     private Integer okCount = 0;
     private Integer bumpCount = 0;
 
+    public static Goal goal;
+
     public StoryFragment() { }
 
     public static StoryFragment newInstance(ArrayList<ParseObject> story, int index, ParseUser currentUser) {
@@ -131,7 +134,7 @@ public class StoryFragment extends Fragment {
                             rootLayout.removeView(rv);
                         }
 
-                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
+                        rv = new ReactionView(getActivity(), StoryFragment.this, object, goal);
                         rootLayout.addView(rv);
                         /**
                          * stop story from moving
