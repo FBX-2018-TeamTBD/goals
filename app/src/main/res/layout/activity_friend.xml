@@ -29,6 +29,7 @@
         android:layout_marginTop="15dp" />
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnMessage"
         android:layout_width="30dp"
         android:layout_height="30dp"

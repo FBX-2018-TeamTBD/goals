@@ -109,6 +109,7 @@
         android:backgroundTint="@color/white" />
 
     <ImageButton
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnInfo"
         android:layout_width="35dp"
         android:layout_height="35dp"
@@ -120,6 +121,7 @@
         android:tint="@color/white" />
 
     <ImageButton
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnInfo2"
         android:layout_width="35dp"
         android:layout_height="35dp"
