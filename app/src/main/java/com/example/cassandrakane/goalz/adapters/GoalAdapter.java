@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,9 +18,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +66,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private final List<Goal> goals;
     private boolean personal; //for determining whether this is for user or for a friend
     Context context;
+    Activity activity;
     Date currentDate;
     ParseUser currentUser;
     float startX = 0;
@@ -80,6 +84,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+        //activity = (MainActivity) parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
@@ -91,6 +96,21 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         final Goal goal = goals.get(position);
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
+
+        holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
+        holder.btnReaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.btnReaction.getTag().equals(context.getResources().getColor(R.color.white))) {
+                    slideLeft(holder.reactionView);
+                    holder.btnReaction.setTag(context.getResources().getColor(R.color.orange));
+                } else {
+                    holder.reactionView.setVisibility(View.INVISIBLE);
+                    holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
+                    slideRight(holder.reactionView);
+                }
+            }
+        });
 
         if (personal) {
             final MainActivity activity = (MainActivity) context;
@@ -358,7 +378,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
                 if (!seen) {
                     startIndex = i;
-                    // TODO - show blue dot under story
                     break;
                 }
             }
@@ -447,6 +466,31 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         .into(holder.ivStory);*//*
             }*/
         }
+    }
+
+    // slide the view from below itself to the current position
+    public void slideRight(View view){
+        view.setVisibility(View.VISIBLE);
+        TranslateAnimation animate = new TranslateAnimation(
+                -view.getWidth()-7,                 // fromXDelta
+                 0,                 // toXDelta
+                0,  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    // slide the view from its current position to below itself
+    public void slideLeft(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                -view.getWidth()-7,                 // toXDelta
+                0,                 // fromYDelta
+                0); // toYDelta
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
     }
 
     private void removeGoal(String id) {
@@ -561,6 +605,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.btnStory) Button btnStory;
         @BindView(R.id.btnFriends) Button btnFriends;
         @BindView(R.id.ibAdd) ImageButton ibAdd;
+        @BindView(R.id.btnReaction) Button btnReaction;
+        @BindView(R.id.reaction_view) RelativeLayout reactionView;
 
         public ViewHolder(View itemView) {
             super(itemView);
