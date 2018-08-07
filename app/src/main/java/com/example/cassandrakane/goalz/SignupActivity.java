@@ -216,7 +216,7 @@ public class SignupActivity extends AppCompatActivity {
                 // Configure byte output stream
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 // Compress the image further
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bytes);
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(imagePath);
@@ -256,7 +256,7 @@ public class SignupActivity extends AppCompatActivity {
                     // Configure byte output stream
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     // Compress the image further
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bytes);
                     FileOutputStream fos = null;
                     try {
                         fos = new FileOutputStream(file.getAbsolutePath());
