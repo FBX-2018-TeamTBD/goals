@@ -49,6 +49,7 @@
         android:textSize="18sp" />
 
     <ImageButton
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
