@@ -26,10 +26,10 @@ import java.util.List;
 public class ReactionView extends View {
 
     private static final int SCALE_DURATION = 200;
-    private static final int TRANSLATION_DURATION = 800;
-    private static final int CHILD_TRANSLATION_DURATION = 300;
-    private static final int CHILD_DELAY = 100;
-    private static final int DRAW_DELAY = 50;
+    private static final int TRANSLATION_DURATION = 700;
+    private static final int CHILD_TRANSLATION_DURATION = 200;
+    private static final int CHILD_DELAY = 50;
+    private static final int DRAW_DELAY = 25;
     private RoundedBoard board;
     private List<Emotion> emotions;
     public int selectedIndex = -1;
@@ -98,13 +98,6 @@ public class ReactionView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                for (int i = 0; i < emotions.size(); i++) {
-                    if (event.getX() > emotions.get(i).x &&
-                            event.getX() < emotions.get(i).x + emotions.get(i).size) {
-                        onSelect(i);
-                        break;
-                    }
-                }
                 return true;
             case MotionEvent.ACTION_MOVE:
                 for (int i = 0; i < emotions.size(); i++) {
@@ -142,27 +135,27 @@ public class ReactionView extends View {
             case 0:
                 type = "thumbs";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
-                fragment.tvReaction.setText("Liked");
+                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 1:
                 type = "goals";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
-                fragment.tvReaction.setText("Liked");
+                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 2:
                 type = "clap";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
-                fragment.tvReaction.setText("Liked");
+                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 3:
                 type = "ok";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
-                fragment.tvReaction.setText("Liked");
+                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 4:
                 type = "bump";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
-                fragment.tvReaction.setText("Liked");
+                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             default:
                 type = "";

@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
@@ -367,7 +368,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
 
         if (imageUrls.size() > 0) {
-            for (int i =0; i<story.size(); i++){
+            for (int i = 0; i<story.size(); i++){
                 boolean seen = false;
                 ParseObject image = story.get(i);
                 List<ParseUser> users = image.getList("viewedBy");
@@ -441,11 +442,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
-        /*    if (personal) {
-                *//*Glide.with(context)
-                        .load(R.drawable.placeholder)
-                        .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);*//*
+            holder.ibAdd.setVisibility(View.VISIBLE);
+            if (personal) {
+                holder.ibAdd.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
                 final Goal finalGoal1 = goal;
                 holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -460,11 +459,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                *//*Glide.with(context)
-                        .load(R.drawable.placeholder)
-                        .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
-                        .into(holder.ivStory);*//*
-            }*/
+                holder.ibAdd.setImageDrawable(null);
+            }
         }
     }
 

@@ -64,7 +64,6 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
     @BindView(R.id.btnReaction) LinearLayout btnReaction;
     @BindView(R.id.ivReaction) public ImageView ivReaction;
-    @BindView(R.id.tvReaction) public TextView tvReaction;
     @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
     @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
     @BindView(R.id.tvReactionCount) public TextView tvReactionCount;

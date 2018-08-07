@@ -129,11 +129,11 @@
 
         <ImageButton
             android:id="@+id/ibAdd"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="73dp"
+            android:layout_marginTop="70dp"
             android:background="@null"
             android:scaleType="fitXY"
             card_view:srcCompat="@drawable/add_circle" />
@@ -178,7 +178,6 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="2dp"
-                android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/tvThumb"
                 android:src="@drawable/thumbs_react" />
 
@@ -189,6 +188,7 @@
                 android:layout_alignBottom="@+id/ivGoals"
                 android:fontFamily="@font/quicksand_medium"
                 android:textColor="@color/white"
+                android:layout_marginBottom="2dp"
                 android:text="@string/_0" />
 
             <ImageView
@@ -217,7 +217,7 @@
                 android:layout_alignBottom="@+id/ivClap"
                 android:fontFamily="@font/quicksand_medium"
                 android:textColor="@color/white"
-                android:layout_marginBottom="3dp"
+                android:layout_marginBottom="2dp"
                 android:text="@string/_0" />
 
             <TextView

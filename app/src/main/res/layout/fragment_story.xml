@@ -161,18 +161,6 @@
             android:src="@drawable/goals_react"
             android:tint="@color/white" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="8dp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/quicksand_medium"
-        android:id="@+id/tvReaction"
-        android:textSize="18dp"
-        android:text="Like"
-        />
-
     </LinearLayout>
 
     <LinearLayout
@@ -188,7 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="6dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="##"
             android:textColor="@color/white"
