@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/etTitle"
-                android:text="How many days will it take? 50"
+                android:text="How many days will it take? 1"
                 android:layout_alignLeft="@id/etTitle"
                 android:fontFamily="@font/quicksand_medium"
                 android:textSize="18sp"
@@ -154,9 +154,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/tvDuration"
-                android:max="101"
+                android:max="50"
                 android:min="1"
-                android:progress="50"
+                android:progress="1"
                 android:layout_marginTop="10dp" />
 
             <TextView
