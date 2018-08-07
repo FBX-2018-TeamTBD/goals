@@ -69,6 +69,8 @@ public class StoryFragment extends Fragment {
     private Handler mHandler;
     private ReactionView rv;
 
+    private ParseObject object;
+
     public StoryFragment() { }
 
     public static StoryFragment newInstance(ArrayList<ParseObject> story, int index, ParseUser currentUser) {
@@ -116,11 +118,15 @@ public class StoryFragment extends Fragment {
                         if (rv != null) {
                             rootLayout.removeView(rv);
                         }
+
                         rv = new ReactionView(getActivity(), StoryFragment.this);
                         rootLayout.addView(rv);
                         /**
                          * stop story from moving
                          */
+                        if (mHandler != null) {
+                            mHandler.removeCallbacks(runnable);
+                        }
                         return true; // if you want to handle the touch event
                     case MotionEvent.ACTION_UP:
                         return true; // if you want to handle the touch event
@@ -201,6 +207,9 @@ public class StoryFragment extends Fragment {
         btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
 
                 tvUsername.setVisibility(View.INVISIBLE);
                 tvDateAdded.setVisibility(View.INVISIBLE);
@@ -288,18 +297,6 @@ public class StoryFragment extends Fragment {
 
         return view;
 
-        /*
-        final Reaction reaction = new Reaction(type, user);
-        reaction.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                List<ParseObject> reactions = object.getList("reactions");
-                reactions.add(reaction);
-                object.setReactions(reactions);
-                object.saveInBackground();
-            }
-        });
-        */
     }
 
     public void setImage(){
@@ -308,7 +305,7 @@ public class StoryFragment extends Fragment {
         } else if (mIndex >= mStory.size()) {
             mIndex = 0;
         }
-        ParseObject object = mStory.get(mIndex);
+        object = mStory.get(mIndex);
         List<ParseUser> viewedBy = object.getList("viewedBy");
         if (viewedBy == null){
             viewedBy = new ArrayList<>();

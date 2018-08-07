@@ -41,4 +41,9 @@
     <string name="sign_me_up">Sign me up</string>
     <string name="notifications">notifications</string>
     <string name="no_notifications"> you have no new notifications</string>
+    <string name="thumbs_react">thumbs</string>
+    <string name="goals_react">goals</string>
+    <string name="clap_react">clap</string>
+    <string name="ok_react">ok</string>
+    <string name="bump_react">bump_react</string>
 </resources>
