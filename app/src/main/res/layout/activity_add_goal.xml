@@ -137,15 +137,28 @@
             </RadioGroup>
 
             <TextView
-                android:id="@+id/tvDuration"
+                android:id="@+id/textDuration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/etTitle"
-                android:text="How many days will it take? 1"
+                android:text="How many days will it take?"
                 android:layout_alignLeft="@id/etTitle"
                 android:fontFamily="@font/quicksand_medium"
                 android:textSize="18sp"
+                android:layout_marginTop="30dp" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/textDuration"
+                android:layout_marginLeft="8dp"
+                android:text="1"
+                android:fontFamily="@font/quicksand_medium"
+                android:textStyle="bold"
+                android:textSize="19sp"
+                android:layout_alignBottom="@id/textDuration"
+                android:textColor="@color/black"
                 android:layout_marginTop="30dp" />
 
             <SeekBar
@@ -154,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/tvDuration"
-                android:max="50"
+                android:max="51"
                 android:min="1"
                 android:progress="1"
                 android:layout_marginTop="10dp" />

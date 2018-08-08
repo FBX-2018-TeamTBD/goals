@@ -10,8 +10,8 @@
         android:layout_height="60dp"
         android:elevation="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="30dp"
         android:layout_centerHorizontal="true"
         android:background="@color/orange"
         card_view:cardCornerRadius="30dp" >

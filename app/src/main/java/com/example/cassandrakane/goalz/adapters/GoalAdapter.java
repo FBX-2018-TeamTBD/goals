@@ -476,6 +476,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         } else {
             holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.black));
             holder.tvFriends.setTextColor(context.getResources().getColor(R.color.black));
+            holder.btnReaction.setBackgroundTintList(context.getResources().getColorStateList(R.color.black));
             if (personal) {
                 holder.ibAdd.setVisibility(View.VISIBLE);
                 holder.ibAdd.setOnClickListener(new View.OnClickListener() {

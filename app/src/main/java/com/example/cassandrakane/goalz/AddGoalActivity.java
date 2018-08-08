@@ -98,7 +98,7 @@ public class AddGoalActivity extends AppCompatActivity {
         sbDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvDuration.setText("How many days will it take? " + seekBar.getProgress());
+                tvDuration.setText(String.valueOf(seekBar.getProgress()));
             }
 
             @Override
