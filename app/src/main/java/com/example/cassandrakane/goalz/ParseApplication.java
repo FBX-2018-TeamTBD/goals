@@ -55,7 +55,7 @@ public class ParseApplication extends Application {
                 .applicationId("FBUGoals") // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("http://fbu-goals.herokuapp.com/parse/")
+                .server("https://fbu-goals.herokuapp.com/parse/")
                 .enableLocalDataStore()
                 .build());
 
