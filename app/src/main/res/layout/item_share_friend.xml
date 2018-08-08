@@ -42,11 +42,9 @@
         android:id="@+id/ivCheck"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignEnd="@+id/card_view"
-        android:layout_alignTop="@+id/card_view"
-        android:layout_marginRight="-10dp"
-        android:layout_marginTop="-7dp"
-        android:visibility="invisible"
-        android:background="@drawable/check_circle" />
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/check_circle"
+        android:visibility="invisible" />
 
 </RelativeLayout>

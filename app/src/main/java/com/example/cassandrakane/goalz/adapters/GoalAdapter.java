@@ -104,7 +104,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
-            String type = react.getType();
+            String type = null;
+            try {
+                type = react.fetchIfNeeded().getString("type");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (type.equals("thumbs")) {
                 thumbs += 1;
             } else if (type.equals("goals")) {
@@ -413,10 +418,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
             holder.tvReaction.setVisibility(View.VISIBLE);
             holder.btnReaction.setVisibility(View.VISIBLE);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
-            params.addRule(RelativeLayout.LEFT_OF, R.id.tvReaction);
-            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.placeholder);
-            holder.btnFriends.setLayoutParams(params);
+            holder.tvAdd.setVisibility(View.INVISIBLE);
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
@@ -460,22 +462,25 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         fragmentTwo.goal = goal;
                         fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
 
-                        activity.ivProfile.setVisibility(View.INVISIBLE);
-                        activity.cardView.setVisibility(View.INVISIBLE);
-                        activity.btnBack.setVisibility(View.INVISIBLE);
-                        activity.btnUnfriend.setVisibility(View.INVISIBLE);
-                        activity.btnMessage.setVisibility(View.INVISIBLE);
+                        activity.ivProfile.setVisibility(View.GONE);
+                        activity.cardView.setVisibility(View.GONE);
+                        activity.btnBack.setVisibility(View.GONE);
+                        activity.btnUnfriend.setVisibility(View.GONE);
+                        activity.btnMessage.setVisibility(View.GONE);
                     }
                 }
             });
         } else {
-            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.black));
-            holder.tvFriends.setTextColor(context.getResources().getColor(R.color.black));
-            holder.tvReaction.setVisibility(View.GONE);
-            holder.btnReaction.setVisibility(View.GONE);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
-            params.addRule(RelativeLayout.LEFT_OF, R.id.placeholder);
-            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.placeholder);
+            holder.ivStory.setImageDrawable(null);
+            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+            holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.btnReaction.setVisibility(View.INVISIBLE);
+            holder.vGradient.setVisibility(View.INVISIBLE);
+            holder.tvAdd.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+            params.setMargins(0, 25, 20, 0);
             holder.btnFriends.setLayoutParams(params);
             if (personal) {
                 holder.ibAdd.setVisibility(View.VISIBLE);
@@ -614,6 +619,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
         @BindView(R.id.ibAdd) Button ibAdd;
+        @BindView(R.id.tvAdd) TextView tvAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
         @BindView(R.id.reaction_view) RelativeLayout reactionView;
         @BindView(R.id.tvThumb) TextView tvThumb;
@@ -622,6 +628,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvOk) TextView tvOk;
         @BindView(R.id.tvBump) TextView tvBump;
         @BindView(R.id.tvReaction) TextView tvReaction;
+        @BindView(R.id.vGradient) View vGradient;
 
         public ViewHolder(View itemView) {
             super(itemView);
