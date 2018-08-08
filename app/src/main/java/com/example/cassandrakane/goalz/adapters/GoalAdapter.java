@@ -38,14 +38,11 @@ import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Reaction;
-import com.example.cassandrakane.goalz.models.TextNotification;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -104,6 +101,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int claps = 0;
         int oks = 0;
         int bumps = 0;
+        int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
             String type = react.getType();
@@ -119,6 +117,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 bumps += 1;
             }
         }
+        holder.tvReaction.setText(String.valueOf(total));
         holder.tvThumb.setText(String.valueOf(thumbs));
         holder.tvClap.setText(String.valueOf(claps));
         holder.tvGoals.setText(String.valueOf(goaled));
@@ -345,7 +344,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         if (goal.getApprovedUsers().size() > 1) {
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
-            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.friend));
+            holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -358,7 +357,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         } else {
             holder.tvFriends.setText("");
             if (personal) {
-                holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
+                holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
                 holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -369,7 +368,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                holder.ivFriends.setImageDrawable(null);
+                holder.btnFriends.setBackground(null);
             }
         }
 
@@ -410,8 +409,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
 
             holder.ibAdd.setVisibility(View.GONE);
-            holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.white));
+            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
             holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
+            holder.tvReaction.setVisibility(View.VISIBLE);
+            holder.btnReaction.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
+            params.addRule(RelativeLayout.LEFT_OF, R.id.tvReaction);
+            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.placeholder);
+            holder.btnFriends.setLayoutParams(params);
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
@@ -424,25 +429,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
                     if (context.getClass().isAssignableFrom(MainActivity.class)) {
                         MainActivity activity = (MainActivity) context;
-//                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-//                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
-//                        activity.toolbar.setVisibility(View.INVISIBLE);
                         ProfileFragment fragmentOne = new ProfileFragment();
                         StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
                         fragmentTwo.goal = goal;
                         Log.i("sdf", fragmentTwo.goal.getTitle());
                         Transition changeTransform = TransitionInflater.from(context).
                                 inflateTransition(R.transition.change_image_transform);
-                        Transition changeBoundsTransform = TransitionInflater.from(context).
-                                inflateTransition(R.transition.change_bounds);
                         Transition explodeTransform = TransitionInflater.from(context).
                                 inflateTransition(android.R.transition.fade);
-
-//                        fragmentTwo.setSharedElementEnterTransition(new DetailsTransition());
-//                        fragmentTwo.setEnterTransition(new Fade());
-//                        fragmentTwo.setExitTransition(new Fade());
-//                        fragmentTwo.setSharedElementReturnTransition(new DetailsTransition());
 
                         fragmentOne.setSharedElementReturnTransition(changeTransform);
                         fragmentOne.setExitTransition(explodeTransform);
@@ -475,9 +469,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
-            holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.black));
+            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.black));
             holder.tvFriends.setTextColor(context.getResources().getColor(R.color.black));
-            holder.btnReaction.setBackgroundTintList(context.getResources().getColorStateList(R.color.black));
+            holder.tvReaction.setVisibility(View.GONE);
+            holder.btnReaction.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
+            params.addRule(RelativeLayout.LEFT_OF, R.id.placeholder);
+            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.placeholder);
+            holder.btnFriends.setLayoutParams(params);
             if (personal) {
                 holder.ibAdd.setVisibility(View.VISIBLE);
                 holder.ibAdd.setOnClickListener(new View.OnClickListener() {
@@ -572,34 +571,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         });
     }
 
-    public ParseUser getParseUserFromId(String id) {
-        final ParseUser[] user = {null};
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", id);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (objects != null && objects.size() > 0) {
-                    user[0] = objects.get(0);
-                }
-            }
-        });
-        return user[0];
-    }
-
-    public void sendTextNotifications(Goal goal, List<ParseUser> users) {
-        String text = getTextNotificationString(goal.getTitle(), users);
-        List<ParseUser> friends = goal.getFriends();
-        for (ParseUser friend : friends) {
-            ParseFile image = null;
-            if (goal.getStory().size() > 0) {
-                image = goal.getStory().get(goal.getStory().size() - 1).getParseFile("image");
-            }
-            TextNotification notification = new TextNotification(text, friend, image);
-            notification.saveInBackground();
-        }
-    }
-
     public String getTextNotificationString(String goalTitle, List<ParseUser> users) {
         String text = String.format("Oh no! You lost your streak for \"%s\"! ", goalTitle);
         for (int i = 0; i < users.size(); i++) {
@@ -639,10 +610,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvProgress) TextView tvProgress;
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivStar) ImageView ivStar;
-        @BindView(R.id.ivFriends) ImageView ivFriends;
+        @BindView(R.id.btnFriends) Button btnFriends;
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
-        @BindView(R.id.btnFriends) Button btnFriends;
         @BindView(R.id.ibAdd) Button ibAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
         @BindView(R.id.reaction_view) RelativeLayout reactionView;
@@ -651,6 +621,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvClap) TextView tvClap;
         @BindView(R.id.tvOk) TextView tvOk;
         @BindView(R.id.tvBump) TextView tvBump;
+        @BindView(R.id.tvReaction) TextView tvReaction;
 
         public ViewHolder(View itemView) {
             super(itemView);

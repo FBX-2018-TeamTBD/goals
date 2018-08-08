@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvStreak"
-            android:layout_toLeftOf="@id/ivFriends"
+            android:layout_toLeftOf="@id/btnFriends"
             android:layout_marginRight="4dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/_0"
@@ -102,28 +102,20 @@
             android:focusableInTouchMode="true"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/ivFriends"
+        <Button
+            android:id="@+id/btnFriends"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_toLeftOf="@+id/btnReaction"
+            android:layout_toLeftOf="@+id/tvReaction"
+            android:gravity="end"
             android:layout_alignBottom="@+id/tvFriends"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="2dp"
             android:tint="@color/white"
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            app:srcCompat="@drawable/friend" />
-
-        <Button
-            android:id="@+id/btnFriends"
-            android:layout_width="32dp"
-            android:layout_height="20dp"
-            android:layout_toLeftOf="@+id/btnReaction"
-            android:layout_alignTop="@+id/ivFriends"
-            android:layout_alignLeft="@+id/tvFriends"
-            android:background="@color/transparent"
-            android:text="" />
+            app:background="@drawable/friend" />
 
         <Button
             android:id="@+id/ibAdd"
@@ -135,15 +127,37 @@
             android:background="@drawable/add_circle"
             android:scaleType="fitXY" />
 
+        <TextView
+            android:id="@+id/tvReaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btnReaction"
+            android:layout_marginRight="3dp"
+            android:layout_alignBottom="@+id/tvFriends"
+            android:textColor="@color/white"
+            android:layout_marginLeft="5dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/quicksand_medium"
+            app:text="@string/_0" />
+
         <Button
             android:id="@+id/btnReaction"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="7dp"
-            android:backgroundTint="@color/white"
-            android:background="@drawable/more" />
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/goals_react" />
+
+        <View
+            android:id="@+id/placeholder"
+            android:layout_width="1dp"
+            android:layout_height="21dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp" />
 
         <RelativeLayout
             android:id="@+id/reaction_view"
