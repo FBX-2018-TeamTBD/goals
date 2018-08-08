@@ -134,7 +134,7 @@
             android:layout_height="72dp"
             android:layout_above="@+id/tvTitle"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/add_circle"
             android:scaleType="fitXY" />
 
@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/ibAdd"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="18dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="LET'S GET STARTED!"
             android:textAlignment="center"

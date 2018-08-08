@@ -59,6 +59,10 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
                     .load(storyUrls.get(storyUrls.size() - 1))
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
+        } else {
+            holder.vGradient.setVisibility(View.INVISIBLE);
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.ivAdd.setVisibility(View.VISIBLE);
         }
     }
 
@@ -73,6 +77,8 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivCheck) ImageView ivCheck;
+        @BindView(R.id.vGradient) View vGradient;
+        @BindView(R.id.ivAdd) ImageView ivAdd;
 
         public ViewHolder(View itemView) {
             super(itemView);

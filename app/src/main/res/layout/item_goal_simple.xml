@@ -8,31 +8,44 @@
     style="@style/SelectableItemBackground"
     android:clickable="true">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/tools"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
         card_view:cardCornerRadius="10dp"
-        card_view:cardPreventCornerOverlap="false"
-        card_view:cardElevation="10dp">
+        card_view:cardElevation="10dp"
+        card_view:cardPreventCornerOverlap="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/ivStory"
-                android:transitionName="story"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:transitionName="story" />
+
+            <ImageView
+                android:id="@+id/ivAdd"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/add_circle"
+                android:visibility="invisible" />
+
             <View
+                android:id="@+id/vGradient"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_alignBottom="@+id/ivStory"
@@ -43,8 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/ivStory"
-                android:layout_marginBottom="10dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/title"
                 android:textAlignment="center"
