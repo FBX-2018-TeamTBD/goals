@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz.models;
 
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -31,11 +30,6 @@ public class GoalRequests extends ParseObject {
     }
 
     public ParseUser getFromUser() {
-        try {
-            return fetchIfNeeded().getParseUser("fromUser");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getParseUser("fromUser");
     }
 }

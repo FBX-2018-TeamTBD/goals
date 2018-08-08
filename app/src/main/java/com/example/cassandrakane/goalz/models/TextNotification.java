@@ -20,21 +20,11 @@ public class TextNotification extends ParseObject {
     }
 
     public String getText() {
-        try {
-            return fetchIfNeeded().getString("text");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return getString("text");
     }
 
     public ParseUser getUser() {
-        try {
-            return fetchIfNeeded().getParseUser("user");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getParseUser("user");
     }
 
     public ParseFile getImage() {
