@@ -160,32 +160,7 @@ public class ProfileFragment extends Fragment {
                 mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
             }
         });
-//        List<ParseObject> lGoals = user.getList("goals");
-//        completedGoals = 0;
-//        progressGoals = 0;
-//        goals.clear();
-//        List<Goal> completed = new ArrayList<>();
-//        if (lGoals != null) {
-//            for (int i = 0; i < lGoals.size(); i++) {
-//                Goal goal = (Goal) lGoals.get(i);
-//                if (goal.getCompleted()) {
-//                    completedGoals += 1;
-//                    completed.add(0, goal);
-//                } else {
-//                    progressGoals += 1;
-//                    goals.add(goal);
-//                }
-//            }
-//            goals.addAll(completed);
-//        }
-//        if (completedGoals == 0 && progressGoals == 0) {
-//            viewFlipper.setVisibility(View.VISIBLE);
-//            btnRefresh.setVisibility(View.GONE);
-//        } else {
-//            viewFlipper.setVisibility(View.GONE);
-//            btnRefresh.setVisibility(View.VISIBLE);
-//        }
-//        goalAdapter.notifyDataSetChanged();
+
     }
 
     public void networkPopulateProfile(){
@@ -231,52 +206,5 @@ public class ProfileFragment extends Fragment {
             mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
             }
         });
-//        mainActivity.centralFragment.progressBar.setVisibility(VISIBLE);
-//        List<ParseObject> arr = new ArrayList<>();
-//        completedGoals = 0;
-//        progressGoals = 0;
-//        goals.clear();
-//        List<Goal> completed = new ArrayList<>();
-//        try {
-//            arr = user.fetch().getList("goals");
-//        } catch(ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (arr != null) {
-//            try {
-//                ParseObject.fetchAllIfNeeded(arr);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            for(int i = 0; i < arr.size(); i++) {
-//                Goal goal = null;
-//                try {
-//                    goal = arr.get(i).fetch();
-//                } catch(ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                if (goal.getCompleted()) {
-//                    completedGoals += 1;
-//                    completed.add(0, goal);
-//                } else {
-//                    progressGoals += 1;
-//                    goals.add(goal);
-//                }
-//            }
-//            goals.addAll(completed);
-//        }
-//        if (completedGoals == 0 && progressGoals == 0) {
-//            viewFlipper.setVisibility(View.VISIBLE);
-//            btnRefresh.setVisibility(View.GONE);
-//        } else {
-//            viewFlipper.setVisibility(View.GONE);
-//            btnRefresh.setVisibility(View.VISIBLE);
-//        }
-//        goalAdapter.notifyDataSetChanged();
-//        btnRefresh.clearAnimation();
-//        ParseObject.unpinAllInBackground(goals);
-//        ParseObject.pinAllInBackground(goals);
-//        mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
     }
 }

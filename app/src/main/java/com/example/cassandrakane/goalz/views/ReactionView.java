@@ -218,11 +218,6 @@ public class ReactionView extends View {
                         List<ParseObject> reacts = StoryFragment.goal.getReactions();
                         reacts.add(reaction);
                         StoryFragment.goal.setReactions(reacts);
-//                        try {
-//                            StoryFragment.goal.save();
-//                        } catch (ParseException e1) {
-//                            e1.printStackTrace();
-//                        }
                         StoryFragment.goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
