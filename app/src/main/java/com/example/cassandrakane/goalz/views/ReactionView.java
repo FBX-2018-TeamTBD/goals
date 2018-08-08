@@ -195,7 +195,13 @@ public class ReactionView extends View {
                         List<ParseObject> reacts = goal.getReactions();
                         reacts.add(reaction);
                         goal.setReactions(reacts);
-                        goal.saveInBackground();
+                        Log.i("sdf", "setReacts");
+                        goal.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.i("sdf", "success");
+                            }
+                        });
                     }
                 });
             } else {
