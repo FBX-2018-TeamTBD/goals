@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.models;
 
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -71,6 +72,25 @@ public class Goal extends ParseObject implements Parcelable {
             }
         }
         return imageUrls;
+    }
+
+    public void setReactions(List<ParseObject> reactions) {
+        Log.i("sdf", ""+reactions.size());
+        put("allReactions", reactions);
+    }
+
+    public List<ParseObject> getReactions() {
+        List<ParseObject> arr = getList("allReactions");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        ArrayList<ParseObject> reacts = new ArrayList<>();
+        if (arr != null) {
+            for (int i = 0; i < arr.size(); i++) {
+                reacts.add(arr.get(i));
+            }
+        }
+        return reacts;
     }
 
     public String getTitle() {

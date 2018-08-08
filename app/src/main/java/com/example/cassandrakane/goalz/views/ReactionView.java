@@ -9,10 +9,11 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.StoryFragment;
+import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
-import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.utils.Constants;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,6 +37,7 @@ public class ReactionView extends View {
 
     private String type;
     private ParseObject mObject;
+    private Goal goal;
 
     private SelectingAnimation selectingAnimation;
     private DeselectAnimation deselectAnimation;
@@ -49,11 +51,12 @@ public class ReactionView extends View {
         }
     };
 
-    public ReactionView(Context context, StoryFragment frag, ParseObject object) {
+    public ReactionView(Context context, StoryFragment frag, ParseObject object, Goal goal) {
         super(context);
         this.context = context;
         fragment = frag;
         mObject = object;
+        this.goal = goal;
         init();
     }
 
@@ -102,7 +105,8 @@ public class ReactionView extends View {
             case MotionEvent.ACTION_MOVE:
                 for (int i = 0; i < emotions.size(); i++) {
                     if (event.getX() > emotions.get(i).x &&
-                            event.getX() < emotions.get(i).x + emotions.get(i).size) {
+                            event.getX() < emotions.get(i).x + emotions.get(i).size &&
+                            event.getY() > 700 && event.getY() < 780) {
                         onSelect(i);
                         break;
                     }
@@ -134,6 +138,7 @@ public class ReactionView extends View {
         fragment.ivReaction.clearColorFilter();
         Integer count = Integer.parseInt(fragment.tvReactionCount.getText().toString()) + 1;
         fragment.tvReactionCount.setText(Integer.toString(count));
+
         switch (selectedIndex) {
             case 0:
                 type = "thumbs";
@@ -177,10 +182,13 @@ public class ReactionView extends View {
                         if (reactions == null) {
                             reactions = new ArrayList<>();
                         }
-
                         reactions.add(reaction);
                         parseObject.setReactions(reactions);
                         parseObject.saveInBackground();
+                        List<ParseObject> reacts = goal.getReactions();
+                        reacts.add(reaction);
+                        goal.setReactions(reacts);
+                        goal.saveInBackground();
                     }
                 });
             } else {
@@ -197,6 +205,10 @@ public class ReactionView extends View {
                         reactions.add(reaction);
                         parseObject.setReactions(reactions);
                         parseObject.saveInBackground();
+                        List<ParseObject> reacts = goal.getReactions();
+                        reacts.add(reaction);
+                        goal.setReactions(reacts);
+                        goal.saveInBackground();
                     }
                 });
             }

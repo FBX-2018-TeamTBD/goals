@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +37,7 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.TextNotification;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
@@ -98,6 +98,32 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
 
+        List<ParseObject> reax = goal.getReactions();
+        int thumbs = 0;
+        int goaled = 0;
+        int claps = 0;
+        int oks = 0;
+        int bumps = 0;
+        for (int i = 0; i < reax.size(); i++) {
+            Reaction react = (Reaction) reax.get(i);
+            String type = react.getType();
+            if (type.equals("thumbs")) {
+                thumbs += 1;
+            } else if (type.equals("goals")) {
+                goaled += 1;
+            } else if (type.equals("clap")) {
+                claps += 1;
+            } else if (type.equals("ok")) {
+                oks += 1;
+            } else if (type.equals("bump")) {
+                bumps += 1;
+            }
+        }
+        holder.tvThumb.setText(String.valueOf(thumbs));
+        holder.tvClap.setText(String.valueOf(claps));
+        holder.tvGoals.setText(String.valueOf(goals));
+        holder.tvOk.setText(String.valueOf(oks));
+        holder.tvBump.setText(String.valueOf(bumps));
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,7 +392,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         final ArrayList<String> imageUrls = goal.getStoryUrls();
         final ArrayList<ParseObject> story = goal.getStory();
 
-
         if (imageUrls.size() > 0) {
             for (int i = 0; i<story.size(); i++){
                 boolean seen = false;
@@ -377,6 +402,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         seen = true;
                     }
                 }
+
                 if (!seen) {
                     startIndex = i;
                     break;
@@ -402,6 +428,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 //                        activity.toolbar.setVisibility(View.INVISIBLE);
                         ProfileFragment fragmentOne = new ProfileFragment();
                         StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
+                        fragmentTwo.goal = goal;
                         Transition changeTransform = TransitionInflater.from(context).
                                 inflateTransition(R.transition.change_image_transform);
                         Transition changeBoundsTransform = TransitionInflater.from(context).
@@ -432,7 +459,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+                        StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
+                        fragmentTwo.goal = goal;
+                        fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
+
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);
@@ -442,9 +472,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
-            holder.ibAdd.setVisibility(View.VISIBLE);
             if (personal) {
-                holder.ibAdd.setImageDrawable(context.getResources().getDrawable(R.drawable.add_circle));
+                holder.ibAdd.setVisibility(View.VISIBLE);
+                holder.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        navigationHelper.toCamera();
+                    }
+                });
                 final Goal finalGoal1 = goal;
                 holder.btnStory.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -459,9 +494,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                holder.ibAdd.setImageDrawable(null);
+                holder.ibAdd.setVisibility(View.GONE);
             }
         }
+
+        startIndex = 0;
     }
 
     // slide the view from below itself to the current position
@@ -600,9 +637,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
         @BindView(R.id.btnFriends) Button btnFriends;
-        @BindView(R.id.ibAdd) ImageButton ibAdd;
+        @BindView(R.id.ibAdd) Button ibAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
         @BindView(R.id.reaction_view) RelativeLayout reactionView;
+        @BindView(R.id.tvThumb) TextView tvThumb;
+        @BindView(R.id.tvGoals) TextView tvGoals;
+        @BindView(R.id.tvClap) TextView tvClap;
+        @BindView(R.id.tvOk) TextView tvOk;
+        @BindView(R.id.tvBump) TextView tvBump;
 
         public ViewHolder(View itemView) {
             super(itemView);

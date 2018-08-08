@@ -103,6 +103,7 @@
     </android.support.v7.widget.CardView>
 
     <Button
+        style="@style/SelectableItemBackground"
         android:id="@+id/btnProfile"
         android:layout_width="wrap_content"
         android:layout_height="30dp"

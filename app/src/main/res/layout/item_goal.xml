@@ -127,16 +127,15 @@
             android:background="@color/transparent"
             android:text="" />
 
-        <ImageButton
+        <Button
             android:id="@+id/ibAdd"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="70dp"
-            android:background="@null"
-            android:scaleType="fitXY"
-            card_view:srcCompat="@drawable/add_circle" />
+            android:background="@drawable/add_circle"
+            android:scaleType="fitXY" />
 
         <Button
             android:id="@+id/btnReaction"
