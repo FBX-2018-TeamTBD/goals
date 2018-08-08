@@ -84,13 +84,10 @@ public class Goal extends ParseObject implements Parcelable {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        ArrayList<ParseObject> reacts = new ArrayList<>();
-        if (arr != null) {
-            for (int i = 0; i < arr.size(); i++) {
-                reacts.add(arr.get(i));
-            }
+        if (arr == null) {
+            return new ArrayList<>();
         }
-        return reacts;
+        return arr;
     }
 
     public String getTitle() {

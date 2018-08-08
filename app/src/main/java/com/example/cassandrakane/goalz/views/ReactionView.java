@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -101,12 +102,20 @@ public class ReactionView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                for (int i = 0; i < emotions.size(); i++) {
+                    if (event.getX() > emotions.get(i).x &&
+                            event.getX() < emotions.get(i).x + emotions.get(i).size &&
+                            event.getY() > emotions.get(i).y - 10 && event.getY() < emotions.get(i).y + Emotion.MEDIUM_SIZE + 10) {
+                        onSelect(i);
+                        break;
+                    }
+                }
                 return true;
             case MotionEvent.ACTION_MOVE:
                 for (int i = 0; i < emotions.size(); i++) {
                     if (event.getX() > emotions.get(i).x &&
                             event.getX() < emotions.get(i).x + emotions.get(i).size &&
-                            event.getY() > 700 && event.getY() < 780) {
+                            event.getY() > emotions.get(i).y - 10 && event.getY() < emotions.get(i).y + Emotion.MEDIUM_SIZE + 10) {
                         onSelect(i);
                         break;
                     }
@@ -136,34 +145,32 @@ public class ReactionView extends View {
          * use selectedIndex
          */
         fragment.ivReaction.clearColorFilter();
-        Integer count = Integer.parseInt(fragment.tvReactionCount.getText().toString()) + 1;
-        fragment.tvReactionCount.setText(Integer.toString(count));
+
+        if (selectedIndex != -1) {
+            Integer count = Integer.parseInt(fragment.tvReactionCount.getText().toString()) + 1;
+            fragment.tvReactionCount.setText(Integer.toString(count));
+        }
 
         switch (selectedIndex) {
             case 0:
                 type = "thumbs";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
-                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 1:
                 type = "goals";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
-                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 2:
                 type = "clap";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
-                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 3:
                 type = "ok";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
-                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             case 4:
                 type = "bump";
                 fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
-                fragment.ivReaction.setImageTintList(context.getResources().getColorStateList(R.color.orange));
                 break;
             default:
                 type = "";

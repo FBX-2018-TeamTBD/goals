@@ -121,7 +121,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
         holder.tvThumb.setText(String.valueOf(thumbs));
         holder.tvClap.setText(String.valueOf(claps));
-        holder.tvGoals.setText(String.valueOf(goals));
+        holder.tvGoals.setText(String.valueOf(goaled));
         holder.tvOk.setText(String.valueOf(oks));
         holder.tvBump.setText(String.valueOf(bumps));
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
