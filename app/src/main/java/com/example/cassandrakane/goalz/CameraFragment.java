@@ -65,14 +65,11 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 
 public class CameraFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
-    // TODO: Rename and change types of parameters
     private Goal goal;
-
-//    private OnFragmentInteractionListener mListener;
 
     ImageButton btnCapture;
     ImageButton btnSwap;
@@ -98,18 +95,14 @@ public class CameraFragment extends Fragment {
     private CameraCaptureSession cameraCaptureSessions;
     private CaptureRequest.Builder captureRequestBuilder;
     private Size imageDimension;
-    private ImageReader imageReader;
     private int mTotalRotation;
 
     // save to FILE
     private File file;
-    private File videoFile;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
 
 //    ParseUser user;
@@ -129,7 +122,6 @@ public class CameraFragment extends Fragment {
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int i) {
             cameraDevice.close();
-            cameraDevice = null;
         }
     };
 
@@ -163,6 +155,7 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -265,7 +258,6 @@ public class CameraFragment extends Fragment {
                             e.printStackTrace();
                         }
                     } catch (FileNotFoundException e) {
-                        Log.i("asdf", "error");
                         e.printStackTrace();
                     }
                 }
@@ -282,21 +274,10 @@ public class CameraFragment extends Fragment {
         }
         CameraManager manager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try{
-            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
-            Size[] jpegSizes = null;
-            if (characteristics != null){
-                jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                        .getOutputSizes(ImageFormat.JPEG);
-            }
 
             // capture image with custom size
             int width = 1920;
             int height = 1080;
-
-//            if (jpegSizes != null && jpegSizes.length > 0){
-//                width = jpegSizes[0].getWidth();
-//                height = jpegSizes[0].getHeight();
-//            }
 
             final ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
             List<Surface> outputSurface = new ArrayList<>(2);

@@ -149,7 +149,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (items[item].equals("Take Photo")) {
                     onLaunchCamera();
                 } else if (items[item].equals("Choose from Library")) {
-                    onLaunchGallery();
+                    Util.onLaunchGallery(SignupActivity.this);
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
@@ -192,21 +192,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
     }
-    public void onLaunchGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        if (Build.VERSION.SDK_INT >= 23) {
-            int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
-        }
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -229,7 +215,6 @@ public class SignupActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } catch (FileNotFoundException e) {
-                    Log.i("asdf", "error");
                     e.printStackTrace();
                 }
                 ivProfile.setImageDrawable(Util.createRoundedBitmapDrawableWithBorder(getResources(), bitmap, R.color.orange));
@@ -269,11 +254,10 @@ public class SignupActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     } catch (FileNotFoundException e) {
-                        Log.i("asdf", "error");
                         e.printStackTrace();
                     }
                     ivProfile.setImageDrawable(Util.createRoundedBitmapDrawableWithBorder(getResources(), bitmap, R.color.orange));
-                } else { // Result was a failure
+                } else {
                     Toast.makeText(this, "Picture wasn't selected!", Toast.LENGTH_SHORT).show();
                 }
             }

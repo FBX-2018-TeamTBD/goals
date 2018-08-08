@@ -1,24 +1,27 @@
 package com.example.cassandrakane.goalz.utils;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -42,9 +45,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.cassandrakane.goalz.SignupActivity.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE;
+
 public class Util {
 
-    public static File photoFile;
     public static boolean storyMode = false;
 
     public static void setImage(ParseFile imageFile, Resources resources, ImageView ivProfile, int color) {
@@ -58,6 +62,22 @@ public class Util {
             ivProfile.setImageDrawable(createRoundedBitmapDrawableWithBorder(resources, bitmap, color));
         } else {
             ivProfile.setImageDrawable(resources.getDrawable(R.drawable.rounded_placeholder_profile));
+        }
+    }
+
+    public static void onLaunchGallery(Activity activity) {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        if (Build.VERSION.SDK_INT >= 23) {
+            int permissionCheck = ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        }
+        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            activity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -134,25 +154,6 @@ public class Util {
         return cal.getTime();
     }
 
-    public static void populateGoalsAsync(ParseUser user, List<Goal> goals, List<Goal> incompleted, SwipeRefreshLayout swipe) {
-        List<ParseObject> lGoals = user.getList("goals");
-        goals.clear();
-        List<Goal> completed = new ArrayList<>();
-        if (lGoals != null) {
-            for (int i = 0; i < lGoals.size(); i++) {
-                Goal g = (Goal) lGoals.get(i);
-                if (g.getCompleted()) {
-                    completed.add(0, g);
-                } else {
-                    goals.add(0, g);
-                    incompleted.add(0, g);
-                }
-            }
-            goals.addAll(completed);
-            swipe.setRefreshing(false);
-        }
-    }
-
     public static void updateFriends() {
         final List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
         ParseQuery<ApprovedFriendRequests> query = ParseQuery.getQuery("ApprovedFriendRequests");
@@ -212,39 +213,6 @@ public class Util {
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
 
         return file;
-    }
-
-    public static Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {
-        int sourceWidth = source.getWidth();
-        int sourceHeight = source.getHeight();
-
-        // Compute the scaling factors to fit the new height and width, respectively.
-        // To cover the final image, the final scaling will be the bigger
-        // of these two.
-        float xScale = (float) newWidth / sourceWidth;
-        float yScale = (float) newHeight / sourceHeight;
-        float scale = Math.max(xScale, yScale);
-
-        // Now get the size of the source bitmap when scaled
-        float scaledWidth = scale * sourceWidth;
-        float scaledHeight = scale * sourceHeight;
-
-        // Let's find out the upper left coordinates if the scaled bitmap
-        // should be centered in the new size give by the parameters
-        float left = (newWidth - scaledWidth) / 2;
-        float top = (newHeight - scaledHeight) / 2;
-
-        // The target rectangle for the new, scaled version of the source bitmap will now
-        // be
-        RectF targetRect = new RectF(left, top, left + scaledWidth, top + scaledHeight);
-
-        // Finally, we create a new bitmap of the specified size and draw our new,
-        // scaled bitmap onto it.
-        Bitmap dest = Bitmap.createBitmap(newWidth, newHeight, source.getConfig());
-        Canvas canvas = new Canvas(dest);
-        canvas.drawBitmap(source, null, targetRect, null);
-
-        return dest;
     }
 
     /**

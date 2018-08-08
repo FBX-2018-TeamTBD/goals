@@ -1,6 +1,5 @@
 package com.example.cassandrakane.goalz;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -30,6 +29,7 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -258,7 +258,7 @@ public class DisplayActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    hideKeyboard(v);
+                    Util.hideKeyboard(v, DisplayActivity.this);
                 }
             }
         });
@@ -345,11 +345,6 @@ public class DisplayActivity extends AppCompatActivity {
             vvVideo.start();
             i = 0;
         }
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public void addToGoal(ArrayList<ParseObject> parseVideos){

@@ -1,6 +1,5 @@
 package com.example.cassandrakane.goalz;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -22,6 +20,7 @@ import com.example.cassandrakane.goalz.adapters.ShareFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -90,7 +89,7 @@ public class AddGoalActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    hideKeyboard(v);
+                    Util.hideKeyboard(v, AddGoalActivity.this);
                 }
             }
         });
@@ -136,7 +135,7 @@ public class AddGoalActivity extends AppCompatActivity {
                     break;
         }
 
-        hideKeyboard(v);
+        Util.hideKeyboard(v, this);
     }
 
     public void goBack(View v) {
@@ -207,8 +206,4 @@ public class AddGoalActivity extends AppCompatActivity {
         }
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
 }
