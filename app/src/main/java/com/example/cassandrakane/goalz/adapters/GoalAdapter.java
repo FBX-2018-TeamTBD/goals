@@ -419,6 +419,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvReaction.setVisibility(View.VISIBLE);
             holder.btnReaction.setVisibility(View.VISIBLE);
             holder.tvAdd.setVisibility(View.INVISIBLE);
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
+            holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+            params.setMargins(0, 25, 130, 0);
+            holder.btnFriends.setLayoutParams(params);
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
