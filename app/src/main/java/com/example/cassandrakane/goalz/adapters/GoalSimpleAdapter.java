@@ -19,7 +19,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,7 +52,7 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         final Goal goal = mGoals.get(position);
 
         holder.tvTitle.setText(goal.getTitle());
-        ArrayList<String> storyUrls = goal.getStoryUrls();
+        List<String> storyUrls = goal.getStoryUrls();
         if (storyUrls.size() > 0) {
             Glide.with(context)
                     .load(storyUrls.get(storyUrls.size() - 1))

@@ -57,8 +57,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final StoryAdapter.ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = mGoals.get(position);
-        final ArrayList<String> imageUrls = goal.getStoryUrls();
-        final ArrayList<ParseObject> story = goal.getStory();
+        final List<String> imageUrls = goal.getStoryUrls();
+        final List<ParseObject> story = goal.getStory();
         if (story.size() > 0 && imageUrls.size() > 0) {
 
             for (int i = 0; i < story.size(); i++){
