@@ -134,7 +134,7 @@ public class StoryFragment extends Fragment {
                             rootLayout.removeView(rv);
                         }
 
-                        rv = new ReactionView(getActivity(), StoryFragment.this, object, goal);
+                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
                         rootLayout.addView(rv);
                         /**
                          * stop story from moving
@@ -476,9 +476,14 @@ public class StoryFragment extends Fragment {
             }
         }
 
-        ParseUser user = object.getParseUser("user");
+        ParseUser user = null;
+        try {
+            user = object.getParseUser("user").fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (user != null) {
-            tvUsername.setText(user.getUsername());
+            tvUsername.setText(user .getUsername());
         }
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Date createdAt = object.getCreatedAt();

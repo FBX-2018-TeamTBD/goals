@@ -431,6 +431,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         ProfileFragment fragmentOne = new ProfileFragment();
                         StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
                         fragmentTwo.goal = goal;
+                        Log.i("sdf", fragmentTwo.goal.getTitle());
                         Transition changeTransform = TransitionInflater.from(context).
                                 inflateTransition(R.transition.change_image_transform);
                         Transition changeBoundsTransform = TransitionInflater.from(context).

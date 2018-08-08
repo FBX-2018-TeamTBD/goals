@@ -11,7 +11,6 @@ import android.view.animation.Transformation;
 
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
-import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
@@ -38,7 +37,6 @@ public class ReactionView extends View {
 
     private String type;
     private ParseObject mObject;
-    private Goal goal;
 
     private SelectingAnimation selectingAnimation;
     private DeselectAnimation deselectAnimation;
@@ -52,12 +50,11 @@ public class ReactionView extends View {
         }
     };
 
-    public ReactionView(Context context, StoryFragment frag, ParseObject object, Goal goal) {
+    public ReactionView(Context context, StoryFragment frag, ParseObject object) {
         super(context);
         this.context = context;
         fragment = frag;
         mObject = object;
-        this.goal = goal;
         init();
     }
 
@@ -192,11 +189,11 @@ public class ReactionView extends View {
                         reactions.add(reaction);
                         parseObject.setReactions(reactions);
                         parseObject.saveInBackground();
-                        List<ParseObject> reacts = goal.getReactions();
+                        List<ParseObject> reacts = StoryFragment.goal.getReactions();
                         reacts.add(reaction);
-                        goal.setReactions(reacts);
+                        StoryFragment.goal.setReactions(reacts);
                         Log.i("sdf", "setReacts");
-                        goal.saveInBackground(new SaveCallback() {
+                        StoryFragment.goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
                                 Log.i("sdf", "success");
@@ -218,10 +215,14 @@ public class ReactionView extends View {
                         reactions.add(reaction);
                         parseObject.setReactions(reactions);
                         parseObject.saveInBackground();
-                        List<ParseObject> reacts = goal.getReactions();
+                        List<ParseObject> reacts = StoryFragment.goal.getReactions();
                         reacts.add(reaction);
-                        goal.setReactions(reacts);
-                        goal.saveInBackground();
+                        StoryFragment.goal.setReactions(reacts);
+                        try {
+                            StoryFragment.goal.save();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 });
             }

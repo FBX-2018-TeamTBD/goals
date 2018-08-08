@@ -180,7 +180,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="6dp"
             android:fontFamily="@font/quicksand_medium"
-            android:text="##"
+            android:text="@string/_0"
             android:textColor="@color/white"
             android:textSize="18dp" />
 
