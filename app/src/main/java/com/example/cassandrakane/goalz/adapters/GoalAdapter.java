@@ -333,7 +333,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         holder.tvTitle.setText(goal.getTitle());
-        holder.tvProgress.setText(goal.getProgress() + "/" + goal.getDuration());
+        holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
@@ -410,6 +410,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
 
             holder.ibAdd.setVisibility(View.GONE);
+            holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.white));
+            holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
@@ -472,6 +474,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else {
+            holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.black));
+            holder.tvFriends.setTextColor(context.getResources().getColor(R.color.black));
             if (personal) {
                 holder.ibAdd.setVisibility(View.VISIBLE);
                 holder.ibAdd.setOnClickListener(new View.OnClickListener() {

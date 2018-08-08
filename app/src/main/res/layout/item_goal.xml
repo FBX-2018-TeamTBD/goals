@@ -47,7 +47,7 @@
             android:text="@string/title"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="21sp" />
 
         <TextView
             android:id="@+id/tvProgress"
@@ -66,12 +66,12 @@
             android:id="@+id/tvStreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/ivStory"
+            android:layout_alignTop="@+id/ivStory"
             android:layout_alignLeft="@+id/ivStory"
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/_0"
-            android:layout_marginBottom="11dp"
-            android:layout_marginLeft="9dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -79,9 +79,10 @@
             android:id="@+id/ivStar"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignBottom="@+id/tvProgress"
+            android:layout_alignTop="@+id/tvStreak"
             android:layout_toEndOf="@+id/tvStreak"
             android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:tint="@color/white"
             android:visibility="visible"
             app:srcCompat="@drawable/star" />
@@ -90,10 +91,9 @@
             android:id="@+id/tvFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ivStory"
+            android:layout_alignBottom="@+id/tvStreak"
             android:layout_toLeftOf="@id/ivFriends"
             android:layout_marginRight="4dp"
-            android:layout_marginBottom="11dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/_0"
             android:textColor="@color/white"
@@ -106,10 +106,9 @@
             android:id="@+id/ivFriends"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_alignBottom="@+id/ivStory"
-            android:layout_alignRight="@id/ivStory"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="9dp"
+            android:layout_toLeftOf="@+id/btnReaction"
+            android:layout_alignBottom="@+id/tvFriends"
+            android:layout_marginBottom="2dp"
             android:tint="@color/white"
             android:clickable="true"
             android:focusable="true"
@@ -120,10 +119,9 @@
             android:id="@+id/btnFriends"
             android:layout_width="32dp"
             android:layout_height="20dp"
-            android:layout_alignBottom="@+id/ivStory"
-            android:layout_alignRight="@id/ivStory"
-            android:layout_marginBottom="9dp"
-            android:layout_marginRight="6dp"
+            android:layout_toLeftOf="@+id/btnReaction"
+            android:layout_alignTop="@+id/ivFriends"
+            android:layout_alignLeft="@+id/tvFriends"
             android:background="@color/transparent"
             android:text="" />
 
