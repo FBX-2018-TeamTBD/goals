@@ -108,17 +108,19 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String data = etMessage.getText().toString();
-                Message message = new Message();
-                message.setBody(data);
-                message.setFromUser(ParseUser.getCurrentUser());
-                message.setToUser(toUser);
-                message.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        refreshMessages();
-                    }
-                });
-                etMessage.setText(null);
+                if (!data.equals("")) {
+                    Message message = new Message();
+                    message.setBody(data);
+                    message.setFromUser(ParseUser.getCurrentUser());
+                    message.setToUser(toUser);
+                    message.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            refreshMessages();
+                        }
+                    });
+                    etMessage.setText("");
+                }
             }
         });
     }

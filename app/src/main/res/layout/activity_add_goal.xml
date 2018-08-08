@@ -186,11 +186,11 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvShareFriends"
-                android:layout_width="match_parent"
+                android:layout_width="339dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvShare"
-                android:layout_alignStart="@id/tvShare"
                 android:layout_alignEnd="@+id/etTitle"
+                android:layout_below="@+id/tvShare"
+                android:layout_marginEnd="-17dp"
                 android:layout_marginTop="10dp"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp" />

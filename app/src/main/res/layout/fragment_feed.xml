@@ -18,6 +18,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvStory"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:paddingBottom="8dp"
                 android:paddingTop="7dp" />
 
@@ -97,7 +99,8 @@
             android:paddingTop="2dp"
             android:text="suggested friends"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvSuggestedFriends"
@@ -105,7 +108,8 @@
             android:layout_height="602dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="47dp" />
+            android:layout_marginTop="47dp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
