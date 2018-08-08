@@ -184,23 +184,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         }
                         if (context.getClass().isAssignableFrom(MainActivity.class)) {
                             MainActivity activity = (MainActivity) context;
-//                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-//                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
-//                        activity.toolbar.setVisibility(View.INVISIBLE);
                             ProfileFragment fragmentOne = new ProfileFragment();
                             StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
+                            fragmentTwo.goal = goal;
                             Transition changeTransform = TransitionInflater.from(context).
                                     inflateTransition(R.transition.change_image_transform);
-                            Transition changeBoundsTransform = TransitionInflater.from(context).
-                                    inflateTransition(R.transition.change_bounds);
                             Transition explodeTransform = TransitionInflater.from(context).
                                     inflateTransition(android.R.transition.fade);
-
-//                        fragmentTwo.setSharedElementEnterTransition(new DetailsTransition());
-//                        fragmentTwo.setEnterTransition(new Fade());
-//                        fragmentTwo.setExitTransition(new Fade());
-//                        fragmentTwo.setSharedElementReturnTransition(new DetailsTransition());
 
                             fragmentOne.setSharedElementReturnTransition(changeTransform);
                             fragmentOne.setExitTransition(explodeTransform);
@@ -220,7 +210,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             FriendActivity activity = (FriendActivity) context;
                             final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                             FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                            fragTransStory.add(R.id.root_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
+                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser);
+                            frag.goal = goal;
+                            fragTransStory.add(R.id.root_layout, frag).commit();
                             activity.ivProfile.setVisibility(View.INVISIBLE);
                             activity.cardView.setVisibility(View.INVISIBLE);
                             activity.btnBack.setVisibility(View.INVISIBLE);
@@ -308,25 +300,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 // check if all users have added here
                 if (!goal.getIsItemAdded()) {
                     goal.setStreak(0);
-
-                    // stores the objectId of users who lost a streak
-//                    ArrayList<ParseUser> streakLostBy = new ArrayList<>();
-//                    Map<String, String> userAdded = goal.getUserAdded();
-//
-//                    if (userAdded != null) {
-//                        for (Map.Entry<String, String> entry : userAdded.entrySet()) {
-//                            String userId = entry.getKey();
-//                            String value = entry.getValue();
-//                            if (value.equals("false")) {
-//                                ParseUser user = getParseUserFromId(userId);
-//                                streakLostBy.add(user);
-//                            }
-//                        }
-//                    }
-//
-//
-//                    sendTextNotifications(goal, streakLostBy);
-
                 }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
@@ -433,31 +406,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.btnStory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if (context.getClass().isAssignableFrom(MainActivity.class)) {
-                        MainActivity activity = (MainActivity) context;
-                        ProfileFragment fragmentOne = new ProfileFragment();
-                        StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
-                        fragmentTwo.goal = goal;
-                        Log.i("sdf", "main");
-                        Transition changeTransform = TransitionInflater.from(context).
-                                inflateTransition(R.transition.change_image_transform);
-                        Transition explodeTransform = TransitionInflater.from(context).
-                                inflateTransition(android.R.transition.fade);
-
-                        fragmentOne.setSharedElementReturnTransition(changeTransform);
-                        fragmentOne.setExitTransition(explodeTransform);
-
-                        fragmentTwo.setSharedElementEnterTransition(changeTransform);
-                        fragmentTwo.setEnterTransition(explodeTransform);
-
-                        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.main_central_fragment, fragmentTwo)
-                                .addToBackStack("transaction")
-                                .addSharedElement(holder.ivStory, "story");
-                        ft.commit();
-
-                    } else if (context.getClass().isAssignableFrom(FriendActivity.class)) {
+                    if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();

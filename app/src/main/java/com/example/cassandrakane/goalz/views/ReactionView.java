@@ -192,13 +192,7 @@ public class ReactionView extends View {
                         List<ParseObject> reacts = StoryFragment.goal.getReactions();
                         reacts.add(reaction);
                         StoryFragment.goal.setReactions(reacts);
-                        Log.i("sdf", "setReacts");
-                        StoryFragment.goal.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.i("sdf", "success");
-                            }
-                        });
+                        StoryFragment.goal.saveInBackground();
                     }
                 });
             } else {
@@ -218,6 +212,7 @@ public class ReactionView extends View {
                         List<ParseObject> reacts = StoryFragment.goal.getReactions();
                         reacts.add(reaction);
                         StoryFragment.goal.setReactions(reacts);
+                        
                         StoryFragment.goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {

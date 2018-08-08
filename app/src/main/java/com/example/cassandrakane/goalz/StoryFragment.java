@@ -346,47 +346,6 @@ public class StoryFragment extends Fragment {
                 }
             });
 
-            final List<ParseObject> reactions = object.getList("reactions");
-            if (reactions != null) {
-                Integer reactionCount = reactions.size();
-                tvReactionCount.setText(Integer.toString(reactionCount));
-
-                setReaction(reactions);
-
-                if (reactionCount != 0){
-                    ivAllReactions.clearColorFilter();
-                    btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
-                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                            intent.putExtra("reactions", (Serializable) reactions);
-                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                            if (mHandler != null) {
-                                mHandler.removeCallbacks(runnable);
-                            }
-                            getActivity().startActivity(intent);
-                        }
-                    });
-                } else {
-                    btnTotalReactions.setOnClickListener(null);
-                }
-
-            }
-
-            ParseUser user = null;
-            try {
-                user = object.getParseUser("user").fetchIfNeeded();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            if (user != null) {
-                tvUsername.setText(user.getUsername());
-            }
-            DateFormat dateFormat = new SimpleDateFormat("mm//dd/yyyy");
-            Date createdAt = object.getCreatedAt();
-            tvDateAdded.setText(dateFormat.format(createdAt));
-
         } else {
             viewStory.setVisibility(View.GONE);
             Image imageObject = (Image) object;
@@ -425,31 +384,32 @@ public class StoryFragment extends Fragment {
                     }
             }, 5000);
 
-            final List<ParseObject> reactions = object.getList("reactions");
-            if (reactions != null) {
-                Integer reactionCount = reactions.size();
-                tvReactionCount.setText(Integer.toString(reactionCount));
+        }
 
-                setReaction(reactions);
+        final List<ParseObject> reactions = object.getList("reactions");
+        if (reactions != null) {
+            Integer reactionCount = reactions.size();
+            tvReactionCount.setText(Integer.toString(reactionCount));
 
-                if (reactionCount != 0) {
-                    ivAllReactions.clearColorFilter();
-                    btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
-                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                            intent.putExtra("reactions", (Serializable) reactions);
-                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                            if (mHandler != null) {
-                                mHandler.removeCallbacks(runnable);
-                            }
-                            getActivity().startActivity(intent);
+            setReaction(reactions);
+
+            if (reactionCount != 0) {
+                ivAllReactions.clearColorFilter();
+                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
+                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                        intent.putExtra("reactions", (Serializable) reactions);
+                        intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                        if (mHandler != null) {
+                            mHandler.removeCallbacks(runnable);
                         }
-                    });
-                } else {
-                    btnTotalReactions.setOnClickListener(null);
-                }
+                        getActivity().startActivity(intent);
+                    }
+                });
+            } else {
+                btnTotalReactions.setOnClickListener(null);
             }
         }
 
