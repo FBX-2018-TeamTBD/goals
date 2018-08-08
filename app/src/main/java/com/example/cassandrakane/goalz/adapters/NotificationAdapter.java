@@ -90,7 +90,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             case 1:
                 final int updatedPos = position - mTextNotifications.size();
-                GoalRequestViewHolder goalRequestViewHolder = (GoalRequestViewHolder) holder;
+                final GoalRequestViewHolder goalRequestViewHolder = (GoalRequestViewHolder) holder;
                 Goal goal2 = null;
                 try {
                     goal2 = mGoals.get(updatedPos).fetchIfNeeded();
@@ -115,6 +115,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         addGoal(goal, updatedPos);
                         notificationsFragment.setNotificationHeader();
                         notificationsFragment.progressBar.setVisibility(View.INVISIBLE);
+                        goalRequestViewHolder.btnConfirm.setOnClickListener(null);
                     }
                 });
                 goalRequestViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {

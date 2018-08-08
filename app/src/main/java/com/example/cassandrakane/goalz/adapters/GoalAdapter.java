@@ -106,7 +106,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int bumps = 0;
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
-            String type = react.getType();
+            String type = null;
+            try {
+                type = react.fetchIfNeeded().getString("type");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (type.equals("thumbs")) {
                 thumbs += 1;
             } else if (type.equals("goals")) {
