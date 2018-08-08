@@ -88,10 +88,10 @@ public class StoryFragment extends Fragment {
 
     public StoryFragment() { }
 
-    public static StoryFragment newInstance(ArrayList<ParseObject> story, int index, ParseUser currentUser) {
+    public static StoryFragment newInstance(List<ParseObject> story, int index, ParseUser currentUser) {
         StoryFragment fragment = new StoryFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARG_STORY, story);
+        args.putSerializable(ARG_STORY, (Serializable) story);
         args.putInt(ARG_INDEX, index);
         args.putParcelable(ARG_USER, currentUser);
         fragment.setArguments(args);
@@ -121,9 +121,6 @@ public class StoryFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         setImage();
-
-//        tvUsername.setVisibility(View.GONE);
-//        tvDateAdded.setVisibility(View.GONE);
 
         btnReaction.setOnTouchListener(new View.OnTouchListener() {
             @Override

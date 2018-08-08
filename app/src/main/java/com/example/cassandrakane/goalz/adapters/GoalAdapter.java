@@ -51,7 +51,6 @@ import com.parse.SaveCallback;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -94,6 +93,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         final Goal goal = goals.get(position);
         currentDate = new Date();
         currentUser = ParseUser.getCurrentUser();
+        startIndex = 0;
 
         List<ParseObject> reax = goal.getReactions();
         int thumbs = 0;
@@ -163,8 +163,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 @Override
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
 
-                    final ArrayList<String> imageUrls = goal.getStoryUrls();
-                    final ArrayList<ParseObject> story = goal.getStory();
+                    final List<String> imageUrls = goal.getStoryUrls();
+                    final List<ParseObject> story = goal.getStory();
 
                     if (imageUrls.size() > 0) {
                         for (int i =0; i<story.size(); i++){
@@ -393,8 +393,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStar.setImageResource(R.drawable.star);
         }
 
-        final ArrayList<String> imageUrls = goal.getStoryUrls();
-        final ArrayList<ParseObject> story = goal.getStory();
+        final List<String> imageUrls = goal.getStoryUrls();
+        final List<ParseObject> story = goal.getStory();
 
         if (imageUrls.size() > 0) {
             for (int i = 0; i<story.size(); i++){
@@ -512,8 +512,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 holder.ibAdd.setVisibility(View.GONE);
             }
         }
-
-        startIndex = 0;
     }
 
     // slide the view from below itself to the current position

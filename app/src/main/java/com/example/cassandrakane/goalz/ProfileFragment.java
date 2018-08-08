@@ -136,7 +136,11 @@ public class ProfileFragment extends Fragment {
                             completed.add(0, goal);
                         } else {
                             progressGoals += 1;
-                            goals.add(goal);
+                            if (goal.getStory().size() == 0){
+                                goals.add(0, goal);
+                            } else {
+                                goals.add(goal);
+                            }
                         }
                     }
                 }
@@ -203,7 +207,11 @@ public class ProfileFragment extends Fragment {
                             completed.add(0, goal);
                         } else {
                             progressGoals += 1;
-                            goals.add(goal);
+                            if (goal.getStory().size() == 0){
+                                goals.add(0, goal);
+                            } else {
+                                goals.add(goal);
+                            }
                         }
                     }
                 }

@@ -117,7 +117,7 @@ public class GoalsListActivity extends AppCompatActivity {
             for (final Goal goal : goals) {
                 if (goal.isSelected()) {
                     selected += 1;
-                    final ArrayList<ParseObject> story = goal.getStory();
+                    final List<ParseObject> story = goal.getStory();
                     List<ParseObject> reactions = new ArrayList<>();
                     final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser(), reactions);
                     selectedGoal = goal;
@@ -227,7 +227,7 @@ public class GoalsListActivity extends AppCompatActivity {
         for (final Goal goal : goals) {
             selected += 1;
             if (goal.isSelected()) {
-                final ArrayList<ParseObject> story = goal.getStory();
+                final List<ParseObject> story = goal.getStory();
                 Collections.reverse(parseVideos);
                     for (ParseObject video: parseVideos) {
                         story.add(video);
