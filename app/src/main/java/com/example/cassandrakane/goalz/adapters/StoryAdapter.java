@@ -91,7 +91,9 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
+                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser());
+                    frag.goal = goal;
+                    fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });
             holder.view.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +103,9 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    fragTransStory.add(R.id.main_central_fragment, StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser())).commit();
+                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser());
+                    frag.goal = goal;
+                    fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });
         }
