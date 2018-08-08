@@ -38,14 +38,11 @@ import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Reaction;
-import com.example.cassandrakane.goalz.models.TextNotification;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -104,6 +101,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int claps = 0;
         int oks = 0;
         int bumps = 0;
+        int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
             String type = null;
@@ -124,6 +122,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 bumps += 1;
             }
         }
+        holder.tvReaction.setText(String.valueOf(total));
         holder.tvThumb.setText(String.valueOf(thumbs));
         holder.tvClap.setText(String.valueOf(claps));
         holder.tvGoals.setText(String.valueOf(goaled));
@@ -350,7 +349,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         if (goal.getApprovedUsers().size() > 1) {
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
-            holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.friend));
+            holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -363,7 +362,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         } else {
             holder.tvFriends.setText("");
             if (personal) {
-                holder.ivFriends.setImageDrawable(context.getResources().getDrawable(R.drawable.larger_add));
+                holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
                 holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -374,7 +373,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     }
                 });
             } else {
-                holder.ivFriends.setImageDrawable(null);
+                holder.btnFriends.setBackground(null);
             }
         }
 
@@ -415,8 +414,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
 
             holder.ibAdd.setVisibility(View.GONE);
-            holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.white));
+            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
             holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
+            holder.tvReaction.setVisibility(View.VISIBLE);
+            holder.btnReaction.setVisibility(View.VISIBLE);
+            holder.tvAdd.setVisibility(View.INVISIBLE);
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
+            holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+            params.setMargins(0, 25, 130, 0);
+            holder.btnFriends.setLayoutParams(params);
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
@@ -429,25 +436,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
                     if (context.getClass().isAssignableFrom(MainActivity.class)) {
                         MainActivity activity = (MainActivity) context;
-//                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-//                        fragTransStory.add(R.id.drawer_layout, StoryFragment.newInstance(story, startIndex, currentUser)).commit();
-//                        activity.toolbar.setVisibility(View.INVISIBLE);
                         ProfileFragment fragmentOne = new ProfileFragment();
                         StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
                         fragmentTwo.goal = goal;
                         Log.i("sdf", fragmentTwo.goal.getTitle());
                         Transition changeTransform = TransitionInflater.from(context).
                                 inflateTransition(R.transition.change_image_transform);
-                        Transition changeBoundsTransform = TransitionInflater.from(context).
-                                inflateTransition(R.transition.change_bounds);
                         Transition explodeTransform = TransitionInflater.from(context).
                                 inflateTransition(android.R.transition.fade);
-
-//                        fragmentTwo.setSharedElementEnterTransition(new DetailsTransition());
-//                        fragmentTwo.setEnterTransition(new Fade());
-//                        fragmentTwo.setExitTransition(new Fade());
-//                        fragmentTwo.setSharedElementReturnTransition(new DetailsTransition());
 
                         fragmentOne.setSharedElementReturnTransition(changeTransform);
                         fragmentOne.setExitTransition(explodeTransform);
@@ -471,16 +467,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         fragmentTwo.goal = goal;
                         fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
 
-                        activity.ivProfile.setVisibility(View.INVISIBLE);
-                        activity.cardView.setVisibility(View.INVISIBLE);
-                        activity.btnBack.setVisibility(View.INVISIBLE);
-                        activity.btnUnfriend.setVisibility(View.INVISIBLE);
-                        activity.btnMessage.setVisibility(View.INVISIBLE);
+                        activity.ivProfile.setVisibility(View.GONE);
+                        activity.cardView.setVisibility(View.GONE);
+                        activity.btnBack.setVisibility(View.GONE);
+                        activity.btnUnfriend.setVisibility(View.GONE);
+                        activity.btnMessage.setVisibility(View.GONE);
                     }
                 }
             });
         } else {
-            holder.ivFriends.setImageTintList(context.getResources().getColorStateList(R.color.orange));
+            holder.ivStory.setImageDrawable(null);
+            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
             holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
             holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
@@ -488,11 +485,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.vGradient.setVisibility(View.INVISIBLE);
             holder.tvAdd.setVisibility(View.VISIBLE);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-            params.setMargins(0, 25, 15, 0);
+            params.setMargins(0, 25, 20, 0);
             holder.btnFriends.setLayoutParams(params);
-            RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) holder.ivFriends.getLayoutParams();
-            params2.setMargins(0, 25, 15, 0);
-            holder.ivFriends.setLayoutParams(params2);
             if (personal) {
                 holder.ibAdd.setVisibility(View.VISIBLE);
                 holder.ibAdd.setOnClickListener(new View.OnClickListener() {
@@ -585,34 +579,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         });
     }
 
-    public ParseUser getParseUserFromId(String id) {
-        final ParseUser[] user = {null};
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", id);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (objects != null && objects.size() > 0) {
-                    user[0] = objects.get(0);
-                }
-            }
-        });
-        return user[0];
-    }
-
-    public void sendTextNotifications(Goal goal, List<ParseUser> users) {
-        String text = getTextNotificationString(goal.getTitle(), users);
-        List<ParseUser> friends = goal.getFriends();
-        for (ParseUser friend : friends) {
-            ParseFile image = null;
-            if (goal.getStory().size() > 0) {
-                image = goal.getStory().get(goal.getStory().size() - 1).getParseFile("image");
-            }
-            TextNotification notification = new TextNotification(text, friend, image);
-            notification.saveInBackground();
-        }
-    }
-
     public String getTextNotificationString(String goalTitle, List<ParseUser> users) {
         String text = String.format("Oh no! You lost your streak for \"%s\"! ", goalTitle);
         for (int i = 0; i < users.size(); i++) {
@@ -652,10 +618,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvProgress) TextView tvProgress;
         @BindView(R.id.ivStory) ImageView ivStory;
         @BindView(R.id.ivStar) ImageView ivStar;
-        @BindView(R.id.ivFriends) ImageView ivFriends;
+        @BindView(R.id.btnFriends) Button btnFriends;
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
-        @BindView(R.id.btnFriends) Button btnFriends;
         @BindView(R.id.ibAdd) Button ibAdd;
         @BindView(R.id.tvAdd) TextView tvAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
@@ -665,6 +630,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvClap) TextView tvClap;
         @BindView(R.id.tvOk) TextView tvOk;
         @BindView(R.id.tvBump) TextView tvBump;
+        @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
 
         public ViewHolder(View itemView) {

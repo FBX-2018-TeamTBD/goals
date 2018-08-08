@@ -24,7 +24,7 @@ public class Reaction extends ParseObject{
 
     public String getType() {
         try {
-            return fetchIfNeeded().getString("type");
+            return fetch().getString("type");
         } catch (ParseException e) {
             e.printStackTrace();
         }
