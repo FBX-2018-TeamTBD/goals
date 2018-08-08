@@ -133,9 +133,6 @@ public class StoryFragment extends Fragment {
 
                         rv = new ReactionView(getActivity(), StoryFragment.this, object);
                         rootLayout.addView(rv);
-                        /**
-                         * stop story from moving
-                         */
                         if (mHandler != null) {
                             mHandler.removeCallbacks(runnable);
                         }
@@ -183,15 +180,6 @@ public class StoryFragment extends Fragment {
                 Util.storyMode = false;
 
                 getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
-                // TODO include animation?
-//                activity.onBackPressed();
-
-//                Activity activity = getActivity();
-//                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
-//                    MainActivity mainActivity = (MainActivity) activity;
-//                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-//                    mainActivity.toolbar.setVisibility(View.VISIBLE);
-//                }
                 if (getActivity().getClass().isAssignableFrom(FriendActivity.class)) {
                     FriendActivity friendActivity = (FriendActivity) getActivity();
                     friendActivity.ivProfile.setVisibility(View.VISIBLE);
@@ -200,19 +188,7 @@ public class StoryFragment extends Fragment {
                     friendActivity.btnUnfriend.setVisibility(View.VISIBLE);
                     friendActivity.btnMessage.setVisibility(View.VISIBLE);
                 }
-//                Activity activity = getActivity();
-//                if (activity.getClass().isAssignableFrom(MainActivity.class)) {
-//                    MainActivity mainActivity = (MainActivity) activity;
-//                    mainActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-//                    mainActivity.centralFragment.toolbar.setVisibility(View.VISIBLE);
-//                }
-//                if (activity.getClass().isAssignableFrom(FriendActivity.class)) {
-//                    FriendActivity friendActivity = (FriendActivity) activity;
-//                    friendActivity.getSupportFragmentManager().beginTransaction().remove(StoryFragment.this).commit();
-//                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
-//                    friendActivity.cardView.setVisibility(View.VISIBLE);
-//                    friendActivity.btnBack.setVisibility(View.VISIBLE);
-//                }
+
             }
         });
 
@@ -225,7 +201,6 @@ public class StoryFragment extends Fragment {
 
                 tvUsername.setVisibility(View.INVISIBLE);
                 tvDateAdded.setVisibility(View.INVISIBLE);
-//                holder.rvStory.setVisibility(View.INVISIBLE);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -399,7 +374,12 @@ public class StoryFragment extends Fragment {
 
             }
 
-            ParseUser user = object.getParseUser("user");
+            ParseUser user = null;
+            try {
+                user = object.getParseUser("user").fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (user != null) {
                 tvUsername.setText(user.getUsername());
             }
@@ -475,7 +455,7 @@ public class StoryFragment extends Fragment {
 
         ParseUser user = null;
         try {
-            user = object.getParseUser("user").fetch();
+            user = object.getParseUser("user").fetchIfNeeded();
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -439,7 +439,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         ProfileFragment fragmentOne = new ProfileFragment();
                         StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
                         fragmentTwo.goal = goal;
-                        Log.i("sdf", fragmentTwo.goal.getTitle());
+                        Log.i("sdf", "main");
                         Transition changeTransform = TransitionInflater.from(context).
                                 inflateTransition(R.transition.change_image_transform);
                         Transition explodeTransform = TransitionInflater.from(context).
@@ -457,9 +457,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                                 .addSharedElement(holder.ivStory, "story");
                         ft.commit();
 
-//                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
-                    }
-                    if (context.getClass().isAssignableFrom(FriendActivity.class)) {
+                    } else if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
