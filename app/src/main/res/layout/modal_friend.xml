@@ -43,7 +43,7 @@
         android:layout_alignTop="@+id/btnBack"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/quicksand_medium"
-        android:text="friends"
+        android:text="@string/friend"
         android:textColor="@color/orange"
         android:textSize="20sp" />
 
