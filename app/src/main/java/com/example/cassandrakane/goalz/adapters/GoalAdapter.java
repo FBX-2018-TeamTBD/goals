@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -54,14 +56,14 @@ import butterknife.ButterKnife;
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private final List<Goal> goals;
-    private boolean personal; //for determining whether this is for user or for a friend
+    private boolean personal;
     Context context;
-    Date currentDate;
-    ParseUser currentUser;
-    float startX = 0;
-    float endX = 0;
-    int startIndex = 0;
-    NavigationHelper navigationHelper;
+    private Date currentDate = new Date();
+    private ParseUser currentUser = ParseUser.getCurrentUser();
+    private float startX = 0;
+    private float endX = 0;
+    private int startIndex = 0;
+    private NavigationHelper navigationHelper;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
         this.goals = gGoals;
@@ -73,20 +75,122 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        //activity = (MainActivity) parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
     }
 
     // bind the values based on the position of the element
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Goal goal = goals.get(position);
-        currentDate = new Date();
-        currentUser = ParseUser.getCurrentUser();
         startIndex = 0;
 
+        if (personal) {
+            final MainActivity activity = (MainActivity) context;
+            navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
+
+            final GestureDetector gestureDetector = getGestureDetector(goal);
+
+            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+
+            holder.btnStory.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                }
+            });
+
+        }
+
+        setTextViews(goal, holder);
+        setStreakViews(goal, holder);
+        setFriendViews(goal, holder);
+        setReactionViews(goal, holder);
+
+        final List<ParseObject> story = goal.getStory();
+        if (story.size() > 0) {
+            setStory(goal, holder, story);
+        } else {
+            setEmptyGoal(goal, holder);
+        }
+    }
+
+    private void setTextViews(final Goal goal, final ViewHolder holder) {
+        holder.tvTitle.setText(goal.getTitle());
+        if (goal.getCompleted()) {
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
+            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvProgress.setText("COMPLETED!");
+            Glide.with(context).asGif().load(R.drawable.confetti).into(holder.ivCelebrate);
+        } else {
+            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
+            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
+        }
+    }
+
+    private void setStreakViews(final Goal goal, final ViewHolder holder) {
+        Date updateBy = goal.getUpdateStoryBy();
+        if (updateBy != null) {
+            if (currentDate.getTime() >= updateBy.getTime()) {
+//                if (!goal.getIsItemAdded()) {
+//                    goal.setStreak(0);
+//                }
+                long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
+                Date newDate = new Date(sum);
+                goal.setUpdateStoryBy(newDate);
+                goal.setItemAdded(false);
+                goal.saveInBackground();
+            }
+        }
+        if (goal.getStreak() > 0) {
+            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
+            holder.ivStar.setVisibility(View.VISIBLE);
+        }
+        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
+            holder.ivStar.setImageResource(R.drawable.clock);
+        } else {
+            holder.ivStar.setImageResource(R.drawable.star);
+        }
+    }
+
+    private void setFriendViews(final Goal goal, final ViewHolder holder) {
+        if (goal.getApprovedUsers().size() > 1) {
+            holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
+            holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
+            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, FriendsModalActivity.class);
+                    i.putExtra(Goal.class.getSimpleName(), goal);
+                    i.putExtra("personal", personal);
+                    context.startActivity(i);
+                }
+            });
+        } else if (personal) {
+            holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
+            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, SearchFriendsActivity.class);
+                    i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
+                    i.putExtra(Goal.class.getSimpleName(), goal);
+                    context.startActivity(i);
+                }
+            });
+        }
+    }
+
+    private void setReactionViews(final Goal goal, final ViewHolder holder) {
         List<ParseObject> reax = goal.getReactions();
         int thumbs = 0;
         int goaled = 0;
@@ -102,16 +206,24 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (type.equals("thumbs")) {
-                thumbs += 1;
-            } else if (type.equals("goals")) {
-                goaled += 1;
-            } else if (type.equals("clap")) {
-                claps += 1;
-            } else if (type.equals("ok")) {
-                oks += 1;
-            } else if (type.equals("bump")) {
-                bumps += 1;
+            if (type != null) {
+                switch (type) {
+                    case "thumbs":
+                        thumbs += 1;
+                        break;
+                    case "goals":
+                        goaled += 1;
+                        break;
+                    case "clap":
+                        claps += 1;
+                        break;
+                    case "ok":
+                        oks += 1;
+                        break;
+                    case "bump":
+                        bumps += 1;
+                        break;
+                }
             }
         }
         holder.tvReaction.setText(String.valueOf(total));
@@ -134,320 +246,196 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             }
         });
+    }
 
-        if (personal) {
-            final MainActivity activity = (MainActivity) context;
+    private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
+        startIndex = getStartIndex(story);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+        params.setMargins(0, 25, 130, 0);
+        holder.btnFriends.setLayoutParams(params);
 
-            navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
-
-            final Goal finalGoal = goal;
-            final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
-                @Override
-                public boolean onDown(MotionEvent motionEvent) {
-                    return true;
-                }
-
-                @Override
-                public void onShowPress(MotionEvent motionEvent) {
-
-                }
-
-                @Override
-                public boolean onSingleTapUp(MotionEvent motionEvent) {
-
-                    final List<String> imageUrls = goal.getStoryUrls();
-                    final List<ParseObject> story = goal.getStory();
-
-                    if (imageUrls.size() > 0) {
-                        for (int i =0; i<story.size(); i++){
-                            boolean seen = false;
-                            ParseObject image = story.get(i);
-                            List<ParseUser> users = image.getList("viewedBy");
-                            if (users != null) {
-                                if (users.contains(currentUser)){
-                                    seen = true;
-                                }
-                            }
-                            if (!seen) {
-                                startIndex = i;
-                                break;
-                            }
-                        }
-                        if (context.getClass().isAssignableFrom(MainActivity.class)) {
-                            MainActivity activity = (MainActivity) context;
-                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                            frag.goal = goal;
-                            fragTransStory.add(R.id.main_central_fragment, frag).commit();
-
-//                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
-                        }
-                        if (context.getClass().isAssignableFrom(FriendActivity.class)) {
-                            FriendActivity activity = (FriendActivity) context;
-                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                            frag.goal = goal;
-                            fragTransStory.add(R.id.root_layout, frag).commit();
-                            activity.ivProfile.setVisibility(View.INVISIBLE);
-                            activity.cardView.setVisibility(View.INVISIBLE);
-                            activity.btnBack.setVisibility(View.INVISIBLE);
-                            activity.btnUnfriend.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                    return true;
-                }
-
-                @Override
-                public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                    startX = motionEvent.getX();
-                    endX = motionEvent1.getX();
-                    if (endX >= startX + 60) {
-                        navigationHelper.toCamera();
-                        startX = 0;
-                        endX = 0;
-                    } else if (startX >= endX + 50) {
-                        navigationHelper.toFeed();
-                        startX = 0;
-                        endX = 0;
-                    }
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent motionEvent) {
-                    if (Math.abs(endX - startX) < 10) {
-                        new AlertDialog.Builder(context)
-                                .setTitle(R.string.delete_goal)
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
-                                        notificationHelper.cancelReminder(finalGoal);
-                                        goals.remove(finalGoal);
-                                        finalGoal.unpinInBackground();
-                                        notificationHelper.cancelReminder(finalGoal);
-                                        removeGoal(finalGoal.getObjectId());
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, null)
-                                .show();
-                    }
-                }
-
-                @Override
-                public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-                    startX = motionEvent.getX();
-                    endX = motionEvent1.getX();
-                    if (endX >= startX + 60) {
-                        navigationHelper.toCamera();
-                        startX = 0;
-                        endX = 0;
-                    } else if (startX >= endX + 50) {
-                        navigationHelper.toFeed();
-                        startX = 0;
-                        endX = 0;
-                    }
-                    return false;
-                }
-
-            });
-
-            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    return gestureDetector.onTouchEvent(motionEvent);
-                }
-            });
-
-            holder.btnStory.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    return gestureDetector.onTouchEvent(motionEvent);
-                }
-            });
-
-        }
-
-        Date updateBy = goal.getUpdateStoryBy();
-        if (updateBy != null) {
-            if (currentDate.getTime() >= updateBy.getTime()) {
-                // check if all users have added here
-//                if (!goal.getIsItemAdded()) {
-//                    goal.setStreak(0);
-//                }
-                long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
-                Date newDate = new Date(sum);
-                goal.setUpdateStoryBy(newDate);
-                goal.setItemAdded(false);
-                goal.saveInBackground();
-            }
-        }
-
-        holder.tvTitle.setText(goal.getTitle());
-        if (!goal.getCompleted()) {
-            holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
-        } else {
-            holder.tvProgress.setText("COMPLETED!");
-        }
-        if (goal.getStreak() > 0) {
-            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
-            holder.ivStar.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvStreak.setText("");
-            holder.ivStar.setVisibility(View.INVISIBLE);
-        }
-
-        if (goal.getDuration() - goal.getProgress() == 0){
-            Glide.with(context).asGif().load(R.drawable.confetti).into(holder.ivCelebrate);
-        }
-
-
-        if (goal.getApprovedUsers().size() > 1) {
-            holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
-            holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
-            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(context, FriendsModalActivity.class);
-                    i.putExtra(Goal.class.getSimpleName(), goal);
-                    i.putExtra("personal", personal);
-                    context.startActivity(i);
-                }
-            });
-        } else {
-            holder.tvFriends.setText("");
-            if (personal) {
-                holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
-                holder.btnFriends.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(context, SearchFriendsActivity.class);
-                        i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
-                        i.putExtra(Goal.class.getSimpleName(), goal);
-                        context.startActivity(i);
-                    }
-                });
-            } else {
-                holder.btnFriends.setBackground(null);
-            }
-        }
-
-        if (goal.getCompleted()) {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-        }
-
-        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
-            holder.ivStar.setImageResource(R.drawable.clock);
-        } else {
-            holder.ivStar.setImageResource(R.drawable.star);
-        }
-
-        final List<String> imageUrls = goal.getStoryUrls();
-        final List<ParseObject> story = goal.getStory();
-
-        if (imageUrls.size() > 0) {
-            for (int i = 0; i<story.size(); i++){
-                boolean seen = false;
-                ParseObject image = story.get(i);
-                List<ParseUser> users = image.getList("viewedBy");
-                if (users != null) {
-                    if (users.contains(currentUser)){
-                        seen = true;
-                    }
-                }
-
-                if (!seen) {
-                    startIndex = i;
-                    break;
-                }
-            }
-
-            holder.ibAdd.setVisibility(View.GONE);
-            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
-            holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
-            holder.tvReaction.setVisibility(View.VISIBLE);
-            holder.btnReaction.setVisibility(View.VISIBLE);
-            holder.tvAdd.setVisibility(View.INVISIBLE);
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
-            holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-            params.setMargins(0, 25, 130, 0);
-            holder.btnFriends.setLayoutParams(params);
-
+        ParseFile image = story.get(startIndex).getParseFile("image");
+        if (image != null) {
             Glide.with(context)
-                    .load(imageUrls.get(startIndex))
+                    .load(image.getUrl())
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
+        }
 
-            holder.btnStory.setOnClickListener(new View.OnClickListener() {
+        holder.btnStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (context.getClass().isAssignableFrom(FriendActivity.class)) {
+                    FriendActivity activity = (FriendActivity) context;
+                    final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                    FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                    StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+                    fragmentTwo.goal = goal;
+                    fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
+
+                    activity.ivProfile.setVisibility(View.GONE);
+                    activity.cardView.setVisibility(View.GONE);
+                    activity.btnBack.setVisibility(View.GONE);
+                    activity.btnUnfriend.setVisibility(View.GONE);
+                    activity.btnMessage.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void setEmptyGoal(final Goal goal, final ViewHolder holder) {
+        holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+        holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.btnReaction.setVisibility(View.INVISIBLE);
+        holder.vGradient.setVisibility(View.INVISIBLE);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+        params.setMargins(0, 25, 20, 0);
+        holder.btnFriends.setLayoutParams(params);
+        if (personal) {
+            holder.ibAdd.setVisibility(View.VISIBLE);
+            holder.tvAdd.setVisibility(View.VISIBLE);
+            holder.ibAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (context.getClass().isAssignableFrom(FriendActivity.class)) {
-                        FriendActivity activity = (FriendActivity) context;
+                    navigationHelper.toCamera();
+                }
+            });
+            holder.btnStory.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    if (context.getClass().isAssignableFrom(MainActivity.class)) {
+                        MainActivity activity = (MainActivity) context;
+                        CameraFragment cameraFragment = CameraFragment.newInstance(goal);
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                        fragmentTwo.goal = goal;
-                        fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
-
-                        activity.ivProfile.setVisibility(View.GONE);
-                        activity.cardView.setVisibility(View.GONE);
-                        activity.btnBack.setVisibility(View.GONE);
-                        activity.btnUnfriend.setVisibility(View.GONE);
-                        activity.btnMessage.setVisibility(View.GONE);
+                        fragTransStory.add(R.id.main_central_fragment, cameraFragment).commit();
                     }
                 }
             });
-        } else {
-            holder.ivStory.setImageDrawable(null);
-            holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
-            holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
-            holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
-            holder.btnReaction.setVisibility(View.INVISIBLE);
-            holder.vGradient.setVisibility(View.INVISIBLE);
-            holder.tvAdd.setVisibility(View.VISIBLE);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-            params.setMargins(0, 25, 20, 0);
-            holder.btnFriends.setLayoutParams(params);
-            if (personal) {
-                holder.ibAdd.setVisibility(View.VISIBLE);
-                holder.ibAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        navigationHelper.toCamera();
-                    }
-                });
-                final Goal finalGoal1 = goal;
-                holder.btnStory.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view){
-                        if (context.getClass().isAssignableFrom(MainActivity.class)) {
-                            MainActivity activity = (MainActivity) context;
-                            CameraFragment cameraFragment = CameraFragment.newInstance(finalGoal1);
-                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                            fragTransStory.add(R.id.main_central_fragment, cameraFragment).commit();
-                        }
-                    }
-                });
-            } else {
-                holder.ibAdd.setVisibility(View.GONE);
-            }
         }
     }
 
+    private GestureDetector getGestureDetector(final Goal goal) {
+        return new GestureDetector(new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return true;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+
+                final List<ParseObject> story = goal.getStory();
+
+                if (story.size() > 0) {
+                    startIndex = getStartIndex(story);
+                    if (personal) {
+                        MainActivity activity = (MainActivity) context;
+                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                        StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+                        frag.goal = goal;
+                        fragTransStory.add(R.id.main_central_fragment, frag).commit();
+                    } else {
+                        FriendActivity activity = (FriendActivity) context;
+                        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                        FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                        StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+                        frag.goal = goal;
+                        fragTransStory.add(R.id.root_layout, frag).commit();
+                        activity.ivProfile.setVisibility(View.INVISIBLE);
+                        activity.cardView.setVisibility(View.INVISIBLE);
+                        activity.btnBack.setVisibility(View.INVISIBLE);
+                        activity.btnUnfriend.setVisibility(View.INVISIBLE);
+                    }
+                }
+
+                return true;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                startX = motionEvent.getX();
+                endX = motionEvent1.getX();
+                if (endX >= startX + 60) {
+                    navigationHelper.toCamera();
+                    startX = 0;
+                    endX = 0;
+                } else if (startX >= endX + 50) {
+                    navigationHelper.toFeed();
+                    startX = 0;
+                    endX = 0;
+                }
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+                if (Math.abs(endX - startX) < 10) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(R.string.delete_goal)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    NotificationHelper notificationHelper = new NotificationHelper(context.getApplicationContext());
+                                    notificationHelper.cancelReminder(goal);
+                                    goals.remove(goal);
+                                    goal.unpinInBackground();
+                                    notificationHelper.cancelReminder(goal);
+                                    removeGoal(goal.getObjectId());
+                                }
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .show();
+                }
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                startX = motionEvent.getX();
+                endX = motionEvent1.getX();
+                if (endX >= startX + 60) {
+                    navigationHelper.toCamera();
+                    startX = 0;
+                    endX = 0;
+                } else if (startX >= endX + 50) {
+                    navigationHelper.toFeed();
+                    startX = 0;
+                    endX = 0;
+                }
+                return false;
+            }
+
+        });
+    }
+
+    private int getStartIndex(List<ParseObject> story) {
+        for (int i = 0; i < story.size(); i++){
+            boolean seen = false;
+            ParseObject image = story.get(i);
+            List<ParseUser> users = image.getList("viewedBy");
+            if (users != null) {
+                if (users.contains(currentUser)){
+                    seen = true;
+                }
+            }
+
+            if (!seen) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     // slide the view from below itself to the current position
-    public void slideRight(View view){
+    private void slideRight(View view){
         view.setVisibility(View.VISIBLE);
         TranslateAnimation animate = new TranslateAnimation(
                 -view.getWidth()-7,                 // fromXDelta
@@ -460,7 +448,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     // slide the view from its current position to below itself
-    public void slideLeft(View view){
+    private void slideLeft(View view){
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
                 -view.getWidth()-7,                 // toXDelta

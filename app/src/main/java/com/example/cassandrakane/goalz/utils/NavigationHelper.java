@@ -19,7 +19,7 @@ import java.util.List;
 
 public class NavigationHelper {
 
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     public NavigationHelper(ViewPager vp) {
         viewPager = vp;
@@ -35,11 +35,6 @@ public class NavigationHelper {
 
     public void toFeed() {
         viewPager.setCurrentItem(2);
-    }
-
-    public void toNotifications() {
-        // TODO update when notifications fragment moved
-        viewPager.setCurrentItem(4);
     }
 
     public void logout(final Activity activity) {
