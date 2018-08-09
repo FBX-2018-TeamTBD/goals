@@ -169,9 +169,10 @@
         android:id="@+id/btnTotalReactions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnReaction"
+        android:layout_alignBottom="@+id/bmb"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
         android:padding="8dp">
 
         <TextView
