@@ -72,7 +72,7 @@
                 android:elevation="10dp"
                 android:src="@drawable/add_friend"
                 android:tint="@color/white"
-                app:fabSize="normal" />
+                app:fabCustomSize="60dp" />
 
         </RelativeLayout>
 

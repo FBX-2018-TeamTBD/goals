@@ -3,7 +3,6 @@ package com.example.cassandrakane.goalz.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -274,10 +273,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
-                // check if all users have added here
-//                if (!goal.getIsItemAdded()) {
-//                    goal.setStreak(0);
-//                }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
@@ -307,6 +302,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         if (goal.getApprovedUsers().size() > 1) {
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
+            holder.tvFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -321,6 +317,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setText("");
             if (personal) {
                 holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
+                holder.tvFriends.setVisibility(View.GONE);
                 holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -332,16 +329,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 });
             } else {
                 holder.btnFriends.setBackground(null);
+                holder.tvFriends.setVisibility(View.GONE);
             }
-        }
-
-        if (goal.getCompleted()) {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
@@ -379,9 +368,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvAdd.setVisibility(View.INVISIBLE);
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
             holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-            params.setMargins(0, 25, 130, 0);
-            holder.btnFriends.setLayoutParams(params);
 
             Glide.with(context)
                     .load(imageUrls.get(startIndex))
@@ -416,9 +402,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.btnReaction.setVisibility(View.INVISIBLE);
             holder.vGradient.setVisibility(View.INVISIBLE);
             holder.tvAdd.setVisibility(View.VISIBLE);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-            params.setMargins(0, 25, 20, 0);
-            holder.btnFriends.setLayoutParams(params);
             if (personal) {
                 holder.ibAdd.setVisibility(View.VISIBLE);
                 holder.ibAdd.setOnClickListener(new View.OnClickListener() {

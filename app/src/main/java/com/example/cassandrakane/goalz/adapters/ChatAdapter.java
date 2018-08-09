@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,9 +51,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         Message message = mMessages.get(position);
         final boolean isMe = message.getFromUser() != null && message.getFromUser() == mUser;
 
-        Log.i("isMe", ""+isMe);
-        Log.i("lastMessage", lastMessageSent);
-        Log.i("message", message.getBody());
         if (isMe) {
             holder.imageMe.setVisibility(View.VISIBLE);
             holder.imageOther.setVisibility(View.GONE);

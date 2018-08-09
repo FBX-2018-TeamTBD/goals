@@ -49,7 +49,7 @@
         android:src="@drawable/check"
         android:background="@drawable/ripple_oval"
         android:tint="@color/white"
-        app:fabSize="normal" />
+        app:fabCustomSize="60dp" />
 
     <ImageButton
         android:id="@+id/btnAddCaption"

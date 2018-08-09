@@ -47,8 +47,8 @@ public class RoundedBoard {
         boardPaint = new Paint();
         boardPaint.setAntiAlias(true);
         boardPaint.setStyle(Paint.Style.FILL);
-        boardPaint.setColor(Color.WHITE);
-        boardPaint.setShadowLayer(5.0f, 0.0f, 2.0f, 0xFF000000);
+        boardPaint.setColor(Color.TRANSPARENT);
+        boardPaint.setShadowLayer(5.0f, 0.0f, 2.0f, 0x00000000);
     }
 
     void setCurrentHeight(float newHeight) {
