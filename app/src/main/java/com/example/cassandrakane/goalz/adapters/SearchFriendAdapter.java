@@ -1,14 +1,11 @@
 package com.example.cassandrakane.goalz.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Filter;
@@ -21,6 +18,7 @@ import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
+import com.example.cassandrakane.goalz.utils.AnimationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -139,57 +137,16 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                 }
                 else if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
                     selectedFriends.add(user);
-                    enterReveal(ivCheck);
+                    AnimationHelper.enterReveal(ivCheck);
                 }
             } else {
                 ivProfile.setTag(R.drawable.add);
                 if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
                     selectedFriends.remove(user);
-                    exitReveal(ivCheck);
+                    AnimationHelper.exitReveal(ivCheck);
                 }
             }
             hideKeyboard(v);
-        }
-
-        void enterReveal(ImageView view) {
-            // get the center for the clipping circle
-            int cx = view.getMeasuredWidth() / 2;
-            int cy = view.getMeasuredHeight() / 2;
-
-            // get the final radius for the clipping circle
-            int finalRadius = Math.max(view.getWidth(), view.getHeight()) / 2;
-
-            // create the animator for this view (the start radius is zero)
-            Animator anim =
-                    ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
-
-            // make the view visible and start the animation
-            view.setVisibility(View.VISIBLE);
-            anim.start();
-        }
-
-        void exitReveal(final ImageView view) {
-            // get the center for the clipping circle
-            int cx = view.getMeasuredWidth() / 2;
-            int cy = view.getMeasuredHeight() / 2;
-
-            // get the initial radius for the clipping circle
-            int initialRadius = view.getWidth() / 2;
-
-            // create the animation (the final radius is zero)
-            Animator anim =
-                    ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
-
-            // make the view invisible when the animation is done
-            anim.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    view.setVisibility(View.INVISIBLE);
-                }
-            });
-            // start the animation
-            anim.start();
         }
     }
 
