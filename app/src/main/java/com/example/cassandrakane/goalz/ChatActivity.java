@@ -1,6 +1,5 @@
 package com.example.cassandrakane.goalz;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,17 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.ChatAdapter;
 import com.example.cassandrakane.goalz.models.Message;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
@@ -40,13 +38,12 @@ public class ChatActivity extends AppCompatActivity {
     static final String TO_USER_KEY = "toUser";
 
     @BindView(R.id.etMessage) EditText etMessage;
-    @BindView(R.id.btSend) Button btSend;
+    @BindView(R.id.btSend) Button btnSend;
     @BindView(R.id.rvChat) RecyclerView rvChat;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.ivCamera) ImageView ivCamera;
     @BindView(R.id.ivPicture) ImageView ivPicture;
     @BindView(R.id.ivMicrophone) ImageView ivMicrophone;
-    @BindView(R.id.rootview) RelativeLayout rootView;
 
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
@@ -65,17 +62,11 @@ public class ChatActivity extends AppCompatActivity {
         final TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toUser.getUsername());
 
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        rvChat.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                rootView.getWindowVisibleDisplayFrame(r);
-                int heightDiff = rootView.getRootView().getHeight() - (r.bottom - r.top);
-
-                if (heightDiff > 100) {
-                    toolbar.setVisibility(View.VISIBLE);
-                } else {
-                    toolbar.setVisibility(View.VISIBLE);
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    Util.hideKeyboard(view, ChatActivity.this);
                 }
             }
         });
@@ -89,6 +80,8 @@ public class ChatActivity extends AppCompatActivity {
                    ivMicrophone.setVisibility(View.GONE);
                    ivCamera.setVisibility(View.GONE);
                    ivPicture.setVisibility(View.GONE);
+                   slideUp(etMessage);
+                   slideUp(btnSend);
                    etMessage.setHint("Type a message...");
                } else {
                    slideRight(ivCamera);
@@ -146,7 +139,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         // When send button is clicked, create message object on Parse
-        btSend.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = etMessage.getText().toString();
@@ -225,12 +218,23 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // slide the view from its current position to below itself
-    public void slideLeft(View view){
+    public void slideLeft(View view) {
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
                 -370,                 // toXDelta
                 0,                 // fromYDelta
                 0); // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    public void slideUp(View view) {
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                0,                 // fromYDelta
+                -25); // toYDelta
         animate.setDuration(200);
         animate.setFillAfter(true);
         view.startAnimation(animate);

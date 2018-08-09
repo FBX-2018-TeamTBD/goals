@@ -81,11 +81,7 @@
             android:theme="@style/AppTheme.PopupTheme" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".CelebrateActivity" />
-        <activity android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:isScrollContainer="true"
-            />
+        <activity android:name=".ChatActivity" />
         <activity android:name=".ReactionModalActivity"></activity>
     </application>
 

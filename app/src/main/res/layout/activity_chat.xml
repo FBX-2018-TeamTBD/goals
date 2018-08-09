@@ -2,10 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
-    android:animateLayoutChanges="true"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:id="@+id/rootview"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
@@ -13,7 +10,6 @@
         android:id="@+id/toolbar"
         android:background="@color/orange"
         app:theme="@style/AppTheme"
-        android:fitsSystemWindows="true"
         android:elevation="10dp"
         android:layout_height="?attr/actionBarSize">
         <RelativeLayout
@@ -43,101 +39,95 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:isScrollContainer="false">
-    </ScrollView>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvChat"
-            android:focusableInTouchMode="true"
-            android:focusable="true"
-            android:clickable="true"
-            android:transcriptMode="alwaysScroll"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="15dp"
-            android:layout_above="@+id/rlSend"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rlSend"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:transcriptMode="alwaysScroll" />
 
-        <RelativeLayout
-            android:id="@+id/rlSend"
+    <RelativeLayout
+        android:id="@+id/rlSend"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="5dp">
+
+        <EditText
+            android:id="@+id/etMessage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="20dp"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:paddingTop="5dp">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btSend"
+            android:layout_toRightOf="@+id/ivMicrophone"
+            android:background="@drawable/rounded_textview"
+            android:fontFamily="@font/quicksand"
+            android:hint="Aa"
+            android:imeOptions="actionSend"
+            android:inputType="textShortMessage"
+            android:paddingBottom="3dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text=""
+            android:textSize="17dp" />
 
+        <Button
+            android:id="@+id/btSend"
+            style="@style/SelectableItemBackground"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/etMessage"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/send_pic"
+            android:backgroundTint="@color/orange"
+            android:gravity="center"
+            android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/etMessage"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/btSend"
-                android:layout_toRightOf="@+id/ivMicrophone"
-                android:background="@drawable/rounded_textview"
-                android:fontFamily="@font/quicksand"
-                android:hint="Aa"
-                android:imeOptions="actionSend"
-                android:inputType="textShortMessage"
-                android:paddingBottom="3dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:text=""
-                android:textSize="17dp" />
+        <ImageView
+            android:id="@+id/ivCamera"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignBottom="@+id/etMessage"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/camera_filled"
+            android:tint="@color/orange" />
 
-            <Button
-                android:id="@+id/btSend"
-                style="@style/SelectableItemBackground"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/etMessage"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/send_pic"
-                android:backgroundTint="@color/orange"
-                android:gravity="center"
-                android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/ivPicture"
+            android:layout_width="30dp"
+            android:layout_height="33dp"
+            android:layout_alignBottom="@+id/ivCamera"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toRightOf="@+id/ivCamera"
+            android:src="@drawable/picture"
+            android:tint="@color/orange" />
 
-            <ImageView
-                android:id="@+id/ivCamera"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignBottom="@+id/etMessage"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/camera_filled"
-                android:tint="@color/orange" />
+        <ImageView
+            android:id="@+id/ivMicrophone"
+            android:layout_width="30dp"
+            android:layout_height="33dp"
+            android:layout_alignBottom="@+id/ivCamera"
+            android:layout_marginLeft="17dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+id/ivPicture"
+            android:src="@drawable/microphone"
+            android:tint="@color/orange" />
 
-            <ImageView
-                android:id="@+id/ivPicture"
-                android:layout_width="30dp"
-                android:layout_height="33dp"
-                android:layout_alignBottom="@+id/ivCamera"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="1dp"
-                android:layout_toRightOf="@+id/ivCamera"
-                android:src="@drawable/picture"
-                android:tint="@color/orange" />
-
-            <ImageView
-                android:id="@+id/ivMicrophone"
-                android:layout_width="30dp"
-                android:layout_height="33dp"
-                android:layout_alignBottom="@+id/ivCamera"
-                android:layout_marginLeft="17dp"
-                android:layout_marginBottom="3dp"
-                android:layout_toRightOf="@+id/ivPicture"
-                android:src="@drawable/microphone"
-                android:tint="@color/orange" />
-
-        </RelativeLayout>
-
+    </RelativeLayout>
 </RelativeLayout>
