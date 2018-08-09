@@ -529,12 +529,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.ibAdd) Button ibAdd;
         @BindView(R.id.tvAdd) TextView tvAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
-        @BindView(R.id.reaction_view) RelativeLayout reactionView;
-        @BindView(R.id.tvThumb) TextView tvThumb;
-        @BindView(R.id.tvGoals) TextView tvGoals;
-        @BindView(R.id.tvClap) TextView tvClap;
-        @BindView(R.id.tvOk) TextView tvOk;
-        @BindView(R.id.tvBump) TextView tvBump;
         @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;

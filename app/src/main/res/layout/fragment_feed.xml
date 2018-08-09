@@ -41,7 +41,7 @@
                 android:paddingBottom="6dp"
                 android:paddingLeft="20dp"
                 android:paddingTop="2dp"
-                android:text="stories"
+                android:text="@string/stories"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -56,7 +56,7 @@
                 android:paddingBottom="6dp"
                 android:paddingLeft="20dp"
                 android:paddingTop="2dp"
-                android:text="friends"
+                android:text="@string/friends"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -97,7 +97,7 @@
             android:paddingBottom="6dp"
             android:paddingLeft="20dp"
             android:paddingTop="2dp"
-            android:text="suggested friends"
+            android:text="@string/suggested_friends"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:visibility="gone" />

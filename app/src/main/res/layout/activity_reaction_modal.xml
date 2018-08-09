@@ -107,7 +107,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="4dp"
                 android:fontFamily="@font/quicksand_medium"
-                android:text="##"
+                android:text="@string/number"
                 android:textSize="14dp" />
 
             <ImageView
@@ -128,7 +128,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="4dp"
                 android:fontFamily="@font/quicksand_medium"
-                android:text="##"
+                android:text="@string/number"
                 android:textSize="14dp" />
 
             <ImageView
@@ -154,7 +154,7 @@
         android:layout_alignTop="@+id/btnBack"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/quicksand_medium"
-        android:text="reactions"
+        android:text="@string/reactions"
         android:textColor="@color/orange"
         android:textSize="20sp" />
 
