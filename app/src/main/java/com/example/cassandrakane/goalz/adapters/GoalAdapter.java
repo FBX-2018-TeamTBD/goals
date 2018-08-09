@@ -122,16 +122,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private void setTextViews(final Goal goal, final ViewHolder holder) {
         holder.tvTitle.setText(goal.getTitle());
         if (goal.getCompleted()) {
-            holder.tvProgress.setText("COMPLETED!");
+            holder.tvProgress.setText(R.string.completed_label);
             Glide.with(context).asGif().load(R.drawable.confetti).into(holder.ivCelebrate);
         } else {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
+            holder.tvProgress.setText(String.format("%d DAYS LEFT", goal.getDuration() - goal.getProgress()));
         }
     }
 
