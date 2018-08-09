@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.transition.Transition;
-import android.support.transition.TransitionInflater;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +30,6 @@ import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
-import com.example.cassandrakane.goalz.ProfileFragment;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -48,9 +45,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -178,31 +172,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             }
                             if (!seen) {
                                 startIndex = i;
-                                // TODO - show blue dot under story
                                 break;
                             }
                         }
                         if (context.getClass().isAssignableFrom(MainActivity.class)) {
                             MainActivity activity = (MainActivity) context;
-                            ProfileFragment fragmentOne = new ProfileFragment();
-                            StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
-                            fragmentTwo.goal = goal;
-                            Transition changeTransform = TransitionInflater.from(context).
-                                    inflateTransition(R.transition.change_image_transform);
-                            Transition explodeTransform = TransitionInflater.from(context).
-                                    inflateTransition(android.R.transition.fade);
-
-                            fragmentOne.setSharedElementReturnTransition(changeTransform);
-                            fragmentOne.setExitTransition(explodeTransform);
-
-                            fragmentTwo.setSharedElementEnterTransition(changeTransform);
-                            fragmentTwo.setEnterTransition(explodeTransform);
-
-                            FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.main_central_fragment, fragmentTwo)
-                                    .addToBackStack("transaction")
-                                    .addSharedElement(holder.ivStory, "story");
-                            ft.commit();
+                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser);
+                            frag.goal = goal;
+                            fragTransStory.add(R.id.main_central_fragment, frag).commit();
 
 //                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                         }
@@ -310,7 +289,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         holder.tvTitle.setText(goal.getTitle());
-        holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
+        if (!goal.getCompleted()) {
+            holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
+        } else {
+            holder.tvProgress.setText("COMPLETED!");
+        }
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
@@ -530,33 +513,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         });
     }
 
-    public String getTextNotificationString(String goalTitle, List<ParseUser> users) {
-        String text = String.format("Oh no! You lost your streak for \"%s\"! ", goalTitle);
-        for (int i = 0; i < users.size(); i++) {
-            ParseUser user = users.get(i);
-            String username = "";
-            if (user != null) {
-                try {
-                    username = user.fetchIfNeeded().getUsername();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (i == users.size() - 1) {
-                text += String.format("%s ", username);
-            } else if (i == users.size() - 2){
-                text += String.format("%s and ", username);
-            } else {
-                text += String.format("%s, ", username);
-            }
-        }
-        if (users.size() == 0) {
-            text += "Someone ";
-        }
-        text += "forgot to post.";
-        return text;
-    }
-
     @Override
     public int getItemCount() {
         return goals.size();
@@ -592,11 +548,4 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
-        }
-    }
 }

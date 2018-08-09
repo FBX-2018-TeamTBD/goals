@@ -3,7 +3,6 @@ package com.example.cassandrakane.goalz.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,11 +25,11 @@ import java.util.List;
 
 public class ReactionView extends View {
 
-    private static final int SCALE_DURATION = 200;
-    private static final int TRANSLATION_DURATION = 700;
-    private static final int CHILD_TRANSLATION_DURATION = 200;
-    private static final int CHILD_DELAY = 50;
-    private static final int DRAW_DELAY = 25;
+    private static final int SCALE_DURATION = 1;
+    private static final int TRANSLATION_DURATION = 1;
+    private static final int CHILD_TRANSLATION_DURATION = 1;
+    private static final int CHILD_DELAY = 0;
+    private static final int DRAW_DELAY = 0;
     private RoundedBoard board;
     private List<Emotion> emotions;
     public int selectedIndex = -1;
