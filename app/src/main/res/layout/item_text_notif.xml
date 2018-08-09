@@ -43,7 +43,7 @@
         android:layout_marginTop="20dp"
         android:layout_toRightOf="@+id/card_view"
         android:fontFamily="@font/quicksand"
-        android:text="text"
+        android:text="@string/text"
         android:textAlignment="textStart"
         android:textColor="@color/black"
         android:textSize="18sp" />

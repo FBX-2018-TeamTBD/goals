@@ -60,4 +60,6 @@
     <string name="stories">stories</string>
     <string name="my_goals">my goals</string>
     <string name="completed_label">COMPLETED!</string>
+    <string name="text">text</string>
+    <string name="Text">Text</string>
 </resources>
