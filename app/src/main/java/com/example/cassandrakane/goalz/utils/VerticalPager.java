@@ -402,7 +402,15 @@ public class VerticalPager extends ViewGroup {
                     return true;
                 }
 
-                if (Util.storyMode) {
+                if (Util.storyMode && ev.getY() > mLastMotionY + 200) {
+                    if (Util.storyFragment.mHandler != null) {
+                        Util.storyFragment.mHandler.removeCallbacks(Util.storyFragment.runnable);
+                    }
+
+                    Util.storyMode = false;
+                    mainActivity.getSupportFragmentManager().beginTransaction().remove(Util.storyFragment).commit();
+                    return false;
+                } else if (Util.storyMode) {
                     return false;
                 }
 

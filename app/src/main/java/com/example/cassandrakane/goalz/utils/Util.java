@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.RemovedFriends;
@@ -50,6 +51,7 @@ import static com.example.cassandrakane.goalz.SignupActivity.GALLERY_IMAGE_ACTIV
 public class Util {
 
     public static boolean storyMode = false;
+    public static StoryFragment storyFragment = null;
 
     public static void setImage(ParseFile imageFile, Resources resources, ImageView ivProfile, int color) {
         if (imageFile != null) {

@@ -74,8 +74,8 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.bmb) BoomMenuButton bmb;
     @BindView(R.id.ivBmb) ImageView ivBmb;
 
-    private Runnable runnable;
-    private Handler mHandler;
+    public Runnable runnable;
+    public Handler mHandler;
     private ReactionView rv;
 
     private ParseObject object;
@@ -120,6 +120,7 @@ public class StoryFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Util.storyMode = true;
+        Util.storyFragment = this;
     }
 
     @Override
