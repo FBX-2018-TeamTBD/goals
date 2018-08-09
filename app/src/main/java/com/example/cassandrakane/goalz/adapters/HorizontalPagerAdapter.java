@@ -42,28 +42,4 @@ public class HorizontalPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
-//    @Override
-//    public Object instantiateItem(ViewGroup container, int position) {
-//        Object obj = super.instantiateItem(container, position);
-//        if (obj instanceof Fragment) {
-//            // record the fragment tag here.
-//            Fragment f = (Fragment) obj;
-//            String tag = f.getTag();
-//            mFragmentTags.put(position, tag);
-//        }
-//        return obj;
-//    }
-
-//    public Fragment getFragment(int position) {
-//        String tag = mFragmentTags.get(position);
-//        if (tag == null)
-//            return null;
-//        return mFragmentManager.findFragmentByTag(tag);
-//    }
-
-//    @Override
-//    public int getItemPosition(@NonNull Object object) {
-//        return POSITION_NONE;
-//    }
-
 }

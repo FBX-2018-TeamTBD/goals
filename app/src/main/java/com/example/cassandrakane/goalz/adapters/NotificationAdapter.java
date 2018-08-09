@@ -253,11 +253,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             e.printStackTrace();
         }
         List<ParseUser> approved = goal.getApprovedUsers();
-//        try {
-//            ParseObject.fetchAll(approved);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+
         approved.add(ParseUser.getCurrentUser());
         goal.setApprovedUsers(approved);
         removeUserfromPending(goal);
@@ -307,11 +303,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             e.printStackTrace();
         }
         List<ParseUser> pending = goal.getPendingUsers();
-//        try {
-//            ParseObject.fetchAll(pending);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+
         pending.remove(ParseUser.getCurrentUser());
         goal.setPendingUsers(pending);
         goal.saveInBackground();
@@ -324,11 +316,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             e.printStackTrace();
         }
         List<ParseUser> friends = goal.getFriends();
-//        try {
-//            ParseObject.fetchAll(friends);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+
         friends.remove(ParseUser.getCurrentUser());
         goal.setFriends(friends);
         goal.saveInBackground();

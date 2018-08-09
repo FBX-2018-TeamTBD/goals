@@ -179,7 +179,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             MainActivity activity = (MainActivity) context;
                             final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                             FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser);
+                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                             frag.goal = goal;
                             fragTransStory.add(R.id.main_central_fragment, frag).commit();
 
@@ -189,7 +189,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             FriendActivity activity = (FriendActivity) context;
                             final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                             FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser);
+                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                             frag.goal = goal;
                             fragTransStory.add(R.id.root_layout, frag).commit();
                             activity.ivProfile.setVisibility(View.INVISIBLE);
@@ -397,7 +397,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                        StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
+                        StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                         fragmentTwo.goal = goal;
                         fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
 

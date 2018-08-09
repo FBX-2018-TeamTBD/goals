@@ -60,16 +60,6 @@ public class ShareFriendAdapter extends RecyclerView.Adapter<ShareFriendAdapter.
         holder.tvUsername.setText(friend.getUsername());
         ParseFile file = friend.getParseFile("image");
         Util.setImage(file, context.getResources(), holder.ivProfile, R.color.orange);
-   /*     if (file != null) {
-            try {
-                Glide.with(context)
-                        .load(Uri.fromFile(file.getFile()))
-                        .apply(new RequestOptions().centerCrop())
-                        .into(holder.ivProfile);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
     @Override
