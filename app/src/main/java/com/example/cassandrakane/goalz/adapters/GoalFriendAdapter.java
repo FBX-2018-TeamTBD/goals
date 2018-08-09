@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 public class GoalFriendAdapter extends RecyclerView.Adapter<GoalFriendAdapter.ViewHolder> {
 
-    List<ParseUser> goalFriends;
+    private List<ParseUser> goalFriends;
     Context context;
 
     public GoalFriendAdapter(List<ParseUser> friends) {
@@ -39,7 +39,7 @@ public class GoalFriendAdapter extends RecyclerView.Adapter<GoalFriendAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final ParseUser user = goalFriends.get(position);
         holder.tvUsername.setText(user.getUsername());
 

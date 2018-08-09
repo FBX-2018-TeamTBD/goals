@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +45,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<ParseUser> mFriends;
     private List<SentFriendRequests> friendRequests;
     Context context;
-    NotificationsFragment notificationsFragment;
+    private NotificationsFragment notificationsFragment;
 
     public NotificationAdapter(List<TextNotification> texts, List<Goal> goals,
                                List<GoalRequests> goalReq, List<ParseUser> friends,
@@ -72,7 +73,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         switch (holder.getItemViewType()) {
             case 0:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
@@ -195,7 +196,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mTextNotifications.size() + mGoals.size() + mFriends.size();
     }
 
-    public void deleteTextNotification(final int position) {
+    private void deleteTextNotification(final int position) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TextNotification");
         query.whereEqualTo("objectId", mTextNotifications.get(position).getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -216,7 +217,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    public void addGoal(final Goal goal, final int position) {
+    private void addGoal(final Goal goal, final int position) {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         List<Goal> goals = currentUser.getList("goals");
         goals.add(0, goal);
@@ -246,24 +247,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    public void moveUser(Goal goal) {
+    private void moveUser(Goal goal) {
         try {
             goal = goal.fetch();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         List<ParseUser> approved = goal.getApprovedUsers();
-//        try {
-//            ParseObject.fetchAll(approved);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         approved.add(ParseUser.getCurrentUser());
         goal.setApprovedUsers(approved);
         removeUserfromPending(goal);
     }
 
-    public void deleteGoalRequest(final int position, final boolean sendNotif) {
+    private void deleteGoalRequest(final int position, final boolean sendNotif) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("GoalRequests");
         query.whereEqualTo("objectId", goalRequests.get(position).getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -300,35 +296,25 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    public void removeUserfromPending(Goal goal) {
+    private void removeUserfromPending(Goal goal) {
         try {
             goal = goal.fetch();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         List<ParseUser> pending = goal.getPendingUsers();
-//        try {
-//            ParseObject.fetchAll(pending);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         pending.remove(ParseUser.getCurrentUser());
         goal.setPendingUsers(pending);
         goal.saveInBackground();
     }
 
-    public void removeUserfromFriends(Goal goal, int position) {
+    private void removeUserfromFriends(Goal goal, int position) {
         try {
             goal = goal.fetch();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         List<ParseUser> friends = goal.getFriends();
-//        try {
-//            ParseObject.fetchAll(friends);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         friends.remove(ParseUser.getCurrentUser());
         goal.setFriends(friends);
         goal.saveInBackground();
@@ -336,7 +322,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         removeUserfromPending(goal);
     }
 
-    public void addFriend(final ParseUser user, final int position) {
+    private void addFriend(final ParseUser user, final int position) {
         final ParseUser currentUser = ParseUser.getCurrentUser();
         List<ParseUser> friends = currentUser.getList("friends");
         friends.add(0, user);
@@ -369,7 +355,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    public void deleteSentRequest(final int position) {
+    private void deleteSentRequest(final int position) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("SentFriendRequests");
         query.whereEqualTo("objectId", friendRequests.get(position).getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -395,7 +381,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    public void sendTextNotification(String text, ParseUser user, ParseFile image) {
+    private void sendTextNotification(String text, ParseUser user, ParseFile image) {
         TextNotification notification = new TextNotification(text, user, image);
         notification.saveInBackground();
     }
@@ -407,7 +393,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.btnDelete) Button btnDelete;
         @BindView(R.id.btnClose) ImageButton btnClose;
 
-        public GoalRequestViewHolder(View itemView) {
+        GoalRequestViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -420,7 +406,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.btnDelete) Button btnDelete;
         @BindView(R.id.btnClose) ImageButton btnClose;
 
-        public FriendRequestViewHolder(View itemView) {
+        FriendRequestViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -431,7 +417,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.ivImage) ImageView ivImage;
         @BindView(R.id.btnClose) ImageButton btnClose;
 
-        public TextViewHolder(View itemView) {
+        TextViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

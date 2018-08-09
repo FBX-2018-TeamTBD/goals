@@ -59,7 +59,7 @@ public class CentralFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        horizontalPagerAdapter = new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), pages);
+        horizontalPagerAdapter = new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), pages);
         horizontalPager.setAdapter(horizontalPagerAdapter);
         horizontalPager.setCurrentItem(1);
 

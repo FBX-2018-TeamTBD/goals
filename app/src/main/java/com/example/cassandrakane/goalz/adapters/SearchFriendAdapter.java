@@ -33,11 +33,11 @@ import butterknife.ButterKnife;
 
 public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapter.ViewHolder> implements Filterable {
 
-    List<ParseUser> searchList;
-    List<ParseUser> filteredList;
+    private List<ParseUser> searchList;
+    private List<ParseUser> filteredList;
     public List<ParseUser> selectedFriends;
     Context context;
-    String requestActivityName;
+    private String requestActivityName;
 
     public SearchFriendAdapter(List<ParseUser> list, List<ParseUser> selFriends, String rActivityName) {
         searchList = list;
@@ -55,7 +55,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final ParseUser user = filteredList.get(position);
         holder.tvUsername.setText(user.getUsername());
 
@@ -63,7 +63,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
         Util.setImage(image, context.getResources(), holder.ivProfile, R.color.orange);
     }
 
-    public void addFriend(final ParseUser user) {
+    private void addFriend(final ParseUser user) {
         SentFriendRequests request = new SentFriendRequests(ParseUser.getCurrentUser(), user);
         request.saveInBackground();
         searchList.remove(user);
@@ -71,9 +71,11 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
         notifyDataSetChanged();
     }
 
-    public void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -129,23 +131,21 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
         public void onClick(View v){
             int position = getAdapterPosition();
             ParseUser user = filteredList.get(position);
-            if (position != RecyclerView.NO_POSITION){
-                if (!ivProfile.getTag().equals(R.drawable.check)) {
-                    ivProfile.setTag(R.drawable.check);
-                    if (requestActivityName.equals(MainActivity.class.getSimpleName())) {
-                        addFriend(user);
-                        Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
-                        selectedFriends.add(user);
-                        enterReveal(ivCheck);
-                    }
-                } else {
-                    ivProfile.setTag(R.drawable.add);
-                    if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
-                        selectedFriends.remove(user);
-                        exitReveal(ivCheck);
-                    }
+            if (!ivProfile.getTag().equals(R.drawable.check)) {
+                ivProfile.setTag(R.drawable.check);
+                if (requestActivityName.equals(MainActivity.class.getSimpleName())) {
+                    addFriend(user);
+                    Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
+                }
+                else if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
+                    selectedFriends.add(user);
+                    enterReveal(ivCheck);
+                }
+            } else {
+                ivProfile.setTag(R.drawable.add);
+                if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
+                    selectedFriends.remove(user);
+                    exitReveal(ivCheck);
                 }
             }
             hideKeyboard(v);
