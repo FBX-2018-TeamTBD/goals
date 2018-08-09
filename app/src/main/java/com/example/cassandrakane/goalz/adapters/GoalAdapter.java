@@ -143,9 +143,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
-//                if (!goal.getIsItemAdded()) {
-//                    goal.setStreak(0);
-//                }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
@@ -167,7 +164,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private void setFriendViews(final Goal goal, final ViewHolder holder) {
         if (goal.getApprovedUsers().size() > 1) {
+            holder.tvFriends.setVisibility(View.VISIBLE);
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
+            holder.tvFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -178,9 +177,28 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     context.startActivity(i);
                 }
             });
+            holder.viewFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, FriendsModalActivity.class);
+                    i.putExtra(Goal.class.getSimpleName(), goal);
+                    i.putExtra("personal", personal);
+                    context.startActivity(i);
+                }
+            });
         } else if (personal) {
+            holder.tvFriends.setVisibility(View.GONE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, SearchFriendsActivity.class);
+                    i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
+                    i.putExtra(Goal.class.getSimpleName(), goal);
+                    context.startActivity(i);
+                }
+            });
+            holder.viewFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, SearchFriendsActivity.class);
@@ -245,9 +263,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
         startIndex = getStartIndex(story);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-        params.setMargins(0, 25, 130, 0);
-        holder.btnFriends.setLayoutParams(params);
 
         ParseFile image = story.get(startIndex).getParseFile("image");
         if (image != null) {
@@ -285,9 +300,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
         holder.btnReaction.setVisibility(View.INVISIBLE);
         holder.vGradient.setVisibility(View.INVISIBLE);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-        params.setMargins(0, 25, 20, 0);
-        holder.btnFriends.setLayoutParams(params);
         if (personal) {
             holder.ibAdd.setVisibility(View.VISIBLE);
             holder.tvAdd.setVisibility(View.VISIBLE);
@@ -515,6 +527,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
+        @BindView(R.id.viewFriends) RelativeLayout viewFriends;
 
         public ViewHolder(View itemView) {
             super(itemView);

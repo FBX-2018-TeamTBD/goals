@@ -6,12 +6,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.ChatAdapter;
@@ -44,6 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.ivCamera) ImageView ivCamera;
     @BindView(R.id.ivPicture) ImageView ivPicture;
     @BindView(R.id.ivMicrophone) ImageView ivMicrophone;
+    @BindView(R.id.rlSend) RelativeLayout rlSend;
 
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
@@ -62,14 +66,60 @@ public class ChatActivity extends AppCompatActivity {
         final TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toUser.getUsername());
 
-        rvChat.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    Util.hideKeyboard(view, ChatActivity.this);
-                }
+            public boolean onDown(MotionEvent motionEvent) {
+                return true;
             }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                rvChat.requestFocus();
+                Util.hideKeyboard(rvChat, ChatActivity.this);
+                ivMicrophone.setVisibility(View.VISIBLE);
+                ivCamera.setVisibility(View.VISIBLE);
+                ivPicture.setVisibility(View.VISIBLE);
+                slideRight(ivCamera);
+                slideRight(ivPicture);
+                slideRight(ivMicrophone);
+                slideRight(etMessage);
+                etMessage.setHint("Aa");
+                return true;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return true;
+            }
+
         });
+
+      /*  rvChat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
+        });*/
+
+      /*  rvChat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
+        });*/
 
         etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
            public void onFocusChange(View v, boolean hasFocus) {
@@ -80,15 +130,7 @@ public class ChatActivity extends AppCompatActivity {
                    ivMicrophone.setVisibility(View.GONE);
                    ivCamera.setVisibility(View.GONE);
                    ivPicture.setVisibility(View.GONE);
-                   slideUp(etMessage);
-                   slideUp(btnSend);
                    etMessage.setHint("Type a message...");
-               } else {
-                   slideRight(ivCamera);
-                   slideRight(ivPicture);
-                   slideRight(ivMicrophone);
-                   slideRight(etMessage);
-                   etMessage.setHint("Aa");
                }
            }
         });
@@ -148,6 +190,7 @@ public class ChatActivity extends AppCompatActivity {
                     message.setBody(data);
                     message.setFromUser(ParseUser.getCurrentUser());
                     message.setToUser(toUser);
+                    mAdapter.lastMessageSent = "";
                     message.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -235,6 +278,17 @@ public class ChatActivity extends AppCompatActivity {
                 0,                 // toXDelta
                 0,                 // fromYDelta
                 -25); // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    public void slideDown(View view) {
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                -25,                 // fromYDelta
+                0); // toYDelta
         animate.setDuration(200);
         animate.setFillAfter(true);
         view.startAnimation(animate);

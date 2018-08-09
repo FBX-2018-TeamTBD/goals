@@ -42,15 +42,19 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/rlSend"
         android:layout_below="@+id/toolbar"
-        android:layout_marginBottom="40dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:clickable="true"
         android:focusable="true"
-        android:isScrollContainer="true"
+        android:foregroundGravity="bottom"
         android:focusableInTouchMode="true"
+        android:isScrollContainer="true"
         android:transcriptMode="alwaysScroll" />
 
     <RelativeLayout
