@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +30,7 @@ import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.ReactionModalActivity;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -46,6 +46,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -140,9 +142,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
-//                if (!goal.getIsItemAdded()) {
-//                    goal.setStreak(0);
-//                }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
@@ -164,7 +163,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private void setFriendViews(final Goal goal, final ViewHolder holder) {
         if (goal.getApprovedUsers().size() > 1) {
+            holder.tvFriends.setVisibility(View.VISIBLE);
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
+            holder.tvFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,6 +177,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             });
         } else if (personal) {
+            holder.tvFriends.setVisibility(View.GONE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -190,7 +192,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     private void setReactionViews(final Goal goal, final ViewHolder holder) {
-        List<ParseObject> reax = goal.getReactions();
+        final List<ParseObject> reax = goal.getReactions();
         int thumbs = 0;
         int goaled = 0;
         int claps = 0;
@@ -199,12 +201,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
-            String type = null;
-            try {
-                type = react.fetchIfNeeded().getString("type");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            String type = null;
+//            try {
+                String type = react.getString("type");
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
             if (type != null) {
                 switch (type) {
                     case "thumbs":
@@ -226,32 +228,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
         }
         holder.tvReaction.setText(String.valueOf(total));
-        holder.tvThumb.setText(String.valueOf(thumbs));
-        holder.tvClap.setText(String.valueOf(claps));
-        holder.tvGoals.setText(String.valueOf(goaled));
-        holder.tvOk.setText(String.valueOf(oks));
-        holder.tvBump.setText(String.valueOf(bumps));
+
+        final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps);
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.btnReaction.getTag().equals(context.getResources().getColor(R.color.white))) {
-                    slideLeft(holder.reactionView);
-                    holder.btnReaction.setTag(context.getResources().getColor(R.color.orange));
-                } else {
-                    holder.reactionView.setVisibility(View.INVISIBLE);
-                    holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
-                    slideRight(holder.reactionView);
-                }
+                Intent intent = new Intent(context, ReactionModalActivity.class);
+                intent.putExtra("reactions", (Serializable) reax);
+                intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                context.startActivity(intent);
             }
         });
     }
 
     private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
         startIndex = getStartIndex(story);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-        params.setMargins(0, 25, 130, 0);
-        holder.btnFriends.setLayoutParams(params);
 
         ParseFile image = story.get(startIndex).getParseFile("image");
         if (image != null) {
@@ -289,9 +281,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
         holder.btnReaction.setVisibility(View.INVISIBLE);
         holder.vGradient.setVisibility(View.INVISIBLE);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
-        params.setMargins(0, 25, 20, 0);
-        holder.btnFriends.setLayoutParams(params);
         if (personal) {
             holder.ibAdd.setVisibility(View.VISIBLE);
             holder.tvAdd.setVisibility(View.VISIBLE);
@@ -516,12 +505,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.ibAdd) Button ibAdd;
         @BindView(R.id.tvAdd) TextView tvAdd;
         @BindView(R.id.btnReaction) Button btnReaction;
-        @BindView(R.id.reaction_view) RelativeLayout reactionView;
-        @BindView(R.id.tvThumb) TextView tvThumb;
-        @BindView(R.id.tvGoals) TextView tvGoals;
-        @BindView(R.id.tvClap) TextView tvClap;
-        @BindView(R.id.tvOk) TextView tvOk;
-        @BindView(R.id.tvBump) TextView tvBump;
         @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;

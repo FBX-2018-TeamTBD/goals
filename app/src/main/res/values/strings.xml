@@ -22,6 +22,7 @@
     <string name="_0_completed_goals">0 completed goals</string>
     <string name="_0_current_goals">0 current goals</string>
     <string name="zero">0</string>
+    <string name="one">1</string>
     <string name="no_goals">Add a goal</string>
     <string name="what_s_your_goal">What\'s your goal?</string>
     <string name="no_friend_goals">Your friend hasn\'t added any goals!</string>
@@ -46,5 +47,19 @@
     <string name="clap_react">clap</string>
     <string name="ok_react">ok</string>
     <string name="bump_react">bump_react</string>
+    <string name="share_friends">Share with friends</string>
+    <string name="days_question">How many days will it take?</string>
+    <string name="chat">chat</string>
+    <string name="message_hint">Type a message</string>
+    <string name="reactions">reactions</string>
+    <string name="number">##</string>
+    <string name="add_friends">add friends</string>
+    <string name="add_profile_pic">Add a profile picture!</string>
+    <string name="friend">friends</string>
+    <string name="suggested_friends">suggested friends</string>
+    <string name="stories">stories</string>
+    <string name="my_goals">my goals</string>
     <string name="completed_label">COMPLETED!</string>
+    <string name="text">text</string>
+    <string name="Text">Text</string>
 </resources>

@@ -83,7 +83,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ChatActivity" />
-        <activity android:name=".ReactionModalActivity"></activity>
+        <activity
+            android:name=".ReactionModalActivity"
+            android:theme="@style/AppTheme.PopupTheme"/>
     </application>
 
 </manifest>

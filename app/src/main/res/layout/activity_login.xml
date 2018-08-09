@@ -30,7 +30,7 @@
         android:ems="10"
         android:background="@drawable/edittext_border"
         android:fontFamily="@font/quicksand_regular"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textPersonName" />
 
     <EditText

@@ -2,7 +2,6 @@
 <com.example.cassandrakane.goalz.utils.VerticalPager
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_main_vertical_pager"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:orientation="vertical"

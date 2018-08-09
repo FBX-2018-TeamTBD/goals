@@ -44,7 +44,7 @@
         android:ems="10"
         android:background="@drawable/edittext_border"
         android:fontFamily="@font/quicksand_regular"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textPersonName" />
 
     <EditText
@@ -112,7 +112,7 @@
         android:background="@color/transparent"
         android:fontFamily="@font/quicksand_regular"
         android:onClick="selectImage"
-        android:text="Add a profile picture!"
+        android:text="@string/add_profile_pic"
         android:textAllCaps="false"
         android:textColor="@color/orange" />
 

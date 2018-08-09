@@ -27,7 +27,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context mContext;
     private ParseUser mUser;
 
-    private String lastMessageSent = "";
+    public String lastMessageSent = "";
 
     public ChatAdapter(Context context, ParseUser user, List<Message> messages) {
         mMessages = messages;
