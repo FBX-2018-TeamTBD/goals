@@ -5,10 +5,8 @@ import android.content.Intent;
 
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -104,46 +102,5 @@ public class DataFetcher {
 
             ParseObject.pinAllInBackground(friendGoals);
         }
-    }
-
-    public List<Goal> getUserGoals() {
-        return userGoals;
-    }
-
-    public List<ParseUser> getUserFriends() {
-        return userFriends;
-    }
-
-    public List<Goal> getFriendGoals() {
-        return friendGoals;
-    }
-
-    public void unpinAll(){
-        ParseQuery<ParseObject> localQuery = ParseQuery.getQuery("Goal");
-        localQuery.fromLocalDatastore();
-        localQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null){
-                    ParseObject.unpinAllInBackground(objects);
-                }
-            }
-        });
-        ParseQuery<ParseUser> localUserQuery = ParseUser.getQuery();
-        localUserQuery.fromLocalDatastore();
-        localUserQuery.whereNotEqualTo("objectId", user.getObjectId());
-        localUserQuery.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
-                    try {
-                        ParseObject.unpinAll(objects);
-                        ParseObject.unpinAll();
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 }
