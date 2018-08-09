@@ -125,25 +125,6 @@
         android:progress="25"
         android:progressTint="@color/white" />
 
-    <!--<LinearLayout-->
-        <!--android:padding="8dp"-->
-        <!--android:background="?selectableItemBackground"-->
-        <!--android:id="@+id/btnReaction"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--android:layout_marginBottom="35dp"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentBottom="true">-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/ivReaction"-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:src="@drawable/goals_react" />-->
-
-    <!--</LinearLayout>-->
-
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb"
         android:layout_width="wrap_content"
