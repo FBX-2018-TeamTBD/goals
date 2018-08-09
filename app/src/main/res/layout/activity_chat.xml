@@ -49,6 +49,7 @@
         android:layout_marginBottom="40dp"
         android:clickable="true"
         android:focusable="true"
+        android:isScrollContainer="true"
         android:focusableInTouchMode="true"
         android:transcriptMode="alwaysScroll" />
 
