@@ -1,16 +1,21 @@
 package com.example.cassandrakane.goalz;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.example.cassandrakane.goalz.adapters.ChatAdapter;
 import com.example.cassandrakane.goalz.models.Message;
@@ -40,6 +45,10 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.btSend) Button btSend;
     @BindView(R.id.rvChat) RecyclerView rvChat;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.ivCamera) ImageView ivCamera;
+    @BindView(R.id.ivPicture) ImageView ivPicture;
+    @BindView(R.id.ivMicrophone) ImageView ivMicrophone;
+    @BindView(R.id.rootview) RelativeLayout rootView;
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
     ParseUser toUser;
@@ -54,9 +63,43 @@ public class ChatActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         toUser = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
+        final TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toUser.getUsername());
 
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                rootView.getWindowVisibleDisplayFrame(r);
+                int heightDiff = rootView.getRootView().getHeight() - (r.bottom - r.top);
+
+                if (heightDiff > 100) {
+                    toolbar.setVisibility(View.VISIBLE);
+                } else {
+                    toolbar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+           public void onFocusChange(View v, boolean hasFocus) {
+               if (hasFocus) {
+                   slideLeft(ivCamera);
+                   slideLeft(ivPicture);
+                   slideLeft(ivMicrophone);
+                   ivMicrophone.setVisibility(View.GONE);
+                   ivCamera.setVisibility(View.GONE);
+                   ivPicture.setVisibility(View.GONE);
+                   etMessage.setHint("Type a message...");
+               } else {
+                   slideRight(ivCamera);
+                   slideRight(ivPicture);
+                   slideRight(ivMicrophone);
+                   slideRight(etMessage);
+                   etMessage.setHint("Aa");
+               }
+           }
+        });
         setupMessagePosting();
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
@@ -97,7 +140,7 @@ public class ChatActivity extends AppCompatActivity {
         mAdapter = new ChatAdapter(ChatActivity.this, user, mMessages);
         rvChat.setAdapter(mAdapter);
 
-        // associate the LayoutManager with the RecylcerView
+        // associate the LayoutManager with the RecyclerView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         rvChat.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setReverseLayout(true);
@@ -169,5 +212,30 @@ public class ChatActivity extends AppCompatActivity {
     public void goBack(View view) {
         finish();
     }
+
+    // slide the view from below itself to the current position
+    public void slideRight(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -370,                 // fromXDelta
+                0,                 // toXDelta
+                0,  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    // slide the view from its current position to below itself
+    public void slideLeft(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                -370,                 // toXDelta
+                0,                 // fromYDelta
+                0); // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
 }
 

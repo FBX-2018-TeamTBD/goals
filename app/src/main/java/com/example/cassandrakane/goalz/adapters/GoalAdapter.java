@@ -1,6 +1,5 @@
 package com.example.cassandrakane.goalz.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,7 +56,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private final List<Goal> goals;
     private boolean personal; //for determining whether this is for user or for a friend
     Context context;
-    Activity activity;
     Date currentDate;
     ParseUser currentUser;
     float startX = 0;
