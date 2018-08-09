@@ -29,8 +29,6 @@ public class CentralFragment extends Fragment {
     CameraFragment cameraFragment;
     FeedFragment feedFragment;
 
-    public int pageNum = 1;
-
     public List<Fragment> pages;
     private HorizontalPagerAdapter horizontalPagerAdapter;
 
@@ -64,30 +62,6 @@ public class CentralFragment extends Fragment {
         horizontalPagerAdapter = new HorizontalPagerAdapter(getActivity().getSupportFragmentManager(), getActivity(), pages);
         horizontalPager.setAdapter(horizontalPagerAdapter);
         horizontalPager.setCurrentItem(1);
-
-//        horizontalPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int i, float v, int i1) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int i) {
-//                Fragment fragment = ((HorizontalPagerAdapter)horizontalPager.getAdapter()).getFragment(i);
-//
-//                if (i ==1 && fragment != null)
-//                {
-//                    fragment.onResume();
-//                } else if (i == 2 && fragment != null){
-//                    fragment.onResume();
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int i) {
-//
-//            }
-//        });
 
         mainActivity = (MainActivity) getActivity();
 

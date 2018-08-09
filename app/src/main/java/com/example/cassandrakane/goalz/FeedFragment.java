@@ -135,16 +135,16 @@ public class FeedFragment extends Fragment {
         ParseObject.unpinAllInBackground(arr);
         ParseObject.pinAllInBackground(arr);
 
-        if (friends.size() == 0) {
-            noFriendsPage.setVisibility(View.VISIBLE);
-            friendsPage.setVisibility(View.GONE);
-            suggestedFriendAdapter = new SuggestedFriendAdapter(suggestedFriends);
-            rvSuggestedFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            rvSuggestedFriends.setAdapter(suggestedFriendAdapter);
-            populateSuggestedFriends();
-        } else {
-            noFriendsPage.setVisibility(View.GONE);
-        }
+//        if (friends.size() == 0) {
+//            noFriendsPage.setVisibility(View.VISIBLE);
+//            friendsPage.setVisibility(View.GONE);
+//            suggestedFriendAdapter = new SuggestedFriendAdapter(suggestedFriends);
+//            rvSuggestedFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
+//            rvSuggestedFriends.setAdapter(suggestedFriendAdapter);
+//            populateSuggestedFriends();
+//        } else {
+//            noFriendsPage.setVisibility(View.GONE);
+//        }
         friendAdapter.notifyDataSetChanged();
     }
 
@@ -166,11 +166,6 @@ public class FeedFragment extends Fragment {
         swipeContainer.setRefreshing(false);
         storyAdapter.notifyDataSetChanged();
 
-        if (goals.size() == 0) {
-            rvStory.setVisibility(View.GONE);
-        } else {
-            rvStory.setVisibility(View.VISIBLE);
-        }
     }
 
 

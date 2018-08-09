@@ -28,8 +28,6 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.parceler.Parcels;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -157,11 +155,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                                 goal.saveInBackground(new SaveCallback() {
                                                     @Override
                                                     public void done(ParseException e) {
-                                                        if (goal.getProgress() == goal.getDuration()){
-                                                            toCelebrateMain();
-                                                        } else {
-                                                            toMain();
-                                                        }
+                                                        toMain();
                                                     }
                                                 });
                                             }
@@ -282,10 +276,4 @@ public class GoalsListActivity extends AppCompatActivity {
         finish();
     }
 
-    public void toCelebrateMain(){
-        Intent intent = new Intent(GoalsListActivity.this, CelebrateActivity.class);
-        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(selectedGoal));
-        startActivity(intent);
-        finish();
-    }
 }
