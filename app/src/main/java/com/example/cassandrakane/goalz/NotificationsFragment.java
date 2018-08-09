@@ -42,7 +42,6 @@ public class NotificationsFragment extends Fragment {
     List<GoalRequests> allGoalRequests;
     List<ParseUser> friendRequests;
     List<SentFriendRequests> allFriendRequests;
-    Integer notificationCount = 0;
 
     List<Goal> goals;
     List<Goal> completed;

@@ -111,12 +111,12 @@ public class FeedFragment extends Fragment {
     }
 
     public void refreshAsync() {
+        ParseObject.unpinAllInBackground(friends);
         friends.clear();
         List<ParseUser> userFriends = new ArrayList<>();
         userFriends = user.getList("friends");
         friends.addAll(userFriends);
 
-        ParseObject.unpinAllInBackground(friends);
         ParseObject.pinAllInBackground(friends);
 
         friendAdapter.notifyDataSetChanged();
@@ -198,6 +198,7 @@ public class FeedFragment extends Fragment {
     }
 
     public void getFriendGoals() {
+        ParseObject.unpinAllInBackground(goals);
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
             try {
@@ -214,10 +215,9 @@ public class FeedFragment extends Fragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            swipeContainer.setRefreshing(false);
         }
         storyAdapter.notifyDataSetChanged();
-        ParseObject.unpinAllInBackground(goals);
         ParseObject.pinAllInBackground(goals);
+        swipeContainer.setRefreshing(false);
     }
 }

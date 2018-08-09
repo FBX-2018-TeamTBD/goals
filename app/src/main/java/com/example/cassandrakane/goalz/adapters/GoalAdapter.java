@@ -48,9 +48,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -310,7 +307,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         holder.tvTitle.setText(goal.getTitle());
-        holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
+        if (!goal.getCompleted()) {
+            holder.tvProgress.setText((goal.getDuration() - goal.getProgress()) + " DAYS LEFT");
+        } else {
+            holder.tvProgress.setText("COMPLETED!");
+        }
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
@@ -526,33 +527,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         });
     }
 
-    public String getTextNotificationString(String goalTitle, List<ParseUser> users) {
-        String text = String.format("Oh no! You lost your streak for \"%s\"! ", goalTitle);
-        for (int i = 0; i < users.size(); i++) {
-            ParseUser user = users.get(i);
-            String username = "";
-            if (user != null) {
-                try {
-                    username = user.fetchIfNeeded().getUsername();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (i == users.size() - 1) {
-                text += String.format("%s ", username);
-            } else if (i == users.size() - 2){
-                text += String.format("%s and ", username);
-            } else {
-                text += String.format("%s, ", username);
-            }
-        }
-        if (users.size() == 0) {
-            text += "Someone ";
-        }
-        text += "forgot to post.";
-        return text;
-    }
-
     @Override
     public int getItemCount() {
         return goals.size();
@@ -587,11 +561,4 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
-        }
-    }
 }
