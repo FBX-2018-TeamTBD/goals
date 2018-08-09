@@ -59,4 +59,5 @@
     <string name="suggested_friends">suggested friends</string>
     <string name="stories">stories</string>
     <string name="my_goals">my goals</string>
+    <string name="completed_label">COMPLETED!</string>
 </resources>
