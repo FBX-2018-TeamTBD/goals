@@ -75,11 +75,6 @@ public class FeedFragment extends Fragment {
         rvStory.setLayoutManager(layoutManager);
         rvStory.setAdapter(storyAdapter);
 
-//        friends = new ArrayList<>();
-//        friendAdapter = new FriendAdapter(friends);
-//        rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-//        rvFriends.setAdapter(friendAdapter);
-
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -113,8 +108,8 @@ public class FeedFragment extends Fragment {
     public void refreshAsync() {
         ParseObject.unpinAllInBackground(friends);
         friends.clear();
-        List<ParseUser> userFriends = new ArrayList<>();
-        userFriends = user.getList("friends");
+
+        List<ParseUser> userFriends = user.getList("friends");
         friends.addAll(userFriends);
 
         ParseObject.pinAllInBackground(friends);
@@ -132,8 +127,7 @@ public class FeedFragment extends Fragment {
     }
 
     public void populateFriends() {
-        List<ParseUser> arr = null;
-        arr = user.getList("friends");
+        List<ParseUser> arr = user.getList("friends");
         friends.clear();
         if (arr != null) {
             friends.addAll(arr);
@@ -167,10 +161,9 @@ public class FeedFragment extends Fragment {
                     correspondingFriends.add(friend);
                 }
             }
+        }
 
         swipeContainer.setRefreshing(false);
-
-        }
         storyAdapter.notifyDataSetChanged();
 
         if (goals.size() == 0) {
@@ -202,10 +195,10 @@ public class FeedFragment extends Fragment {
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
             try {
-                ParseUser friend = friends.get(i).fetch();
-                List<Goal> friendGoals = friend.fetch().getList("goals");
+                ParseUser friend = friends.get(i);
+                List<Goal> friendGoals = friend.fetchIfNeeded().getList("goals");
                 for (int j = 0; j < friendGoals.size(); j++) {
-                    Goal goal = friendGoals.get(j).fetch();
+                    Goal goal = friendGoals.get(j);
                     if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
                             && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
                         goals.add(goal);
@@ -216,6 +209,7 @@ public class FeedFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+        swipeContainer.setRefreshing(false);
         storyAdapter.notifyDataSetChanged();
         ParseObject.pinAllInBackground(goals);
         swipeContainer.setRefreshing(false);

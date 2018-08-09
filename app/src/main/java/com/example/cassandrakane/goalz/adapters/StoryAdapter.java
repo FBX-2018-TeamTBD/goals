@@ -23,7 +23,6 @@ import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -59,8 +58,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         final Goal goal = mGoals.get(position);
         final List<String> imageUrls = goal.getStoryUrls();
         final List<ParseObject> story = goal.getStory();
-        if (story.size() > 0 && imageUrls.size() > 0) {
 
+        if (story.size() > 0 && imageUrls.size() > 0) {
             for (int i = 0; i < story.size(); i++){
                 boolean seen = false;
                 ParseObject image = story.get(i);
@@ -72,7 +71,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 }
                 if (!seen) {
                     startIndex = i;
-                    // TODO - show blue dot under story
                     holder.ivDot.setVisibility(View.VISIBLE);
                     break;
                 } else {

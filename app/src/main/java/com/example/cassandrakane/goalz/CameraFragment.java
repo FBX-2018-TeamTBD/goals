@@ -105,8 +105,6 @@ public class CameraFragment extends Fragment {
 
     public final static int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 134;
 
-//    ParseUser user;
-
     CameraDevice.StateCallback stateCallBack = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(@NonNull CameraDevice camera) {
@@ -126,17 +124,8 @@ public class CameraFragment extends Fragment {
     };
 
     public CameraFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment CameraFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CameraFragment newInstance(Goal param1) {
         CameraFragment fragment = new CameraFragment();
         Bundle args = new Bundle();
