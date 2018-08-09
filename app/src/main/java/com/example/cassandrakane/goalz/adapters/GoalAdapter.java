@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.transition.Transition;
-import android.support.transition.TransitionInflater;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +30,6 @@ import com.example.cassandrakane.goalz.CameraFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
-import com.example.cassandrakane.goalz.ProfileFragment;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -175,31 +172,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                             }
                             if (!seen) {
                                 startIndex = i;
-                                // TODO - show blue dot under story
                                 break;
                             }
                         }
                         if (context.getClass().isAssignableFrom(MainActivity.class)) {
                             MainActivity activity = (MainActivity) context;
-                            ProfileFragment fragmentOne = new ProfileFragment();
-                            StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser);
-                            fragmentTwo.goal = goal;
-                            Transition changeTransform = TransitionInflater.from(context).
-                                    inflateTransition(R.transition.change_image_transform);
-                            Transition explodeTransform = TransitionInflater.from(context).
-                                    inflateTransition(android.R.transition.fade);
-
-                            fragmentOne.setSharedElementReturnTransition(changeTransform);
-                            fragmentOne.setExitTransition(explodeTransform);
-
-                            fragmentTwo.setSharedElementEnterTransition(changeTransform);
-                            fragmentTwo.setEnterTransition(explodeTransform);
-
-                            FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.main_central_fragment, fragmentTwo)
-                                    .addToBackStack("transaction")
-                                    .addSharedElement(holder.ivStory, "story");
-                            ft.commit();
+                            final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                            FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
+                            StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser);
+                            frag.goal = goal;
+                            fragTransStory.add(R.id.main_central_fragment, frag).commit();
 
 //                        ((MainActivity) context).storyTransition(story, startIndex, currentUser);
                         }
