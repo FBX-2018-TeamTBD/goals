@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> {
     private List<Goal> mGoals;
     private List<ParseUser> friends;
-    int startIndex = 0;
+    private int startIndex = 0;
     Context context;
 
     public StoryAdapter(List<Goal> goals, List<ParseUser> friends) {

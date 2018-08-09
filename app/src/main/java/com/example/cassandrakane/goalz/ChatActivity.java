@@ -4,16 +4,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.example.cassandrakane.goalz.adapters.ChatAdapter;
 import com.example.cassandrakane.goalz.models.Message;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
@@ -35,9 +38,12 @@ public class ChatActivity extends AppCompatActivity {
     static final String TO_USER_KEY = "toUser";
 
     @BindView(R.id.etMessage) EditText etMessage;
-    @BindView(R.id.btSend) Button btSend;
+    @BindView(R.id.btSend) Button btnSend;
     @BindView(R.id.rvChat) RecyclerView rvChat;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.ivCamera) ImageView ivCamera;
+    @BindView(R.id.ivPicture) ImageView ivPicture;
+    @BindView(R.id.ivMicrophone) ImageView ivMicrophone;
 
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
@@ -53,9 +59,39 @@ public class ChatActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         toUser = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
+        final TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toUser.getUsername());
 
+        rvChat.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    Util.hideKeyboard(view, ChatActivity.this);
+                }
+            }
+        });
+
+        etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+           public void onFocusChange(View v, boolean hasFocus) {
+               if (hasFocus) {
+                   slideLeft(ivCamera);
+                   slideLeft(ivPicture);
+                   slideLeft(ivMicrophone);
+                   ivMicrophone.setVisibility(View.GONE);
+                   ivCamera.setVisibility(View.GONE);
+                   ivPicture.setVisibility(View.GONE);
+                   slideUp(etMessage);
+                   slideUp(btnSend);
+                   etMessage.setHint("Type a message...");
+               } else {
+                   slideRight(ivCamera);
+                   slideRight(ivPicture);
+                   slideRight(ivMicrophone);
+                   slideRight(etMessage);
+                   etMessage.setHint("Aa");
+               }
+           }
+        });
         setupMessagePosting();
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
@@ -96,14 +132,14 @@ public class ChatActivity extends AppCompatActivity {
         mAdapter = new ChatAdapter(ChatActivity.this, user, mMessages);
         rvChat.setAdapter(mAdapter);
 
-        // associate the LayoutManager with the RecylcerView
+        // associate the LayoutManager with the RecyclerView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         rvChat.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setReverseLayout(true);
 
 
         // When send button is clicked, create message object on Parse
-        btSend.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String data = etMessage.getText().toString();
@@ -168,5 +204,41 @@ public class ChatActivity extends AppCompatActivity {
     public void goBack(View view) {
         finish();
     }
+
+    // slide the view from below itself to the current position
+    public void slideRight(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                -370,                 // fromXDelta
+                0,                 // toXDelta
+                0,  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    // slide the view from its current position to below itself
+    public void slideLeft(View view) {
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                -370,                 // toXDelta
+                0,                 // fromYDelta
+                0); // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    public void slideUp(View view) {
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                0,                 // fromYDelta
+                -25); // toYDelta
+        animate.setDuration(200);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
 }
 

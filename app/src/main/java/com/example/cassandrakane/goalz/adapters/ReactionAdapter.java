@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHolder> {
 
-    List<ParseObject> mReactions;
+    private List<ParseObject> mReactions;
     Context context;
 
     public ReactionAdapter(List<ParseObject> reactions) { mReactions = reactions; }
