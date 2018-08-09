@@ -31,6 +31,7 @@ import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
+import com.example.cassandrakane.goalz.ReactionModalActivity;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -46,6 +47,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -190,7 +193,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     private void setReactionViews(final Goal goal, final ViewHolder holder) {
-        List<ParseObject> reax = goal.getReactions();
+        final List<ParseObject> reax = goal.getReactions();
         int thumbs = 0;
         int goaled = 0;
         int claps = 0;
@@ -226,23 +229,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
         }
         holder.tvReaction.setText(String.valueOf(total));
-        holder.tvThumb.setText(String.valueOf(thumbs));
-        holder.tvClap.setText(String.valueOf(claps));
-        holder.tvGoals.setText(String.valueOf(goaled));
-        holder.tvOk.setText(String.valueOf(oks));
-        holder.tvBump.setText(String.valueOf(bumps));
+
+        final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps);
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.btnReaction.getTag().equals(context.getResources().getColor(R.color.white))) {
-                    slideLeft(holder.reactionView);
-                    holder.btnReaction.setTag(context.getResources().getColor(R.color.orange));
-                } else {
-                    holder.reactionView.setVisibility(View.INVISIBLE);
-                    holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
-                    slideRight(holder.reactionView);
-                }
+                Intent intent = new Intent(context, ReactionModalActivity.class);
+                intent.putExtra("reactions", (Serializable) reax);
+                intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                context.startActivity(intent);
             }
         });
     }
