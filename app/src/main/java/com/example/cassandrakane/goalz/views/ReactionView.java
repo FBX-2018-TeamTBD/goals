@@ -3,7 +3,6 @@ package com.example.cassandrakane.goalz.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -11,16 +10,9 @@ import android.view.animation.Transformation;
 
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
-import com.example.cassandrakane.goalz.models.Image;
-import com.example.cassandrakane.goalz.models.Reaction;
-import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Constants;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -119,7 +111,7 @@ public class ReactionView extends View {
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                onDeselect();
+                // onDeselect();
                 setVisibility(GONE);
                 return true;
         }
@@ -137,96 +129,96 @@ public class ReactionView extends View {
         startAnimation(selectingAnimation);
     }
 
-    private void onDeselect() {
-        /**
-         * use selectedIndex
-         */
-        fragment.ivReaction.clearColorFilter();
-
-        if (selectedIndex != -1) {
-            Integer count = Integer.parseInt(fragment.tvReactionCount.getText().toString()) + 1;
-            fragment.tvReactionCount.setText(Integer.toString(count));
-        }
-
-        switch (selectedIndex) {
-            case 0:
-                type = "thumbs";
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
-                break;
-            case 1:
-                type = "goals";
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
-                break;
-            case 2:
-                type = "clap";
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
-                break;
-            case 3:
-                type = "ok";
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
-                break;
-            case 4:
-                type = "bump";
-                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
-                break;
-            default:
-                type = "";
-
-        }
-
-        if (!type.equals("")) {
-
-            if (mObject.get("video") != null) {
-                final Video parseObject = (Video) mObject;
-                final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
-                reaction.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        List<ParseObject> reactions = parseObject.getList("reactions");
-                        if (reactions == null) {
-                            reactions = new ArrayList<>();
-                        }
-                        reactions.add(reaction);
-                        parseObject.setReactions(reactions);
-                        parseObject.saveInBackground();
-                        List<ParseObject> reacts = StoryFragment.goal.getReactions();
-                        reacts.add(reaction);
-                        StoryFragment.goal.setReactions(reacts);
-                        StoryFragment.goal.saveInBackground();
-                    }
-                });
-            } else {
-                final Image parseObject = (Image) mObject;
-                final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
-                reaction.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        List<ParseObject> reactions = parseObject.getList("reactions");
-                        if (reactions == null) {
-                            reactions = new ArrayList<>();
-                        }
-
-                        reactions.add(reaction);
-                        parseObject.setReactions(reactions);
-                        parseObject.saveInBackground();
-                        List<ParseObject> reacts = StoryFragment.goal.getReactions();
-                        reacts.add(reaction);
-                        StoryFragment.goal.setReactions(reacts);
-
-                        StoryFragment.goal.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.i("sdf", "success");
-                            }
-                        });
-                    }
-                });
-            }
-        }
-
-        deselectAnimation.prepare();
-        startAnimation(deselectAnimation);
-    }
+//    private void onDeselect() {
+//        /**
+//         * use selectedIndex
+//         */
+//        fragment.ivReaction.clearColorFilter();
+//
+//        if (selectedIndex != -1) {
+//            Integer count = Integer.parseInt(fragment.tvReactionCount.getText().toString()) + 1;
+//            fragment.tvReactionCount.setText(Integer.toString(count));
+//        }
+//
+//        switch (selectedIndex) {
+//            case 0:
+//                type = "thumbs";
+//                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.thumbs_react));
+//                break;
+//            case 1:
+//                type = "goals";
+//                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.goals_react));
+//                break;
+//            case 2:
+//                type = "clap";
+//                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.clap_react));
+//                break;
+//            case 3:
+//                type = "ok";
+//                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.ok_react));
+//                break;
+//            case 4:
+//                type = "bump";
+//                fragment.ivReaction.setImageDrawable(context.getResources().getDrawable(R.drawable.bump_react));
+//                break;
+//            default:
+//                type = "";
+//
+//        }
+//
+//        if (!type.equals("")) {
+//
+//            if (mObject.get("video") != null) {
+//                final Video parseObject = (Video) mObject;
+//                final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
+//                reaction.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        List<ParseObject> reactions = parseObject.getList("reactions");
+//                        if (reactions == null) {
+//                            reactions = new ArrayList<>();
+//                        }
+//                        reactions.add(reaction);
+//                        parseObject.setReactions(reactions);
+//                        parseObject.saveInBackground();
+//                        List<ParseObject> reacts = StoryFragment.goal.getReactions();
+//                        reacts.add(reaction);
+//                        StoryFragment.goal.setReactions(reacts);
+//                        StoryFragment.goal.saveInBackground();
+//                    }
+//                });
+//            } else {
+//                final Image parseObject = (Image) mObject;
+//                final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
+//                reaction.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        List<ParseObject> reactions = parseObject.getList("reactions");
+//                        if (reactions == null) {
+//                            reactions = new ArrayList<>();
+//                        }
+//
+//                        reactions.add(reaction);
+//                        parseObject.setReactions(reactions);
+//                        parseObject.saveInBackground();
+//                        List<ParseObject> reacts = StoryFragment.goal.getReactions();
+//                        reacts.add(reaction);
+//                        StoryFragment.goal.setReactions(reacts);
+//
+//                        StoryFragment.goal.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(ParseException e) {
+//                                Log.i("sdf", "success");
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        }
+//
+//        deselectAnimation.prepare();
+//        startAnimation(deselectAnimation);
+//    }
 
     @Override
     protected void onDraw(final Canvas canvas) {

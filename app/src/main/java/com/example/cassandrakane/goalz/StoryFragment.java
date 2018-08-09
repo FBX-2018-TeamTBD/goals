@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -26,6 +25,9 @@ import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.example.cassandrakane.goalz.views.ReactionView;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -60,13 +62,15 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
-    @BindView(R.id.btnReaction) LinearLayout btnReaction;
-    @BindView(R.id.ivReaction) public ImageView ivReaction;
+//    @BindView(R.id.btnReaction) LinearLayout btnReaction;
+//    @BindView(R.id.ivReaction) public ImageView ivReaction;
     @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
     @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
     @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
     @BindView(R.id.root) RelativeLayout rootLayout;
     @BindView(R.id.rlInfo) RelativeLayout rlInfo;
+    @BindView(R.id.bmb) BoomMenuButton bmb;
+    @BindView(R.id.ivBmb) ImageView ivBmb;
 
     private Runnable runnable;
     private Handler mHandler;
@@ -122,27 +126,78 @@ public class StoryFragment extends Fragment {
 
         setImage();
 
-        btnReaction.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (rv != null) {
-                            rootLayout.removeView(rv);
-                        }
+//        btnReaction.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch(event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        if (rv != null) {
+//                            rootLayout.removeView(rv);
+//                        }
+//
+//                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
+//                        rootLayout.addView(rv);
+//                        if (mHandler != null) {
+//                            mHandler.removeCallbacks(runnable);
+//                        }
+//                        return true; // if you want to handle the touch event
+//                    case MotionEvent.ACTION_UP:
+//                        return true; // if you want to handle the touch event
+//                }
+//                return false;
+//            }
+//        });
 
-                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
-                        rootLayout.addView(rv);
-                        if (mHandler != null) {
-                            mHandler.removeCallbacks(runnable);
-                        }
-                        return true; // if you want to handle the touch event
-                    case MotionEvent.ACTION_UP:
-                        return true; // if you want to handle the touch event
-                }
-                return false;
-            }
-        });
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.thumbs_react);
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.goals_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.goals_react);
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.clap_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.clap_react);
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.ok_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.ok_react);
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.bump_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.bump_react);
+                    }
+                })
+        );
 
         btnLeft.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
@@ -211,8 +266,8 @@ public class StoryFragment extends Fragment {
         }
         object = mStory.get(mIndex);
 
-        ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-        ivReaction.setColorFilter(Color.argb(255, 255, 255, 255));
+//        ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+//        ivReaction.setColorFilter(Color.argb(255, 255, 255, 255));
         ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
 
         if (object.get("video") != null){
@@ -372,32 +427,32 @@ public class StoryFragment extends Fragment {
                     break;
             }
 
-            try {
-                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
-                    ivReaction.clearColorFilter();
-                    switch (type) {
-                        case "thumbs":
-                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
-                            break;
-                        case "goals":
-                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-                            break;
-                        case "clap":
-                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
-                            break;
-                        case "ok":
-                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
-                            break;
-                        case "bump":
-                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
-                            break;
-                        default:
-                            ivReaction.setVisibility(View.GONE);
-                    }
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
+//                    ivReaction.clearColorFilter();
+//                    switch (type) {
+//                        case "thumbs":
+//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
+//                            break;
+//                        case "goals":
+//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+//                            break;
+//                        case "clap":
+//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
+//                            break;
+//                        case "ok":
+//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
+//                            break;
+//                        case "bump":
+//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
+//                            break;
+//                        default:
+//                            ivReaction.setVisibility(View.GONE);
+//                    }
+//                }
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }

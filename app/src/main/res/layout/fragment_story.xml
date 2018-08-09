@@ -126,24 +126,45 @@
         android:progress="25"
         android:progressTint="@color/white" />
 
-    <LinearLayout
-        android:padding="8dp"
-        android:background="?selectableItemBackground"
-        android:id="@+id/btnReaction"
+    <!--<LinearLayout-->
+        <!--android:padding="8dp"-->
+        <!--android:background="?selectableItemBackground"-->
+        <!--android:id="@+id/btnReaction"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginBottom="35dp"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentBottom="true">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/ivReaction"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@drawable/goals_react" />-->
+
+    <!--</LinearLayout>-->
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="35dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        app:bmb_normalColor="@color/white"
+        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_piecePlaceEnum="piecePlace_dot_5_1"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_5_1">
 
         <ImageView
-            android:id="@+id/ivReaction"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/goals_react" />
-
-    </LinearLayout>
+            android:id="@+id/ivBmb"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/thumbs_react"
+            android:layout_gravity="center" />
+    </com.nightonke.boommenu.BoomMenuButton>
 
     <LinearLayout
         android:id="@+id/btnTotalReactions"
