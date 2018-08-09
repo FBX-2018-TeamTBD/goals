@@ -34,12 +34,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChatActivity extends AppCompatActivity {
-    static final String TAG = ChatActivity.class.getSimpleName();
     static final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
 
     static final String FROM_USER_KEY = "fromUser";
     static final String TO_USER_KEY = "toUser";
-    static final String BODY_KEY = "body";
 
     @BindView(R.id.etMessage) EditText etMessage;
     @BindView(R.id.btSend) Button btSend;
@@ -49,6 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.ivPicture) ImageView ivPicture;
     @BindView(R.id.ivMicrophone) ImageView ivMicrophone;
     @BindView(R.id.rootview) RelativeLayout rootView;
+
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
     ParseUser toUser;

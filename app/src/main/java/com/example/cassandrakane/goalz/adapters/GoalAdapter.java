@@ -300,6 +300,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStar.setVisibility(View.INVISIBLE);
         }
 
+        if (goal.getDuration() - goal.getProgress() == 0){
+            Glide.with(context).asGif().load(R.drawable.confetti).into(holder.ivCelebrate);
+        }
+
 
         if (goal.getApprovedUsers().size() > 1) {
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
@@ -533,6 +537,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvBump) TextView tvBump;
         @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
+        @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
 
         public ViewHolder(View itemView) {
             super(itemView);

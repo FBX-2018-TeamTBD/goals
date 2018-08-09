@@ -175,7 +175,6 @@ public class VideoActivity extends AppCompatActivity {
                     if (mIsRecording) {
                         ivCircle.setVisibility(View.GONE);
                         mIsRecording = false;
-//                        mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_online));
                         mMediaRecorder.stop();
                         videos.add(videoFile);
                         Intent intent = new Intent(VideoActivity.this, DisplayActivity.class);
@@ -290,7 +289,6 @@ public class VideoActivity extends AppCompatActivity {
                 if (mCameraId == CAMERA_FRONT){
                     mTotalRotation += 180;
                 }
-//                mCameraId = cameraId;
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedViewWidth, rotatedViewHeight);
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedViewWidth, rotatedViewHeight);
                 return;
@@ -438,7 +436,6 @@ public class VideoActivity extends AppCompatActivity {
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 mIsRecording = true;
-//                mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_busy));
                 try {
                     videoFile = createVideoFileName();
                 } catch (IOException e) {
@@ -454,7 +451,6 @@ public class VideoActivity extends AppCompatActivity {
             }
         } else {
             mIsRecording = true;
-//            mRecordImageButton.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_video_busy));
             try {
                 videoFile = createVideoFileName();
             } catch (IOException e) {

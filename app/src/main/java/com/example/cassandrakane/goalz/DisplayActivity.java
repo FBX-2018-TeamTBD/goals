@@ -52,8 +52,6 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.view.MotionEvent.INVALID_POINTER_ID;
-
 public class DisplayActivity extends AppCompatActivity {
 
     File file;
@@ -74,13 +72,6 @@ public class DisplayActivity extends AppCompatActivity {
     int i;
     private int mTasksComplete = 0;
     private int mTasksRequired;
-
-    Float mLastTouchX;
-    Float mLastTouchY;
-    Float mPosX;
-    Float mPosY;
-
-    private int mActivePointerId = INVALID_POINTER_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

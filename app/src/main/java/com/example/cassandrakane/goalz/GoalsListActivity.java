@@ -28,8 +28,6 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.parceler.Parcels;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -81,6 +79,7 @@ public class GoalsListActivity extends AppCompatActivity {
                 goals.add(goal);
             }
         }
+
         file = (File) getIntent().getSerializableExtra("image");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         caption = getIntent().getStringExtra("caption");
@@ -126,8 +125,7 @@ public class GoalsListActivity extends AppCompatActivity {
                         public void done(ParseException e) {
                             story.add(image);
                             goal.setStory(story);
-//                            goal.setItemAdded(true);
-//                            List<ParseUser> approvedUsers = goal.getApprovedUsers();
+
                             Map<String, String> userAdded = goal.getUserAdded();
                             if (userAdded == null){
                                 userAdded = new HashMap<>();
@@ -135,7 +133,6 @@ public class GoalsListActivity extends AppCompatActivity {
                             userAdded.put(currentUser.getObjectId(), "true");
                             for (String value : userAdded.values()) {
                                 if (value.equals("false")) {
-//                                    goal.setItemAdded(false);
                                     allAdded = false;
                                 }
                             }
@@ -157,11 +154,7 @@ public class GoalsListActivity extends AppCompatActivity {
                                                 goal.saveInBackground(new SaveCallback() {
                                                     @Override
                                                     public void done(ParseException e) {
-                                                        if (goal.getProgress() == goal.getDuration()){
-                                                            toCelebrateMain();
-                                                        } else {
-                                                            toMain();
-                                                        }
+                                                        toMain();
                                                     }
                                                 });
                                             }
@@ -233,27 +226,30 @@ public class GoalsListActivity extends AppCompatActivity {
                         story.add(video);
                     }
                         goal.setStory(story);
+                        Map<String, String> userAdded = goal.getUserAdded();
+                        if (userAdded == null){
+                            userAdded = new HashMap<>();
+                        }
+                        userAdded.put(currentUser.getObjectId(), "true");
+                        for (String value : userAdded.values()) {
+                            if (value.equals("false")) {
+                                allAdded = false;
+                            }
+                        }
+
+                        goal.setUserAdded(userAdded);
                         goal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
                                 NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
                                 notificationHelper.cancelReminder(goal);
                                 notificationHelper.setReminder(goal);
-                                if (goal.getStory().size() == 1) {
-                                    goal.setProgress(1);
-                                    goal.setStreak(1);
-                                    goal.setItemAdded(false);
-                                    goal.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            toMain();
-                                        }
-                                    });
-                                } else {
-                                    if (!goal.getIsItemAdded()) {
+
+                                if (!goal.getIsItemAdded()) {
+                                    if (allAdded) {
+                                        goal.setItemAdded(true);
                                         goal.setProgress(goal.getProgress() + 1);
                                         if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
-                                            goal.setItemAdded(true);
                                             goal.setStreak(goal.getStreak() + 1);
                                             goal.saveInBackground(new SaveCallback() {
                                                 @Override
@@ -262,9 +258,11 @@ public class GoalsListActivity extends AppCompatActivity {
                                                 }
                                             });
                                         }
-                                    } else {
+                                    } else{
                                         toMain();
                                     }
+                                } else{
+                                    toMain();
                                 }
                             }
                 });
@@ -282,10 +280,4 @@ public class GoalsListActivity extends AppCompatActivity {
         finish();
     }
 
-    public void toCelebrateMain(){
-        Intent intent = new Intent(GoalsListActivity.this, CelebrateActivity.class);
-        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(selectedGoal));
-        startActivity(intent);
-        finish();
-    }
 }

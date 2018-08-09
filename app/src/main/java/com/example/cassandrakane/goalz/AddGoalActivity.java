@@ -67,11 +67,9 @@ public class AddGoalActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         user = ParseUser.getCurrentUser();
-        try {
-            shareFriends = user.fetch().getList("friends");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        shareFriends = user.getList("friends");
+
         shareFriendAdapter = new ShareFriendAdapter(shareFriends);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvShareFriends.setLayoutManager(layoutManager);
@@ -149,9 +147,11 @@ public class AddGoalActivity extends AppCompatActivity {
             Date updateBy = new Date(sum);
             List<ParseUser> pendingFriends = new ArrayList<>();
             selectedFriends = shareFriendAdapter.selectedFriends;
+
             Map<String, String> usersAdded = new HashMap<String, String>(){{
                 put(user.getObjectId(), "false");
             }};
+
             pendingFriends.addAll(selectedFriends);
             selectedFriends.add(ParseUser.getCurrentUser());
             List<ParseUser> approved = new ArrayList<>();
@@ -176,17 +176,12 @@ public class AddGoalActivity extends AppCompatActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        try {
-                            NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                            notificationHelper.setReminder(finalGoal);
-                            user.fetch();
-                            Intent data = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(data);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            finish();
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
+                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                        notificationHelper.setReminder(finalGoal);
+                        Intent data = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(data);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        finish();
                     } else {
                         Log.i("Profile Activity", "Failed to update object, with error code: " + e.toString());
                     }

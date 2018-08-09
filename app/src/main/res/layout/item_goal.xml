@@ -17,6 +17,14 @@
         android:layout_height="match_parent" >
 
         <ImageView
+            android:id="@+id/ivCelebrate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="20dp"
+            android:foregroundGravity="top"
+            card_view:srcCompat="@android:color/transparent" />
+
+        <ImageView
             android:id="@+id/ivStory"
             android:transitionName="story"
             android:layout_width="match_parent"
