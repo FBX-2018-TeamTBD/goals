@@ -17,7 +17,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,7 +26,6 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private final List<ParseUser> friends;
     Context context;
-    List<ParseUser> selectedFriends;
 
     public FriendAdapter(List<ParseUser> friends) {
         this.friends = friends;
@@ -39,8 +37,6 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
-        selectedFriends = new ArrayList<>();
 
         return new ViewHolder(inflater.inflate(R.layout.item_friend, parent, false));
     }
@@ -80,7 +76,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 
-    public void toFriendActivity(ParseUser friend) {
+    private void toFriendActivity(ParseUser friend) {
         Intent i = new Intent(context, FriendActivity.class);
         i.putExtra(ParseUser.class.getSimpleName(), friend);
         context.startActivity(i);

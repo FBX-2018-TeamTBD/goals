@@ -1,6 +1,8 @@
 package com.example.cassandrakane.goalz.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,7 +27,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context mContext;
     private ParseUser mUser;
 
-    private String lastMessageSent = "blank";
+    private String lastMessageSent = "";
 
     public ChatAdapter(Context context, ParseUser user, List<Message> messages) {
         mMessages = messages;
@@ -33,18 +35,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         mContext = context;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.item_chat, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return new ViewHolder(contactView);
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Message message = mMessages.get(position);
         final boolean isMe = message.getFromUser() != null && message.getFromUser() == mUser;
 
@@ -68,7 +71,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.ivMarginLeft.setVisibility(View.GONE);
         }
 
-        if (!lastMessageSent.equals("blank") && message.getFromUser().getUsername().equals(lastMessageSent)) {
+        if (!lastMessageSent.equals("") && message.getFromUser().getUsername().equals(lastMessageSent)) {
             if (isMe) {
                 holder.imageMe.setVisibility(View.GONE);
                 holder.ivMarginRight.setVisibility(View.VISIBLE);
