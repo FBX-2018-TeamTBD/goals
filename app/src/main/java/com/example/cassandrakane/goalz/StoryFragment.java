@@ -172,7 +172,9 @@ public class StoryFragment extends Fragment {
 
             @Override
             public void onBoomWillShow() {
-
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
             }
 
             @Override
