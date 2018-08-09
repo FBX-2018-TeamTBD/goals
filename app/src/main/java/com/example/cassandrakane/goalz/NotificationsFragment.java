@@ -42,6 +42,7 @@ public class NotificationsFragment extends Fragment {
     List<GoalRequests> allGoalRequests;
     List<ParseUser> friendRequests;
     List<SentFriendRequests> allFriendRequests;
+    Integer notificationCount = 0;
 
     List<Goal> goals;
     List<Goal> completed;
@@ -73,8 +74,6 @@ public class NotificationsFragment extends Fragment {
         super.onAttach(mainActivity.getBaseContext());
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         ButterKnife.bind(this, view);
-
-        ParseUser user = ParseUser.getCurrentUser();
 
         goals = new ArrayList<>();
         completed = new ArrayList<>();

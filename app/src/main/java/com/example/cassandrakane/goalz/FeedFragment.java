@@ -14,13 +14,10 @@ import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.adapters.StoryAdapter;
-import com.example.cassandrakane.goalz.adapters.SuggestedFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -33,9 +30,7 @@ public class FeedFragment extends Fragment {
 
     MainActivity mainActivity;
     List<ParseUser> friends;
-    List<ParseUser> suggestedFriends;
     FriendAdapter friendAdapter;
-    SuggestedFriendAdapter suggestedFriendAdapter;
 
     StoryAdapter storyAdapter;
     List<Goal> goals;
@@ -68,7 +63,6 @@ public class FeedFragment extends Fragment {
 
         goals = new ArrayList<>();
         correspondingFriends = new ArrayList<>();
-        suggestedFriends = new ArrayList<>();
 
         storyAdapter = new StoryAdapter(goals, correspondingFriends);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -135,16 +129,6 @@ public class FeedFragment extends Fragment {
         ParseObject.unpinAllInBackground(arr);
         ParseObject.pinAllInBackground(arr);
 
-//        if (friends.size() == 0) {
-//            noFriendsPage.setVisibility(View.VISIBLE);
-//            friendsPage.setVisibility(View.GONE);
-//            suggestedFriendAdapter = new SuggestedFriendAdapter(suggestedFriends);
-//            rvSuggestedFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
-//            rvSuggestedFriends.setAdapter(suggestedFriendAdapter);
-//            populateSuggestedFriends();
-//        } else {
-//            noFriendsPage.setVisibility(View.GONE);
-//        }
         friendAdapter.notifyDataSetChanged();
     }
 
@@ -168,22 +152,21 @@ public class FeedFragment extends Fragment {
 
     }
 
-
-    public void populateSuggestedFriends(){
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                suggestedFriends.clear();
-                if (objects != null) {
-                    suggestedFriends.addAll(objects);
-                }
-                ParseObject.unpinAllInBackground(objects);
-                ParseObject.pinAllInBackground(objects);
-                suggestedFriendAdapter.notifyDataSetChanged();
-            }
-        });
-    }
+//    public void populateSuggestedFriends(){
+//        ParseQuery<ParseUser> query = ParseUser.getQuery();
+//        query.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                suggestedFriends.clear();
+//                if (objects != null) {
+//                    suggestedFriends.addAll(objects);
+//                }
+//                ParseObject.unpinAllInBackground(objects);
+//                ParseObject.pinAllInBackground(objects);
+//                suggestedFriendAdapter.notifyDataSetChanged();
+//            }
+//        });
+//    }
 
     public void getFriendGoals() {
         ParseObject.unpinAllInBackground(goals);

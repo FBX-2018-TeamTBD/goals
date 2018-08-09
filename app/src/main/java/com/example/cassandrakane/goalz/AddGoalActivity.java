@@ -147,9 +147,11 @@ public class AddGoalActivity extends AppCompatActivity {
             Date updateBy = new Date(sum);
             List<ParseUser> pendingFriends = new ArrayList<>();
             selectedFriends = shareFriendAdapter.selectedFriends;
+
             Map<String, String> usersAdded = new HashMap<String, String>(){{
                 put(user.getObjectId(), "false");
             }};
+
             pendingFriends.addAll(selectedFriends);
             selectedFriends.add(ParseUser.getCurrentUser());
             List<ParseUser> approved = new ArrayList<>();
