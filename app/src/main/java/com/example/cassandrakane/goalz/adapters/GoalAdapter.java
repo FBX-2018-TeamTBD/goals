@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -177,28 +176,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     context.startActivity(i);
                 }
             });
-            holder.viewFriends.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(context, FriendsModalActivity.class);
-                    i.putExtra(Goal.class.getSimpleName(), goal);
-                    i.putExtra("personal", personal);
-                    context.startActivity(i);
-                }
-            });
         } else if (personal) {
             holder.tvFriends.setVisibility(View.GONE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(context, SearchFriendsActivity.class);
-                    i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
-                    i.putExtra(Goal.class.getSimpleName(), goal);
-                    context.startActivity(i);
-                }
-            });
-            holder.viewFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, SearchFriendsActivity.class);
@@ -527,7 +508,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
-        @BindView(R.id.viewFriends) RelativeLayout viewFriends;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -93,18 +93,11 @@
             android:visibility="invisible"
             app:srcCompat="@drawable/star" />
 
-        <RelativeLayout
-            android:id="@+id/viewFriends"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content">
-
         <TextView
             android:id="@+id/tvFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="5dp"
+            android:layout_alignTop="@+id/btnFriends"
             android:layout_toStartOf="@+id/btnFriends"
             android:clickable="true"
             android:focusable="true"
@@ -118,14 +111,13 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="9dp"
             android:clickable="true"
             android:focusable="true"
             android:background="@color/transparent"
             android:focusableInTouchMode="true"
             android:backgroundTint="@color/white" />
-
-        </RelativeLayout>
 
         <Button
             android:id="@+id/ibAdd"
@@ -144,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/btnReaction"
             android:layout_marginRight="3dp"
-            android:layout_alignBottom="@+id/tvFriends"
+            android:layout_alignBottom="@+id/tvStreak"
             android:textColor="@color/white"
             android:layout_marginLeft="5dp"
             android:textSize="16sp"
