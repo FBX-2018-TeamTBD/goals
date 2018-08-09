@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.Serializable;
@@ -87,6 +89,8 @@ public class StoryFragment extends Fragment {
     private Goal mGoal;
 
     public static Goal goal;
+
+    String type;
 
     public StoryFragment() { }
 
@@ -155,6 +159,8 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.thumbs_react);
+                        addReaction(0);
+
                     }
                 })
         );
@@ -165,6 +171,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.goals_react);
+                        addReaction(1);
                     }
                 })
         );
@@ -175,6 +182,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.clap_react);
+                        addReaction(2);
                     }
                 })
         );
@@ -185,6 +193,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.ok_react);
+                        addReaction(3);
                     }
                 })
         );
@@ -195,6 +204,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.bump_react);
+                        addReaction(4);
                     }
                 })
         );
@@ -453,6 +463,77 @@ public class StoryFragment extends Fragment {
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
+        }
+    }
+
+    public void addReaction(int selectedIndex){
+
+        switch (selectedIndex) {
+            case 0:
+                type = "thumbs";
+                break;
+            case 1:
+                type = "goals";
+                break;
+            case 2:
+                type = "clap";
+                break;
+            case 3:
+                type = "ok";
+                break;
+            case 4:
+                type = "bump";
+                break;
+            default:
+                type = "";
+
+        }
+
+        if (object.get("video") != null) {
+            final Video parseObject = (Video) object;
+            final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
+            reaction.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    List<ParseObject> reactions = parseObject.getList("reactions");
+                    if (reactions == null) {
+                        reactions = new ArrayList<>();
+                    }
+                    reactions.add(reaction);
+                    parseObject.setReactions(reactions);
+                    parseObject.saveInBackground();
+                    List<ParseObject> reacts = StoryFragment.goal.getReactions();
+                    reacts.add(reaction);
+                    StoryFragment.goal.setReactions(reacts);
+                    StoryFragment.goal.saveInBackground();
+                }
+            });
+        } else {
+            final Image parseObject = (Image) object;
+            final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
+            reaction.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    List<ParseObject> reactions = parseObject.getList("reactions");
+                    if (reactions == null) {
+                        reactions = new ArrayList<>();
+                    }
+
+                    reactions.add(reaction);
+                    parseObject.setReactions(reactions);
+                    parseObject.saveInBackground();
+                    List<ParseObject> reacts = StoryFragment.goal.getReactions();
+                    reacts.add(reaction);
+                    StoryFragment.goal.setReactions(reacts);
+
+                    StoryFragment.goal.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Log.i("sdf", "success");
+                        }
+                    });
+                }
+            });
         }
     }
 }
