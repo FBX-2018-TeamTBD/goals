@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -65,11 +66,20 @@ public class ChatActivity extends AppCompatActivity {
         final TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toUser.getUsername());
 
-        rvChat.setOnTouchListener(new View.OnTouchListener() {
+        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public boolean onDown(MotionEvent motionEvent) {
+                return true;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
                 rvChat.requestFocus();
-                Util.hideKeyboard(view, ChatActivity.this);
+                Util.hideKeyboard(rvChat, ChatActivity.this);
                 ivMicrophone.setVisibility(View.VISIBLE);
                 ivCamera.setVisibility(View.VISIBLE);
                 ivPicture.setVisibility(View.VISIBLE);
@@ -80,7 +90,36 @@ public class ChatActivity extends AppCompatActivity {
                 etMessage.setHint("Aa");
                 return true;
             }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return true;
+            }
+
         });
+
+      /*  rvChat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
+        });*/
+
+      /*  rvChat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+            }
+        });*/
 
         etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
            public void onFocusChange(View v, boolean hasFocus) {
@@ -151,6 +190,7 @@ public class ChatActivity extends AppCompatActivity {
                     message.setBody(data);
                     message.setFromUser(ParseUser.getCurrentUser());
                     message.setToUser(toUser);
+                    mAdapter.lastMessageSent = "";
                     message.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
