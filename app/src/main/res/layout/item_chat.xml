@@ -6,9 +6,9 @@
 
     <ImageView
         android:id="@+id/ivMarginLeft"
-        android:layout_width="64dp"
+        android:layout_width="60dp"
         android:layout_height="10dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="3dp"
         android:visibility="gone"
@@ -16,9 +16,9 @@
 
     <ImageView
         android:id="@+id/ivProfileOther"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginLeft="15dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="8dp"
         android:layout_gravity="start"
@@ -54,9 +54,9 @@
 
     <ImageView
         android:id="@+id/ivProfileMe"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginRight="15dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="6dp"
         android:layout_gravity="end"
@@ -64,9 +64,9 @@
 
     <ImageView
         android:id="@+id/ivMarginRight"
-        android:layout_width="64dp"
+        android:layout_width="60dp"
         android:layout_height="10dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="6dp"
         android:visibility="gone"

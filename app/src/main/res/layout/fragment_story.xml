@@ -79,8 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginEnd="20dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/username"
             android:textColor="@color/white"
@@ -92,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="20dp"
             android:layout_below="@+id/tvUsername"
             android:fontFamily="@font/quicksand_medium"
             android:text="Date Added"
@@ -132,7 +131,7 @@
         android:id="@+id/btnReaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginBottom="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true">
@@ -151,7 +150,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/btnReaction"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="20dp"
         android:padding="8dp">
 
         <TextView

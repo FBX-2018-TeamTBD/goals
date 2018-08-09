@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/btSend"
             android:layout_toRightOf="@+id/ivMicrophone"
@@ -104,8 +104,8 @@
 
         <ImageView
             android:id="@+id/ivCamera"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignBottom="@+id/etMessage"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
@@ -114,8 +114,8 @@
 
         <ImageView
             android:id="@+id/ivPicture"
-            android:layout_width="30dp"
-            android:layout_height="33dp"
+            android:layout_width="26dp"
+            android:layout_height="29dp"
             android:layout_alignBottom="@+id/ivCamera"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="1dp"
@@ -125,8 +125,8 @@
 
         <ImageView
             android:id="@+id/ivMicrophone"
-            android:layout_width="30dp"
-            android:layout_height="33dp"
+            android:layout_width="26dp"
+            android:layout_height="29dp"
             android:layout_alignBottom="@+id/ivCamera"
             android:layout_marginLeft="17dp"
             android:layout_marginBottom="3dp"
