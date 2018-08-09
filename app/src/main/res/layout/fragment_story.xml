@@ -161,7 +161,7 @@
             android:id="@+id/ivBmb"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/thumbs_react"
+            android:src="@drawable/thumbs_react_grey"
             android:layout_gravity="center" />
     </com.nightonke.boommenu.BoomMenuButton>
 
