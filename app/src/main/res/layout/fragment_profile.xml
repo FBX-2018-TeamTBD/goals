@@ -16,7 +16,7 @@
         android:textColor="@color/black"
         android:fontFamily="@font/quicksand_medium"
         android:textSize="20sp"
-        android:text="my goals" />
+        android:text="@string/my_goals" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoals"

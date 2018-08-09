@@ -38,7 +38,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/quicksand_medium"
                 android:gravity="center"
-                android:text="add friends"
+                android:text="@string/add_friends"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </RelativeLayout>

@@ -82,7 +82,7 @@
             android:layout_marginEnd="15dp"
             android:layout_marginTop="0dp"
             android:fontFamily="@font/quicksand_medium"
-            android:text="Username"
+            android:text="@string/username"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:visibility="visible" />
@@ -97,7 +97,7 @@
             android:fontFamily="@font/quicksand_medium"
             android:text="Date Added"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:visibility="visible" />
 
     </RelativeLayout>
@@ -163,7 +163,7 @@
             android:fontFamily="@font/quicksand_medium"
             android:text="@string/_0"
             android:textColor="@color/white"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/ivAllReactions"
