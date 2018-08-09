@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,12 +33,11 @@ import com.parse.ParseUser;
 
 import java.io.File;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,8 +56,6 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.btnLeft) ImageButton btnLeft;
     @BindView(R.id.btnRight) ImageButton btnRight;
     @BindView(R.id.btnClose) ImageButton btnClose;
-    @BindView(R.id.btnInfo) ImageButton btnInfo;
-    @BindView(R.id.btnInfo2) ImageButton btnInfo2;
     @BindView(R.id.pbProgress) ProgressBar pbProgress;
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
@@ -71,6 +66,7 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
     @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
     @BindView(R.id.root) RelativeLayout rootLayout;
+    @BindView(R.id.rlInfo) RelativeLayout rlInfo;
 
     private Runnable runnable;
     private Handler mHandler;
@@ -84,16 +80,19 @@ public class StoryFragment extends Fragment {
     private Integer okCount = 0;
     private Integer bumpCount = 0;
 
+    private Goal mGoal;
+
     public static Goal goal;
 
     public StoryFragment() { }
 
-    public static StoryFragment newInstance(List<ParseObject> story, int index, ParseUser currentUser) {
+    public static StoryFragment newInstance(List<ParseObject> story, int index, ParseUser currentUser, Goal goal) {
         StoryFragment fragment = new StoryFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_STORY, (Serializable) story);
         args.putInt(ARG_INDEX, index);
         args.putParcelable(ARG_USER, currentUser);
+        args.putParcelable("goal", goal);
         fragment.setArguments(args);
         return fragment;
     }
@@ -105,6 +104,7 @@ public class StoryFragment extends Fragment {
             mStory = getArguments().getParcelableArrayList(ARG_STORY);
             mIndex = getArguments().getInt(ARG_INDEX);
             currentUser = getArguments().getParcelable(ARG_USER);
+            mGoal = getArguments().getParcelable("goal");
         }
     }
 
@@ -189,96 +189,6 @@ public class StoryFragment extends Fragment {
                     friendActivity.btnMessage.setVisibility(View.VISIBLE);
                 }
 
-            }
-        });
-
-        btnInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mHandler != null) {
-                    mHandler.removeCallbacks(runnable);
-                }
-
-                tvUsername.setVisibility(View.INVISIBLE);
-                tvDateAdded.setVisibility(View.INVISIBLE);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Animation infoAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.info_slide_left);
-                        tvUsername.setVisibility(View.VISIBLE);
-                        tvDateAdded.setVisibility(View.VISIBLE);
-                        btnInfo.startAnimation(infoAnimation);
-                        tvUsername.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
-                        tvDateAdded.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_up));
-
-                        infoAnimation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                btnInfo.setVisibility(View.GONE);
-                                btnInfo2.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-
-                    }
-                }, 100);
-            }
-        });
-
-        btnInfo2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Animation detailAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.menu_slide_back);
-                Animation infoAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.info_slide_right);
-                tvUsername.startAnimation(detailAnimation);
-                tvDateAdded.startAnimation(detailAnimation);
-                btnInfo2.startAnimation(infoAnimation);
-
-                detailAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        tvUsername.setVisibility(View.INVISIBLE);
-                        tvDateAdded.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-
-                infoAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        btnInfo.setVisibility(View.VISIBLE);
-                        btnInfo2.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
             }
         });
 
@@ -422,9 +332,13 @@ public class StoryFragment extends Fragment {
         if (user != null) {
             tvUsername.setText(user .getUsername());
         }
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+//        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date createdGoal = mGoal.getCreatedAt();
         Date createdAt = object.getCreatedAt();
-        tvDateAdded.setText(dateFormat.format(createdAt));
+        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
+        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
+
+        tvDateAdded.setText("Day " + Integer.toString(day + 1));
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 

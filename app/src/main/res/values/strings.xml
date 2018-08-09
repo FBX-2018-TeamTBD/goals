@@ -46,4 +46,5 @@
     <string name="clap_react">clap</string>
     <string name="ok_react">ok</string>
     <string name="bump_react">bump_react</string>
+    <string name="completed_label">COMPLETED!</string>
 </resources>

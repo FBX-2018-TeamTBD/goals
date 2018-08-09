@@ -51,16 +51,63 @@
         android:tint="@color/white"
         app:fabCustomSize="60dp" />
 
-    <ImageButton
-        android:id="@+id/btnAddCaption"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/btnConfirm"
-        android:layout_alignTop="@+id/btnBack"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:tint="#ffffff"
-        app:srcCompat="@drawable/ic_outline_text_fields_24px" />
+        android:layout_alignTop="@+id/btnBack">
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@+id/btnConfirm"
+            android:layout_alignTop="@+id/btnBack"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:tint="#ffffff"
+            app:srcCompat="@drawable/ic_outline_crop_24px" />
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@+id/btnConfirm"
+            android:layout_alignTop="@+id/btnBack"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:tint="#ffffff"
+            app:srcCompat="@drawable/ic_outline_tag_faces_24px" />
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@+id/btnConfirm"
+            android:layout_alignTop="@+id/btnBack"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:tint="#ffffff"
+            app:srcCompat="@drawable/ic_outline_create_24px" />
+
+        <ImageButton
+            android:id="@+id/btnAddCaption"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@+id/btnConfirm"
+            android:layout_alignTop="@+id/btnBack"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:tint="#ffffff"
+            app:srcCompat="@drawable/ic_outline_text_fields_24px" />
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/etCaption"
