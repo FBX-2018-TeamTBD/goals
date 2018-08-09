@@ -139,8 +139,13 @@ public class FeedFragment extends Fragment {
             List<Goal> friendGoals = friend.getList("goals");
             for (int j = 0; j < friendGoals.size(); j++) {
                 Goal goal = friendGoals.get(j);
+//                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+//                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+//                    goals.add(goal);
+//                    correspondingFriends.add(friend);
+//                }
                 if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+                        && !goals.contains(goal)) {
                     goals.add(goal);
                     correspondingFriends.add(friend);
                 }

@@ -275,9 +275,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
                 // check if all users have added here
-                if (!goal.getIsItemAdded()) {
-                    goal.setStreak(0);
-                }
+//                if (!goal.getIsItemAdded()) {
+//                    goal.setStreak(0);
+//                }
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
