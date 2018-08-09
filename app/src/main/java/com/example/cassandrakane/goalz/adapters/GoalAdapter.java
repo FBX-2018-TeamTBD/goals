@@ -125,8 +125,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private void setTextViews(final Goal goal, final ViewHolder holder) {
         holder.tvTitle.setText(goal.getTitle());
         if (goal.getCompleted()) {
-            holder.tvTitle.setTextColor(context.getResources().getColor(R.color.grey));
-            holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvProgress.setText("COMPLETED!");
             Glide.with(context).asGif().load(R.drawable.confetti).into(holder.ivCelebrate);
         } else {
