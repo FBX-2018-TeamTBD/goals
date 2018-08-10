@@ -143,7 +143,6 @@
             android:id="@+id/ivBmb"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:tint="@color/grey"
             android:src="@drawable/ic_round_thumb_up_24px"
             android:layout_gravity="center" />
     </com.nightonke.boommenu.BoomMenuButton>
