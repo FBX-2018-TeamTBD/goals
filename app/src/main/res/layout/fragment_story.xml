@@ -147,34 +147,4 @@
             android:layout_gravity="center" />
     </com.nightonke.boommenu.BoomMenuButton>
 
-    <LinearLayout
-        android:id="@+id/btnTotalReactions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/bmb"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/tvReactionCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="6dp"
-            android:fontFamily="@font/quicksand_medium"
-            android:text="@string/_0"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/ivAllReactions"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:tint="@color/white"
-            android:src="@drawable/ic_round_thumb_up_24px" />
-
-    </LinearLayout>
-
 </RelativeLayout>

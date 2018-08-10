@@ -207,6 +207,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int claps = 0;
         int oks = 0;
         int bumps = 0;
+        int rocks =0 ;
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
@@ -233,12 +234,15 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     case "bump":
                         bumps += 1;
                         break;
+                    case "rock":
+                        rocks += 1;
+                        break;
                 }
             }
         }
         holder.tvReaction.setText(String.valueOf(total));
 
-        final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps);
+        final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks);
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override

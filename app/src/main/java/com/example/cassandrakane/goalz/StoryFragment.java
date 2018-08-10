@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,9 +63,6 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
-    @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
-    @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
-    @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
     @BindView(R.id.root) RelativeLayout rootLayout;
     @BindView(R.id.rlInfo) RelativeLayout rlInfo;
     @BindView(R.id.bmb) BoomMenuButton bmb;
@@ -82,6 +78,10 @@ public class StoryFragment extends Fragment {
     private Integer clapCount = 0;
     private Integer okCount = 0;
     private Integer bumpCount = 0;
+    private Integer rockCount = 0;
+
+    private List<ParseObject> reactions;
+    private Integer reactionCount;
 
     private Goal mGoal;
 
@@ -233,7 +233,7 @@ public class StoryFragment extends Fragment {
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.rock_react);
                         ivBmb.clearColorFilter();
-                        // TODO add reaction
+                        addReaction(5);
                     }
                 })
         );
@@ -243,7 +243,16 @@ public class StoryFragment extends Fragment {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        // TODO open modal
+                        if (reactionCount != 0) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
+                            }
+                            getActivity().startActivity(intent);
+                        }
                     }
                 })
         );
@@ -306,6 +315,7 @@ public class StoryFragment extends Fragment {
         clapCount = 0;
         okCount = 0;
         bumpCount = 0;
+        rockCount = 0;
 
         if (mIndex < 0) {
             mIndex = mStory.size() - 1;
@@ -408,31 +418,10 @@ public class StoryFragment extends Fragment {
 
         }
 
-        final List<ParseObject> reactions = object.getList("reactions");
+        reactions = object.getList("reactions");
         if (reactions != null) {
-            Integer reactionCount = reactions.size();
-            tvReactionCount.setText(Integer.toString(reactionCount));
-
+            reactionCount = reactions.size();
             setReaction(reactions);
-
-            if (reactionCount != 0) {
-                ivAllReactions.clearColorFilter();
-                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
-                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                        intent.putExtra("reactions", (Serializable) reactions);
-                        intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                        if (mHandler != null) {
-                            mHandler.removeCallbacks(runnable);
-                        }
-                        getActivity().startActivity(intent);
-                    }
-                });
-            } else {
-                btnTotalReactions.setOnClickListener(null);
-            }
         }
 
         ParseUser user = null;
@@ -488,6 +477,8 @@ public class StoryFragment extends Fragment {
                 case "bump":
                     bumpCount += 1;
                     break;
+                case "rock":
+                    rockCount += 1;
                 default:
                     break;
             }
@@ -511,6 +502,8 @@ public class StoryFragment extends Fragment {
                         case "bump":
                             ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
                             break;
+                        case "rock":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
                         default:
                             ivBmb.setVisibility(View.GONE);
                     }
@@ -538,6 +531,8 @@ public class StoryFragment extends Fragment {
             case 4:
                 type = "bump";
                 break;
+            case 5:
+                type = "rock";
             default:
                 type = "";
 
