@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,9 +63,6 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
-    @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
-    @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
-    @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
     @BindView(R.id.root) RelativeLayout rootLayout;
     @BindView(R.id.rlInfo) RelativeLayout rlInfo;
     @BindView(R.id.bmb) BoomMenuButton bmb;
@@ -128,18 +124,12 @@ public class StoryFragment extends Fragment {
 
         setImage();
 
-
-
         bmb.setOnBoomListener(new OnBoomListener() {
             @Override
-            public void onClicked(int index, BoomButton boomButton) {
-
-            }
+            public void onClicked(int index, BoomButton boomButton) { }
 
             @Override
-            public void onBackgroundClick() {
-
-            }
+            public void onBackgroundClick() { }
 
             @Override
             public void onBoomWillHide() {
@@ -147,9 +137,7 @@ public class StoryFragment extends Fragment {
             }
 
             @Override
-            public void onBoomDidHide() {
-
-            }
+            public void onBoomDidHide() { }
 
             @Override
             public void onBoomWillShow() {
@@ -159,9 +147,7 @@ public class StoryFragment extends Fragment {
             }
 
             @Override
-            public void onBoomDidShow() {
-
-            }
+            public void onBoomDidShow() { }
         });
 
         bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
@@ -177,18 +163,6 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.goals_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.goals_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(1);
-                    }
-                })
-        );
         bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.clap_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
@@ -198,18 +172,6 @@ public class StoryFragment extends Fragment {
                         ivBmb.setImageResource(R.drawable.clap_react);
                         ivBmb.clearColorFilter();
                         addReaction(2);
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.ok_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.ok_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(3);
                     }
                 })
         );
@@ -225,6 +187,46 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
+        bmb.addBuilder(new SimpleCircleButton.Builder()
+                .normalImageRes(R.drawable.notification)
+                .normalColorRes(R.color.orange)
+                .highlightedColorRes(R.color.white)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        final List<ParseObject> reactions = object.getList("reactions");
+                        if (reactions != null) {
+                            Integer reactionCount = reactions.size();
+                            // TODO set text to reactionCount
+//                            tvReactionCount.setText(Integer.toString(reactionCount));
+
+                            if (reactionCount != 0) {
+                                setReaction(reactions);
+                                List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
+                                Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                                intent.putExtra("reactions", (Serializable) reactions);
+                                intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                                if (mHandler != null) {
+                                    mHandler.removeCallbacks(runnable);
+                                }
+                                getActivity().startActivity(intent);
+                            }
+                        }
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.ok_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.ok_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(3);
+                    }
+                })
+        );
         bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.rock_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
@@ -237,13 +239,15 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.notification)
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.goals_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        // TODO open modal
+                        ivBmb.setImageResource(R.drawable.goals_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(1);
                     }
                 })
         );
@@ -406,33 +410,6 @@ public class StoryFragment extends Fragment {
                     }
             }, 5000);
 
-        }
-
-        final List<ParseObject> reactions = object.getList("reactions");
-        if (reactions != null) {
-            Integer reactionCount = reactions.size();
-            tvReactionCount.setText(Integer.toString(reactionCount));
-
-            setReaction(reactions);
-
-            if (reactionCount != 0) {
-                ivAllReactions.clearColorFilter();
-                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
-                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                        intent.putExtra("reactions", (Serializable) reactions);
-                        intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                        if (mHandler != null) {
-                            mHandler.removeCallbacks(runnable);
-                        }
-                        getActivity().startActivity(intent);
-                    }
-                });
-            } else {
-                btnTotalReactions.setOnClickListener(null);
-            }
         }
 
         ParseUser user = null;
