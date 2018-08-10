@@ -29,7 +29,7 @@
             android:id="@+id/ivStory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:transitionName="story" />
+            android:transitionName="story"/>
 
         <Button
             android:id="@+id/btnStory"

@@ -146,6 +146,7 @@ public class AddGoalActivity extends AppCompatActivity {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
             List<ParseUser> pendingFriends = new ArrayList<>();
+            List<ParseObject> allReactions = new ArrayList<>();
             selectedFriends = shareFriendAdapter.selectedFriends;
 
             Map<String, String> usersAdded = new HashMap<String, String>(){{
@@ -159,7 +160,7 @@ public class AddGoalActivity extends AppCompatActivity {
             Goal goal = new Goal(etTitle.getText().toString(),
                     sbDuration.getProgress(), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
-                    selectedFriends, approved, pendingFriends, usersAdded);
+                    selectedFriends, approved, pendingFriends, usersAdded, allReactions);
             List<ParseObject> goals = user.getList("goals");
             sendGoalRequest(goal, pendingFriends);
             goals.add(0, goal);

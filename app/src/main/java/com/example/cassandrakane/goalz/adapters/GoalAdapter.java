@@ -93,7 +93,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             final MainActivity activity = (MainActivity) context;
             navigationHelper = new NavigationHelper(activity.centralFragment.horizontalPager);
 
-            final GestureDetector gestureDetector = getGestureDetector(goal);
+            final GestureDetector gestureDetector = getGestureDetector(goal, holder);
 
             holder.itemView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -108,6 +108,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     return gestureDetector.onTouchEvent(motionEvent);
                 }
             });
+
+            holder.ivStory.setTransitionName("transition" + position);
 
         }
 
@@ -335,7 +337,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
     }
 
-    private GestureDetector getGestureDetector(final Goal goal) {
+    private GestureDetector getGestureDetector(final Goal goal, final ViewHolder holder) {
         return new GestureDetector(new GestureDetector.OnGestureListener() {
             @Override
             public boolean onDown(MotionEvent motionEvent) {
@@ -356,6 +358,15 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     startIndex = getStartIndex(story);
                     if (personal) {
                         MainActivity activity = (MainActivity) context;
+
+//                        ProfileFragment current = (ProfileFragment) activity.getSupportFragmentManager().findFragmentById(R.id.root_layout);
+//                        current.setSharedElementReturnTransition(TransitionInflater.from(context).inflateTransition(R.transition.default_transition));
+//                        current.setExitTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.no_transition));
+//
+//                        StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+//                        frag.setSharedElementEnterTransition(TransitionInflater.from(context).inflateTransition(R.transition.default_transition));
+//                        frag.setEnterTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.no_transition));
+
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
