@@ -166,6 +166,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setVisibility(View.VISIBLE);
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
             holder.tvFriends.setVisibility(View.VISIBLE);
+            holder.btnFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -244,8 +245,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
         startIndex = getStartIndex(story);
+        holder.ibAdd.setVisibility(View.GONE);
+        holder.tvAdd.setVisibility(View.GONE);
+        holder.vGradient.setVisibility(View.VISIBLE);
+        holder.rvGradient.setVisibility(View.VISIBLE);
+        holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
+        holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
+        holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
+        holder.btnReaction.setVisibility(View.VISIBLE);
+        holder.tvReaction.setVisibility(View.VISIBLE);
 
-        ParseFile image = story.get(startIndex).getParseFile("image");
+        ParseFile image = null;
+        try {
+            image = story.get(startIndex).fetch().getParseFile("image");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (image != null) {
             Glide.with(context)
                     .load(image.getUrl())
@@ -279,8 +294,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
-        holder.btnReaction.setVisibility(View.INVISIBLE);
+        holder.ivStory.setImageDrawable(null);
+        holder.btnReaction.setVisibility(View.GONE);
+        holder.tvReaction.setVisibility(View.INVISIBLE);
         holder.vGradient.setVisibility(View.INVISIBLE);
+        holder.rvGradient.setVisibility(View.INVISIBLE);
         if (personal) {
             holder.ibAdd.setVisibility(View.VISIBLE);
             holder.tvAdd.setVisibility(View.VISIBLE);
@@ -507,6 +525,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.btnReaction) Button btnReaction;
         @BindView(R.id.tvReaction) TextView tvReaction;
         @BindView(R.id.vGradient) View vGradient;
+        @BindView(R.id.rvGradient) View rvGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
 
         public ViewHolder(View itemView) {

@@ -14,7 +14,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/ivCelebrate"
@@ -32,10 +32,10 @@
 
         <Button
             android:id="@+id/btnStory"
-            android:layout_width="match_parent"
             style="@style/SelectableItemBackground"
-            android:background="@color/transparent"
-            android:layout_height="270dp" />
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:background="@color/transparent" />
 
         <View
             android:id="@+id/vGradient"
@@ -44,6 +44,14 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:background="@drawable/gradient"
+            android:clickable="true" />
+
+        <View
+            android:id="@+id/rvGradient"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/reverse_gradient"
             android:clickable="true" />
 
         <TextView
@@ -73,54 +81,54 @@
             android:id="@+id/tvStreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ivStory"
-            android:layout_alignTop="@+id/ivStory"
-            android:layout_marginLeft="11dp"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="5dp"
+            android:layout_alignLeft="@+id/ivStory"
+            android:layout_marginLeft="11dp"
             android:fontFamily="@font/quicksand_medium"
+            android:text="@string/_0"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/ivStar"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignTop="@+id/tvStreak"
-            android:layout_toEndOf="@+id/tvStreak"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
+            android:layout_toEndOf="@+id/tvStreak"
             android:tint="@color/white"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:srcCompat="@drawable/star" />
 
         <TextView
             android:id="@+id/tvFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnFriends"
-            android:layout_toStartOf="@+id/btnFriends"
             android:layout_marginRight="3dp"
-            android:layout_marginTop="4dp"
+            android:layout_alignBottom="@id/tvStreak"
+            android:layout_toStartOf="@+id/btnFriends"
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:fontFamily="@font/quicksand_medium"
-            android:textColor="@color/white"
             android:text="@string/_0"
-            android:textSize="16sp" />
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btnFriends"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="9dp"
+            android:background="@drawable/friend"
+            android:backgroundTint="@color/white"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/friend"
-            android:focusableInTouchMode="true"
-            android:backgroundTint="@color/white" />
+            android:focusableInTouchMode="true" />
 
         <Button
             android:id="@+id/ibAdd"
@@ -130,20 +138,20 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:background="@drawable/add_circle"
-            android:visibility="gone"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvReaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/btnReaction"
-            android:layout_marginRight="3dp"
             android:layout_alignBottom="@+id/tvStreak"
-            android:textColor="@color/white"
             android:layout_marginLeft="5dp"
-            android:textSize="16sp"
+            android:layout_marginRight="3dp"
+            android:layout_toLeftOf="@+id/btnReaction"
             android:fontFamily="@font/quicksand_medium"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             app:text="@string/_0" />
 
         <TextView
@@ -163,12 +171,12 @@
 
         <Button
             android:id="@+id/btnReaction"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_marginRight="11dp"
             android:layout_marginTop="4dp"
-            android:layout_marginRight="8dp"
             android:background="@drawable/goals_react" />
 
     </RelativeLayout>
