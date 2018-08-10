@@ -148,11 +148,11 @@
         app:bmb_buttonPlaceEnum="buttonPlace_sc_7_4">
 
         <ImageView
-            android:id="@+id/ivBmb"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_round_thumb_up_24px"
-            android:layout_gravity="center" />
+        android:id="@+id/ivBmb"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_round_thumb_up_24px"
+        android:layout_gravity="center" />
     </com.nightonke.boommenu.BoomMenuButton>
 
 </RelativeLayout>
