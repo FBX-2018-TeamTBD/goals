@@ -126,7 +126,195 @@ public class StoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_story, container, false);
         ButterKnife.bind(this, view);
 
-        setImage();
+        setImageAndText();
+        setReactionBoomMenuButton();
+
+        btnLeft.setBackgroundColor(Color.TRANSPARENT);
+        btnRight.setBackgroundColor(Color.TRANSPARENT);
+
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
+                mIndex--;
+                setImageAndText();
+            }
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
+                mIndex++;
+                setImageAndText();
+            }
+        });
+
+        final StoryFragment storyFragment = this;
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
+
+                Util.storyMode = false;
+
+                getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
+                if (getActivity().getClass().isAssignableFrom(FriendActivity.class)) {
+                    FriendActivity friendActivity = (FriendActivity) getActivity();
+                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
+                    friendActivity.cardView.setVisibility(View.VISIBLE);
+                    friendActivity.btnBack.setVisibility(View.VISIBLE);
+                    friendActivity.btnUnfriend.setVisibility(View.VISIBLE);
+                    friendActivity.btnMessage.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        return view;
+    }
+
+    public void setImageAndText(){
+        if (mIndex < 0) {
+            mIndex = mStory.size() - 1;
+        } else if (mIndex >= mStory.size()) {
+            mIndex = 0;
+        }
+        try {
+            object = mStory.get(mIndex).fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ParseFile video = null;
+        try {
+            video = (ParseFile) object.fetchIfNeeded().get("video");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (video != null){
+            viewStory.setVisibility(View.VISIBLE);
+            Video videoObject = (Video) object;
+
+            List<ParseUser> viewedBy = object.getList("viewedBy");
+            if (viewedBy == null){
+                viewedBy = new ArrayList<>();
+            }
+            if (!viewedBy.contains(currentUser)) {
+                viewedBy.add(currentUser);
+                videoObject.setViewedBy(viewedBy);
+                videoObject.saveInBackground();
+            }
+
+            String caption = (String) object.get("caption");
+            if (caption.length() != 0){
+                tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
+            } else {
+                tvCaption.setVisibility(View.GONE);
+            }
+
+            File file = null;
+            try {
+                file = video.getFile();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Uri fileUri = Uri.fromFile(file);
+            viewStory.setVideoURI(fileUri);
+            viewStory.start();
+            viewStory.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    mIndex++;
+                    setImageAndText();
+                }
+            });
+
+        } else {
+            viewStory.setVisibility(View.GONE);
+            Image imageObject = (Image) object;
+
+            List<ParseUser> viewedBy = object.getList("viewedBy");
+            if (viewedBy == null){
+                viewedBy = new ArrayList<>();
+            }
+            if (!viewedBy.contains(currentUser)) {
+                viewedBy.add(currentUser);
+                imageObject.setViewedBy(viewedBy);
+                imageObject.saveInBackground();
+            }
+
+            ParseFile image = (ParseFile) object.get("image");
+
+            String caption = (String) object.get("caption");
+            if (caption.length() != 0){
+                tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
+            } else {
+                tvCaption.setVisibility(View.GONE);
+            }
+
+            String url = image.getUrl();
+            Glide.with(this)
+                    .load(url)
+                    .into(ivImage);
+
+            mHandler = new Handler();
+            mHandler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    mIndex++;
+                    setImageAndText();
+                    }
+            }, 5000);
+
+        }
+
+        ParseUser user = null;
+        try {
+            user = object.getParseUser("user").fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (user != null) {
+            tvUsername.setText(user .getUsername());
+        }
+
+        // TODO include hardcoding for ukulele videos
+        // HARDCODE FOR DEMO
+        if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
+            tvDateAdded.setText("DAY 2");
+        } else {
+            tvDateAdded.setText("DAY 1");
+        }
+
+//        Date createdGoal = mGoal.getCreatedAt();
+//        Date createdAt = object.getCreatedAt();
+//        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
+//        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
+//        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
+
+        pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
+    }
+
+    public void setReactionBoomMenuButton() {
+        thumbsCount = goalsCount = clapCount = okCount = bumpCount = rockCount = 0;
+
+        reactions = object.getList("reactions");
+        if (reactions != null) {
+            reactionCount = reactions.size();
+            setReaction(reactions);
+        }
+
+        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
+        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
 
         bmb.setOnBoomListener(new OnBoomListener() {
             @Override
@@ -191,6 +379,7 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
+        // TODO set text
         bmb.addBuilder(new SimpleCircleButton.Builder()
                 .normalImageRes(R.drawable.notification)
                 .normalColorRes(R.color.orange)
@@ -247,201 +436,6 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-
-        btnLeft.setBackgroundColor(Color.TRANSPARENT);
-        btnRight.setBackgroundColor(Color.TRANSPARENT);
-
-        btnLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mHandler != null) {
-                    mHandler.removeCallbacks(runnable);
-                }
-                mIndex--;
-                setImage();
-            }
-        });
-
-        btnRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mHandler != null) {
-                    mHandler.removeCallbacks(runnable);
-                }
-                mIndex++;
-                setImage();
-            }
-        });
-
-        final StoryFragment storyFragment = this;
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mHandler != null) {
-                    mHandler.removeCallbacks(runnable);
-                }
-
-                Util.storyMode = false;
-
-                getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
-                if (getActivity().getClass().isAssignableFrom(FriendActivity.class)) {
-                    FriendActivity friendActivity = (FriendActivity) getActivity();
-                    friendActivity.ivProfile.setVisibility(View.VISIBLE);
-                    friendActivity.cardView.setVisibility(View.VISIBLE);
-                    friendActivity.btnBack.setVisibility(View.VISIBLE);
-                    friendActivity.btnUnfriend.setVisibility(View.VISIBLE);
-                    friendActivity.btnMessage.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
-
-        return view;
-
-    }
-
-    public void setImage(){
-        thumbsCount = 0;
-        goalsCount = 0;
-        clapCount = 0;
-        okCount = 0;
-        bumpCount = 0;
-        rockCount = 0;
-
-        if (mIndex < 0) {
-            mIndex = mStory.size() - 1;
-        } else if (mIndex >= mStory.size()) {
-            mIndex = 0;
-        }
-        try {
-            object = mStory.get(mIndex).fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-//        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
-        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
-        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
-
-        ParseFile video = null;
-        try {
-            video = (ParseFile) object.fetchIfNeeded().get("video");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (video != null){
-            viewStory.setVisibility(View.VISIBLE);
-            Video videoObject = (Video) object;
-
-            List<ParseUser> viewedBy = object.getList("viewedBy");
-            if (viewedBy == null){
-                viewedBy = new ArrayList<>();
-            }
-            if (!viewedBy.contains(currentUser)) {
-                viewedBy.add(currentUser);
-                videoObject.setViewedBy(viewedBy);
-                videoObject.saveInBackground();
-            }
-
-            String caption = (String) object.get("caption");
-            if (caption.length() != 0){
-                tvCaption.setText(caption);
-                tvCaption.setVisibility(View.VISIBLE);
-            } else {
-                tvCaption.setVisibility(View.GONE);
-            }
-
-            File file = null;
-            try {
-                file = video.getFile();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Uri fileUri = Uri.fromFile(file);
-            viewStory.setVideoURI(fileUri);
-            viewStory.start();
-            viewStory.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mIndex++;
-                    setImage();
-                }
-            });
-
-        } else {
-            viewStory.setVisibility(View.GONE);
-            Image imageObject = (Image) object;
-
-            List<ParseUser> viewedBy = object.getList("viewedBy");
-            if (viewedBy == null){
-                viewedBy = new ArrayList<>();
-            }
-            if (!viewedBy.contains(currentUser)) {
-                viewedBy.add(currentUser);
-                imageObject.setViewedBy(viewedBy);
-                imageObject.saveInBackground();
-            }
-
-            ParseFile image = (ParseFile) object.get("image");
-
-            String caption = (String) object.get("caption");
-            if (caption.length() != 0){
-                tvCaption.setText(caption);
-                tvCaption.setVisibility(View.VISIBLE);
-            } else {
-                tvCaption.setVisibility(View.GONE);
-            }
-
-            String url = image.getUrl();
-            Glide.with(this)
-                    .load(url)
-                    .into(ivImage);
-
-            mHandler = new Handler();
-            mHandler.postDelayed(runnable = new Runnable() {
-                @Override
-                public void run() {
-                    mIndex++;
-                    setImage();
-                    }
-            }, 5000);
-
-        }
-
-        ParseUser user = null;
-        try {
-            user = object.getParseUser("user").fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (user != null) {
-            tvUsername.setText(user .getUsername());
-        }
-
-        reactions = object.getList("reactions");
-        if (reactions != null) {
-            reactionCount = reactions.size();
-            setReaction(reactions);
-            // TODO set text to reactionCount
-//          tvReactionCount.setText(Integer.toString(reactionCount));
-        }
-
-        // TODO include hardcoding for ukulele videos
-        // HARDCODE FOR DEMO
-        if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
-            tvDateAdded.setText("DAY 2");
-        } else {
-            tvDateAdded.setText("DAY 1");
-        }
-
-//        Date createdGoal = mGoal.getCreatedAt();
-//        Date createdAt = object.getCreatedAt();
-//        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
-//        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
-//        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
-
-        pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 
     public void setReaction(List<ParseObject> reactions){
