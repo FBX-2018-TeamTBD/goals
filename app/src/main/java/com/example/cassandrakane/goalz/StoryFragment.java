@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -79,6 +78,10 @@ public class StoryFragment extends Fragment {
     private Integer clapCount = 0;
     private Integer okCount = 0;
     private Integer bumpCount = 0;
+    private Integer rockCount = 0;
+
+    private List<ParseObject> reactions;
+    private Integer reactionCount;
 
     private Goal mGoal;
 
@@ -222,6 +225,37 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.rock_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.rock_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(5);
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.notification)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        if (reactionCount != 0) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
+                            }
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                })
+        );
 
         btnLeft.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
@@ -281,6 +315,7 @@ public class StoryFragment extends Fragment {
         clapCount = 0;
         okCount = 0;
         bumpCount = 0;
+        rockCount = 0;
 
         if (mIndex < 0) {
             mIndex = mStory.size() - 1;
@@ -383,10 +418,9 @@ public class StoryFragment extends Fragment {
 
         }
 
-        final List<ParseObject> reactions = object.getList("reactions");
+        reactions = object.getList("reactions");
         if (reactions != null) {
-            Integer reactionCount = reactions.size();
-
+            reactionCount = reactions.size();
             setReaction(reactions);
         }
 
@@ -443,6 +477,8 @@ public class StoryFragment extends Fragment {
                 case "bump":
                     bumpCount += 1;
                     break;
+                case "rock":
+                    rockCount += 1;
                 default:
                     break;
             }
@@ -466,6 +502,8 @@ public class StoryFragment extends Fragment {
                         case "bump":
                             ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
                             break;
+                        case "rock":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
                         default:
                             ivBmb.setVisibility(View.GONE);
                     }
@@ -493,6 +531,8 @@ public class StoryFragment extends Fragment {
             case 4:
                 type = "bump";
                 break;
+            case 5:
+                type = "rock";
             default:
                 type = "";
 

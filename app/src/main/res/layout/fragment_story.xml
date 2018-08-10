@@ -144,8 +144,8 @@
         android:layout_alignParentBottom="true"
         app:bmb_normalColor="@color/white"
         app:bmb_buttonEnum="simpleCircle"
-        app:bmb_piecePlaceEnum="piecePlace_dot_5_1"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_5_1">
+        app:bmb_piecePlaceEnum="piecePlace_dot_7_4"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_7_4">
 
         <ImageView
             android:id="@+id/ivBmb"
