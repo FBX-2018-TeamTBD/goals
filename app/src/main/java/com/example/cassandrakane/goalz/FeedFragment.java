@@ -107,9 +107,11 @@ public class FeedFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        rvFriends.setVisibility(View.VISIBLE);
-        if (isVisibleToUser) {
-            populateFriends();
+        if (rvFriends != null) {
+            rvFriends.setVisibility(View.VISIBLE);
+            if (isVisibleToUser) {
+                populateFriends();
+            }
         }
     }
 
