@@ -235,7 +235,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     try {
                         currentUser.fetch();
                         moveUser(goal);
-                        Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "You have joined the goal!", Toast.LENGTH_LONG).show();
                         deleteGoalRequest(position, true);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
@@ -343,7 +343,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "You are now friends!", Toast.LENGTH_LONG).show();
                         deleteSentRequest(position);
                         String textNotification = String.format("%s accepted your friend request!", currentUser.fetchIfNeeded().getUsername());
                         ParseFile profilePicture = currentUser.getParseFile("image");
