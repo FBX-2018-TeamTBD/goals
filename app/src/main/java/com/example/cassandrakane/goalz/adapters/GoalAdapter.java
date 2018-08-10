@@ -245,7 +245,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
         startIndex = getStartIndex(story);
 
-        ParseFile image = story.get(startIndex).getParseFile("image");
+        ParseFile image = null;
+        try {
+            image = story.get(startIndex).fetchIfNeeded().getParseFile("image");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (image != null) {
             Glide.with(context)
                     .load(image.getUrl())
