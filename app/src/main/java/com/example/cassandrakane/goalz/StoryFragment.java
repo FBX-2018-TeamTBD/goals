@@ -25,10 +25,11 @@ import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.example.cassandrakane.goalz.views.ReactionView;
+import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.OnBoomListener;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -64,8 +65,6 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
-//    @BindView(R.id.btnReaction) LinearLayout btnReaction;
-//    @BindView(R.id.ivReaction) public ImageView ivReaction;
     @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
     @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
     @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
@@ -76,7 +75,6 @@ public class StoryFragment extends Fragment {
 
     public Runnable runnable;
     public Handler mHandler;
-    private ReactionView rv;
 
     private ParseObject object;
 
@@ -152,6 +150,39 @@ public class StoryFragment extends Fragment {
 //                return false;
 //            }
 //        });
+        bmb.setOnBoomListener(new OnBoomListener() {
+            @Override
+            public void onClicked(int index, BoomButton boomButton) {
+
+            }
+
+            @Override
+            public void onBackgroundClick() {
+
+            }
+
+            @Override
+            public void onBoomWillHide() {
+
+            }
+
+            @Override
+            public void onBoomDidHide() {
+
+            }
+
+            @Override
+            public void onBoomWillShow() {
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
+            }
+
+            @Override
+            public void onBoomDidShow() {
+
+            }
+        });
 
         bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
                 .normalColorRes(R.color.white)
@@ -277,8 +308,6 @@ public class StoryFragment extends Fragment {
         }
         object = mStory.get(mIndex);
 
-//        ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-//        ivReaction.setColorFilter(Color.argb(255, 255, 255, 255));
         ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
 
         if (object.get("video") != null){
@@ -437,38 +466,10 @@ public class StoryFragment extends Fragment {
                 default:
                     break;
             }
-
-//            try {
-//                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
-//                    ivReaction.clearColorFilter();
-//                    switch (type) {
-//                        case "thumbs":
-//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
-//                            break;
-//                        case "goals":
-//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-//                            break;
-//                        case "clap":
-//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
-//                            break;
-//                        case "ok":
-//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
-//                            break;
-//                        case "bump":
-//                            ivReaction.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
-//                            break;
-//                        default:
-//                            ivReaction.setVisibility(View.GONE);
-//                    }
-//                }
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 
     public void addReaction(int selectedIndex){
-
         switch (selectedIndex) {
             case 0:
                 type = "thumbs";

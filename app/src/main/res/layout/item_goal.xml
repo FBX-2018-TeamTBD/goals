@@ -97,13 +97,16 @@
             android:id="@+id/tvFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/btnFriends"
+            android:layout_alignBottom="@+id/btnFriends"
             android:layout_toStartOf="@+id/btnFriends"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="4dp"
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:fontFamily="@font/quicksand_medium"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:text="@string/_0"
             android:textSize="16sp" />
 
         <Button
@@ -115,9 +118,9 @@
             android:layout_marginTop="9dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="@color/transparent"
+            android:background="@drawable/friend"
             android:focusableInTouchMode="true"
-            android:backgroundTint="@color/white" />
+            android:backgroundTint="@color/black" />
 
         <Button
             android:id="@+id/ibAdd"

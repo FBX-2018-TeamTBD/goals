@@ -107,19 +107,12 @@ public class ChatActivity extends AppCompatActivity {
 
         });
 
-      /*  rvChat.setOnTouchListener(new View.OnTouchListener() {
+        rvChat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return gestureDetector.onTouchEvent(motionEvent);
             }
-        });*/
-
-      /*  rvChat.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return gestureDetector.onTouchEvent(motionEvent);
-            }
-        });*/
+        });
 
         etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
            public void onFocusChange(View v, boolean hasFocus) {
