@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -48,11 +47,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final ParseUser friend = friends.get(position);
 
         ViewHolder viewHolder = (ViewHolder) holder;
-        try {
-            viewHolder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        viewHolder.tvUsername.setText(friend.getUsername());
         final ParseFile file = friend.getParseFile("image");
         Util.setImage(file, context.getResources(), viewHolder.ivProfile, R.color.orange);
         viewHolder.ivProfile.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +62,6 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 toFriendActivity(friend);
             }
         });
-
     }
 
     @Override
@@ -93,4 +87,5 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

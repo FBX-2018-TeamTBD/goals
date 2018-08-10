@@ -7,18 +7,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.RelativeLayout;
 
 import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.adapters.StoryAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.example.cassandrakane.goalz.views.GridRecyclerView;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -27,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class FeedFragment extends Fragment {
 
@@ -38,7 +37,7 @@ public class FeedFragment extends Fragment {
     List<Goal> goals;
     List<ParseUser> correspondingFriends;
 
-    @BindView(R.id.rvFriends) GridRecyclerView rvFriends;
+    @BindView(R.id.rvFriends) RecyclerView rvFriends;
     @BindView(R.id.rvSuggestedFriends) RecyclerView rvSuggestedFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
     @BindView(R.id.friendsPage) RelativeLayout friendsPage;
@@ -88,6 +87,13 @@ public class FeedFragment extends Fragment {
             rvFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
         rvFriends.setAdapter(friendAdapter);
 
+        SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+        animator.setAddDuration(1000);
+        animator.setRemoveDuration(500);
+        animator.setChangeDuration(500);
+        animator.setMoveDuration(1000);
+        rvFriends.setItemAnimator(animator);
+
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,10 +101,22 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        populateFriends();
-        populateStories();
-
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        rvFriends.setVisibility(View.VISIBLE);
+        if (isVisibleToUser) {
+            populateFriends();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        populateStories();
     }
 
     public void refreshAsync() {
@@ -114,25 +132,18 @@ public class FeedFragment extends Fragment {
         getFriendGoals();
     }
 
-    @Override
-    public void onResume() {
-        //do the data changes
-        super.onResume();
-        populateFriends();
-        populateStories();
-    }
-
     public void populateFriends() {
         List<ParseUser> arr = user.getList("friends");
+        int size = friends.size();
         friends.clear();
+        friendAdapter.notifyItemRangeRemoved(0, size);
         if (arr != null) {
             friends.addAll(arr);
         }
         ParseObject.unpinAllInBackground(arr);
         ParseObject.pinAllInBackground(arr);
 
-        Log.i("lsdf", "loaded friends");
-        friendAdapter.notifyDataSetChanged();
+        friendAdapter.notifyItemRangeInserted(0, arr.size());
     }
 
     public void populateStories() {
@@ -182,21 +193,17 @@ public class FeedFragment extends Fragment {
         ParseObject.unpinAllInBackground(goals);
         goals.clear();
         for (int i = 0; i < friends.size(); i++) {
-            try {
-                ParseUser friend = friends.get(i);
-                List<Goal> friendGoals = friend.fetchIfNeeded().getList("goals");
-                for (int j = 0; j < friendGoals.size(); j++) {
-                    Goal goal = friendGoals.get(j);
-                    if (goal.getStory() != null) {
-                        if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                                && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
-                            goals.add(goal);
-                            correspondingFriends.add(friend);
-                        }
+            ParseUser friend = friends.get(i);
+            List<Goal> friendGoals = friend.getList("goals");
+            for (int j = 0; j < friendGoals.size(); j++) {
+                Goal goal = friendGoals.get(j);
+                if (goal.getStory() != null) {
+                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+                        goals.add(goal);
+                        correspondingFriends.add(friend);
                     }
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
         swipeContainer.setRefreshing(false);

@@ -1,7 +1,7 @@
 package com.example.cassandrakane.goalz;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.ViewFlipper;
 
@@ -29,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import static com.parse.Parse.getApplicationContext;
 
@@ -70,6 +71,13 @@ public class ProfileFragment extends Fragment {
         rvGoals.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvGoals.setAdapter(goalAdapter);
 
+        SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+        animator.setAddDuration(1000);
+        animator.setRemoveDuration(500);
+        animator.setChangeDuration(500);
+        animator.setMoveDuration(1000);
+        rvGoals.setItemAnimator(animator);
+
         populateProfile();
 
         viewFlipper.setAutoStart(true);
@@ -105,8 +113,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 btnRefresh.startAnimation(animation);
-                //networkPopulateProfile();
-                runLayoutAnimation();
+                networkPopulateProfile();
             }
         });
 
@@ -129,7 +136,9 @@ public class ProfileFragment extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 completedGoals = 0;
                 progressGoals = 0;
+                int size = goals.size();
                 goals.clear();
+                goalAdapter.notifyItemRangeRemoved(0, size);
                 List<Goal> completed = new ArrayList<>();
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
@@ -156,7 +165,7 @@ public class ProfileFragment extends Fragment {
                     btnRefresh.setVisibility(View.VISIBLE);
                 }
 
-                goalAdapter.notifyDataSetChanged();
+                goalAdapter.notifyItemRangeInserted(0, completed.size());
                 btnRefresh.clearAnimation();
                 ParseObject.unpinAllInBackground(goals);
                 ParseObject.pinAllInBackground(goals);
@@ -175,7 +184,9 @@ public class ProfileFragment extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 completedGoals = 0;
                 progressGoals = 0;
+                int size = goals.size();
                 goals.clear();
+                goalAdapter.notifyItemRangeRemoved(0, size);
                 List<Goal> completed = new ArrayList<>();
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
@@ -194,29 +205,27 @@ public class ProfileFragment extends Fragment {
                     }
                 }
                 goals.addAll(completed);
-            if (completedGoals == 0 && progressGoals == 0) {
-                viewFlipper.setVisibility(View.VISIBLE);
-                btnRefresh.setVisibility(View.GONE);
-            } else {
-                viewFlipper.setVisibility(View.GONE);
-                btnRefresh.setVisibility(View.VISIBLE);
-            }
+                goalAdapter.notifyItemRangeInserted(0, goals.size());
+                ParseObject.unpinAllInBackground(goals);
+                ParseObject.pinAllInBackground(goals);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnRefresh.clearAnimation();
+                    }
+                }, 3000);
+                mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
+                if (completedGoals == 0 && progressGoals == 0) {
+                    viewFlipper.setVisibility(View.VISIBLE);
+                    btnRefresh.setVisibility(View.GONE);
+                } else {
+                    viewFlipper.setVisibility(View.GONE);
+                    btnRefresh.setVisibility(View.VISIBLE);
+                }
 
             }
         });
     }
 
-    public void runLayoutAnimation() {
-        final Context context = rvGoals.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.bottom_grid_layout);
-
-        rvGoals.setLayoutAnimation(controller);
-        goalAdapter.notifyDataSetChanged();
-        btnRefresh.clearAnimation();
-        ParseObject.unpinAllInBackground(goals);
-        ParseObject.pinAllInBackground(goals);
-        mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
-        rvGoals.scheduleLayoutAnimation();
-    }
 }

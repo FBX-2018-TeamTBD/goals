@@ -1,7 +1,9 @@
 package com.example.cassandrakane.goalz;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +30,7 @@ import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.OnBoomListener;
 import com.parse.ParseException;
@@ -126,127 +129,8 @@ public class StoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_story, container, false);
         ButterKnife.bind(this, view);
 
-        setImage();
-
-        bmb.setOnBoomListener(new OnBoomListener() {
-            @Override
-            public void onClicked(int index, BoomButton boomButton) { }
-
-            @Override
-            public void onBackgroundClick() { }
-
-            @Override
-            public void onBoomWillHide() {
-
-            }
-
-            @Override
-            public void onBoomDidHide() { }
-
-            @Override
-            public void onBoomWillShow() {
-                if (mHandler != null) {
-                    mHandler.removeCallbacks(runnable);
-                }
-            }
-
-            @Override
-            public void onBoomDidShow() { }
-        });
-
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.thumbs_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(0);
-
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.clap_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.clap_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(2);
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.bump_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.bump_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(4);
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder()
-                .normalImageRes(R.drawable.notification)
-                .normalColorRes(R.color.orange)
-                .highlightedColorRes(R.color.white)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        if (reactionCount != 0) {
-                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
-                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                            intent.putExtra("reactions", (Serializable) reactions);
-                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                            if (mHandler != null) {
-                                mHandler.removeCallbacks(runnable);
-                            }
-                            getActivity().startActivity(intent);
-                        }
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.ok_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.ok_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(3);
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.rock_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.rock_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(5);
-                    }
-                })
-        );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.goals_react)
-                .normalColorRes(R.color.white)
-                .highlightedColorRes(R.color.orange)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        ivBmb.setImageResource(R.drawable.goals_react);
-                        ivBmb.clearColorFilter();
-                        addReaction(1);
-                    }
-                })
-        );
+        setImageAndText();
+        setReactionBoomMenuButton();
 
         btnLeft.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
@@ -258,7 +142,7 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
                 mIndex--;
-                setImage();
+                setImageAndText();
             }
         });
 
@@ -269,7 +153,7 @@ public class StoryFragment extends Fragment {
                     mHandler.removeCallbacks(runnable);
                 }
                 mIndex++;
-                setImage();
+                setImageAndText();
             }
         });
 
@@ -292,22 +176,13 @@ public class StoryFragment extends Fragment {
                     friendActivity.btnUnfriend.setVisibility(View.VISIBLE);
                     friendActivity.btnMessage.setVisibility(View.VISIBLE);
                 }
-
             }
         });
 
         return view;
-
     }
 
-    public void setImage(){
-        thumbsCount = 0;
-        goalsCount = 0;
-        clapCount = 0;
-        okCount = 0;
-        bumpCount = 0;
-        rockCount = 0;
-
+    public void setImageAndText(){
         if (mIndex < 0) {
             mIndex = mStory.size() - 1;
         } else if (mIndex >= mStory.size()) {
@@ -318,10 +193,6 @@ public class StoryFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-//        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
-        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
-        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
 
         ParseFile video = null;
         try {
@@ -365,7 +236,7 @@ public class StoryFragment extends Fragment {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     mIndex++;
-                    setImage();
+                    setImageAndText();
                 }
             });
 
@@ -403,28 +274,15 @@ public class StoryFragment extends Fragment {
                 @Override
                 public void run() {
                     mIndex++;
-                    setImage();
+                    setImageAndText();
                     }
             }, 5000);
 
         }
 
-        ParseUser user = null;
-        try {
-            user = object.getParseUser("user").fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ParseUser user = object.getParseUser("user");
         if (user != null) {
             tvUsername.setText(user .getUsername());
-        }
-
-        reactions = object.getList("reactions");
-        if (reactions != null) {
-            reactionCount = reactions.size();
-            setReaction(reactions);
-            // TODO set text to reactionCount
-//          tvReactionCount.setText(Integer.toString(reactionCount));
         }
 
         // TODO include hardcoding for ukulele videos
@@ -444,15 +302,151 @@ public class StoryFragment extends Fragment {
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 
+    @SuppressLint("DefaultLocale")
+    public void setReactionBoomMenuButton() {
+        thumbsCount = goalsCount = clapCount = okCount = bumpCount = rockCount = 0;
+
+        reactions = object.getList("reactions");
+        if (reactions != null) {
+            reactionCount = reactions.size();
+            setReaction(reactions);
+        }
+
+        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
+        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
+
+        bmb.setOnBoomListener(new OnBoomListener() {
+            @Override
+            public void onClicked(int index, BoomButton boomButton) { }
+
+            @Override
+            public void onBackgroundClick() { }
+
+            @Override
+            public void onBoomWillHide() {
+
+            }
+
+            @Override
+            public void onBoomDidHide() { }
+
+            @Override
+            public void onBoomWillShow() {
+                if (mHandler != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
+            }
+
+            @Override
+            public void onBoomDidShow() { }
+        });
+
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.thumbs_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(0);
+
+                    }
+                })
+        );
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.clap_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.clap_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(2);
+                    }
+                })
+        );
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.bump_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.bump_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(4);
+                    }
+                })
+        );
+        // TODO set text
+        bmb.addBuilder(new TextInsideCircleButton.Builder()
+                .normalText(String.format("%d", reactionCount))
+                .normalTextColorRes(R.color.white)
+                .normalColorRes(R.color.orange)
+                .highlightedTextColorRes(R.color.orange)
+                .highlightedColorRes(R.color.white)
+                .textSize(40)
+                .textRect(new Rect(com.nightonke.boommenu.Util.dp2px(15), com.nightonke.boommenu.Util.dp2px(12),
+                        com.nightonke.boommenu.Util.dp2px(65), com.nightonke.boommenu.Util.dp2px(62)))
+                .textGravity(Gravity.CENTER)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        if (reactionCount != 0) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
+                            }
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                })
+        );
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.ok_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.ok_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(3);
+                    }
+                })
+        );
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.rock_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.rock_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(5);
+                    }
+                })
+        );
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.goals_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.goals_react);
+                        ivBmb.clearColorFilter();
+                        addReaction(1);
+                    }
+                })
+        );
+    }
+
     public void setReaction(List<ParseObject> reactions){
         for (ParseObject reaction : reactions){
             Reaction reactionObject = (Reaction) reaction;
-            String type = null;
-            try {
-                type = reactionObject.fetchIfNeeded().getString("type");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String type = reactionObject.getString("type");
 
             switch (type) {
                 case "thumbs":
@@ -477,35 +471,31 @@ public class StoryFragment extends Fragment {
                     break;
             }
 
-            try {
-                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
-                    ivBmb.clearColorFilter();
-                    switch (type) {
-                        case "thumbs":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
-                            break;
-                        case "goals":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-                            break;
-                        case "clap":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
-                            break;
-                        case "ok":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
-                            break;
-                        case "bump":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
-                            break;
-                        case "rock":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
-                            break;
-                        default:
-                            ivBmb.setVisibility(View.GONE);
-                            break;
-                    }
+            if (reactionObject.getParseUser("user") == currentUser){
+                ivBmb.clearColorFilter();
+                switch (type) {
+                    case "thumbs":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
+                        break;
+                    case "goals":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+                        break;
+                    case "clap":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
+                        break;
+                    case "ok":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
+                        break;
+                    case "bump":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
+                        break;
+                    case "rock":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
+                        break;
+                    default:
+                        ivBmb.setVisibility(View.GONE);
+                        break;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
     }

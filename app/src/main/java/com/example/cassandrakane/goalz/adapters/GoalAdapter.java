@@ -151,6 +151,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 goal.saveInBackground();
             }
         }
+
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
@@ -209,16 +210,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         int claps = 0;
         int oks = 0;
         int bumps = 0;
-        int rocks =0 ;
+        int rocks = 0 ;
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
-            String type = null;
-            try {
-                type = react.fetchIfNeeded().getString("type");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String type = react.getString("type");
             if (type != null) {
                 switch (type) {
                     case "thumbs":
@@ -242,7 +238,21 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 }
             }
         }
-        holder.tvReaction.setText(String.valueOf(total));
+
+        // HARDCODE FOR DEMO
+        if (goal.getObjectId().equals("jBsVVmXedF")) {
+            holder.tvReaction.setText("7");
+        } else if (goal.getObjectId().equals("zkavo2ePKo")) {
+            holder.tvReaction.setText("4");
+        } else if (goal.getObjectId().equals("0rTN9QsSlk")) {
+            holder.tvReaction.setText("9");
+        } else if (goal.getObjectId().equals("NaWB0UjSWz")) {
+            holder.tvReaction.setText("3");
+        } else {
+            holder.tvReaction.setText(String.valueOf(total));
+        }
+
+        // holder.tvReaction.setText(String.valueOf(total));
 
         final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks);
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));

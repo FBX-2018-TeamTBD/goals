@@ -94,11 +94,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final GoalRequestViewHolder goalRequestViewHolder = (GoalRequestViewHolder) holder;
                 Goal goal2 = null;
                 try {
-                    goal2 = mGoals.get(updatedPos).fetchIfNeeded();
+                    goal2 = mGoals.get(updatedPos);
                     String text = goal2.getTitle();
                     ParseUser fromUser = goalRequests.get(updatedPos).getFromUser();
                     if (fromUser != null) {
-                        text = "<b>" + fromUser.fetchIfNeeded().getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
+                        text = "<b>" + fromUser.getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
                     }
                     goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
                     List<ParseObject> story = goal2.getStory();
@@ -140,13 +140,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final int updatedPos2 = position - mTextNotifications.size() - mGoals.size();
                 FriendRequestViewHolder friendRequestViewHolder = (FriendRequestViewHolder) holder;
                 final ParseUser friend = mFriends.get(updatedPos2);
-                try {
-                    String sourceString = "<b>" + friend.fetchIfNeeded().getUsername() + "</b> " +
-                            " added you as a friend!";
-                    friendRequestViewHolder.tvUsername.setText(Html.fromHtml(sourceString));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                String sourceString = "<b>" + friend.getUsername() + "</b> " +
+                        " added you as a friend!";
+                friendRequestViewHolder.tvUsername.setText(Html.fromHtml(sourceString));
 
                 ParseFile pfile = friend.getParseFile("image");
                 Util.setImage(pfile, context.getResources(), friendRequestViewHolder.ivProfile, R.color.orange);
@@ -235,7 +231,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     try {
                         currentUser.fetch();
                         moveUser(goal);
-                        Toast.makeText(context, "You are now goal buddies!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "You have joined the goal!", Toast.LENGTH_LONG).show();
                         deleteGoalRequest(position, true);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
@@ -270,7 +266,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     GoalRequests request = (GoalRequests) object;
                     ParseUser fromUser = request.getFromUser();
                     if (sendNotif && fromUser != null) {
-                        String textNotification = String.format("%s accepted your goal request!", ParseUser.getCurrentUser().fetchIfNeeded().getUsername());
+                        String textNotification = String.format("%s accepted your goal request!", ParseUser.getCurrentUser().getUsername());
                         List<ParseObject> story = mGoals.get(position).getStory();
                         ParseFile image = null;
                         if (story.size() > 0) {
@@ -343,9 +339,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (e == null) {
                     try {
                         currentUser.fetch();
-                        Toast.makeText(context, "You are now friends", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "You are now friends!", Toast.LENGTH_LONG).show();
                         deleteSentRequest(position);
-                        String textNotification = String.format("%s accepted your friend request!", currentUser.fetchIfNeeded().getUsername());
+                        String textNotification = String.format("%s accepted your friend request!", currentUser.getUsername());
                         ParseFile profilePicture = currentUser.getParseFile("image");
                         sendTextNotification(textNotification, user, profilePicture);
                     } catch (ParseException e1) {
