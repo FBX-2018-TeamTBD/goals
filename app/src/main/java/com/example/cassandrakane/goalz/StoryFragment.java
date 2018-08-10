@@ -479,6 +479,7 @@ public class StoryFragment extends Fragment {
                     break;
                 case "rock":
                     rockCount += 1;
+                    break;
                 default:
                     break;
             }
@@ -504,8 +505,10 @@ public class StoryFragment extends Fragment {
                             break;
                         case "rock":
                             ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
+                            break;
                         default:
                             ivBmb.setVisibility(View.GONE);
+                            break;
                     }
                 }
             } catch (ParseException e) {
@@ -533,8 +536,10 @@ public class StoryFragment extends Fragment {
                 break;
             case 5:
                 type = "rock";
+                break;
             default:
                 type = "";
+                break;
 
         }
 
