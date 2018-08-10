@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.utils.AnimationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -54,11 +53,7 @@ public class SuggestedFriendAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         final ViewHolder viewHolder = (ViewHolder) holder;
 
-        try {
-            viewHolder.tvUsername.setText(friend.fetchIfNeeded().getUsername());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        viewHolder.tvUsername.setText(friend.getUsername());
         final ParseFile file = friend.getParseFile("image");
         Util.setImage(file, context.getResources(), viewHolder.ivProfile, R.color.orange);
 
