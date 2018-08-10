@@ -33,13 +33,21 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" />
 
+    <View
+        android:id="@+id/rvGradient"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/reverse_gradient"
+        android:clickable="true" />
+
     <TextView
         android:id="@+id/tvCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="106dp"
+        android:layout_marginBottom="140dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="TextView"
         android:textAlignment="center"
@@ -130,9 +138,9 @@
         android:id="@+id/bmb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="35dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         app:bmb_normalColor="@color/white"
         app:bmb_buttonEnum="simpleCircle"
@@ -140,11 +148,11 @@
         app:bmb_buttonPlaceEnum="buttonPlace_sc_7_4">
 
         <ImageView
-            android:id="@+id/ivBmb"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_round_thumb_up_24px"
-            android:layout_gravity="center" />
+        android:id="@+id/ivBmb"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_round_thumb_up_24px"
+        android:layout_gravity="center" />
     </com.nightonke.boommenu.BoomMenuButton>
 
 </RelativeLayout>

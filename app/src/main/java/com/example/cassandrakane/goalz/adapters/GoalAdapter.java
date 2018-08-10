@@ -176,7 +176,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
-            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
+            holder.overlayFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, FriendsModalActivity.class);
@@ -188,7 +188,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         } else if (personal) {
             holder.tvFriends.setVisibility(View.GONE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
-            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
+            holder.overlayFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, SearchFriendsActivity.class);
@@ -539,6 +539,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.vGradient) View vGradient;
         @BindView(R.id.rvGradient) View rvGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
+        @BindView(R.id.overlayFriends) Button overlayFriends;
 
         public ViewHolder(View itemView) {
             super(itemView);
