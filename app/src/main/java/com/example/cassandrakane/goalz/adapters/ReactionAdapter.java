@@ -40,20 +40,21 @@ public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ReactionAdapter.ViewHolder viewHolder, int i) {
         final Reaction reaction = (Reaction) mReactions.get(i);
-        final ParseUser user = (ParseUser) reaction.get("user");
-
+        ParseUser user;
         String username = "";
+        ParseFile image = null;
+        String type = "";
         try {
+            user = reaction.fetchIfNeeded().getParseUser("user");
             username = user.fetchIfNeeded().getUsername();
+            image = user.fetchIfNeeded().getParseFile("image");
+            type = reaction.fetchIfNeeded().getString("type");
         } catch (ParseException e) {
             e.printStackTrace();
         }
         viewHolder.tvUsername.setText(username);
 
-        ParseFile image = user.getParseFile("image");
         Util.setImage(image, context.getResources(), viewHolder.ivProfile, R.color.orange);
-
-        String type = reaction.getString("type");
 
         switch (type) {
             case "thumbs":
