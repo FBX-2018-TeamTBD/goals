@@ -103,33 +103,46 @@
             android:visibility="visible"
             app:srcCompat="@drawable/star" />
 
-        <TextView
-            android:id="@+id/tvFriends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="3dp"
-            android:layout_alignBottom="@id/tvStreak"
-            android:layout_toStartOf="@+id/btnFriends"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:fontFamily="@font/quicksand_medium"
-            android:text="@string/_0"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
         <Button
-            android:id="@+id/btnFriends"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentTop="true"
+            android:id="@+id/overlayFriends"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:background="@color/transparent"
+            android:layout_alignTop="@+id/layout_friends"
+            android:layout_alignLeft="@+id/layout_friends" />
+
+        <RelativeLayout
+            android:id="@+id/layout_friends"
+            android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="9dp"
-            android:background="@drawable/friend"
-            android:backgroundTint="@color/white"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:layout_alignBottom="@id/tvStreak"
+                android:layout_toLeftOf="@id/btnFriends"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/_0"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnFriends"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/friend"
+                android:backgroundTint="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+        </RelativeLayout>
 
         <Button
             android:id="@+id/ibAdd"

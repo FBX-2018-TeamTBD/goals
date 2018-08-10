@@ -64,9 +64,6 @@ public class StoryFragment extends Fragment {
     @BindView(R.id.tvCaption) TextView tvCaption;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvDateAdded) TextView tvDateAdded;
-    @BindView(R.id.btnTotalReactions) LinearLayout btnTotalReactions;
-    @BindView(R.id.ivAllReactions) public ImageView ivAllReactions;
-    @BindView(R.id.tvReactionCount) public TextView tvReactionCount;
     @BindView(R.id.root) RelativeLayout rootLayout;
     @BindView(R.id.rlInfo) RelativeLayout rlInfo;
     @BindView(R.id.bmb) BoomMenuButton bmb;
@@ -389,28 +386,8 @@ public class StoryFragment extends Fragment {
         final List<ParseObject> reactions = object.getList("reactions");
         if (reactions != null) {
             Integer reactionCount = reactions.size();
-            tvReactionCount.setText(Integer.toString(reactionCount));
 
             setReaction(reactions);
-
-            if (reactionCount != 0) {
-                ivAllReactions.clearColorFilter();
-                btnTotalReactions.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
-                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                        intent.putExtra("reactions", (Serializable) reactions);
-                        intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                        if (mHandler != null) {
-                            mHandler.removeCallbacks(runnable);
-                        }
-                        getActivity().startActivity(intent);
-                    }
-                });
-            } else {
-                btnTotalReactions.setOnClickListener(null);
-            }
         }
 
         ParseUser user = null;
