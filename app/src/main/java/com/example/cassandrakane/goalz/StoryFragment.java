@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -170,6 +171,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.thumbs_react);
+                        ivBmb.clearColorFilter();
                         addReaction(0);
 
                     }
@@ -182,6 +184,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.goals_react);
+                        ivBmb.clearColorFilter();
                         addReaction(1);
                     }
                 })
@@ -193,6 +196,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.clap_react);
+                        ivBmb.clearColorFilter();
                         addReaction(2);
                     }
                 })
@@ -204,6 +208,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.ok_react);
+                        ivBmb.clearColorFilter();
                         addReaction(3);
                     }
                 })
@@ -215,6 +220,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.bump_react);
+                        ivBmb.clearColorFilter();
                         addReaction(4);
                     }
                 })
@@ -286,7 +292,9 @@ public class StoryFragment extends Fragment {
         }
         object = mStory.get(mIndex);
 
-        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
+//        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
+        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
+        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
 
         ParseFile video = null;
         try {
@@ -456,6 +464,33 @@ public class StoryFragment extends Fragment {
                     break;
                 default:
                     break;
+            }
+
+            try {
+                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
+                    ivBmb.clearColorFilter();
+                    switch (type) {
+                        case "thumbs":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
+                            break;
+                        case "goals":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+                            break;
+                        case "clap":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
+                            break;
+                        case "ok":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
+                            break;
+                        case "bump":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
+                            break;
+                        default:
+                            ivBmb.setVisibility(View.GONE);
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
     }
