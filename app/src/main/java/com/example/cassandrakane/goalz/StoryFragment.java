@@ -198,23 +198,15 @@ public class StoryFragment extends Fragment {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        final List<ParseObject> reactions = object.getList("reactions");
-                        if (reactions != null) {
-                            Integer reactionCount = reactions.size();
-                            // TODO set text to reactionCount
-//                            tvReactionCount.setText(Integer.toString(reactionCount));
-
-                            if (reactionCount != 0) {
-                                setReaction(reactions);
-                                List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
-                                Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                                intent.putExtra("reactions", (Serializable) reactions);
-                                intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                                if (mHandler != null) {
-                                    mHandler.removeCallbacks(runnable);
-                                }
-                                getActivity().startActivity(intent);
+                        if (reactionCount != 0) {
+                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
+                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                            intent.putExtra("reactions", (Serializable) reactions);
+                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                            if (mHandler != null) {
+                                mHandler.removeCallbacks(runnable);
                             }
+                            getActivity().startActivity(intent);
                         }
                     }
                 })
@@ -425,6 +417,14 @@ public class StoryFragment extends Fragment {
         }
         if (user != null) {
             tvUsername.setText(user .getUsername());
+        }
+
+        reactions = object.getList("reactions");
+        if (reactions != null) {
+            reactionCount = reactions.size();
+            setReaction(reactions);
+            // TODO set text to reactionCount
+//          tvReactionCount.setText(Integer.toString(reactionCount));
         }
 
         // TODO include hardcoding for ukulele videos
