@@ -105,7 +105,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:fontFamily="@font/quicksand_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:text="@string/_0"
             android:textSize="16sp" />
 
@@ -120,7 +120,7 @@
             android:focusable="true"
             android:background="@drawable/friend"
             android:focusableInTouchMode="true"
-            android:backgroundTint="@color/black" />
+            android:backgroundTint="@color/white" />
 
         <Button
             android:id="@+id/ibAdd"
