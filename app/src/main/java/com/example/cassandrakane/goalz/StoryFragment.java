@@ -225,6 +225,28 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.rock_react)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        ivBmb.setImageResource(R.drawable.rock_react);
+                        ivBmb.clearColorFilter();
+                        // TODO add reaction
+                    }
+                })
+        );
+        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.notification)
+                .normalColorRes(R.color.white)
+                .highlightedColorRes(R.color.orange)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        // TODO open modal
+                    }
+                })
+        );
 
         btnLeft.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
