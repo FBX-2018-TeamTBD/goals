@@ -1,7 +1,9 @@
 package com.example.cassandrakane.goalz;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +30,7 @@ import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.OnBoomListener;
 import com.parse.ParseException;
@@ -304,6 +307,7 @@ public class StoryFragment extends Fragment {
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 
+    @SuppressLint("DefaultLocale")
     public void setReactionBoomMenuButton() {
         thumbsCount = goalsCount = clapCount = okCount = bumpCount = rockCount = 0;
 
@@ -342,7 +346,7 @@ public class StoryFragment extends Fragment {
             public void onBoomDidShow() { }
         });
 
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.thumbs_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
@@ -355,7 +359,7 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.clap_react)
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.clap_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
@@ -367,7 +371,7 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.bump_react)
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.bump_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
@@ -380,10 +384,16 @@ public class StoryFragment extends Fragment {
                 })
         );
         // TODO set text
-        bmb.addBuilder(new SimpleCircleButton.Builder()
-                .normalImageRes(R.drawable.notification)
+        bmb.addBuilder(new TextInsideCircleButton.Builder()
+                .normalText(String.format("%d", reactionCount))
+                .normalTextColorRes(R.color.white)
                 .normalColorRes(R.color.orange)
+                .highlightedTextColorRes(R.color.orange)
                 .highlightedColorRes(R.color.white)
+                .textSize(40)
+                .textRect(new Rect(com.nightonke.boommenu.Util.dp2px(15), com.nightonke.boommenu.Util.dp2px(12),
+                        com.nightonke.boommenu.Util.dp2px(65), com.nightonke.boommenu.Util.dp2px(62)))
+                .textGravity(Gravity.CENTER)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
@@ -400,7 +410,7 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.ok_react)
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.ok_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
@@ -412,7 +422,7 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.rock_react)
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.rock_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
@@ -424,7 +434,7 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        bmb.addBuilder(new SimpleCircleButton.Builder().normalImageRes(R.drawable.goals_react)
+        bmb.addBuilder(new TextInsideCircleButton.Builder().normalImageRes(R.drawable.goals_react)
                 .normalColorRes(R.color.white)
                 .highlightedColorRes(R.color.orange)
                 .listener(new OnBMClickListener() {
