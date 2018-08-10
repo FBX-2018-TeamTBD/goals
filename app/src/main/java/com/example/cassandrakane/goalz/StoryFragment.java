@@ -129,27 +129,8 @@ public class StoryFragment extends Fragment {
 
         setImage();
 
-//        btnReaction.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch(event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        if (rv != null) {
-//                            rootLayout.removeView(rv);
-//                        }
-//
-//                        rv = new ReactionView(getActivity(), StoryFragment.this, object);
-//                        rootLayout.addView(rv);
-//                        if (mHandler != null) {
-//                            mHandler.removeCallbacks(runnable);
-//                        }
-//                        return true; // if you want to handle the touch event
-//                    case MotionEvent.ACTION_UP:
-//                        return true; // if you want to handle the touch event
-//                }
-//                return false;
-//            }
-//        });
+
+
         bmb.setOnBoomListener(new OnBoomListener() {
             @Override
             public void onClicked(int index, BoomButton boomButton) {
