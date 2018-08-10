@@ -40,9 +40,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -275,7 +273,6 @@ public class StoryFragment extends Fragment {
     }
 
     public void setImage(){
-
         thumbsCount = 0;
         goalsCount = 0;
         clapCount = 0;
@@ -291,7 +288,14 @@ public class StoryFragment extends Fragment {
 
         ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
 
-        if (object.get("video") != null){
+        ParseFile video = null;
+        try {
+            video = (ParseFile) object.fetchIfNeeded().get("video");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (video != null){
             viewStory.setVisibility(View.VISIBLE);
             Video videoObject = (Video) object;
 
@@ -304,8 +308,6 @@ public class StoryFragment extends Fragment {
                 videoObject.setViewedBy(viewedBy);
                 videoObject.saveInBackground();
             }
-
-            ParseFile video = (ParseFile) object.get("video");
 
             String caption = (String) object.get("caption");
             if (caption.length() != 0){
@@ -408,13 +410,21 @@ public class StoryFragment extends Fragment {
         if (user != null) {
             tvUsername.setText(user .getUsername());
         }
-//        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        Date createdGoal = mGoal.getCreatedAt();
-        Date createdAt = object.getCreatedAt();
-        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
-        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
 
-        tvDateAdded.setText("Day " + Integer.toString(day + 1));
+        // TODO include hardcoding for ukulele videos
+        // HARDCODE FOR DEMO
+        if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
+            tvDateAdded.setText("DAY 2");
+        } else {
+            tvDateAdded.setText("DAY 1");
+        }
+
+//        Date createdGoal = mGoal.getCreatedAt();
+//        Date createdAt = object.getCreatedAt();
+//        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
+//        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
+//        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
+
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 

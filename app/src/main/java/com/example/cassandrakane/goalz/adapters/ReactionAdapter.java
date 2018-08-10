@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.utils.Util;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -41,7 +42,13 @@ public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHo
         final Reaction reaction = (Reaction) mReactions.get(i);
         final ParseUser user = (ParseUser) reaction.get("user");
 
-        viewHolder.tvUsername.setText(user.getUsername());
+        String username = "";
+        try {
+            username = user.fetchIfNeeded().getUsername();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        viewHolder.tvUsername.setText(username);
 
         ParseFile image = user.getParseFile("image");
         Util.setImage(image, context.getResources(), viewHolder.ivProfile, R.color.orange);
