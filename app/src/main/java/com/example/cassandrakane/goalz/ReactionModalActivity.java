@@ -25,6 +25,7 @@ public class ReactionModalActivity extends Activity {
     @BindView(R.id.tvClapCount) TextView tvClapCount;
     @BindView(R.id.tvOkCount) TextView tvOkCount;
     @BindView(R.id.tvBumpCount) TextView tvBumpCount;
+    @BindView(R.id.tvRockCount) TextView tvRockCount;
     ReactionAdapter reactionAdapter;
     List<ParseObject> reactions;
     List<Integer> reactionCounts;
@@ -61,6 +62,7 @@ public class ReactionModalActivity extends Activity {
             tvClapCount.setText(Integer.toString(reactionCounts.get(2)));
             tvOkCount.setText(Integer.toString(reactionCounts.get(3)));
             tvBumpCount.setText(Integer.toString(reactionCounts.get(4)));
+            tvRockCount.setText(Integer.toString(reactionCounts.get(5)));
         }
     }
 

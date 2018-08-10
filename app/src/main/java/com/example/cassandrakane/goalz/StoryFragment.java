@@ -78,6 +78,10 @@ public class StoryFragment extends Fragment {
     private Integer clapCount = 0;
     private Integer okCount = 0;
     private Integer bumpCount = 0;
+    private Integer rockCount = 0;
+
+    private List<ParseObject> reactions;
+    private Integer reactionCount;
 
     private Goal mGoal;
 
@@ -202,7 +206,7 @@ public class StoryFragment extends Fragment {
 
                             if (reactionCount != 0) {
                                 setReaction(reactions);
-                                List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount);
+                                List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
                                 Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
                                 intent.putExtra("reactions", (Serializable) reactions);
                                 intent.putExtra("reactionCounts", (Serializable) reactionCounts);
@@ -235,7 +239,7 @@ public class StoryFragment extends Fragment {
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.rock_react);
                         ivBmb.clearColorFilter();
-                        // TODO add reaction
+                        addReaction(5);
                     }
                 })
         );
@@ -310,6 +314,7 @@ public class StoryFragment extends Fragment {
         clapCount = 0;
         okCount = 0;
         bumpCount = 0;
+        rockCount = 0;
 
         if (mIndex < 0) {
             mIndex = mStory.size() - 1;
@@ -465,6 +470,8 @@ public class StoryFragment extends Fragment {
                 case "bump":
                     bumpCount += 1;
                     break;
+                case "rock":
+                    rockCount += 1;
                 default:
                     break;
             }
@@ -488,6 +495,8 @@ public class StoryFragment extends Fragment {
                         case "bump":
                             ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
                             break;
+                        case "rock":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
                         default:
                             ivBmb.setVisibility(View.GONE);
                     }
@@ -515,6 +524,8 @@ public class StoryFragment extends Fragment {
             case 4:
                 type = "bump";
                 break;
+            case 5:
+                type = "rock";
             default:
                 type = "";
 
