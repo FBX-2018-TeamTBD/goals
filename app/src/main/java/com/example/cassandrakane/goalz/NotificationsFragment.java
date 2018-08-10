@@ -1,18 +1,14 @@
 package com.example.cassandrakane.goalz;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,6 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class NotificationsFragment extends Fragment {
 
@@ -72,12 +69,6 @@ public class NotificationsFragment extends Fragment {
     }
 
     @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        Log.i("sdf", "anima");
-        return super.onCreateAnimation(transit, enter, nextAnim);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -109,7 +100,6 @@ public class NotificationsFragment extends Fragment {
                 getTextNotifications();
                 getGoalRequests();
                 getFriendRequests();
-                runLayoutAnimation();
             }
         });
         // Configure the refreshing colors
@@ -126,18 +116,30 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter = new NotificationAdapter(textNotifications, goalRequests, allGoalRequests, friendRequests, allFriendRequests, this);
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
         rvNotifications.setAdapter(notificationAdapter);
-
-        getTextNotifications();
-        getGoalRequests();
-        getFriendRequests();
-
-        if(allGoalRequests.size() == 0 && allFriendRequests.size() == 0) {
-            noNotifications.setVisibility(View.VISIBLE);
-        } else {
-            noNotifications.setVisibility(View.GONE);
-        }
+        SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+        animator.setAddDuration(1000);
+        animator.setRemoveDuration(500);
+        animator.setChangeDuration(500);
+        animator.setMoveDuration(1000);
+        rvNotifications.setItemAnimator(animator);
 
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getTextNotifications();
+            getGoalRequests();
+            getFriendRequests();
+
+            if(allGoalRequests.size() == 0 && allFriendRequests.size() == 0) {
+                noNotifications.setVisibility(View.VISIBLE);
+            } else {
+                noNotifications.setVisibility(View.GONE);
+            }
+        }
     }
 
     public void getTextNotifications() {
@@ -147,6 +149,7 @@ public class NotificationsFragment extends Fragment {
         query.findInBackground(new FindCallback<TextNotification>() {
             @Override
             public void done(List<TextNotification> objects, ParseException e) {
+                notificationCount += textNotifications.size();
                 textNotifications.clear();
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
@@ -167,6 +170,7 @@ public class NotificationsFragment extends Fragment {
         query.findInBackground(new FindCallback<GoalRequests>() {
             @Override
             public void done(List<GoalRequests> objects, ParseException e) {
+                notificationCount += goalRequests.size();
                 goalRequests.clear();
                 allGoalRequests.clear();
                 if (objects != null) {
@@ -199,8 +203,10 @@ public class NotificationsFragment extends Fragment {
         query.findInBackground(new FindCallback<SentFriendRequests>() {
             @Override
             public void done(List<SentFriendRequests> objects, ParseException e) {
+                notificationCount += friendRequests.size();
                 friendRequests.clear();
                 allFriendRequests.clear();
+                notificationAdapter.notifyItemRangeRemoved(0, notificationCount);
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
                         SentFriendRequests request = objects.get(i);
@@ -213,22 +219,15 @@ public class NotificationsFragment extends Fragment {
                         }
                     }
                 }
+                notificationAdapter.notifyItemRangeInserted(0, friendRequests.size() + goalRequests.size() + textNotifications.size());
+
             }
         });
+        swipeContainer.setRefreshing(false);
     }
 
     public void setNotificationHeader() {
         Util.populateNotificationsHeader(getContext(), ParseUser.getCurrentUser(), tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
     }
 
-    public void runLayoutAnimation() {
-        final Context context = rvNotifications.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down);
-
-        rvNotifications.setLayoutAnimation(controller);
-        notificationAdapter.notifyDataSetChanged();
-        rvNotifications.scheduleLayoutAnimation();
-        swipeContainer.setRefreshing(false);
-    }
 }

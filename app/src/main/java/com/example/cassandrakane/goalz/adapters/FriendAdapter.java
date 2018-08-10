@@ -67,7 +67,6 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 toFriendActivity(friend);
             }
         });
-
     }
 
     @Override
@@ -93,4 +92,5 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

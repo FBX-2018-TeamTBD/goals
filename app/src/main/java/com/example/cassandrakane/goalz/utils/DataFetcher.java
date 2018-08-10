@@ -57,7 +57,7 @@ public class DataFetcher {
                 } catch(ParseException e) {
                     e.printStackTrace();
                 }
-                if (goal.getCompleted()) {
+                if (goal != null && goal.getCompleted()) {
                     userGoals.add(goal);
                 } else {
                     userGoals.add(0, goal);

@@ -10,6 +10,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class ChatActivity extends AppCompatActivity {
     static final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
@@ -113,6 +115,12 @@ public class ChatActivity extends AppCompatActivity {
                 return gestureDetector.onTouchEvent(motionEvent);
             }
         });
+        SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+        animator.setAddDuration(1000);
+        animator.setRemoveDuration(500);
+        animator.setChangeDuration(500);
+        animator.setMoveDuration(1000);
+        rvChat.setItemAnimator(animator);
 
         etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
            public void onFocusChange(View v, boolean hasFocus) {
@@ -179,7 +187,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String data = etMessage.getText().toString();
                 if (!data.equals("")) {
-                    Message message = new Message();
+                    final Message message = new Message();
                     message.setBody(data);
                     message.setFromUser(ParseUser.getCurrentUser());
                     message.setToUser(toUser);
@@ -187,7 +195,9 @@ public class ChatActivity extends AppCompatActivity {
                     message.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            refreshMessages();
+                            //refreshMessages();
+                            mMessages.add(message);
+                            mAdapter.notifyItemInserted(mMessages.size() - 1);
                         }
                     });
                     etMessage.setText("");
@@ -222,9 +232,11 @@ public class ChatActivity extends AppCompatActivity {
         mainQuery.findInBackground(new FindCallback<Message>() {
             public void done(List<Message> messages, ParseException e) {
                 if (e == null) {
+                    int size = mMessages.size();
                     mMessages.clear();
+                    mAdapter.notifyItemRangeRemoved(0, size);
                     mMessages.addAll(messages);
-                    mAdapter.notifyDataSetChanged(); // update adapter
+                    mAdapter.notifyItemRangeInserted(0, messages.size()); // update adapter
                     // Scroll to the bottom of the list on initial load
                     if (mFirstLoad) {
                         rvChat.scrollToPosition(0);

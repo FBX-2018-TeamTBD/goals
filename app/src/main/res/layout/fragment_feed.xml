@@ -23,12 +23,11 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="7dp" />
 
-            <com.example.cassandrakane.goalz.views.GridRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvFriends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvFriends"
-                android:layoutAnimation="@anim/bottom_grid_layout"
                 android:layout_marginTop="10dp" />
 
             <TextView

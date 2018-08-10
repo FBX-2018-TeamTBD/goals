@@ -18,7 +18,7 @@
         android:textSize="20sp"
         android:text="@string/my_goals" />
 
-    <com.example.cassandrakane.goalz.views.GridRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +26,6 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layoutAnimation="@anim/bottom_grid_layout"
         android:paddingTop="7dp" />
 
     <android.support.design.widget.FloatingActionButton
