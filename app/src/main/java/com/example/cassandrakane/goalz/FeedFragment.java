@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.cassandrakane.goalz.adapters.FriendAdapter;
 import com.example.cassandrakane.goalz.adapters.StoryAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.Util;
+import com.example.cassandrakane.goalz.views.GridRecyclerView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -36,7 +38,7 @@ public class FeedFragment extends Fragment {
     List<Goal> goals;
     List<ParseUser> correspondingFriends;
 
-    @BindView(R.id.rvFriends) RecyclerView rvFriends;
+    @BindView(R.id.rvFriends) GridRecyclerView rvFriends;
     @BindView(R.id.rvSuggestedFriends) RecyclerView rvSuggestedFriends;
     @BindView(R.id.noFriends) RelativeLayout noFriendsPage;
     @BindView(R.id.friendsPage) RelativeLayout friendsPage;
@@ -129,6 +131,7 @@ public class FeedFragment extends Fragment {
         ParseObject.unpinAllInBackground(arr);
         ParseObject.pinAllInBackground(arr);
 
+        Log.i("lsdf", "loaded friends");
         friendAdapter.notifyDataSetChanged();
     }
 

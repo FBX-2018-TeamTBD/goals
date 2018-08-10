@@ -1,5 +1,6 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.ViewFlipper;
 
@@ -103,7 +105,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 btnRefresh.startAnimation(animation);
-                networkPopulateProfile();
+                //networkPopulateProfile();
+                runLayoutAnimation();
             }
         });
 
@@ -199,12 +202,21 @@ public class ProfileFragment extends Fragment {
                 btnRefresh.setVisibility(View.VISIBLE);
             }
 
-            goalAdapter.notifyDataSetChanged();
-            btnRefresh.clearAnimation();
-            ParseObject.unpinAllInBackground(goals);
-            ParseObject.pinAllInBackground(goals);
-            mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    public void runLayoutAnimation() {
+        final Context context = rvGoals.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.bottom_grid_layout);
+
+        rvGoals.setLayoutAnimation(controller);
+        goalAdapter.notifyDataSetChanged();
+        btnRefresh.clearAnimation();
+        ParseObject.unpinAllInBackground(goals);
+        ParseObject.pinAllInBackground(goals);
+        mainActivity.centralFragment.progressBar.setVisibility(View.INVISIBLE);
+        rvGoals.scheduleLayoutAnimation();
     }
 }

@@ -1,13 +1,18 @@
 package com.example.cassandrakane.goalz;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -67,6 +72,12 @@ public class NotificationsFragment extends Fragment {
     }
 
     @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        Log.i("sdf", "anima");
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -98,6 +109,7 @@ public class NotificationsFragment extends Fragment {
                 getTextNotifications();
                 getGoalRequests();
                 getFriendRequests();
+                runLayoutAnimation();
             }
         });
         // Configure the refreshing colors
@@ -143,7 +155,6 @@ public class NotificationsFragment extends Fragment {
                         noNotifications.setVisibility(View.GONE);
                     }
                 }
-                notificationAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -175,7 +186,6 @@ public class NotificationsFragment extends Fragment {
                         allGoalRequests.add(request);
                     }
                 }
-                notificationAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -202,14 +212,23 @@ public class NotificationsFragment extends Fragment {
                             e1.printStackTrace();
                         }
                     }
-                    swipeContainer.setRefreshing(false);
                 }
-                notificationAdapter.notifyDataSetChanged();
             }
         });
     }
 
     public void setNotificationHeader() {
         Util.populateNotificationsHeader(getContext(), ParseUser.getCurrentUser(), tvProgress, tvCompleted, tvFriends, tvUsername, ivProfile, goals, incompleted);
+    }
+
+    public void runLayoutAnimation() {
+        final Context context = rvNotifications.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down);
+
+        rvNotifications.setLayoutAnimation(controller);
+        notificationAdapter.notifyDataSetChanged();
+        rvNotifications.scheduleLayoutAnimation();
+        swipeContainer.setRefreshing(false);
     }
 }
