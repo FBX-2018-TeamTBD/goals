@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +41,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,6 +171,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.thumbs_react);
+                        ivBmb.clearColorFilter();
                         addReaction(0);
 
                     }
@@ -184,6 +184,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.goals_react);
+                        ivBmb.clearColorFilter();
                         addReaction(1);
                     }
                 })
@@ -195,6 +196,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.clap_react);
+                        ivBmb.clearColorFilter();
                         addReaction(2);
                     }
                 })
@@ -206,6 +208,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.ok_react);
+                        ivBmb.clearColorFilter();
                         addReaction(3);
                     }
                 })
@@ -217,6 +220,7 @@ public class StoryFragment extends Fragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         ivBmb.setImageResource(R.drawable.bump_react);
+                        ivBmb.clearColorFilter();
                         addReaction(4);
                     }
                 })
@@ -275,7 +279,6 @@ public class StoryFragment extends Fragment {
     }
 
     public void setImage(){
-
         thumbsCount = 0;
         goalsCount = 0;
         clapCount = 0;
@@ -293,9 +296,18 @@ public class StoryFragment extends Fragment {
             e.printStackTrace();
         }
 
-        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
+//        ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
+        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
+        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
 
-        if (object.get("video") != null){
+        ParseFile video = null;
+        try {
+            video = (ParseFile) object.fetchIfNeeded().get("video");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (video != null){
             viewStory.setVisibility(View.VISIBLE);
             Video videoObject = (Video) object;
 
@@ -308,8 +320,6 @@ public class StoryFragment extends Fragment {
                 videoObject.setViewedBy(viewedBy);
                 videoObject.saveInBackground();
             }
-
-            ParseFile video = (ParseFile) object.get("video");
 
             String caption = (String) object.get("caption");
             if (caption.length() != 0){
@@ -412,13 +422,21 @@ public class StoryFragment extends Fragment {
         if (user != null) {
             tvUsername.setText(user .getUsername());
         }
-//        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        Date createdGoal = mGoal.getCreatedAt();
-        Date createdAt = object.getCreatedAt();
-        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
-        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
 
-        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
+        // TODO include hardcoding for ukulele videos
+        // HARDCODE FOR DEMO
+        if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
+            tvDateAdded.setText("DAY 2");
+        } else {
+            tvDateAdded.setText("DAY 1");
+        }
+
+//        Date createdGoal = mGoal.getCreatedAt();
+//        Date createdAt = object.getCreatedAt();
+//        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
+//        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
+//        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
+
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 
@@ -450,6 +468,33 @@ public class StoryFragment extends Fragment {
                     break;
                 default:
                     break;
+            }
+
+            try {
+                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
+                    ivBmb.clearColorFilter();
+                    switch (type) {
+                        case "thumbs":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
+                            break;
+                        case "goals":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+                            break;
+                        case "clap":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
+                            break;
+                        case "ok":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
+                            break;
+                        case "bump":
+                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
+                            break;
+                        default:
+                            ivBmb.setVisibility(View.GONE);
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
     }

@@ -140,17 +140,19 @@ public class FeedFragment extends Fragment {
         for (int i = 0; i < friends.size(); i++) {
             ParseUser friend = friends.get(i);
             List<Goal> friendGoals = friend.getList("goals");
-            for (int j = 0; j < friendGoals.size(); j++) {
-                Goal goal = friendGoals.get(j);
+            if (friendGoals != null) {
+                for (int j = 0; j < friendGoals.size(); j++) {
+                    Goal goal = friendGoals.get(j);
 //                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
 //                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
 //                    goals.add(goal);
 //                    correspondingFriends.add(friend);
 //                }
-                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                        && !goals.contains(goal)) {
-                    goals.add(goal);
-                    correspondingFriends.add(friend);
+                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                            && !goals.contains(goal)) {
+                        goals.add(goal);
+                        correspondingFriends.add(friend);
+                    }
                 }
             }
         }
@@ -185,10 +187,12 @@ public class FeedFragment extends Fragment {
                 List<Goal> friendGoals = friend.fetchIfNeeded().getList("goals");
                 for (int j = 0; j < friendGoals.size(); j++) {
                     Goal goal = friendGoals.get(j);
-                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
-                            && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
-                        goals.add(goal);
-                        correspondingFriends.add(friend);
+                    if (goal.getStory() != null) {
+                        if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                                && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
+                            goals.add(goal);
+                            correspondingFriends.add(friend);
+                        }
                     }
                 }
             } catch (ParseException e) {

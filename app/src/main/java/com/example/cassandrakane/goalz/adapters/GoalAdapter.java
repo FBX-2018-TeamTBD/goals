@@ -153,12 +153,20 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
         }
-        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
+
+        // HARDCODE FOR DEMO
+        if (goal.getObjectId().equals("jBsVVmXedF") && currentUser.getObjectId().equals("aRuJfmtYke") && !goal.getIsItemAdded()) {
             holder.ivStar.setImageResource(R.drawable.clock);
         } else {
             holder.ivStar.setImageResource(R.drawable.star);
         }
+
+//        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+//        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
+//            holder.ivStar.setImageResource(R.drawable.clock);
+//        } else {
+//            holder.ivStar.setImageResource(R.drawable.star);
+//        }
     }
 
     private void setFriendViews(final Goal goal, final ViewHolder holder) {
