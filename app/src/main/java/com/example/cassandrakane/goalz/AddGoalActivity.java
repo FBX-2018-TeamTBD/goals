@@ -159,7 +159,7 @@ public class AddGoalActivity extends AppCompatActivity {
             Goal goal = new Goal(etTitle.getText().toString(),
                     sbDuration.getProgress(), frequency, 0, 0,
                     new ArrayList<ParseObject>(), ParseUser.getCurrentUser(), false, updateBy,
-                    selectedFriends, approved, pendingFriends, usersAdded);
+                    selectedFriends, approved, pendingFriends, usersAdded, new ArrayList<ParseObject>());
             List<ParseObject> goals = user.getList("goals");
             sendGoalRequest(goal, pendingFriends);
             goals.add(0, goal);

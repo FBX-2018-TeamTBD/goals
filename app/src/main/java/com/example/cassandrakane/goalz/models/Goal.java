@@ -25,7 +25,7 @@ public class Goal extends ParseObject implements Parcelable {
     public Goal(String title, int duration, int frequency, int progress,
                 int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy,
                 List<ParseUser> friends, List<ParseUser> approvedUsers, List<ParseUser> pendingUsers,
-                Map<String, String> userAdded) {
+                Map<String, String> userAdded, List<ParseObject> reactions) {
         super();
         setTitle(title);
         setDuration(duration);
@@ -40,6 +40,7 @@ public class Goal extends ParseObject implements Parcelable {
         setApprovedUsers(approvedUsers);
         setPendingUsers(pendingUsers);
         setUserAdded(userAdded);
+        setReactions(reactions);
     }
 
     public List<ParseObject> getStory() {

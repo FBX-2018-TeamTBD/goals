@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.utils.Util;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -40,18 +39,11 @@ public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ReactionAdapter.ViewHolder viewHolder, int i) {
         final Reaction reaction = (Reaction) mReactions.get(i);
-        ParseUser user;
-        String username = "";
-        ParseFile image = null;
-        String type = "";
-        try {
-            user = reaction.fetchIfNeeded().getParseUser("user");
-            username = user.fetchIfNeeded().getUsername();
-            image = user.fetchIfNeeded().getParseFile("image");
-            type = reaction.fetchIfNeeded().getString("type");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ParseUser user = reaction.getParseUser("user");
+        String username = user.getUsername();
+        ParseFile image = user.getParseFile("image");
+        String type = reaction.getString("type");
+
         viewHolder.tvUsername.setText(username);
 
         Util.setImage(image, context.getResources(), viewHolder.ivProfile, R.color.orange);

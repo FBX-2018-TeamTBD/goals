@@ -280,12 +280,7 @@ public class StoryFragment extends Fragment {
 
         }
 
-        ParseUser user = null;
-        try {
-            user = object.getParseUser("user").fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        ParseUser user = object.getParseUser("user");
         if (user != null) {
             tvUsername.setText(user .getUsername());
         }
@@ -451,12 +446,7 @@ public class StoryFragment extends Fragment {
     public void setReaction(List<ParseObject> reactions){
         for (ParseObject reaction : reactions){
             Reaction reactionObject = (Reaction) reaction;
-            String type = null;
-            try {
-                type = reactionObject.fetchIfNeeded().getString("type");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String type = reactionObject.getString("type");
 
             switch (type) {
                 case "thumbs":
@@ -481,35 +471,31 @@ public class StoryFragment extends Fragment {
                     break;
             }
 
-            try {
-                if (reactionObject.fetchIfNeeded().getParseUser("user") == currentUser){
-                    ivBmb.clearColorFilter();
-                    switch (type) {
-                        case "thumbs":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
-                            break;
-                        case "goals":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
-                            break;
-                        case "clap":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
-                            break;
-                        case "ok":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
-                            break;
-                        case "bump":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
-                            break;
-                        case "rock":
-                            ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
-                            break;
-                        default:
-                            ivBmb.setVisibility(View.GONE);
-                            break;
-                    }
+            if (reactionObject.getParseUser("user") == currentUser){
+                ivBmb.clearColorFilter();
+                switch (type) {
+                    case "thumbs":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.thumbs_react));
+                        break;
+                    case "goals":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.goals_react));
+                        break;
+                    case "clap":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.clap_react));
+                        break;
+                    case "ok":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ok_react));
+                        break;
+                    case "bump":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.bump_react));
+                        break;
+                    case "rock":
+                        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.rock_react));
+                        break;
+                    default:
+                        ivBmb.setVisibility(View.GONE);
+                        break;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
     }
