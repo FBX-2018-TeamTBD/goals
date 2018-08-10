@@ -46,6 +46,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/add_goal"
+                android:onClick="autofill"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
             <Button

@@ -201,4 +201,11 @@ public class AddGoalActivity extends AppCompatActivity {
         }
     }
 
+    public void autofill(View v) {
+        etTitle.setText("spread positivity");
+        etTitle.setSelection(17);
+        sbDuration.setProgress(16);
+        rbDay.toggle();
+    }
+
 }

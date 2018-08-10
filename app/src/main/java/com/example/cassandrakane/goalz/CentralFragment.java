@@ -49,6 +49,7 @@ public class CentralFragment extends Fragment {
         pages.add(cameraFragment);
         pages.add(profileFragment);
         pages.add(feedFragment);
+
     }
 
     @Override

@@ -287,7 +287,11 @@ public class StoryFragment extends Fragment {
         } else if (mIndex >= mStory.size()) {
             mIndex = 0;
         }
-        object = mStory.get(mIndex);
+        try {
+            object = mStory.get(mIndex).fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         ivAllReactions.setColorFilter(Color.argb(255, 255, 255, 255));
 
@@ -414,7 +418,7 @@ public class StoryFragment extends Fragment {
         int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
         int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
 
-        tvDateAdded.setText("Day " + Integer.toString(day + 1));
+        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }
 
