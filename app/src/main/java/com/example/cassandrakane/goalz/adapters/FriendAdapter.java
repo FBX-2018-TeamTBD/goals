@@ -46,7 +46,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         // get the data according to position
         final ParseUser friend = friends.get(position);
 
-        ViewHolder viewHolder = (ViewHolder) holder;
+        final ViewHolder viewHolder = (ViewHolder) holder;
         viewHolder.tvUsername.setText(friend.getUsername());
         final ParseFile file = friend.getParseFile("image");
         Util.setImage(file, context.getResources(), viewHolder.ivProfile, R.color.orange);

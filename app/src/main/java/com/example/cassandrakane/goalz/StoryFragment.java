@@ -161,6 +161,7 @@ public class StoryFragment extends Fragment {
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnClose.setOnClickListener(null);
                 if (mHandler != null) {
                     mHandler.removeCallbacks(runnable);
                 }

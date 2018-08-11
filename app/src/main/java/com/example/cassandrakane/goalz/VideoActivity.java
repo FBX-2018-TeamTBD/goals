@@ -197,6 +197,7 @@ public class VideoActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnCamera.setOnClickListener(null);
                 finish();
             }
         });

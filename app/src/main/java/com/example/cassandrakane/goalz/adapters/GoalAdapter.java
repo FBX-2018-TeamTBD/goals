@@ -34,7 +34,9 @@ import com.example.cassandrakane.goalz.ReactionModalActivity;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.GetCallback;
@@ -194,6 +196,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.overlayFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    holder.overlayFriends.setOnClickListener(null);
                     Intent i = new Intent(context, SearchFriendsActivity.class);
                     i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
                     i.putExtra(Goal.class.getSimpleName(), goal);
@@ -259,6 +262,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.btnReaction.setOnClickListener(null);
                 Intent intent = new Intent(context, ReactionModalActivity.class);
                 intent.putExtra("reactions", (Serializable) reax);
                 intent.putExtra("reactionCounts", (Serializable) reactionCounts);
@@ -280,11 +284,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvReaction.setVisibility(View.VISIBLE);
 
         ParseFile image = null;
+
         try {
-            image = story.get(startIndex).fetch().getParseFile("image");
-        } catch (ParseException e) {
+          Image parseObject = (Image) story.get(startIndex);
+          image = parseObject.getParseFile("image");
+        } catch (ClassCastException e) {
             e.printStackTrace();
+            Video parseObject = (Video) story.get(startIndex);
+            image = parseObject.getParseFile("image");
         }
+
         if (image != null) {
             Glide.with(context)
                     .load(image.getUrl())

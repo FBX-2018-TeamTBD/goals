@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,6 +64,7 @@ public class DisplayActivity extends AppCompatActivity {
     @BindView(R.id.videoView) VideoView vvVideo;
     @BindView(R.id.etCaption) EditText etCaption;
     @BindView(R.id.btnAddCaption) ImageButton btnAddCaption;
+    @BindView(R.id.btnBack) Button btnBack;
 
     ArrayList<ParseObject> parseVideos;
     ArrayList<File> videos;
@@ -90,6 +92,7 @@ public class DisplayActivity extends AppCompatActivity {
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    btnConfirm.setOnClickListener(null);
                     if (file != null) {
                         final ParseFile parseFile = new ParseFile(file);
                         caption = etCaption.getText().toString();
@@ -326,6 +329,7 @@ public class DisplayActivity extends AppCompatActivity {
     }
 
     public void goBack(View v) {
+        btnBack.setOnClickListener(null);
         finish();
     }
 

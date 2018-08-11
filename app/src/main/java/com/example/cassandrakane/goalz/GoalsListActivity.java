@@ -98,6 +98,8 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
+        // ensures the confirm button is pressed only once
+        btnConfirm.setOnClickListener(null);
         progressBar.setVisibility(ProgressBar.VISIBLE);
         if (file != null) {
             final ParseFile parseFile = new ParseFile(file);
