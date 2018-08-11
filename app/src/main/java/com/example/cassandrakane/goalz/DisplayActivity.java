@@ -68,8 +68,8 @@ public class DisplayActivity extends AppCompatActivity {
 
     ArrayList<ParseObject> parseVideos;
     ArrayList<File> videos;
+    Date currentDate = new Date();
     Goal goal;
-    Date currentDate;
     String caption;
     int i;
     private int mTasksComplete = 0;
@@ -82,10 +82,46 @@ public class DisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        currentDate = new Date();
-        videos = new ArrayList<>();
-
         ButterKnife.bind(this);
+
+        cameraId = getIntent().getStringExtra("cameraId");
+        videos = (ArrayList) getIntent().getSerializableExtra("videos");
+        file = (File) getIntent().getSerializableExtra("image");
+        if (file != null) {
+            image = BitmapFactory.decodeFile(file.getAbsolutePath());
+            image = rotateBitmapOrientation(file.getAbsolutePath());
+
+            if (cameraId != null && cameraId.equals("1")) {
+                try {
+                    //create a file to write bitmap data
+                    file = new File(Environment.getExternalStorageDirectory() + "/" + UUID.randomUUID().toString() + "1.jpg");
+
+                    file.createNewFile();
+
+                    //Convert bitmap to byte array
+                    Bitmap bitmap = image;
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+                    //write the bytes in file
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            ivImage.setImageBitmap(image);
+        } else if (videos != null){
+            vvVideo.setVisibility(View.VISIBLE);
+            File video = videos.get(0);
+            Uri fileUri = Uri.fromFile(video);
+            vvVideo.setVideoURI(fileUri);
+            vvVideo.start();
+            i = 0;
+        }
 
         if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
             goal = Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
@@ -256,45 +292,6 @@ public class DisplayActivity extends AppCompatActivity {
                 }
             }
         });
-
-        cameraId = getIntent().getStringExtra("cameraId");
-        videos = (ArrayList) getIntent().getSerializableExtra("videos");
-        file = (File) getIntent().getSerializableExtra("image");
-        if (file != null) {
-            image = BitmapFactory.decodeFile(file.getAbsolutePath());
-            image = rotateBitmapOrientation(file.getAbsolutePath());
-
-            if (cameraId != null && cameraId.equals("1")) {
-                try {
-                    //create a file to write bitmap data
-                    file = new File(Environment.getExternalStorageDirectory() + "/" + UUID.randomUUID().toString() + "1.jpg");
-
-                    file.createNewFile();
-
-                    //Convert bitmap to byte array
-                    Bitmap bitmap = image;
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-                    byte[] bitmapdata = bos.toByteArray();
-
-                    //write the bytes in file
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            ivImage.setImageBitmap(image);
-        } else if (videos != null){
-            vvVideo.setVisibility(View.VISIBLE);
-            File video = videos.get(0);
-            Uri fileUri = Uri.fromFile(video);
-            vvVideo.setVideoURI(fileUri);
-            vvVideo.start();
-            i = 0;
-        }
     }
 
     public Bitmap rotateBitmapOrientation(String photoFilePath) {

@@ -90,7 +90,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser(), goal);
-                    frag.goal = goal;
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });
@@ -102,7 +101,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser(), goal);
-                    frag.goal = goal;
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });

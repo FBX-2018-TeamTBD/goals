@@ -50,7 +50,7 @@ public class ReactionModalActivity extends Activity {
         getWindow().setLayout(width, height);
 
         reactions = (List) getIntent().getSerializableExtra("reactions");
-        reactionCounts = (List) getIntent().getSerializableExtra("reactionCounts");
+        reactionCounts = getIntent().getIntegerArrayListExtra("reactionCounts");
 
         if (reactions != null) {
             reactionAdapter = new ReactionAdapter(reactions);
