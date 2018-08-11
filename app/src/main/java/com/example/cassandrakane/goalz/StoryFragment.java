@@ -87,6 +87,7 @@ public class StoryFragment extends Fragment {
 
     public Goal mGoal;
     String type;
+    boolean firstOpen = true;
 
     public StoryFragment() { }
 
@@ -173,6 +174,15 @@ public class StoryFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        if (!firstOpen) {
+            bmb.boom();
+        }
+        firstOpen = false;
+        super.onResume();
     }
 
     public void setImageAndText(){
