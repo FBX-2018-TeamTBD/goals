@@ -2,7 +2,6 @@ package com.example.cassandrakane.goalz;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -128,9 +127,6 @@ public class StoryFragment extends Fragment {
 
         setImageAndText();
         setReactionBoomMenuButton();
-
-        btnLeft.setBackgroundColor(Color.TRANSPARENT);
-        btnRight.setBackgroundColor(Color.TRANSPARENT);
 
         btnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
