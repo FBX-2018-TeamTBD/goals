@@ -188,7 +188,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="11dp"
             android:layout_marginTop="11dp"
-            android:background="@drawable/ic_round_thumb_up_24px"
+            android:background="@drawable/thumb_outline"
             android:backgroundTint="@color/white" />
 
     </RelativeLayout>
