@@ -375,7 +375,6 @@ public class StoryFragment extends Fragment {
                     }
                 })
         );
-        // TODO set text
         bmb.addBuilder(new TextInsideCircleButton.Builder()
                 .normalText(String.format("%d", reactionCount))
                 .normalTextColorRes(R.color.white)

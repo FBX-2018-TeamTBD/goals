@@ -145,6 +145,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
+                // DISABLE FOR DEMO
+                // goal.setStreak(0);
+
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
@@ -156,21 +159,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
-        }
 
-        // HARDCODE FOR DEMO
-        if (goal.getObjectId().equals("jBsVVmXedF") && currentUser.getObjectId().equals("aRuJfmtYke") && !goal.getIsItemAdded()) {
-            holder.ivStar.setImageResource(R.drawable.clock);
-        } else {
-            holder.ivStar.setImageResource(R.drawable.star);
-        }
+            // HARDCODE FOR DEMO
+            if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getIsItemAdded()) {
+                holder.ivStar.setImageResource(R.drawable.clock);
+            } else {
+                holder.ivStar.setImageResource(R.drawable.star);
+            }
 
-//        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-//        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
-//            holder.ivStar.setImageResource(R.drawable.clock);
-//        } else {
-//            holder.ivStar.setImageResource(R.drawable.star);
-//        }
+            // DISABLE FOR DEMO
+//          int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+//          if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
+//              holder.ivStar.setImageResource(R.drawable.clock);
+//          } else {
+//              holder.ivStar.setImageResource(R.drawable.star);
+//          }
+        }
     }
 
     private void setFriendViews(final Goal goal, final ViewHolder holder) {
