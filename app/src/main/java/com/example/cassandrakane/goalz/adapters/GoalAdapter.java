@@ -47,6 +47,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -205,16 +206,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private void setReactionViews(final Goal goal, final ViewHolder holder) {
         final List<ParseObject> reax = goal.getReactions();
-        int thumbs = 0;
-        int goaled = 0;
-        int claps = 0;
-        int oks = 0;
-        int bumps = 0;
-        int rocks = 0 ;
+        int thumbs, goaled, claps, oks, bumps, rocks;
+        thumbs = goaled = claps = oks = bumps = rocks = 0;
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
-            String type = react.getString("type");
+            String type = null;
+            try {
+                type = react.fetchIfNeeded().getString("type");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (type != null) {
                 switch (type) {
                     case "thumbs":
@@ -254,14 +256,15 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         // holder.tvReaction.setText(String.valueOf(total));
 
-        final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks);
+        final ArrayList<Integer> reactionCounts = new ArrayList<>();
+        reactionCounts.addAll(Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks));
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ReactionModalActivity.class);
                 intent.putExtra("reactions", (Serializable) reax);
-                intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
                 context.startActivity(intent);
             }
         });
@@ -300,7 +303,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                    fragmentTwo.goal = goal;
                     fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
 
                     activity.ivProfile.setVisibility(View.GONE);
@@ -380,14 +382,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                        frag.goal = goal;
                         fragTransStory.add(R.id.main_central_fragment, frag).commit();
                     } else {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                        frag.goal = goal;
                         fragTransStory.add(R.id.root_layout, frag).commit();
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);

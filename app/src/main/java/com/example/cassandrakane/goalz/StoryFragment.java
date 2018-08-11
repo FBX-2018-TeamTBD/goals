@@ -86,10 +86,7 @@ public class StoryFragment extends Fragment {
     private List<ParseObject> reactions;
     private Integer reactionCount;
 
-    private Goal mGoal;
-
-    public static Goal goal;
-
+    public Goal mGoal;
     String type;
 
     public StoryFragment() { }
@@ -392,16 +389,15 @@ public class StoryFragment extends Fragment {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        if (reactionCount != 0) {
-                            List<Integer> reactionCounts = Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount);
-                            Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                            intent.putExtra("reactions", (Serializable) reactions);
-                            intent.putExtra("reactionCounts", (Serializable) reactionCounts);
-                            if (mHandler != null) {
-                                mHandler.removeCallbacks(runnable);
-                            }
-                            getActivity().startActivity(intent);
+                        final ArrayList<Integer> reactionCounts = new ArrayList<>();
+                        reactionCounts.addAll(Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount));
+                        Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                        intent.putExtra("reactions", (Serializable) reactions);
+                        intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
+                        if (mHandler != null) {
+                            mHandler.removeCallbacks(runnable);
                         }
+                        getActivity().startActivity(intent);
                     }
                 })
         );
@@ -539,10 +535,10 @@ public class StoryFragment extends Fragment {
                     reactions.add(reaction);
                     parseObject.setReactions(reactions);
                     parseObject.saveInBackground();
-                    List<ParseObject> reacts = StoryFragment.goal.getReactions();
+                    List<ParseObject> reacts = mGoal.getReactions();
                     reacts.add(reaction);
-                    StoryFragment.goal.setReactions(reacts);
-                    StoryFragment.goal.saveInBackground();
+                    mGoal.setReactions(reacts);
+                    mGoal.saveInBackground();
                 }
             });
         } else {
@@ -559,11 +555,11 @@ public class StoryFragment extends Fragment {
                     reactions.add(reaction);
                     parseObject.setReactions(reactions);
                     parseObject.saveInBackground();
-                    List<ParseObject> reacts = StoryFragment.goal.getReactions();
+                    List<ParseObject> reacts = mGoal.getReactions();
                     reacts.add(reaction);
-                    StoryFragment.goal.setReactions(reacts);
+                    mGoal.setReactions(reacts);
 
-                    StoryFragment.goal.saveInBackground(new SaveCallback() {
+                    mGoal.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             Log.i("sdf", "success");
