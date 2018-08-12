@@ -81,6 +81,8 @@ public class GoalsListActivity extends AppCompatActivity {
             }
         }
 
+        Collections.reverse(goals);
+
         file = (File) getIntent().getSerializableExtra("image");
         videos = (ArrayList) getIntent().getSerializableExtra("videos");
         caption = getIntent().getStringExtra("caption");
@@ -100,6 +102,7 @@ public class GoalsListActivity extends AppCompatActivity {
 
     public void addImage(View v) {
         // ensures the confirm button is pressed only once
+        rvGoals.findViewHolderForAdapterPosition(0).itemView.performClick();
         btnConfirm.setOnClickListener(null);
         progressBar.setVisibility(ProgressBar.VISIBLE);
         if (file != null) {
