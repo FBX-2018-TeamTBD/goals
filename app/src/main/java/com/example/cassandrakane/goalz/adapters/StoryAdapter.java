@@ -32,6 +32,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     private List<Goal> mGoals;
     private List<ParseUser> friends;
     private int startIndex = 0;
+    private ParseUser currentUser = ParseUser.getCurrentUser();
     Context context;
 
     public StoryAdapter(List<Goal> goals, List<ParseUser> friends) {
@@ -65,7 +66,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 ParseObject image = story.get(i);
                 List<ParseUser> users = image.getList("viewedBy");
                 if (users != null) {
-                    if (users.contains(ParseUser.getCurrentUser())){
+                    if (users.contains(currentUser)){
                         seen = true;
                     }
                 }
@@ -89,7 +90,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser(), goal);
+                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });
@@ -100,7 +101,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser(), goal);
+                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });

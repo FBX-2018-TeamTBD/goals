@@ -219,11 +219,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         for (int i = 0; i < reax.size(); i++) {
             Reaction react = (Reaction) reax.get(i);
             String type = null;
-            try {
-                type = react.fetchIfNeeded().getString("type");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            try {
+                type = react.getString("type");
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
             if (type != null) {
                 switch (type) {
                     case "thumbs":
@@ -294,11 +294,19 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         try {
           Image parseObject = (Image) story.get(startIndex);
-          image = parseObject.getParseFile("image");
+//            try {
+                image = parseObject.getImage();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
         } catch (ClassCastException e) {
             e.printStackTrace();
             Video parseObject = (Video) story.get(startIndex);
-            image = parseObject.getParseFile("image");
+//            try {
+                image = parseObject.getParseFile("image");
+//            } catch (ParseException e1) {
+//                e1.printStackTrace();
+//            }
         }
 
         if (image != null) {

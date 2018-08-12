@@ -192,16 +192,17 @@ public class StoryFragment extends Fragment {
         } else if (mIndex >= mStory.size()) {
             mIndex = 0;
         }
-        try {
-            object = mStory.get(mIndex).fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+            object = mStory.get(mIndex);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
         ParseFile video = null;
         try {
-            video = (ParseFile) object.fetchIfNeeded().get("video");
-        } catch (ParseException e) {
+            Video videoObject = (Video) object;
+            video = (ParseFile) videoObject.get("video");
+        } catch (ClassCastException e) {
             e.printStackTrace();
         }
 
@@ -286,7 +287,7 @@ public class StoryFragment extends Fragment {
 
         ParseUser user = object.getParseUser("user");
         if (user != null) {
-            tvUsername.setText(user .getUsername());
+            tvUsername.setText(user.getUsername());
         }
 
         // TODO include hardcoding for ukulele videos
