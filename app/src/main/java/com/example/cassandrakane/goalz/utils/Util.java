@@ -53,6 +53,27 @@ public class Util {
     public static boolean storyMode = false;
     public static StoryFragment storyFragment = null;
 
+    public static void hideKeyboard(View view, Context context) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static Date yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal.getTime();
+    }
+
+    public static boolean isImage(ParseObject parseObject) {
+        try {
+            return parseObject.fetchIfNeeded().get("video") == null;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
     public static void setImage(ParseFile imageFile, Resources resources, ImageView ivProfile, int color) {
         if (imageFile != null) {
             Bitmap bitmap = null;
@@ -67,23 +88,7 @@ public class Util {
         }
     }
 
-    public static void onLaunchGallery(Activity activity) {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        if (Build.VERSION.SDK_INT >= 23) {
-            int permissionCheck = ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
-        }
-        if (intent.resolveActivity(activity.getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            activity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
-
-    public static RoundedBitmapDrawable createRoundedBitmapDrawableWithBorder(Resources mResources, Bitmap bitmap, int color){
+    public static RoundedBitmapDrawable createRoundedBitmapDrawableWithBorder(Resources mResources, Bitmap bitmap, int color) {
         int bitmapWidth = bitmap.getWidth();
         int bitmapHeight = bitmap.getHeight();
         int borderWidthHalf = (int) (bitmap.getWidth() / 15.5); // In pixels
@@ -116,11 +121,6 @@ public class Util {
         return roundedBitmapDrawable;
     }
 
-    public static void hideKeyboard(View view, Context context) {
-        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     public static void populateNotificationsHeader(Context context, ParseUser user, TextView tvProgress, TextView tvCompleted, TextView tvFriends, TextView tvUsername, ImageView ivProfile, List<Goal> goals, List<Goal> incompleted) {
         List<ParseObject> lGoals = user.getList("goals");
         int completedGoals = 0;
@@ -150,12 +150,6 @@ public class Util {
         setImage(pfile, context.getResources(), ivProfile, R.color.white);
     }
 
-    public static Date yesterday() {
-        final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        return cal.getTime();
-    }
-
     public static void updateFriends() {
         final List<ParseUser> friends = ParseUser.getCurrentUser().getList("friends");
         ParseQuery<ApprovedFriendRequests> query = ParseQuery.getQuery("ApprovedFriendRequests");
@@ -165,7 +159,7 @@ public class Util {
             public void done(List<ApprovedFriendRequests> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        ParseUser newFriend = objects.get(i).getParseUser("toUser");
+                        ParseUser newFriend = objects.get(i).getToUser();
                         friends.add(newFriend);
                         try {
                             objects.get(i).delete();
@@ -184,7 +178,7 @@ public class Util {
             public void done(List<RemovedFriends> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        ParseUser removedFriend = objects.get(i).getParseUser("remover");
+                        ParseUser removedFriend = objects.get(i).getRemover();
                         friends.remove(removedFriend);
                         try {
                             objects.get(i).delete();
@@ -197,6 +191,23 @@ public class Util {
             }
         });
         ParseUser.getCurrentUser().put("friends", friends);
+    }
+
+
+    public static void onLaunchGallery(Activity activity) {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        if (Build.VERSION.SDK_INT >= 23) {
+            int permissionCheck = ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        }
+        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            activity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
     }
 
     // Returns the File for a photo stored on disk given the fileName

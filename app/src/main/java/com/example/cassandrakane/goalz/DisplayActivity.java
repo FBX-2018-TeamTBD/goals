@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import android.widget.VideoView;
 
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
@@ -63,11 +65,12 @@ public class DisplayActivity extends AppCompatActivity {
     @BindView(R.id.videoView) VideoView vvVideo;
     @BindView(R.id.etCaption) EditText etCaption;
     @BindView(R.id.btnAddCaption) ImageButton btnAddCaption;
+    @BindView(R.id.btnBack) Button btnBack;
 
     ArrayList<ParseObject> parseVideos;
     ArrayList<File> videos;
+    Date currentDate = new Date();
     Goal goal;
-    Date currentDate;
     String caption;
     int i;
     private int mTasksComplete = 0;
@@ -80,16 +83,53 @@ public class DisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        currentDate = new Date();
-        videos = new ArrayList<>();
-
         ButterKnife.bind(this);
+
+        cameraId = getIntent().getStringExtra("cameraId");
+        videos = (ArrayList) getIntent().getSerializableExtra("videos");
+        file = (File) getIntent().getSerializableExtra("image");
+        if (file != null) {
+            image = BitmapFactory.decodeFile(file.getAbsolutePath());
+            image = rotateBitmapOrientation(file.getAbsolutePath());
+
+            if (cameraId != null && cameraId.equals("1")) {
+                try {
+                    //create a file to write bitmap data
+                    file = new File(Environment.getExternalStorageDirectory() + "/" + UUID.randomUUID().toString() + "1.jpg");
+
+                    file.createNewFile();
+
+                    //Convert bitmap to byte array
+                    Bitmap bitmap = image;
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+                    //write the bytes in file
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(bitmapdata);
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            ivImage.setImageBitmap(image);
+        } else if (videos != null){
+            vvVideo.setVisibility(View.VISIBLE);
+            File video = videos.get(0);
+            Uri fileUri = Uri.fromFile(video);
+            vvVideo.setVideoURI(fileUri);
+            vvVideo.start();
+            i = 0;
+        }
 
         if (getIntent().getParcelableExtra(Goal.class.getSimpleName()) != null){
             goal = Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    btnConfirm.setOnClickListener(null);
                     if (file != null) {
                         final ParseFile parseFile = new ParseFile(file);
                         caption = etCaption.getText().toString();
@@ -104,8 +144,9 @@ public class DisplayActivity extends AppCompatActivity {
                             }
                         });
                         final List<ParseObject> story = goal.getStory();
-                        List<ParseObject> reactions = new ArrayList<>();
-                        final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser(), reactions);
+                        List<Reaction> reactions = new ArrayList<>();
+                        final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser(),
+                                new ArrayList<ParseUser>(), reactions);
                         image.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -129,7 +170,7 @@ public class DisplayActivity extends AppCompatActivity {
                                                 }
                                             });
                                         } else {
-                                            if (!goal.getIsItemAdded()) {
+                                            if (!goal.getItemAdded()) {
                                                 goal.setProgress(goal.getProgress() + 1);
                                                 if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                                     goal.setItemAdded(true);
@@ -164,8 +205,9 @@ public class DisplayActivity extends AppCompatActivity {
                             parseFile.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    List<ParseObject> reactions = new ArrayList<>();
-                                    final Video videoFile = new Video(parseFile, caption, parseFileThumbnail, ParseUser.getCurrentUser(), reactions);
+                                    List<Reaction> reactions = new ArrayList<>();
+                                    final Video videoFile = new Video(parseFile, caption, parseFileThumbnail,
+                                            ParseUser.getCurrentUser(), new ArrayList<ParseUser>(), reactions);
                                     parseVideos.add(videoFile);
                                     videoFile.saveInBackground(new SaveCallback() {
                                         @Override
@@ -253,45 +295,6 @@ public class DisplayActivity extends AppCompatActivity {
                 }
             }
         });
-
-        cameraId = getIntent().getStringExtra("cameraId");
-        videos = (ArrayList) getIntent().getSerializableExtra("videos");
-        file = (File) getIntent().getSerializableExtra("image");
-        if (file != null) {
-            image = BitmapFactory.decodeFile(file.getAbsolutePath());
-            image = rotateBitmapOrientation(file.getAbsolutePath());
-
-            if (cameraId != null && cameraId.equals("1")) {
-                try {
-                    //create a file to write bitmap data
-                    file = new File(Environment.getExternalStorageDirectory() + "/" + UUID.randomUUID().toString() + "1.jpg");
-
-                    file.createNewFile();
-
-                    //Convert bitmap to byte array
-                    Bitmap bitmap = image;
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-                    byte[] bitmapdata = bos.toByteArray();
-
-                    //write the bytes in file
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            ivImage.setImageBitmap(image);
-        } else if (videos != null){
-            vvVideo.setVisibility(View.VISIBLE);
-            File video = videos.get(0);
-            Uri fileUri = Uri.fromFile(video);
-            vvVideo.setVideoURI(fileUri);
-            vvVideo.start();
-            i = 0;
-        }
     }
 
     public Bitmap rotateBitmapOrientation(String photoFilePath) {
@@ -326,6 +329,7 @@ public class DisplayActivity extends AppCompatActivity {
     }
 
     public void goBack(View v) {
+        btnBack.setOnClickListener(null);
         finish();
     }
 
@@ -369,7 +373,7 @@ public class DisplayActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            if (!goal.getIsItemAdded()) {
+                            if (!goal.getItemAdded()) {
                                 goal.setProgress(goal.getProgress() + 1);
                                 if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                     goal.setItemAdded(true);

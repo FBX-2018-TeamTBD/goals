@@ -19,6 +19,8 @@ import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -32,6 +34,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     private List<Goal> mGoals;
     private List<ParseUser> friends;
     private int startIndex = 0;
+    private ParseUser currentUser = ParseUser.getCurrentUser();
     Context context;
 
     public StoryAdapter(List<Goal> goals, List<ParseUser> friends) {
@@ -56,16 +59,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final StoryAdapter.ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = mGoals.get(position);
-        final List<String> imageUrls = goal.getStoryUrls();
         final List<ParseObject> story = goal.getStory();
 
-        if (story.size() > 0 && imageUrls.size() > 0) {
+        if (story.size() > 0) {
             for (int i = 0; i < story.size(); i++){
                 boolean seen = false;
                 ParseObject image = story.get(i);
                 List<ParseUser> users = image.getList("viewedBy");
                 if (users != null) {
-                    if (users.contains(ParseUser.getCurrentUser())){
+                    if (users.contains(currentUser)){
                         seen = true;
                     }
                 }
@@ -78,8 +80,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 }
             }
 
+            String imageUrl = "";
+            ParseObject parseObject = story.get(startIndex);
+            if (Util.isImage(parseObject)) {
+                imageUrl = ((Image) parseObject).getImage().getUrl();
+            } else {
+                imageUrl = ((Video) parseObject).getImage().getUrl();
+            }
             Glide.with(context)
-                    .load(imageUrls.get(startIndex))
+                    .load(imageUrl)
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
             holder.ivStory.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +98,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser(), goal);
-                    frag.goal = goal;
+                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });
@@ -101,8 +109,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     holder.ivDot.setVisibility(View.GONE);
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
-                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, ParseUser.getCurrentUser(), goal);
-                    frag.goal = goal;
+                    StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });

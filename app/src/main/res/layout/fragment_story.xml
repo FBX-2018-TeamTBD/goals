@@ -66,14 +66,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@android:color/transparent" />
+            android:background="@color/transparent" />
 
         <ImageButton
             android:id="@+id/btnRight"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@android:color/transparent" />
+            android:background="@color/transparent" />
 
     </LinearLayout>
 

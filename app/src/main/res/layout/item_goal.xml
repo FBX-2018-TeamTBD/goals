@@ -82,12 +82,11 @@
             android:id="@+id/tvStreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="5dp"
             android:layout_alignLeft="@+id/ivStory"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="11dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/quicksand_medium"
-            android:text="@string/_0"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -100,8 +99,7 @@
             android:layout_marginTop="2dp"
             android:layout_toEndOf="@+id/tvStreak"
             android:tint="@color/white"
-            android:visibility="visible"
-            app:srcCompat="@drawable/star" />
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/overlayFriends"
@@ -190,7 +188,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="11dp"
             android:layout_marginTop="11dp"
-            android:background="@drawable/ic_round_thumb_up_24px"
+            android:background="@drawable/thumb_outline"
             android:backgroundTint="@color/white" />
 
     </RelativeLayout>

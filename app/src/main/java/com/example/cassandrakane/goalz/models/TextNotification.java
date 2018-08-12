@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -19,15 +20,30 @@ public class TextNotification extends ParseObject {
     }
 
     public String getText() {
-        return getString("text");
+        try {
+            return fetchIfNeeded().getString("text");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public ParseUser getUser() {
-        return getParseUser("user");
+        try {
+            return fetchIfNeeded().getParseUser("user");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ParseFile getImage() {
-        return getParseFile("image");
+        try {
+            return fetchIfNeeded().getParseFile("image");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setText(String text) {
@@ -39,8 +55,6 @@ public class TextNotification extends ParseObject {
     }
 
     public void setImage(ParseFile image) {
-        if (image != null) {
-            put("image", image);
-        }
+        put("image", image);
     }
 }

@@ -20,8 +20,10 @@ import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.ApprovedFriendRequests;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
+import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.SentFriendRequests;
 import com.example.cassandrakane.goalz.models.TextNotification;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
@@ -93,20 +95,23 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final int updatedPos = position - mTextNotifications.size();
                 final GoalRequestViewHolder goalRequestViewHolder = (GoalRequestViewHolder) holder;
                 Goal goal2 = null;
-                try {
-                    goal2 = mGoals.get(updatedPos);
-                    String text = goal2.getTitle();
-                    ParseUser fromUser = goalRequests.get(updatedPos).getFromUser();
-                    if (fromUser != null) {
-                        text = "<b>" + fromUser.getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
+                goal2 = mGoals.get(updatedPos);
+                String text = goal2.getTitle();
+                ParseUser fromUser = goalRequests.get(updatedPos).getFromUser();
+                if (fromUser != null) {
+                    text = "<b>" + fromUser.getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
+                }
+                goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
+                List<ParseObject> story = goal2.getStory();
+                if (story.size() > 0) {
+                    ParseFile imageFile = null;
+                    ParseObject parseObject = story.get(story.size() - 1);
+                    if (Util.isImage(parseObject)) {
+                        imageFile = ((Image) parseObject).getImage();
+                    } else {
+                        imageFile = ((Video) parseObject).getImage();
                     }
-                    goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
-                    List<ParseObject> story = goal2.getStory();
-                    if (story.size() > 0) {
-                        Util.setImage(story.get(story.size() - 1).fetch().getParseFile("image"), context.getResources(), goalRequestViewHolder.ivStory, R.color.orange);
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    Util.setImage(imageFile, context.getResources(), goalRequestViewHolder.ivStory, R.color.orange);
                 }
                 final Goal goal = goal2;
                 goalRequestViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -270,7 +275,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         List<ParseObject> story = mGoals.get(position).getStory();
                         ParseFile image = null;
                         if (story.size() > 0) {
-                            image = story.get(story.size() - 1).getParseFile("image");
+                            ParseObject parseObject = story.get(story.size() - 1);
+                            if (Util.isImage(parseObject)) {
+                                image = ((Image) parseObject).getImage();
+                            } else {
+                                image = ((Video) parseObject).getImage();
+                            }
                         }
                         sendTextNotification(textNotification, fromUser, image);
                     }

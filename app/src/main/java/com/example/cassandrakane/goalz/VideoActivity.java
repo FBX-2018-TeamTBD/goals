@@ -133,7 +133,6 @@ public class VideoActivity extends AppCompatActivity {
     private ArrayList<File> videos;
 
     Runnable runnable;
-    private ArrayList<Goal> goals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +150,6 @@ public class VideoActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.btnCamera);
         ivCircle = findViewById(R.id.ivCircle);
 
-        goals = (ArrayList) getIntent().getSerializableExtra("goals");
         mRecordImageButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -178,8 +176,8 @@ public class VideoActivity extends AppCompatActivity {
                         mMediaRecorder.stop();
                         videos.add(videoFile);
                         Intent intent = new Intent(VideoActivity.this, DisplayActivity.class);
+                        intent.putExtra(Goal.class.getSimpleName(), getIntent().getParcelableExtra(Goal.class.getSimpleName()));
                         intent.putExtra("videos", (Serializable) videos);
-                        intent.putExtra("goals", (Serializable) goals);
                         startActivity(intent);
                     }
                 }
@@ -197,6 +195,7 @@ public class VideoActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnCamera.setOnClickListener(null);
                 finish();
             }
         });

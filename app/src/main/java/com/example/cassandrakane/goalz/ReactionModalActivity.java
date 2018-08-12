@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.ReactionAdapter;
@@ -26,6 +27,7 @@ public class ReactionModalActivity extends Activity {
     @BindView(R.id.tvOkCount) TextView tvOkCount;
     @BindView(R.id.tvBumpCount) TextView tvBumpCount;
     @BindView(R.id.tvRockCount) TextView tvRockCount;
+    @BindView(R.id.btnBack) Button btnBack;
     ReactionAdapter reactionAdapter;
     List<ParseObject> reactions;
     List<Integer> reactionCounts;
@@ -48,7 +50,7 @@ public class ReactionModalActivity extends Activity {
         getWindow().setLayout(width, height);
 
         reactions = (List) getIntent().getSerializableExtra("reactions");
-        reactionCounts = (List) getIntent().getSerializableExtra("reactionCounts");
+        reactionCounts = getIntent().getIntegerArrayListExtra("reactionCounts");
 
         if (reactions != null) {
             reactionAdapter = new ReactionAdapter(reactions);
@@ -67,6 +69,7 @@ public class ReactionModalActivity extends Activity {
     }
 
     public void goBack (View v){
+        btnBack.setOnClickListener(null);
         finish();
     }
 }

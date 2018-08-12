@@ -214,7 +214,7 @@ public class NotificationsFragment extends Fragment {
                     for (int i = 0; i < objects.size(); i++) {
                         SentFriendRequests request = objects.get(i);
                         try {
-                            friendRequests.add(request.getParseUser("fromUser").fetch());
+                            friendRequests.add(request.getFromUser().fetch());
                             allFriendRequests.add(request);
                             noNotifications.setVisibility(View.GONE);
                         } catch (ParseException e1) {

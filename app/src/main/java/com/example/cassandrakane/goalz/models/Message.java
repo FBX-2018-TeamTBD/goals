@@ -1,36 +1,49 @@
 package com.example.cassandrakane.goalz.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 @ParseClassName("Message")
 public class Message extends ParseObject {
-    public static final String FROM_USER_KEY = "fromUser";
-    public static final String TO_USER_KEY = "toUser";
-    public static final String BODY_KEY = "body";
 
     public ParseUser getFromUser() {
-        return getParseUser(FROM_USER_KEY);
+        try {
+            return fetchIfNeeded().getParseUser("fromUser");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ParseUser getToUser() {
-        return getParseUser(TO_USER_KEY);
+        try {
+            return fetchIfNeeded().getParseUser("toUser");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String getBody() {
-        return getString(BODY_KEY);
+        try {
+            return fetchIfNeeded().getString("body");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void setFromUser(ParseUser user) {
-        put(FROM_USER_KEY, user);
+        put("fromUser", user);
     }
 
     public void setToUser(ParseUser user) {
-        put(TO_USER_KEY, user);
+        put("toUser", user);
     }
 
     public void setBody(String body) {
-        put(BODY_KEY, body);
+        put("body", body);
     }
 }

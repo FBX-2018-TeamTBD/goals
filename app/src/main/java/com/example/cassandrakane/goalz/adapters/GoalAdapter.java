@@ -34,7 +34,9 @@ import com.example.cassandrakane.goalz.ReactionModalActivity;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.GetCallback;
@@ -47,6 +49,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -144,6 +147,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         Date updateBy = goal.getUpdateStoryBy();
         if (updateBy != null) {
             if (currentDate.getTime() >= updateBy.getTime()) {
+                // DISABLE FOR DEMO
+                // goal.setStreak(0);
+
                 long sum = updateBy.getTime() + TimeUnit.DAYS.toMillis(goal.getFrequency());
                 Date newDate = new Date(sum);
                 goal.setUpdateStoryBy(newDate);
@@ -155,21 +161,22 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
             holder.ivStar.setVisibility(View.VISIBLE);
-        }
 
-        // HARDCODE FOR DEMO
-        if (goal.getObjectId().equals("jBsVVmXedF") && currentUser.getObjectId().equals("aRuJfmtYke") && !goal.getIsItemAdded()) {
-            holder.ivStar.setImageResource(R.drawable.clock);
-        } else {
-            holder.ivStar.setImageResource(R.drawable.star);
-        }
+            // HARDCODE FOR DEMO
+            if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getItemAdded()) {
+                holder.ivStar.setImageResource(R.drawable.clock);
+            } else {
+                holder.ivStar.setImageResource(R.drawable.star);
+            }
 
-//        int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-//        if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
-//            holder.ivStar.setImageResource(R.drawable.clock);
-//        } else {
-//            holder.ivStar.setImageResource(R.drawable.star);
-//        }
+            // DISABLE FOR DEMO
+//          int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+//          if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getItemAdded() && !goal.getCompleted()){
+//              holder.ivStar.setImageResource(R.drawable.clock);
+//          } else {
+//              holder.ivStar.setImageResource(R.drawable.star);
+//          }
+        }
     }
 
     private void setFriendViews(final Goal goal, final ViewHolder holder) {
@@ -194,6 +201,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.overlayFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    holder.overlayFriends.setOnClickListener(null);
                     Intent i = new Intent(context, SearchFriendsActivity.class);
                     i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
                     i.putExtra(Goal.class.getSimpleName(), goal);
@@ -204,17 +212,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     private void setReactionViews(final Goal goal, final ViewHolder holder) {
-        final List<ParseObject> reax = goal.getReactions();
-        int thumbs = 0;
-        int goaled = 0;
-        int claps = 0;
-        int oks = 0;
-        int bumps = 0;
-        int rocks = 0 ;
+        final List<Reaction> reax = goal.getReactions();
+        int thumbs, goaled, claps, oks, bumps, rocks;
+        thumbs = goaled = claps = oks = bumps = rocks = 0;
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
-            Reaction react = (Reaction) reax.get(i);
-            String type = react.getString("type");
+
+            String type = reax.get(i).getType();
             if (type != null) {
                 switch (type) {
                     case "thumbs":
@@ -254,14 +258,16 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         // holder.tvReaction.setText(String.valueOf(total));
 
-        final List<Integer> reactionCounts = Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks);
+        final ArrayList<Integer> reactionCounts = new ArrayList<>();
+        reactionCounts.addAll(Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks));
         holder.btnReaction.setTag(context.getResources().getColor(R.color.white));
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.btnReaction.setOnClickListener(null);
                 Intent intent = new Intent(context, ReactionModalActivity.class);
                 intent.putExtra("reactions", (Serializable) reax);
-                intent.putExtra("reactionCounts", (Serializable) reactionCounts);
+                intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
                 context.startActivity(intent);
             }
         });
@@ -280,11 +286,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvReaction.setVisibility(View.VISIBLE);
 
         ParseFile image = null;
+
         try {
-            image = story.get(startIndex).fetch().getParseFile("image");
-        } catch (ParseException e) {
+          Image parseObject = (Image) story.get(startIndex);
+
+          image = parseObject.getImage();
+        } catch (ClassCastException e) {
             e.printStackTrace();
+            Video parseObject = (Video) story.get(startIndex);
+            image = parseObject.getImage();
         }
+
         if (image != null) {
             Glide.with(context)
                     .load(image.getUrl())
@@ -300,7 +312,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                    fragmentTwo.goal = goal;
                     fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
 
                     activity.ivProfile.setVisibility(View.GONE);
@@ -380,14 +391,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                        frag.goal = goal;
                         fragTransStory.add(R.id.main_central_fragment, frag).commit();
                     } else {
                         FriendActivity activity = (FriendActivity) context;
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                        frag.goal = goal;
                         fragTransStory.add(R.id.root_layout, frag).commit();
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
