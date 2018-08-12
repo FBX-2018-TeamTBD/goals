@@ -176,7 +176,7 @@ public class GoalsListActivity extends AppCompatActivity {
             }
             if (selected == 0) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(this, "Please select a goal to add to.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Please select a goal.", Toast.LENGTH_LONG).show();
             }
         } else if (videos != null){
             for (final File video : videos){

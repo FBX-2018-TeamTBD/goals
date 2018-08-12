@@ -133,7 +133,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<SearchFriendAdapte
                 ivProfile.setTag(R.drawable.check);
                 if (requestActivityName.equals(MainActivity.class.getSimpleName())) {
                     addFriend(user);
-                    Toast.makeText(context, "Friend request to " + user.getUsername() + " sent!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Sent friend request to " + user.getUsername() + "!", Toast.LENGTH_SHORT).show();
                 }
                 else if (requestActivityName.equals(FriendsModalActivity.class.getSimpleName())) {
                     selectedFriends.add(user);
