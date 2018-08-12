@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -11,12 +12,34 @@ public class RemovedFriends extends ParseObject {
         super();
     }
 
-    public RemovedFriends(ParseUser removed, ParseUser remover) {
-        setRemoved(removed, remover);
+    public RemovedFriends(ParseUser removedFriend, ParseUser remover) {
+        setRemovedFriend(removedFriend);
+        setRemover(remover);
     }
 
-    public void setRemoved(ParseUser removed, ParseUser remover) {
-        put("removedFriend", removed);
+    public ParseUser getRemovedFriend() {
+        try {
+            return fetchIfNeeded().getParseUser("removedFriend");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ParseUser getRemover() {
+        try {
+            return fetchIfNeeded().getParseUser("remover");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setRemovedFriend(ParseUser removedFriend) {
+        put("removedFriend", removedFriend);
+    }
+
+    public void setRemover(ParseUser remover) {
         put("remover", remover);
     }
 

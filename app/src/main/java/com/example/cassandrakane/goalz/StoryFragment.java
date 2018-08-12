@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -198,58 +197,13 @@ public class StoryFragment extends Fragment {
 //            e.printStackTrace();
 //        }
 
-        ParseFile video = null;
-        try {
-            Video videoObject = (Video) object;
-            video = (ParseFile) videoObject.get("video");
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-
-        if (video != null){
-            viewStory.setVisibility(View.VISIBLE);
-            Video videoObject = (Video) object;
-
-            List<ParseUser> viewedBy = object.getList("viewedBy");
-            if (viewedBy == null){
-                viewedBy = new ArrayList<>();
-            }
-            if (!viewedBy.contains(currentUser)) {
-                viewedBy.add(currentUser);
-                videoObject.setViewedBy(viewedBy);
-                videoObject.saveInBackground();
-            }
-
-            String caption = (String) object.get("caption");
-            if (caption.length() != 0){
-                tvCaption.setText(caption);
-                tvCaption.setVisibility(View.VISIBLE);
-            } else {
-                tvCaption.setVisibility(View.GONE);
-            }
-
-            File file = null;
-            try {
-                file = video.getFile();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Uri fileUri = Uri.fromFile(file);
-            viewStory.setVideoURI(fileUri);
-            viewStory.start();
-            viewStory.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mIndex++;
-                    setImageAndText();
-                }
-            });
-
-        } else {
+        ParseUser user = null;
+        if (Util.isImage(object)){
             viewStory.setVisibility(View.GONE);
             Image imageObject = (Image) object;
 
-            List<ParseUser> viewedBy = object.getList("viewedBy");
+            user = imageObject.getUser();
+            List<ParseUser> viewedBy = imageObject.getViewedBy();
             if (viewedBy == null){
                 viewedBy = new ArrayList<>();
             }
@@ -259,12 +213,10 @@ public class StoryFragment extends Fragment {
                 imageObject.saveInBackground();
             }
 
-            ParseFile image = (ParseFile) object.get("image");
-
-            String caption = (String) object.get("caption");
+            ParseFile image = imageObject.getImage();
+            String caption = imageObject.getCaption();
             if (caption.length() != 0){
                 tvCaption.setText(caption);
-                tvCaption.setVisibility(View.VISIBLE);
             } else {
                 tvCaption.setVisibility(View.GONE);
             }
@@ -280,17 +232,53 @@ public class StoryFragment extends Fragment {
                 public void run() {
                     mIndex++;
                     setImageAndText();
-                    }
+                }
             }, 5000);
+        } else {
+            viewStory.setVisibility(View.VISIBLE);
+            Video videoObject = (Video) object;
 
+            user = videoObject.getUser();
+            List<ParseUser> viewedBy = videoObject.getViewedBy();
+            if (viewedBy == null){
+                viewedBy = new ArrayList<>();
+            }
+            if (!viewedBy.contains(currentUser)) {
+                viewedBy.add(currentUser);
+                videoObject.setViewedBy(viewedBy);
+                videoObject.saveInBackground();
+            }
+
+            String caption = videoObject.getCaption();
+            if (caption.length() != 0){
+                tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
+            } else {
+                tvCaption.setVisibility(View.GONE);
+            }
+
+            File file = null;
+            try {
+                file = videoObject.getVideo().getFile();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Uri fileUri = Uri.fromFile(file);
+            viewStory.setVideoURI(fileUri);
+            viewStory.start();
+            viewStory.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    mIndex++;
+                    setImageAndText();
+                }
+            });
         }
 
-        ParseUser user = object.getParseUser("user");
         if (user != null) {
             tvUsername.setText(user.getUsername());
         }
 
-        // TODO include hardcoding for ukulele videos
         // HARDCODE FOR DEMO
         if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
             tvDateAdded.setText("DAY 2");
@@ -449,7 +437,7 @@ public class StoryFragment extends Fragment {
     public void setReaction(List<ParseObject> reactions){
         for (ParseObject reaction : reactions){
             Reaction reactionObject = (Reaction) reaction;
-            String type = reactionObject.getString("type");
+            String type = reactionObject.getType();
 
             switch (type) {
                 case "thumbs":
@@ -474,7 +462,7 @@ public class StoryFragment extends Fragment {
                     break;
             }
 
-            if (reactionObject.getParseUser("user") == currentUser){
+            if (reactionObject.getUser() == currentUser){
                 ivBmb.clearColorFilter();
                 switch (type) {
                     case "thumbs":
@@ -529,49 +517,36 @@ public class StoryFragment extends Fragment {
 
         }
 
-        if (object.get("video") != null) {
-            final Video parseObject = (Video) object;
+        if (Util.isImage(object)) {
+            final Image parseObject = (Image) object;
             final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
             reaction.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    List<ParseObject> reactions = parseObject.getList("reactions");
-                    if (reactions == null) {
-                        reactions = new ArrayList<>();
-                    }
+                    List<Reaction> reactions = parseObject.getReactions();
                     reactions.add(reaction);
                     parseObject.setReactions(reactions);
                     parseObject.saveInBackground();
-                    List<ParseObject> reacts = mGoal.getReactions();
+                    List<Reaction> reacts = mGoal.getReactions();
                     reacts.add(reaction);
                     mGoal.setReactions(reacts);
                     mGoal.saveInBackground();
                 }
             });
         } else {
-            final Image parseObject = (Image) object;
+            final Video parseObject = (Video) object;
             final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
             reaction.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    List<ParseObject> reactions = parseObject.getList("reactions");
-                    if (reactions == null) {
-                        reactions = new ArrayList<>();
-                    }
-
+                    List<Reaction> reactions = parseObject.getReactions();
                     reactions.add(reaction);
                     parseObject.setReactions(reactions);
                     parseObject.saveInBackground();
-                    List<ParseObject> reacts = mGoal.getReactions();
+                    List<Reaction> reacts = mGoal.getReactions();
                     reacts.add(reaction);
                     mGoal.setReactions(reacts);
-
-                    mGoal.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            Log.i("sdf", "success");
-                        }
-                    });
+                    mGoal.saveInBackground();
                 }
             });
         }
