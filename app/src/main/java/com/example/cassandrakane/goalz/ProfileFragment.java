@@ -17,12 +17,16 @@ import android.widget.ViewFlipper;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +125,32 @@ public class ProfileFragment extends Fragment {
                 networkPopulateProfile();
             }
         });
+
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<Image> parseQueryImage = ParseQuery.getQuery(Image.class);
+        // Connect to Parse server
+        SubscriptionHandling<Image> subscriptionHandlingImage = parseLiveQueryClient.subscribe(parseQueryImage);
+        // Listen for CREATE events
+        subscriptionHandlingImage.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Image>() {
+                    @Override
+                    public void onEvent(ParseQuery<Image> query, Image object) {
+                        networkPopulateProfile();
+                    }
+                });
+
+        ParseQuery<Video> parseQueryVideo = ParseQuery.getQuery(Video.class);
+        // Connect to Parse server
+        SubscriptionHandling<Video> subscriptionHandlingVideo = parseLiveQueryClient.subscribe(parseQueryVideo);
+        // Listen for CREATE events
+        subscriptionHandlingVideo.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Video>() {
+                    @Override
+                    public void onEvent(ParseQuery<Video> query, Video object) {
+                        networkPopulateProfile();
+                    }
+                });
 
         return view;
     }
