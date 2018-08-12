@@ -209,6 +209,9 @@ public class AddGoalActivity extends AppCompatActivity {
         etTitle.setSelection(17);
         sbDuration.setProgress(16);
         rbDay.toggle();
+        rvShareFriends.findViewHolderForAdapterPosition(0).itemView.performClick();
+        rvShareFriends.findViewHolderForAdapterPosition(2).itemView.performClick();
+        postGoal(v);
     }
 
 }
