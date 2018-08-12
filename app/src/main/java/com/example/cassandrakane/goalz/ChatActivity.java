@@ -23,6 +23,7 @@ import com.example.cassandrakane.goalz.models.Message;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -50,6 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.ivPicture) ImageView ivPicture;
     @BindView(R.id.ivMicrophone) ImageView ivMicrophone;
     @BindView(R.id.rlSend) RelativeLayout rlSend;
+    @BindView(R.id.ivProfile) ImageView ivProfile;
 
     ArrayList<Message> mMessages;
     ChatAdapter mAdapter;
@@ -67,6 +69,8 @@ public class ChatActivity extends AppCompatActivity {
         toUser = getIntent().getParcelableExtra(ParseUser.class.getSimpleName());
         final TextView toolbarTitle = toolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toUser.getUsername());
+        ParseFile file = toUser.getParseFile("image");
+        Util.setImage(file, getResources(), ivProfile, R.color.white);
 
         final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
             @Override

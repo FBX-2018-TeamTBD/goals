@@ -299,14 +299,15 @@ public class StoryFragment extends Fragment {
     public void setReactionBoomMenuButton() {
         thumbsCount = goalsCount = clapCount = okCount = bumpCount = rockCount = 0;
 
+        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
+        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
+
         reactions = object.getList("reactions");
         if (reactions != null) {
             reactionCount = reactions.size();
             setReaction(reactions);
         }
 
-        ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
-        ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
 
         bmb.setOnBoomListener(new OnBoomListener() {
             @Override
