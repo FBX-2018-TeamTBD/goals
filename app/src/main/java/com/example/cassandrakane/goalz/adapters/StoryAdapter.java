@@ -19,6 +19,8 @@ import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -77,8 +79,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 }
             }
 
+            String imageUrl = "";
+            ParseObject parseObject = story.get(startIndex);
+            if (Util.isImage(parseObject)) {
+                imageUrl = ((Image) parseObject).getImage().getUrl();
+            } else {
+                imageUrl = ((Video) parseObject).getImage().getUrl();
+            }
             Glide.with(context)
-                    .load(story.get(startIndex).getParseFile("image").getUrl())
+                    .load(imageUrl)
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
             holder.ivStory.setOnClickListener(new View.OnClickListener() {

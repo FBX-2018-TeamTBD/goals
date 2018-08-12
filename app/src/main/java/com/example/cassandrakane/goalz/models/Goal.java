@@ -42,25 +42,6 @@ public class Goal extends ParseObject implements Parcelable {
         setReactions(allReactions);
     }
 
-//    public List<String> getStoryUrls() {
-//        List<ParseObject> images = getStory();
-//        List<String> imageUrls = new ArrayList<String>();
-//        for (ParseObject i : images) {
-//            try {
-//                if (i.fetchIfNeeded().get("video") != null) {
-//                    Video mediaObject = (Video) i;
-//                    imageUrls.add(mediaObject.getParseFile("image").getUrl());
-//                } else {
-//                    Image mediaObject = (Image) i;
-//                    imageUrls.add(mediaObject.getParseFile("image").getUrl());
-//                }
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return imageUrls;
-//    }
-
     public String getTitle() {
         try {
             return fetchIfNeeded().getString("title");

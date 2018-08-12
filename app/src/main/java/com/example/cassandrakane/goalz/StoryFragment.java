@@ -197,55 +197,8 @@ public class StoryFragment extends Fragment {
             e.printStackTrace();
         }
 
-        ParseFile video = null;
-        try {
-            video = (ParseFile) object.fetchIfNeeded().get("video");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         ParseUser user = null;
-        if (video != null){
-            viewStory.setVisibility(View.VISIBLE);
-            Video videoObject = (Video) object;
-
-            user = videoObject.getUser();
-            List<ParseUser> viewedBy = videoObject.getViewedBy();
-            if (viewedBy == null){
-                viewedBy = new ArrayList<>();
-            }
-            if (!viewedBy.contains(currentUser)) {
-                viewedBy.add(currentUser);
-                videoObject.setViewedBy(viewedBy);
-                videoObject.saveInBackground();
-            }
-
-            String caption = videoObject.getCaption();
-            if (caption.length() != 0){
-                tvCaption.setText(caption);
-                tvCaption.setVisibility(View.VISIBLE);
-            } else {
-                tvCaption.setVisibility(View.GONE);
-            }
-
-            File file = null;
-            try {
-                file = video.getFile();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Uri fileUri = Uri.fromFile(file);
-            viewStory.setVideoURI(fileUri);
-            viewStory.start();
-            viewStory.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mIndex++;
-                    setImageAndText();
-                }
-            });
-
-        } else {
+        if (Util.isImage(object)){
             viewStory.setVisibility(View.GONE);
             Image imageObject = (Image) object;
 
@@ -279,9 +232,47 @@ public class StoryFragment extends Fragment {
                 public void run() {
                     mIndex++;
                     setImageAndText();
-                    }
+                }
             }, 5000);
+        } else {
+            viewStory.setVisibility(View.VISIBLE);
+            Video videoObject = (Video) object;
 
+            user = videoObject.getUser();
+            List<ParseUser> viewedBy = videoObject.getViewedBy();
+            if (viewedBy == null){
+                viewedBy = new ArrayList<>();
+            }
+            if (!viewedBy.contains(currentUser)) {
+                viewedBy.add(currentUser);
+                videoObject.setViewedBy(viewedBy);
+                videoObject.saveInBackground();
+            }
+
+            String caption = videoObject.getCaption();
+            if (caption.length() != 0){
+                tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
+            } else {
+                tvCaption.setVisibility(View.GONE);
+            }
+
+            File file = null;
+            try {
+                file = videoObject.getVideo().getFile();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Uri fileUri = Uri.fromFile(file);
+            viewStory.setVideoURI(fileUri);
+            viewStory.start();
+            viewStory.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    mIndex++;
+                    setImageAndText();
+                }
+            });
         }
 
         if (user != null) {
@@ -526,8 +517,8 @@ public class StoryFragment extends Fragment {
 
         }
 
-        if (object.get("video") != null) {
-            final Video parseObject = (Video) object;
+        if (Util.isImage(object)) {
+            final Image parseObject = (Image) object;
             final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
             reaction.saveInBackground(new SaveCallback() {
                 @Override
@@ -543,7 +534,7 @@ public class StoryFragment extends Fragment {
                 }
             });
         } else {
-            final Image parseObject = (Image) object;
+            final Video parseObject = (Video) object;
             final Reaction reaction = new Reaction(type, ParseUser.getCurrentUser());
             reaction.saveInBackground(new SaveCallback() {
                 @Override

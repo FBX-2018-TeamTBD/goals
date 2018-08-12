@@ -15,7 +15,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
+import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.AnimationHelper;
+import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseObject;
 
 import java.util.List;
@@ -54,8 +57,14 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         List<ParseObject> story = goal.getStory();
         if (story.size() > 0) {
             ParseObject parseObject = story.get(story.size() - 1);
+            String imageUrl = "";
+            if (Util.isImage(parseObject)) {
+                imageUrl = ((Image) parseObject).getImage().getUrl();
+            } else {
+                imageUrl = ((Video) parseObject).getImage().getUrl();
+            }
             Glide.with(context)
-                    .load(parseObject.getParseFile("image").getUrl())
+                    .load(imageUrl)
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
         } else {
