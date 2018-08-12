@@ -17,8 +17,6 @@ import android.widget.ViewFlipper;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.models.Image;
-import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -128,29 +126,29 @@ public class ProfileFragment extends Fragment {
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
-        ParseQuery<Image> parseQueryImage = ParseQuery.getQuery(Image.class);
+        ParseQuery<Goal> parseQuery = ParseQuery.getQuery(Goal.class);
         // Connect to Parse server
-        SubscriptionHandling<Image> subscriptionHandlingImage = parseLiveQueryClient.subscribe(parseQueryImage);
+        SubscriptionHandling<Goal> subscriptionHandling= parseLiveQueryClient.subscribe(parseQuery);
         // Listen for CREATE events
-        subscriptionHandlingImage.handleEvent(SubscriptionHandling.Event.CREATE, new
-                SubscriptionHandling.HandleEventCallback<Image>() {
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<Goal>() {
                     @Override
-                    public void onEvent(ParseQuery<Image> query, Image object) {
+                    public void onEvent(ParseQuery<Goal> query, Goal object) {
                         networkPopulateProfile();
                     }
                 });
 
-        ParseQuery<Video> parseQueryVideo = ParseQuery.getQuery(Video.class);
-        // Connect to Parse server
-        SubscriptionHandling<Video> subscriptionHandlingVideo = parseLiveQueryClient.subscribe(parseQueryVideo);
-        // Listen for CREATE events
-        subscriptionHandlingVideo.handleEvent(SubscriptionHandling.Event.CREATE, new
-                SubscriptionHandling.HandleEventCallback<Video>() {
-                    @Override
-                    public void onEvent(ParseQuery<Video> query, Video object) {
-                        networkPopulateProfile();
-                    }
-                });
+//        ParseQuery<Video> parseQueryVideo = ParseQuery.getQuery(Video.class);
+//        // Connect to Parse server
+//        SubscriptionHandling<Video> subscriptionHandlingVideo = parseLiveQueryClient.subscribe(parseQueryVideo);
+//        // Listen for CREATE events
+//        subscriptionHandlingVideo.handleEvent(SubscriptionHandling.Event.CREATE, new
+//                SubscriptionHandling.HandleEventCallback<Video>() {
+//                    @Override
+//                    public void onEvent(ParseQuery<Video> query, Video object) {
+//                        networkPopulateProfile();
+//                    }
+//                });
 
         return view;
     }
