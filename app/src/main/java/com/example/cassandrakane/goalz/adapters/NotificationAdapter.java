@@ -83,7 +83,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (mTextNotifications.get(position).getObjectId().equals("axcAPx6E4o")) {
                     textViewHolder.tvText.setText(Html.fromHtml("<b>cassandra</b> accepted your friend request!"));
                 } else if (mTextNotifications.get(position).getObjectId().equals("tHad80bvZH")) {
-                    textViewHolder.tvText.setText(Html.fromHtml("Oh no! You lost your streak for <b>cook dinner</b> because <b>rose</b> forgot to post."));
+                    textViewHolder.tvText.setText(Html.fromHtml("You lost your streak for <b>cook dinner</b>! <b>rose</b> forgot to post."));
                 } else {
                     textViewHolder.tvText.setText(mTextNotifications.get(position).getText());
                 }
@@ -107,7 +107,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 String text = goal2.getTitle();
                 ParseUser fromUser = goalRequests.get(updatedPos).getFromUser();
                 if (fromUser != null) {
-                    text = "<b>" + fromUser.getUsername() + "</b> invited you to their goal: <b>" + goal2.getTitle() + "</b>";
+                    text = "<b>" + fromUser.getUsername() + "</b> invited you to their goal, <b>" + goal2.getTitle() + "</b>";
                 }
                 goalRequestViewHolder.tvGoalTitle.setText(Html.fromHtml(text));
                 List<ParseObject> story = goal2.getStory();

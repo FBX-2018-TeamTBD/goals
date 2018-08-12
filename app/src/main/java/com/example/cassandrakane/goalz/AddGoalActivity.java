@@ -199,7 +199,7 @@ public class AddGoalActivity extends AppCompatActivity {
 
     public void sendGoalRequest(Goal goal, List<ParseUser> pending) {
         for (int i = 0; i < pending.size(); i++) {
-            GoalRequests request = new GoalRequests(pending.get(i), ParseUser.getCurrentUser(), (Goal) goal);
+            GoalRequests request = new GoalRequests(pending.get(i), ParseUser.getCurrentUser(), goal);
             request.saveInBackground();
         }
     }
