@@ -46,10 +46,13 @@ public class ProfileFragment extends Fragment {
     private ParseUser user = ParseUser.getCurrentUser();
 
     private List<Goal> goals;
+    private List<Goal> tempGoals;
     private GoalAdapter goalAdapter;
 
     public int completedGoals = 0;
     public int progressGoals = 0;
+
+    private boolean shown = false;
 
     public ProfileFragment() {
     }
@@ -67,15 +70,16 @@ public class ProfileFragment extends Fragment {
 
         mainActivity = (MainActivity) getActivity();
         goals = new ArrayList<>();
+        tempGoals = new ArrayList<>();
         goalAdapter = new GoalAdapter(goals, true);
         rvGoals.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvGoals.setAdapter(goalAdapter);
 
         SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        animator.setAddDuration(1000);
-        animator.setRemoveDuration(500);
-        animator.setChangeDuration(500);
-        animator.setMoveDuration(1000);
+        animator.setAddDuration(600);
+        animator.setRemoveDuration(300);
+        animator.setChangeDuration(300);
+        animator.setMoveDuration(600);
         rvGoals.setItemAnimator(animator);
 
         populateProfile();
@@ -119,11 +123,14 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
+
     @Override
     public void onResume() {
-        //do the data changes
         super.onResume();
         populateProfile();
+        if (!shown) {
+            animateProfile();
+        }
     }
 
     public void populateProfile() {
@@ -136,9 +143,7 @@ public class ProfileFragment extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 completedGoals = 0;
                 progressGoals = 0;
-                int size = goals.size();
-                goals.clear();
-                goalAdapter.notifyItemRangeRemoved(0, size);
+                tempGoals.clear();
                 List<Goal> completed = new ArrayList<>();
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
@@ -149,14 +154,14 @@ public class ProfileFragment extends Fragment {
                         } else {
                             progressGoals += 1;
                             if (goal.getStory().size() == 0){
-                                goals.add(0, goal);
+                                tempGoals.add(0, goal);
                             } else {
-                                goals.add(goal);
+                                tempGoals.add(goal);
                             }
                         }
                     }
                 }
-                goals.addAll(completed);
+                tempGoals.addAll(completed);
                 if (completedGoals == 0 && progressGoals == 0) {
                     viewFlipper.setVisibility(View.VISIBLE);
                     btnRefresh.setVisibility(View.GONE);
@@ -165,7 +170,6 @@ public class ProfileFragment extends Fragment {
                     btnRefresh.setVisibility(View.VISIBLE);
                 }
 
-                goalAdapter.notifyItemRangeInserted(0, completed.size());
                 btnRefresh.clearAnimation();
                 ParseObject.unpinAllInBackground(goals);
                 ParseObject.pinAllInBackground(goals);
@@ -175,7 +179,16 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void networkPopulateProfile(){
+    public void animateProfile() {
+        int size = goals.size();
+        goals.clear();
+        goalAdapter.notifyItemRangeRemoved(0, size);
+        goals.addAll(tempGoals);
+        shown = true;
+        goalAdapter.notifyItemRangeInserted(0, goals.size());
+    }
+
+    public void networkPopulateProfile() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Goal");
         query.whereEqualTo("approvedUsers", user);
         query.orderByAscending("updateBy");

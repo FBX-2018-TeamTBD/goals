@@ -31,6 +31,7 @@ public class FeedFragment extends Fragment {
 
     MainActivity mainActivity;
     List<ParseUser> friends;
+    List<ParseUser> tempFriends;
     FriendAdapter friendAdapter;
 
     StoryAdapter storyAdapter;
@@ -46,6 +47,8 @@ public class FeedFragment extends Fragment {
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     ParseUser user = ParseUser.getCurrentUser();
+
+    boolean shown = false;
 
     public FeedFragment() { }
 
@@ -81,17 +84,17 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_blue_light,
                 android.R.color.holo_red_light);
 
-
+        tempFriends = new ArrayList<>();
         friends = new ArrayList<>();
         friendAdapter = new FriendAdapter(friends);
             rvFriends.setLayoutManager(new GridLayoutManager(getContext(), 3));
         rvFriends.setAdapter(friendAdapter);
 
         SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        animator.setAddDuration(1000);
+        animator.setAddDuration(500);
         animator.setRemoveDuration(500);
         animator.setChangeDuration(500);
-        animator.setMoveDuration(1000);
+        animator.setMoveDuration(500);
         rvFriends.setItemAnimator(animator);
 
         btnAddFriend.setOnClickListener(new View.OnClickListener() {
@@ -101,57 +104,59 @@ public class FeedFragment extends Fragment {
             }
         });
 
+        populateFriends();
+        populateStories();
+
         return view;
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (rvFriends != null) {
-            rvFriends.setVisibility(View.VISIBLE);
-            if (isVisibleToUser) {
-                populateFriends();
-            }
+        if (isVisibleToUser && !shown) {
+            animateFriends();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        populateFriends();
         populateStories();
     }
 
     public void refreshAsync() {
-        ParseObject.unpinAllInBackground(friends);
+        populateStories();
+        int size = friends.size();
         friends.clear();
+        friendAdapter.notifyItemRangeRemoved(0, size);
+        populateFriends();
+        animateFriends();
+    }
 
-        List<ParseUser> userFriends = user.getList("friends");
-        friends.addAll(userFriends);
-
-        ParseObject.pinAllInBackground(friends);
-
-        friendAdapter.notifyDataSetChanged();
-        getFriendGoals();
+    public void animateFriends() {
+        if (friends != null) {
+            shown = true;
+            friends.addAll(tempFriends);
+            friendAdapter.notifyItemRangeInserted(0, friends.size());
+        }
     }
 
     public void populateFriends() {
         List<ParseUser> arr = user.getList("friends");
-        int size = friends.size();
-        friends.clear();
-        friendAdapter.notifyItemRangeRemoved(0, size);
+
         if (arr != null) {
-            friends.addAll(arr);
+            tempFriends.addAll(arr);
         }
         ParseObject.unpinAllInBackground(arr);
         ParseObject.pinAllInBackground(arr);
 
-        friendAdapter.notifyItemRangeInserted(0, arr.size());
     }
 
     public void populateStories() {
         goals.clear();
-        for (int i = 0; i < friends.size(); i++) {
-            ParseUser friend = friends.get(i);
+        for (int i = 0; i < tempFriends.size(); i++) {
+            ParseUser friend = tempFriends.get(i);
             List<Goal> friendGoals = friend.getList("goals");
             if (friendGoals != null) {
                 for (int j = 0; j < friendGoals.size(); j++) {

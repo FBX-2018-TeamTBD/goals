@@ -51,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/reverse_gradient"
             android:clickable="true" />
 
@@ -119,14 +120,11 @@
                 android:id="@+id/tvFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:layout_alignBottom="@id/tvStreak"
-                android:layout_toLeftOf="@id/btnFriends"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignBottom="@+id/btnFriends"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/_0"
+                android:layout_marginTop="4dp"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -134,6 +132,8 @@
                 android:id="@+id/btnFriends"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
+                android:layout_toRightOf="@+id/tvFriends"
+                android:layout_marginLeft="3dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="9dp"
                 android:background="@drawable/friend"

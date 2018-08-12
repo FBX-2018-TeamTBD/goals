@@ -196,8 +196,8 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void done(ParseException e) {
                             //refreshMessages();
-                            mMessages.add(message);
-                            mAdapter.notifyItemInserted(mMessages.size() - 1);
+                            mMessages.add(0, message);
+                            mAdapter.notifyItemInserted(0);
                         }
                     });
                     etMessage.setText("");

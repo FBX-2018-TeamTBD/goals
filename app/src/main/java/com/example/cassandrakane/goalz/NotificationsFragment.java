@@ -50,6 +50,8 @@ public class NotificationsFragment extends Fragment {
     List<Goal> completed;
     List<Goal> incompleted;
 
+    boolean shown = false;
+
     @BindView(R.id.tvProgress) TextView tvProgress;
     @BindView(R.id.tvCompleted) TextView tvCompleted;
     @BindView(R.id.tvFriends) TextView tvFriends;
@@ -117,11 +119,21 @@ public class NotificationsFragment extends Fragment {
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
         rvNotifications.setAdapter(notificationAdapter);
         SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        animator.setAddDuration(1000);
-        animator.setRemoveDuration(500);
-        animator.setChangeDuration(500);
-        animator.setMoveDuration(1000);
+        animator.setAddDuration(600);
+        animator.setRemoveDuration(300);
+        animator.setChangeDuration(300);
+        animator.setMoveDuration(600);
         rvNotifications.setItemAnimator(animator);
+
+        getTextNotifications();
+        getGoalRequests();
+        getFriendRequests();
+
+        if(allGoalRequests.size() == 0 && allFriendRequests.size() == 0) {
+            noNotifications.setVisibility(View.VISIBLE);
+        } else {
+            noNotifications.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -130,15 +142,7 @@ public class NotificationsFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            getTextNotifications();
-            getGoalRequests();
-            getFriendRequests();
-
-            if(allGoalRequests.size() == 0 && allFriendRequests.size() == 0) {
-                noNotifications.setVisibility(View.VISIBLE);
-            } else {
-                noNotifications.setVisibility(View.GONE);
-            }
+            animateNotifications();
         }
     }
 
@@ -206,7 +210,6 @@ public class NotificationsFragment extends Fragment {
                 notificationCount += friendRequests.size();
                 friendRequests.clear();
                 allFriendRequests.clear();
-                notificationAdapter.notifyItemRangeRemoved(0, notificationCount);
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
                         SentFriendRequests request = objects.get(i);
@@ -219,11 +222,13 @@ public class NotificationsFragment extends Fragment {
                         }
                     }
                 }
-                notificationAdapter.notifyItemRangeInserted(0, friendRequests.size() + goalRequests.size() + textNotifications.size());
-
             }
         });
         swipeContainer.setRefreshing(false);
+    }
+
+    public void animateNotifications() {
+        notificationAdapter.notifyItemRangeInserted(0, friendRequests.size() + goalRequests.size() + textNotifications.size());
     }
 
     public void setNotificationHeader() {
