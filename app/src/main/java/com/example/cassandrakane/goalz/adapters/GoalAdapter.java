@@ -163,7 +163,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.ivStar.setVisibility(View.VISIBLE);
 
             // HARDCODE FOR DEMO
-            if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getIsItemAdded()) {
+            if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getItemAdded()) {
                 holder.ivStar.setImageResource(R.drawable.clock);
             } else {
                 holder.ivStar.setImageResource(R.drawable.star);
@@ -171,7 +171,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
             // DISABLE FOR DEMO
 //          int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-//          if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getIsItemAdded() && !goal.getCompleted()){
+//          if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getItemAdded() && !goal.getCompleted()){
 //              holder.ivStar.setImageResource(R.drawable.clock);
 //          } else {
 //              holder.ivStar.setImageResource(R.drawable.star);
@@ -212,18 +212,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     private void setReactionViews(final Goal goal, final ViewHolder holder) {
-        final List<ParseObject> reax = goal.getReactions();
+        final List<Reaction> reax = goal.getReactions();
         int thumbs, goaled, claps, oks, bumps, rocks;
         thumbs = goaled = claps = oks = bumps = rocks = 0;
         int total = reax.size();
         for (int i = 0; i < reax.size(); i++) {
-            Reaction react = (Reaction) reax.get(i);
-            String type = null;
-            try {
-                type = react.fetchIfNeeded().getString("type");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            String type = reax.get(i).getType();
             if (type != null) {
                 switch (type) {
                     case "thumbs":
@@ -294,11 +288,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         try {
           Image parseObject = (Image) story.get(startIndex);
-          image = parseObject.getParseFile("image");
+          image = parseObject.getImage();
         } catch (ClassCastException e) {
             e.printStackTrace();
             Video parseObject = (Video) story.get(startIndex);
-            image = parseObject.getParseFile("image");
+            image = parseObject.getImage();
         }
 
         if (image != null) {

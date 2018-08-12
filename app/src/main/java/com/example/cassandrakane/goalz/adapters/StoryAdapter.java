@@ -56,10 +56,9 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final StoryAdapter.ViewHolder holder, int position) {
         // get the data according to position
         final Goal goal = mGoals.get(position);
-        final List<String> imageUrls = goal.getStoryUrls();
         final List<ParseObject> story = goal.getStory();
 
-        if (story.size() > 0 && imageUrls.size() > 0) {
+        if (story.size() > 0) {
             for (int i = 0; i < story.size(); i++){
                 boolean seen = false;
                 ParseObject image = story.get(i);
@@ -79,7 +78,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             }
 
             Glide.with(context)
-                    .load(imageUrls.get(startIndex))
+                    .load(story.get(startIndex).getParseFile("image").getUrl())
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
             holder.ivStory.setOnClickListener(new View.OnClickListener() {

@@ -28,6 +28,7 @@ import android.widget.VideoView;
 
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
+import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
@@ -143,8 +144,9 @@ public class DisplayActivity extends AppCompatActivity {
                             }
                         });
                         final List<ParseObject> story = goal.getStory();
-                        List<ParseObject> reactions = new ArrayList<>();
-                        final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser(), reactions);
+                        List<Reaction> reactions = new ArrayList<>();
+                        final Image image = new Image(parseFile, caption, ParseUser.getCurrentUser(),
+                                new ArrayList<ParseUser>(), reactions);
                         image.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -168,7 +170,7 @@ public class DisplayActivity extends AppCompatActivity {
                                                 }
                                             });
                                         } else {
-                                            if (!goal.getIsItemAdded()) {
+                                            if (!goal.getItemAdded()) {
                                                 goal.setProgress(goal.getProgress() + 1);
                                                 if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                                     goal.setItemAdded(true);
@@ -203,8 +205,9 @@ public class DisplayActivity extends AppCompatActivity {
                             parseFile.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    List<ParseObject> reactions = new ArrayList<>();
-                                    final Video videoFile = new Video(parseFile, caption, parseFileThumbnail, ParseUser.getCurrentUser(), reactions);
+                                    List<Reaction> reactions = new ArrayList<>();
+                                    final Video videoFile = new Video(parseFile, caption, parseFileThumbnail,
+                                            ParseUser.getCurrentUser(), new ArrayList<ParseUser>(), reactions);
                                     parseVideos.add(videoFile);
                                     videoFile.saveInBackground(new SaveCallback() {
                                         @Override
@@ -370,7 +373,7 @@ public class DisplayActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            if (!goal.getIsItemAdded()) {
+                            if (!goal.getItemAdded()) {
                                 goal.setProgress(goal.getProgress() + 1);
                                 if (currentDate.getTime() <= goal.getUpdateStoryBy().getTime()) {
                                     goal.setItemAdded(true);

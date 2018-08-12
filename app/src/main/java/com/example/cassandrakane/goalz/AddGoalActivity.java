@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.cassandrakane.goalz.adapters.ShareFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
+import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseACL;
@@ -146,7 +147,7 @@ public class AddGoalActivity extends AppCompatActivity {
             long sum = currentDate.getTime() + TimeUnit.DAYS.toMillis(frequency);
             Date updateBy = new Date(sum);
             List<ParseUser> pendingFriends = new ArrayList<>();
-            List<ParseObject> allReactions = new ArrayList<>();
+            List<Reaction> allReactions = new ArrayList<>();
             selectedFriends = shareFriendAdapter.selectedFriends;
 
             Map<String, String> usersAdded = new HashMap<String, String>(){{

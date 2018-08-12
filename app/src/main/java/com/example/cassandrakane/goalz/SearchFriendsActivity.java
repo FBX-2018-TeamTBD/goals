@@ -164,7 +164,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
                     for (int i = 0; i < objects.size(); i++) {
                         SentFriendRequests request = objects.get(i);
                         try {
-                            friendNames.add(request.getParseUser("toUser").fetch().getUsername());
+                            friendNames.add(request.getToUser().fetch().getUsername());
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
@@ -183,7 +183,7 @@ public class SearchFriendsActivity extends AppCompatActivity {
                     for (int i = 0; i < objects.size(); i++) {
                         SentFriendRequests request = objects.get(i);
                         try {
-                            friendNames.add(request.getParseUser("fromUser").fetch().getUsername());
+                            friendNames.add(request.getFromUser().fetch().getUsername());
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }

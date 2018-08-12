@@ -39,10 +39,10 @@ public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ReactionAdapter.ViewHolder viewHolder, int i) {
         final Reaction reaction = (Reaction) mReactions.get(i);
-        ParseUser user = reaction.getParseUser("user");
+        ParseUser user = reaction.getUser();
         String username = user.getUsername();
         ParseFile image = user.getParseFile("image");
-        String type = reaction.getString("type");
+        String type = reaction.getType();
 
         viewHolder.tvUsername.setText(username);
 

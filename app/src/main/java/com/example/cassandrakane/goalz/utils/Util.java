@@ -165,7 +165,7 @@ public class Util {
             public void done(List<ApprovedFriendRequests> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        ParseUser newFriend = objects.get(i).getParseUser("toUser");
+                        ParseUser newFriend = objects.get(i).getToUser();
                         friends.add(newFriend);
                         try {
                             objects.get(i).delete();
@@ -184,7 +184,7 @@ public class Util {
             public void done(List<RemovedFriends> objects, ParseException e) {
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        ParseUser removedFriend = objects.get(i).getParseUser("remover");
+                        ParseUser removedFriend = objects.get(i).getRemover();
                         friends.remove(removedFriend);
                         try {
                             objects.get(i).delete();

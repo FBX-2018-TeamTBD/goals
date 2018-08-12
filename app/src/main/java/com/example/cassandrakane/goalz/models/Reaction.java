@@ -1,6 +1,7 @@
 package com.example.cassandrakane.goalz.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -17,12 +18,22 @@ public class Reaction extends ParseObject{
         setUser(user);
     }
 
-    public ParseUser getUser() {
-        return getParseUser("user");
+    public String getType() {
+        try {
+            return fetchIfNeeded().getString("type");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
-    public String getType() {
-        return getString("type");
+    public ParseUser getUser() {
+        try {
+            return fetchIfNeeded().getParseUser("user");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setType(String type) {

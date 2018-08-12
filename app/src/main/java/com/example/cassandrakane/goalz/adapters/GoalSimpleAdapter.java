@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.AnimationHelper;
+import com.parse.ParseObject;
 
 import java.util.List;
 
@@ -50,10 +51,11 @@ public class GoalSimpleAdapter extends RecyclerView.Adapter<GoalSimpleAdapter.Vi
         final Goal goal = mGoals.get(position);
 
         holder.tvTitle.setText(goal.getTitle());
-        List<String> storyUrls = goal.getStoryUrls();
-        if (storyUrls.size() > 0) {
+        List<ParseObject> story = goal.getStory();
+        if (story.size() > 0) {
+            ParseObject parseObject = story.get(story.size() - 1);
             Glide.with(context)
-                    .load(storyUrls.get(storyUrls.size() - 1))
+                    .load(parseObject.getParseFile("image").getUrl())
                     .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10)))
                     .into(holder.ivStory);
         } else {

@@ -1,7 +1,6 @@
 package com.example.cassandrakane.goalz.models;
 
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -25,17 +24,17 @@ public class Goal extends ParseObject implements Parcelable {
     public Goal(String title, int duration, int frequency, int progress,
                 int streak, ArrayList<ParseObject> story, ParseUser user, Boolean itemAdded, Date updateBy,
                 List<ParseUser> friends, List<ParseUser> approvedUsers, List<ParseUser> pendingUsers,
-                Map<String, String> userAdded, List<ParseObject> allReactions) {
+                Map<String, String> userAdded, List<Reaction> allReactions) {
         super();
         setTitle(title);
+        setUser(user);
+        setStory(story);
+        setProgress(progress);
         setDuration(duration);
         setFrequency(frequency);
-        setProgress(progress);
         setStreak(streak);
-        setStory(story);
-        setUser(user);
-        setItemAdded(itemAdded);
         setUpdateStoryBy(updateBy);
+        setItemAdded(itemAdded);
         setFriends(friends);
         setApprovedUsers(approvedUsers);
         setPendingUsers(pendingUsers);
@@ -43,69 +42,153 @@ public class Goal extends ParseObject implements Parcelable {
         setReactions(allReactions);
     }
 
-    public List<ParseObject> getStory() {
-        List<ParseObject> story = getList("images");
-        return story;
-    }
-
-    public List<String> getStoryUrls() {
-        List<ParseObject> images = getStory();
-        List<String> imageUrls = new ArrayList<String>();
-        for (ParseObject i : images) {
-            try {
-                if (i.fetchIfNeeded().get("video") != null) {
-                    Video mediaObject = (Video) i;
-                    imageUrls.add(mediaObject.getParseFile("image").getUrl());
-                } else {
-                    Image mediaObject = (Image) i;
-                    imageUrls.add(mediaObject.getParseFile("image").getUrl());
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return imageUrls;
-    }
-
-    public void setReactions(List<ParseObject> reactions) {
-        Log.i("sdf", ""+reactions.size());
-        put("allReactions", reactions);
-    }
-
-    public List<ParseObject> getReactions() {
-        List<ParseObject> arr = getList("allReactions");
-        if (arr == null) {
-            return new ArrayList<>();
-        }
-        return arr;
-    }
+//    public List<String> getStoryUrls() {
+//        List<ParseObject> images = getStory();
+//        List<String> imageUrls = new ArrayList<String>();
+//        for (ParseObject i : images) {
+//            try {
+//                if (i.fetchIfNeeded().get("video") != null) {
+//                    Video mediaObject = (Video) i;
+//                    imageUrls.add(mediaObject.getParseFile("image").getUrl());
+//                } else {
+//                    Image mediaObject = (Image) i;
+//                    imageUrls.add(mediaObject.getParseFile("image").getUrl());
+//                }
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return imageUrls;
+//    }
 
     public String getTitle() {
-        return getString("title");
-    }
-
-    public int getDuration() {
-        return getInt("duration");
-    }
-
-    public int getFrequency() {
-        return getInt("frequency");
-    }
-
-    public int getProgress() {
-        return getInt("progress");
-    }
-
-    public int getStreak() {
-        return getInt("streak");
+        try {
+            return fetchIfNeeded().getString("title");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public ParseUser getUser() {
-        return getParseUser("user");
+        try {
+            return fetchIfNeeded().getParseUser("user");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<ParseObject> getStory() {
+        try {
+            return fetchIfNeeded().getList("images");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public int getProgress() {
+        try {
+            return fetchIfNeeded().getInt("progress");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getDuration() {
+        try {
+            return fetchIfNeeded().getInt("duration");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getFrequency() {
+        try {
+            return fetchIfNeeded().getInt("frequency");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getStreak() {
+        try {
+            return fetchIfNeeded().getInt("streak");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public Date getUpdateStoryBy(){
-        return getDate("updateBy");
+        try {
+            return fetchIfNeeded().getDate("updateBy");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean getItemAdded() {
+        try {
+            return fetchIfNeeded().getBoolean("itemAdded");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<ParseUser> getFriends() {
+        try {
+            return fetchIfNeeded().getList("friends");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<ParseUser> getApprovedUsers() {
+        try {
+            return fetchIfNeeded().getList("approvedUsers");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<ParseUser> getPendingUsers() {
+        try {
+            return fetchIfNeeded().getList("pendingUsers");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public Map<String, String> getUserAdded(){
+        try {
+            return (Map) fetchIfNeeded().get("userAdded");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Reaction> getReactions() {
+        try {
+            return fetchIfNeeded().getList("allReactions");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean getCompleted() {
+        return getProgress() >= getDuration();
     }
 
     public int getIntId() {
@@ -113,47 +196,24 @@ public class Goal extends ParseObject implements Parcelable {
         return id.hashCode();
     }
 
-    public boolean getIsItemAdded() {
-        return getBoolean("itemAdded");
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public List<ParseUser> getFriends() {
-        List<ParseUser> friends = getList("friends");
-        if (friends == null) {
-            return new ArrayList<ParseUser>();
-        }
-        return friends;
+    public void setTitle(String title) {
+        put("title", title);
     }
 
-    public List<ParseUser> getApprovedUsers() {
-        List<ParseUser> users = getList("approvedUsers");
-
-        if (users == null) {
-            return new ArrayList<ParseUser>();
-        }
-        return users;
+    public void setUser(ParseUser user) {
+        put("user", user);
     }
-
-    public List<ParseUser> getPendingUsers() {
-        List<ParseUser> users = getList("pendingUsers");
-        if (users == null) {
-            return new ArrayList<ParseUser>();
-        }
-        return users;
-    }
-
-    public Map<String, String> getUserAdded(){
-        return (Map) get("userAdded");
-    }
-
-    public void setUserAdded(Map<String, String> userAdded){ put("userAdded", userAdded); }
 
     public void setStory(List<ParseObject> story) {
         put("images", story);
     }
 
-    public void setTitle(String title) {
-        put("title", title);
+    public void setProgress(int progress) {
+        put("progress", progress);
     }
 
     public void setDuration(int duration) {
@@ -164,17 +224,15 @@ public class Goal extends ParseObject implements Parcelable {
         put("frequency", frequency);
     }
 
-    public void setProgress(int progress) {
-        put("progress", progress);
-    }
-
     public void setStreak(int streak) {
         put("streak", streak);
     }
 
-    public void setUser(ParseUser user) {
-        put("user", user);
+    public void setUpdateStoryBy(Date updateStoryBy){
+        put("updateBy", updateStoryBy);
     }
+
+    public void setItemAdded(boolean itemAdded) { put("itemAdded", itemAdded); }
 
     public void setFriends(List<ParseUser> friends) {
         put("friends", friends);
@@ -188,21 +246,13 @@ public class Goal extends ParseObject implements Parcelable {
         put("pendingUsers", users);
     }
 
-    public boolean getCompleted() {
-        return getProgress() >= getDuration();
+    public void setUserAdded(Map<String, String> userAdded){ put("userAdded", userAdded); }
+
+    public void setReactions(List<Reaction> reactions) {
+        put("allReactions", reactions);
     }
 
     public void setSelected(boolean selected) {
         isSelected = selected;
-    }
-
-    public void setItemAdded(boolean itemAdded) { put("itemAdded", itemAdded); }
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setUpdateStoryBy(Date updateStoryBy){
-        put("updateBy", updateStoryBy);
     }
 }
