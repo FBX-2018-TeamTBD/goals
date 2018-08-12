@@ -289,7 +289,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
         try {
           Image parseObject = (Image) story.get(startIndex);
-
           image = parseObject.getImage();
         } catch (ClassCastException e) {
             e.printStackTrace();

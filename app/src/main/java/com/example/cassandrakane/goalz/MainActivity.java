@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     // Start page index. 0 - top page, 1 - central page, 2 - bottom page.
     private static final int CENTRAL_PAGE_INDEX = 1;
 
-    @BindView(R.id.activity_main_vertical_pager) VerticalPager verticalPager;
+    @BindView(R.id.activity_main_vertical_pager) public VerticalPager verticalPager;
     public CentralFragment centralFragment;
     public NotificationsFragment notificationsFragment;
 

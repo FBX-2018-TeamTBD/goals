@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     public int completedGoals = 0;
     public int progressGoals = 0;
 
-    private boolean shown = false;
+    private int count = 0;
 
     public ProfileFragment() {
     }
@@ -83,6 +83,7 @@ public class ProfileFragment extends Fragment {
         rvGoals.setItemAnimator(animator);
 
         populateProfile();
+        animateProfile();
 
         viewFlipper.setAutoStart(true);
         viewFlipper.setFlipInterval(5000);
@@ -127,9 +128,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        populateProfile();
-        if (!shown) {
-            animateProfile();
+        if (count < 2) {
+            networkPopulateProfile();
+        } else {
+            populateProfile();
         }
     }
 
@@ -184,11 +186,12 @@ public class ProfileFragment extends Fragment {
         goals.clear();
         goalAdapter.notifyItemRangeRemoved(0, size);
         goals.addAll(tempGoals);
-        shown = true;
+        count += 1;
         goalAdapter.notifyItemRangeInserted(0, goals.size());
     }
 
     public void networkPopulateProfile() {
+        count += 1;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Goal");
         query.whereEqualTo("approvedUsers", user);
         query.orderByAscending("updateBy");
