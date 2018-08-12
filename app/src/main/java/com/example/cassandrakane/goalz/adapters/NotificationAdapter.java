@@ -79,7 +79,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (holder.getItemViewType()) {
             case 0:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
-                textViewHolder.tvText.setText(mTextNotifications.get(position).getText());
+                // HARDCODE FOR DEMO
+                if (mTextNotifications.get(position).getObjectId().equals("axcAPx6E4o")) {
+                    textViewHolder.tvText.setText(Html.fromHtml("<b>cassandra</b> accepted your friend request!"));
+                } else if (mTextNotifications.get(position).getObjectId().equals("tHad80bvZH")) {
+                    textViewHolder.tvText.setText(Html.fromHtml("Oh no! You lost your streak for <b>cook dinner</b> because <b>rose</b> forgot to post."));
+                } else {
+                    textViewHolder.tvText.setText(mTextNotifications.get(position).getText());
+                }
+                // textViewHolder.tvText.setText(mTextNotifications.get(position).getText());
                 ParseFile image = mTextNotifications.get(position).getImage();
                 Util.setImage(image, context.getResources(), textViewHolder.ivImage, R.color.orange);
                 textViewHolder.btnClose.setOnClickListener(new View.OnClickListener() {
