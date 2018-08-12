@@ -274,7 +274,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
-        startIndex = getStartIndex(story);
+        // HARDCODE FOR DEMO
+        startIndex = story.size() - 1;
+//        startIndex = getStartIndex(story);
         holder.ibAdd.setVisibility(View.GONE);
         holder.tvAdd.setVisibility(View.GONE);
         holder.vGradient.setVisibility(View.VISIBLE);

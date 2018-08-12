@@ -138,18 +138,6 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
-//        ParseQuery<Video> parseQueryVideo = ParseQuery.getQuery(Video.class);
-//        // Connect to Parse server
-//        SubscriptionHandling<Video> subscriptionHandlingVideo = parseLiveQueryClient.subscribe(parseQueryVideo);
-//        // Listen for CREATE events
-//        subscriptionHandlingVideo.handleEvent(SubscriptionHandling.Event.CREATE, new
-//                SubscriptionHandling.HandleEventCallback<Video>() {
-//                    @Override
-//                    public void onEvent(ParseQuery<Video> query, Video object) {
-//                        networkPopulateProfile();
-//                    }
-//                });
-
         return view;
     }
 
