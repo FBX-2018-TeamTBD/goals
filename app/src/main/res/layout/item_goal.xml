@@ -58,7 +58,8 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tvProgress"
+            android:layout_below="@+id/btnFriends"
+            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/quicksand_medium"
             android:textAlignment="center"
@@ -74,28 +75,68 @@
             android:tint="@color/white"
             android:src="@drawable/clock" />
 
-        <TextView
-            android:id="@+id/tvProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tvStreak"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/quicksand_medium"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+        <RelativeLayout
+            android:id="@+id/layoutProgress"
+            android:layout_width="85dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dp"
+            android:layout_alignParentLeft="true">
+            <TextView
+                android:id="@+id/tvProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/_0"
+                android:textSize="22sp" />
 
-        <TextView
-            android:id="@+id/tvStreak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/ivStory"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/quicksand_medium"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/placeholder_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvProgress"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-3dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/days_left"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="68dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dp"
+            android:layout_alignParentRight="true">
+            <TextView
+                android:id="@+id/tvStreak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/quicksand_medium"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/_0"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/placeholder_streak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvStreak"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-3dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="@string/streak"
+                android:textSize="14dp" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvFriends"
@@ -112,8 +153,8 @@
 
         <Button
             android:id="@+id/btnFriends"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="25dp"
             android:layout_alignParentTop="true"

@@ -150,7 +150,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvProgress.setText(String.format("%d DAYS LEFT", goal.getDuration() - goal.getProgress()));
+            holder.tvProgress.setText(String.format("%d", goal.getDuration() - goal.getProgress()));
         }
     }
 
@@ -170,7 +170,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         if (goal.getStreak() > 0) {
-            holder.tvStreak.setText(String.format("%d DAY STREAK", goal.getStreak()));
+            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
 
             // HARDCODE FOR DEMO
             if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getItemAdded()) {

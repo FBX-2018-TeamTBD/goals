@@ -62,4 +62,6 @@
     <string name="completed_label">COMPLETED!</string>
     <string name="text">text</string>
     <string name="Text">Text</string>
+    <string name="days_left">DAYS LEFT</string>
+    <string name="streak">STREAK</string>
 </resources>
