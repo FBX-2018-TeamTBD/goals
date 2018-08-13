@@ -205,6 +205,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     });
                     etMessage.setText("");
+                    rvChat.scrollToPosition(0);
                 }
             }
         });

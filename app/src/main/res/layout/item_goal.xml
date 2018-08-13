@@ -73,7 +73,7 @@
             android:layout_alignBottom="@id/btnReaction"
             android:layout_centerHorizontal="true"
             android:tint="@color/white"
-            android:src="@drawable/clock" />
+            android:src="@drawable/ic_outline_hourglass_empty_24px" />
 
         <RelativeLayout
             android:id="@+id/layoutProgress"
