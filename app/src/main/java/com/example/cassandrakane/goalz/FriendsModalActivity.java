@@ -1,9 +1,9 @@
 package com.example.cassandrakane.goalz;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 import static android.support.v7.widget.DividerItemDecoration.HORIZONTAL;
 
-public class FriendsModalActivity extends Activity {
+public class FriendsModalActivity extends AppCompatActivity {
 
     @BindView(R.id.rvGoalFriends) RecyclerView rvGoalFriends;
     @BindView(R.id.btnAdd) Button btnAdd;
