@@ -44,13 +44,10 @@ public class NotificationsFragment extends Fragment {
     List<GoalRequests> allGoalRequests;
     List<ParseUser> friendRequests;
     List<SentFriendRequests> allFriendRequests;
-    Integer notificationCount = 0;
 
     List<Goal> goals;
     List<Goal> completed;
     List<Goal> incompleted;
-
-    int count = 0;
 
     @BindView(R.id.tvProgress) TextView tvProgress;
     @BindView(R.id.tvCompleted) TextView tvCompleted;
@@ -123,7 +120,7 @@ public class NotificationsFragment extends Fragment {
         animator.setMoveDuration(600);
         rvNotifications.setItemAnimator(animator);
 
-        //getTextNotifications();
+        getTextNotifications();
 
         return view;
     }
@@ -135,7 +132,6 @@ public class NotificationsFragment extends Fragment {
         query.findInBackground(new FindCallback<TextNotification>() {
             @Override
             public void done(List<TextNotification> objects, ParseException e) {
-                notificationCount += textNotifications.size();
                 textNotifications.clear();
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
@@ -157,7 +153,6 @@ public class NotificationsFragment extends Fragment {
         query.findInBackground(new FindCallback<GoalRequests>() {
             @Override
             public void done(List<GoalRequests> objects, ParseException e) {
-                notificationCount += goalRequests.size();
                 goalRequests.clear();
                 allGoalRequests.clear();
                 if (objects != null) {
@@ -191,10 +186,8 @@ public class NotificationsFragment extends Fragment {
         query.findInBackground(new FindCallback<SentFriendRequests>() {
             @Override
             public void done(List<SentFriendRequests> objects, ParseException e) {
-                notificationCount += friendRequests.size();
                 friendRequests.clear();
                 allFriendRequests.clear();
-                notificationAdapter.notifyItemRangeRemoved(0, notificationCount);
                 if (objects != null) {
                     for (int i = 0; i < objects.size(); i++) {
                         SentFriendRequests request = objects.get(i);
@@ -207,7 +200,7 @@ public class NotificationsFragment extends Fragment {
                         }
                     }
                 }
-                notificationAdapter.notifyItemRangeInserted(0, friendRequests.size() + goalRequests.size() + textNotifications.size());
+                notificationAdapter.notifyDataSetChanged();
             }
         });
         swipeContainer.setRefreshing(false);

@@ -118,13 +118,6 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        populateFriends();
-        populateStories();
-    }
-
     public void refreshAsync() {
         populateStories();
         int size = friends.size();
