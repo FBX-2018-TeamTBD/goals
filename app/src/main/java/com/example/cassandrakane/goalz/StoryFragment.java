@@ -287,7 +287,7 @@ public class StoryFragment extends Fragment {
 
         // HARDCODE FOR DEMO
         String objectId = object.getObjectId();
-        if (objectId.equals("lYU8H3gNwB") || objectId.equals("W5FPGdH6kW") || objectId.equals("2zjqTFoGGG")) {
+        if (objectId.equals("lYU8H3gNwB") || objectId.equals("W5FPGdH6kW") || objectId.equals("KFJGnMBn45")) {
             tvDateAdded.setText("DAY 1");
         } else if (objectId.equals("SAHHXjjdwL")) {
             tvDateAdded.setText("DAY 3");
