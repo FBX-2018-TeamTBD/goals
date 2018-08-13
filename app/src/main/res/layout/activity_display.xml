@@ -12,9 +12,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
         android:background="@drawable/cancel"
         android:backgroundTint="@color/white"
         android:onClick="goBack" />
@@ -53,7 +52,7 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignEnd="@+id/btnConfirm"
         android:layout_alignTop="@+id/btnBack">
 
@@ -64,6 +63,7 @@
             android:layout_alignTop="@+id/btnBack"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
             android:background="@null"
             android:scaleType="fitXY"
             android:tint="#ffffff"
@@ -72,38 +72,34 @@
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignEnd="@+id/btnConfirm"
-            android:layout_alignTop="@+id/btnBack"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@null"
             android:scaleType="fitXY"
             android:tint="#ffffff"
+            android:layout_gravity="center_vertical"
             app:srcCompat="@drawable/ic_outline_tag_faces_24px" />
 
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignEnd="@+id/btnConfirm"
-            android:layout_alignTop="@+id/btnBack"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@null"
             android:scaleType="fitXY"
             android:tint="#ffffff"
+            android:layout_gravity="center_vertical"
             app:srcCompat="@drawable/ic_outline_create_24px" />
 
         <ImageButton
             android:id="@+id/btnAddCaption"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignEnd="@+id/btnConfirm"
-            android:layout_alignTop="@+id/btnBack"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:background="@null"
             android:scaleType="fitXY"
             android:tint="#ffffff"
+            android:layout_gravity="center_vertical"
             app:srcCompat="@drawable/ic_outline_text_fields_24px" />
 
     </LinearLayout>

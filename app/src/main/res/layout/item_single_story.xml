@@ -71,9 +71,9 @@
             android:id="@+id/ivDot"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/tvTitle"
-            android:layout_marginTop="11dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:tint="@color/orange"
             android:visibility="gone"
             card_view:srcCompat="@drawable/dot" />

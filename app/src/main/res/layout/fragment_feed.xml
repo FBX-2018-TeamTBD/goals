@@ -43,7 +43,7 @@
                 android:paddingTop="2dp"
                 android:text="@string/stories"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
             <TextView
                 android:id="@+id/tvFriends"
@@ -58,7 +58,7 @@
                 android:paddingTop="2dp"
                 android:text="@string/friend"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/btnAddFriend"
