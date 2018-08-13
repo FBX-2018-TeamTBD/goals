@@ -625,10 +625,6 @@ public class VerticalPager extends ViewGroup {
 
         mNextPage = whichPage;
 
-        if (mNextPage == 0) {
-            mainActivity.notificationsFragment.getTextNotifications();
-        }
-
         View focusedChild = getFocusedChild();
         if (focusedChild != null && changingPages && focusedChild == getChildAt(mCurrentPage)) {
             focusedChild.clearFocus();
