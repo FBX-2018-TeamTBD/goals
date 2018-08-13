@@ -311,6 +311,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.rvGradient.setVisibility(View.VISIBLE);
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
         holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
+        holder.tvStreak.setTextColor(context.getResources().getColor(R.color.white));
+        holder.placeholderStreak.setTextColor(context.getResources().getColor(R.color.white));
         holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
         holder.btnReaction.setVisibility(View.VISIBLE);
         holder.tvReaction.setVisibility(View.VISIBLE);
@@ -363,6 +365,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.placeholderProgress.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.tvStreak.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.placeholderStreak.setTextColor(context.getResources().getColor(R.color.orange));
         holder.ivStory.setImageDrawable(null);
         holder.btnReaction.setVisibility(View.GONE);
         holder.tvReaction.setVisibility(View.INVISIBLE);
@@ -592,6 +597,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.ivStar) ImageView ivStar;
         @BindView(R.id.placeholder_progress) TextView placeholderProgress;
         @BindView(R.id.ivCompleted) ImageView ivComplete;
+        @BindView(R.id.placeholder_streak) TextView placeholderStreak;
 
         public ViewHolder(View itemView) {
             super(itemView);

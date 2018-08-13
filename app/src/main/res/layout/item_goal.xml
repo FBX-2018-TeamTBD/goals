@@ -206,14 +206,14 @@
             android:id="@+id/tvAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="44dp"
+            android:layout_marginBottom="60dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="LET'S GET STARTED!"
             android:textAlignment="center"
             android:textColor="@color/orange"
-            android:textSize="24sp"
+            android:textSize="23sp"
             android:textStyle="bold"
             android:visibility="invisible" />
 
