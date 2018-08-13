@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.transition.Transition;
+import android.support.transition.TransitionInflater;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -87,6 +89,7 @@ public class StoryFragment extends Fragment {
     public Goal mGoal;
     String type;
     boolean firstOpen = true;
+    private String mTransitionName;
 
     public StoryFragment() { }
 
@@ -161,6 +164,11 @@ public class StoryFragment extends Fragment {
 
                 Util.storyMode = false;
 
+                Transition slide = TransitionInflater.from(getActivity()).
+                        inflateTransition(android.R.transition.slide_bottom);
+
+                storyFragment.setExitTransition(slide);
+
                 getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
                 if (getActivity().getClass().isAssignableFrom(FriendActivity.class)) {
                     FriendActivity friendActivity = (FriendActivity) getActivity();
@@ -191,11 +199,8 @@ public class StoryFragment extends Fragment {
         } else if (mIndex >= mStory.size()) {
             mIndex = 0;
         }
-//        try {
-            object = mStory.get(mIndex);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+
+        object = mStory.get(mIndex);
 
         ParseUser user = null;
         if (Util.isImage(object)){
@@ -217,6 +222,7 @@ public class StoryFragment extends Fragment {
             String caption = imageObject.getCaption();
             if (caption.length() != 0){
                 tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
             } else {
                 tvCaption.setVisibility(View.GONE);
             }
@@ -280,10 +286,15 @@ public class StoryFragment extends Fragment {
         }
 
         // HARDCODE FOR DEMO
-        if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
-            tvDateAdded.setText("DAY 2");
-        } else {
+        String objectId = object.getObjectId();
+        if (objectId.equals("lYU8H3gNwB") || objectId.equals("W5FPGdH6kW") || objectId.equals("2zjqTFoGGG")) {
             tvDateAdded.setText("DAY 1");
+        } else if (objectId.equals("SAHHXjjdwL")) {
+            tvDateAdded.setText("DAY 3");
+        } else if (objectId.equals("vXaNQPEP18")) {
+            tvDateAdded.setText("DAY 4");
+        } else {
+            tvDateAdded.setText("DAY 2");
         }
 
 //        Date createdGoal = mGoal.getCreatedAt();

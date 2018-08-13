@@ -20,7 +20,7 @@
             <RelativeLayout
                 android:id="@+id/header"
                 android:layout_width="match_parent"
-                android:layout_height="177dp"
+                android:layout_height="wrap_content"
                 android:background="@color/darkOrange">
 
                 <Button
@@ -57,12 +57,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/cardview"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:fontFamily="@font/quicksand_medium"
                     android:text="@string/username"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="24sp" />
 
                 <RelativeLayout
                     android:id="@+id/info_layout"
@@ -70,7 +70,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvUsername"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:id="@+id/tvProgress"
@@ -79,12 +80,13 @@
                         android:fontFamily="@font/quicksand_regular"
                         android:text="@string/zero"
                         android:textAlignment="center"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
                     <ImageView
                         android:id="@+id/ivProgress"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignTop="@id/tvProgress"
                         android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/tvProgress"
@@ -96,17 +98,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/tvProgress"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:layout_toRightOf="@id/tvProgress"
                         android:fontFamily="@font/quicksand_regular"
                         android:text="@string/zero"
                         android:textAlignment="center"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
                     <ImageView
                         android:id="@+id/ivCompleted"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignTop="@id/tvCompleted"
                         android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/tvCompleted"
@@ -118,17 +121,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/tvProgress"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginLeft="40dp"
                         android:layout_toRightOf="@+id/tvCompleted"
                         android:fontFamily="@font/quicksand_regular"
                         android:text="@string/zero"
                         android:textAlignment="center"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
                     <ImageView
                         android:id="@+id/ivFriends"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignTop="@id/tvFriends"
                         android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/tvFriends"

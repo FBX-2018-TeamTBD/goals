@@ -2,6 +2,8 @@ package com.example.cassandrakane.goalz.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.transition.Transition;
+import android.support.transition.TransitionInflater;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.cassandrakane.goalz.FeedFragment;
 import com.example.cassandrakane.goalz.MainActivity;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.StoryFragment;
@@ -35,7 +38,9 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     private List<ParseUser> friends;
     private int startIndex = 0;
     private ParseUser currentUser = ParseUser.getCurrentUser();
+    private Transition slide;
     Context context;
+
 
     public StoryAdapter(List<Goal> goals, List<ParseUser> friends) {
         this.mGoals = goals;
@@ -48,6 +53,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     public StoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
+
+        slide = TransitionInflater.from(context).
+                inflateTransition(android.R.transition.slide_bottom);
+
 
         return new StoryAdapter.ViewHolder(
                 inflater.inflate(R.layout.item_single_story, parent, false)
@@ -96,9 +105,14 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) context;
                     holder.ivDot.setVisibility(View.GONE);
+
+                    FeedFragment fragOne = new FeedFragment();
+                    fragOne.setExitTransition(slide);
+
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+                    frag.setEnterTransition(slide);
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });
@@ -107,9 +121,14 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 public void onClick(View view) {
                     MainActivity activity = (MainActivity) context;
                     holder.ivDot.setVisibility(View.GONE);
+
+                    FeedFragment fragOne = new FeedFragment();
+                    fragOne.setExitTransition(slide);
+
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+                    frag.setEnterTransition(slide);
                     fragTransStory.add(R.id.main_central_fragment, frag).commit();
                 }
             });

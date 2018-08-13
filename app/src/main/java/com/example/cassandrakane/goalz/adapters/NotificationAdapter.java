@@ -113,11 +113,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 List<ParseObject> story = goal2.getStory();
                 if (story.size() > 0) {
                     ParseFile imageFile = null;
-                    ParseObject parseObject = story.get(story.size() - 1);
-                    if (Util.isImage(parseObject)) {
-                        imageFile = ((Image) parseObject).getImage();
-                    } else {
-                        imageFile = ((Video) parseObject).getImage();
+                    try {
+                        imageFile = fromUser.fetchIfNeeded().getParseFile("image");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                     Util.setImage(imageFile, context.getResources(), goalRequestViewHolder.ivStory, R.color.orange);
                 }

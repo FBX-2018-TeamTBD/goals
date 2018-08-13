@@ -20,9 +20,11 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +123,20 @@ public class ProfileFragment extends Fragment {
                 networkPopulateProfile();
             }
         });
+
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<Goal> parseQuery = ParseQuery.getQuery(Goal.class);
+        // Connect to Parse server
+        SubscriptionHandling<Goal> subscriptionHandling= parseLiveQueryClient.subscribe(parseQuery);
+        // Listen for CREATE events
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<Goal>() {
+                    @Override
+                    public void onEvent(ParseQuery<Goal> query, Goal object) {
+                        networkPopulateProfile();
+                    }
+                });
 
         return view;
     }
