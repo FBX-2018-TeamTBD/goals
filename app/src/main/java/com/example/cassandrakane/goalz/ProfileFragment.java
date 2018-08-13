@@ -17,7 +17,6 @@ import android.widget.ViewFlipper;
 
 import com.example.cassandrakane.goalz.adapters.GoalAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
-import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
@@ -40,8 +39,6 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.rvGoals) public RecyclerView rvGoals;
     @BindView(R.id.viewFlipper) ViewFlipper viewFlipper;
     @BindView(R.id.btnAddGoal) public FloatingActionButton btnAddGoal;
-    @BindView(R.id.btnCamera) ImageButton btnCamera;
-    @BindView(R.id.btnFeed) ImageButton btnFeed;
     @BindView(R.id.btnRefresh) ImageButton btnRefresh;
 
     MainActivity mainActivity;
@@ -100,19 +97,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mainActivity.addGoal(view);
-            }
-        });
-        final NavigationHelper navigationHelper = new NavigationHelper(mainActivity.centralFragment.horizontalPager);
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigationHelper.toCamera();
-            }
-        });
-        btnFeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigationHelper.toFeed();
             }
         });
 
