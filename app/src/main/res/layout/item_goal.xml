@@ -65,8 +65,28 @@
             android:textColor="@color/white"
             android:textSize="21sp" />
 
+        <ImageView
+            android:id="@+id/ivStar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/btnReaction"
+            android:layout_centerHorizontal="true"
+            android:tint="@color/white"
+            android:src="@drawable/clock" />
+
         <TextView
             android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvStreak"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/quicksand_medium"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvStreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/ivStory"
@@ -78,7 +98,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvStreak"
+            android:id="@+id/tvFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/ivStory"
@@ -87,58 +107,22 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/quicksand_medium"
             android:textColor="@color/white"
+            android:text="0"
             android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/ivStar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/tvStreak"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_toEndOf="@+id/tvStreak"
-            android:tint="@color/white"
-            android:visibility="visible" />
-
         <Button
-            android:id="@+id/overlayFriends"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:background="@color/transparent"
-            android:layout_alignTop="@+id/layout_friends"
-            android:layout_alignLeft="@+id/layout_friends" />
-
-        <RelativeLayout
-            android:id="@+id/layout_friends"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvFriends"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignBottom="@+id/btnFriends"
-                android:fontFamily="@font/quicksand_medium"
-                android:text="@string/_0"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/btnFriends"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_toRightOf="@+id/tvFriends"
-                android:layout_marginLeft="3dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="9dp"
-                android:background="@drawable/friend"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true" />
-        </RelativeLayout>
+            android:id="@+id/btnFriends"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="9dp"
+            android:background="@drawable/friend"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
         <Button
             android:id="@+id/ibAdd"
@@ -155,7 +139,7 @@
             android:id="@+id/tvReaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvStreak"
+            android:layout_alignBottom="@+id/btnReaction"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="3dp"
             android:layout_toLeftOf="@+id/btnReaction"
@@ -181,11 +165,11 @@
 
         <Button
             android:id="@+id/btnReaction"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="11dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="11dp"
             android:background="@drawable/thumb_outline"
             android:backgroundTint="@color/white" />

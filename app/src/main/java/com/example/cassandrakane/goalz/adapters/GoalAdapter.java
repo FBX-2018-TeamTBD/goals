@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,7 @@ import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Image;
 import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.models.Video;
+import com.example.cassandrakane.goalz.utils.DisplayUtil;
 import com.example.cassandrakane.goalz.utils.NavigationHelper;
 import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.parse.GetCallback;
@@ -168,14 +170,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
 
         if (goal.getStreak() > 0) {
-            holder.tvStreak.setText(String.format("%d", goal.getStreak()));
-            holder.ivStar.setVisibility(View.VISIBLE);
+            holder.tvStreak.setText(String.format("%d DAY STREAK", goal.getStreak()));
 
             // HARDCODE FOR DEMO
             if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getItemAdded()) {
-                holder.ivStar.setImageResource(R.drawable.clock);
+                holder.ivStar.setVisibility(View.VISIBLE);
             } else {
-                holder.ivStar.setImageResource(R.drawable.star);
+                holder.ivStar.setVisibility(View.INVISIBLE);
             }
 
             // DISABLE FOR DEMO
@@ -194,8 +195,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setText(String.valueOf(goal.getApprovedUsers().size() - 1));
             holder.tvFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
+            params.setMargins(DisplayUtil.dpToPx(28), DisplayUtil.dpToPx(13), 0, 0);
+            holder.btnFriends.setLayoutParams(params);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
-            holder.overlayFriends.setOnClickListener(new View.OnClickListener() {
+            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, FriendsModalActivity.class);
@@ -207,10 +211,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         } else if (personal) {
             holder.tvFriends.setVisibility(View.GONE);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.larger_add));
-            holder.overlayFriends.setOnClickListener(new View.OnClickListener() {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
+            params.setMargins(DisplayUtil.dpToPx(17), DisplayUtil.dpToPx(13), 0, 0);
+            holder.btnFriends.setLayoutParams(params);
+            holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    holder.overlayFriends.setOnClickListener(null);
+                    holder.btnFriends.setOnClickListener(null);
                     Intent i = new Intent(context, SearchFriendsActivity.class);
                     i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
                     i.putExtra(Goal.class.getSimpleName(), goal);
@@ -579,7 +586,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.tvStreak) TextView tvStreak;
         @BindView(R.id.tvProgress) TextView tvProgress;
         @BindView(R.id.ivStory) ImageView ivStory;
-        @BindView(R.id.ivStar) ImageView ivStar;
         @BindView(R.id.btnFriends) Button btnFriends;
         @BindView(R.id.tvFriends) TextView tvFriends;
         @BindView(R.id.btnStory) Button btnStory;
@@ -590,7 +596,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.vGradient) View vGradient;
         @BindView(R.id.rvGradient) View rvGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
-        @BindView(R.id.overlayFriends) Button overlayFriends;
+        @BindView(R.id.ivStar) ImageView ivStar;
 
         public ViewHolder(View itemView) {
             super(itemView);
