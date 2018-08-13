@@ -280,10 +280,15 @@ public class StoryFragment extends Fragment {
         }
 
         // HARDCODE FOR DEMO
-        if (!object.getObjectId().equals("pjJ33DVw3s") && !object.getObjectId().equals("ghmG65FNbI")) {
-            tvDateAdded.setText("DAY 2");
-        } else {
+        String objectId = object.getObjectId();
+        if (objectId.equals("lYU8H3gNwB") || objectId.equals("W5FPGdH6kW") || objectId.equals("2zjqTFoGGG")) {
             tvDateAdded.setText("DAY 1");
+        } else if (objectId.equals("vXaNQPEP18")) {
+            tvDateAdded.setText("DAY 3");
+        } else if (objectId.equals("SAHHXjjdwL")) {
+            tvDateAdded.setText("DAY 4");
+        } else {
+            tvDateAdded.setText("DAY 2");
         }
 
 //        Date createdGoal = mGoal.getCreatedAt();
