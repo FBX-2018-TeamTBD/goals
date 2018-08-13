@@ -106,6 +106,9 @@ public class FeedFragment extends Fragment {
 
         populateFriends();
         populateStories();
+        if (shown) {
+            animateFriends();
+        }
 
         return view;
     }
