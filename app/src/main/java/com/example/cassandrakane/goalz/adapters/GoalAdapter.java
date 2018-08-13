@@ -173,7 +173,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
             // HARDCODE FOR DEMO
             if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getItemAdded()) {
-                holder.ivStar.setImageResource(R.drawable.clock);
+                holder.ivStar.setImageResource(R.drawable.ic_outline_hourglass_empty_24px);
             } else {
                 holder.ivStar.setImageResource(R.drawable.star);
             }
