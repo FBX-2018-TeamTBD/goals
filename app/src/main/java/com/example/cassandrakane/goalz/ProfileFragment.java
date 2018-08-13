@@ -111,6 +111,8 @@ public class ProfileFragment extends Fragment {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Goal> parseQuery = ParseQuery.getQuery(Goal.class);
+        // HARDCODE FOR DEMO
+        parseQuery.whereEqualTo("objectId", "jBsVVmXedF");
         // Connect to Parse server
         SubscriptionHandling<Goal> subscriptionHandling= parseLiveQueryClient.subscribe(parseQuery);
         // Listen for CREATE events
