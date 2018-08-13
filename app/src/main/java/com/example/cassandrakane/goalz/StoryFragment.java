@@ -332,18 +332,28 @@ public class StoryFragment extends Fragment {
             public void onClicked(int index, BoomButton boomButton) { }
 
             @Override
-            public void onBackgroundClick() { }
+            public void onBackgroundClick() {
+                if ((viewStory.getVisibility() == View.VISIBLE) && !viewStory.isPlaying()) {
+                    viewStory.start();
+                }
+            }
 
             @Override
             public void onBoomWillHide() { }
 
             @Override
-            public void onBoomDidHide() { }
+            public void onBoomDidHide() {
+
+            }
 
             @Override
             public void onBoomWillShow() {
                 if (mHandler != null) {
                     mHandler.removeCallbacks(runnable);
+                }
+
+                if (viewStory.isPlaying()) {
+                    viewStory.pause();
                 }
             }
 
