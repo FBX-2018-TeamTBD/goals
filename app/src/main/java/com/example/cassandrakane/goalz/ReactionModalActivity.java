@@ -3,6 +3,7 @@ package com.example.cassandrakane.goalz;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -11,8 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.ReactionAdapter;
-import com.parse.ParseObject;
+import com.example.cassandrakane.goalz.models.Reaction;
 
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,7 +33,7 @@ public class ReactionModalActivity extends Activity {
     @BindView(R.id.tvRockCount) TextView tvRockCount;
     @BindView(R.id.btnBack) Button btnBack;
     ReactionAdapter reactionAdapter;
-    List<ParseObject> reactions;
+    List<Reaction> reactions;
     List<Integer> reactionCounts;
 
     @Override
@@ -49,7 +53,8 @@ public class ReactionModalActivity extends Activity {
 
         getWindow().setLayout(width, height);
 
-        reactions = (List) getIntent().getSerializableExtra("reactions");
+        ArrayList<Parcelable> parcelableReactions = getIntent().getParcelableArrayListExtra("reactions");
+        reactions = getReactionsFromParcelable(parcelableReactions);
         reactionCounts = getIntent().getIntegerArrayListExtra("reactionCounts");
 
         if (reactions != null) {
@@ -66,6 +71,14 @@ public class ReactionModalActivity extends Activity {
             tvBumpCount.setText(Integer.toString(reactionCounts.get(4)));
             tvRockCount.setText(Integer.toString(reactionCounts.get(5)));
         }
+    }
+
+    public ArrayList<Reaction> getReactionsFromParcelable(ArrayList<Parcelable> parcelables) {
+        ArrayList<Reaction> reactions = new ArrayList<>();
+        for (Parcelable p: parcelables) {
+            reactions.add((Reaction) Parcels.unwrap(p));
+        }
+        return reactions;
     }
 
     public void goBack (View v){

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.transition.Transition;
 import android.support.transition.TransitionInflater;
@@ -18,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +52,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.Serializable;
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -279,7 +280,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             public void onClick(View view) {
                 holder.btnReaction.setOnClickListener(null);
                 Intent intent = new Intent(context, ReactionModalActivity.class);
-                intent.putExtra("reactions", (Serializable) reax);
+                ArrayList<Reaction> reactionArrayList = new ArrayList<>();
+                reactionArrayList.addAll(reax);
+                intent.putExtra("reactions", getParcelableReactions(reactionArrayList));
                 intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
                 context.startActivity(intent);
             }
@@ -503,29 +506,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         return 0;
     }
 
-    // slide the view from below itself to the current position
-    private void slideRight(View view){
-        view.setVisibility(View.VISIBLE);
-        TranslateAnimation animate = new TranslateAnimation(
-                -view.getWidth()-7,                 // fromXDelta
-                 0,                 // toXDelta
-                0,  // fromYDelta
-                0);                // toYDelta
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-    }
-
-    // slide the view from its current position to below itself
-    private void slideLeft(View view){
-        TranslateAnimation animate = new TranslateAnimation(
-                0,                 // fromXDelta
-                -view.getWidth()-7,                 // toXDelta
-                0,                 // fromYDelta
-                0); // toYDelta
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
+    public ArrayList<Parcelable> getParcelableReactions(ArrayList<Reaction> reactions) {
+        ArrayList<Parcelable> parcelableReactions = new ArrayList<>();
+        for (Reaction reaction : reactions) {
+            parcelableReactions.add(Parcels.wrap(reaction));
+        }
+        return parcelableReactions;
     }
 
     private void removeGoal(String id) {
