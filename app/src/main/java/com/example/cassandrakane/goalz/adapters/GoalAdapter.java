@@ -254,6 +254,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvReaction.setText("3");
         } else if (goal.getObjectId().equals("pcJ3yyYLGe")) {
             holder.tvReaction.setText("5");
+        } else if (goal.getObjectId().equals("sHQB3KuqBT")) {
+            holder.tvReaction.setText("8");
         } else {
             holder.tvReaction.setText(String.valueOf(total));
         }
