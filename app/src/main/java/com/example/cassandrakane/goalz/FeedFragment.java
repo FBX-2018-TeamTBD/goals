@@ -165,7 +165,7 @@ public class FeedFragment extends Fragment {
 //                    goals.add(goal);
 //                    correspondingFriends.add(friend);
 //                }
-                    if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
+                    if (goal.getStory().size() > 0 && !goal.getApprovedUsers().contains(ParseUser.getCurrentUser())
                             && !goals.contains(goal)) {
                         goals.add(goal);
                         correspondingFriends.add(friend);
