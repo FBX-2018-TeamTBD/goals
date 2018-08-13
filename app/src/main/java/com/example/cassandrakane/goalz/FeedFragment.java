@@ -144,7 +144,7 @@ public class FeedFragment extends Fragment {
 
     public void populateFriends() {
         List<ParseUser> arr = user.getList("friends");
-
+        tempFriends.clear();
         if (arr != null) {
             tempFriends.addAll(arr);
         }
