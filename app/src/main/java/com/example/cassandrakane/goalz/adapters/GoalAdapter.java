@@ -147,13 +147,18 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private void setTextViews(final Goal goal, final ViewHolder holder) {
         holder.tvTitle.setText(goal.getTitle());
         if (goal.getCompleted()) {
-            holder.tvProgress.setText(R.string.completed_label);
+            holder.placeholderProgress.setText(R.string.completed_label);
+            holder.tvProgress.setVisibility(View.INVISIBLE);
+            holder.ivComplete.setVisibility(View.VISIBLE);
             Glide.with(context).asGif().load(R.drawable.confetti).into(holder.ivCelebrate);
         } else {
             holder.tvTitle.setTextColor(context.getResources().getColor(R.color.white));
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvTitle.setPaintFlags(holder.tvTitle.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvProgress.setText(String.format("%d", goal.getDuration() - goal.getProgress()));
+            holder.tvProgress.setVisibility(View.VISIBLE);
+            holder.ivComplete.setVisibility(View.INVISIBLE);
+            holder.placeholderProgress.setText(R.string.days_left);
             holder.ivCelebrate.setImageDrawable(null);
         }
     }
@@ -200,7 +205,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.tvFriends.setVisibility(View.VISIBLE);
             holder.btnFriends.setVisibility(View.VISIBLE);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(holder.btnFriends.getLayoutParams());
-            params.setMargins(DisplayUtil.dpToPx(28), DisplayUtil.dpToPx(13), 0, 0);
+            params.setMargins(DisplayUtil.dpToPx(32), DisplayUtil.dpToPx(13), 0, 0);
             holder.btnFriends.setLayoutParams(params);
             holder.btnFriends.setBackground(context.getResources().getDrawable(R.drawable.friend));
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
@@ -312,6 +317,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.rvGradient.setVisibility(View.VISIBLE);
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.white));
         holder.tvFriends.setTextColor(context.getResources().getColor(R.color.white));
+        holder.tvStreak.setTextColor(context.getResources().getColor(R.color.white));
+        holder.placeholderStreak.setTextColor(context.getResources().getColor(R.color.white));
         holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
         holder.btnReaction.setVisibility(View.VISIBLE);
         holder.tvReaction.setVisibility(View.VISIBLE);
@@ -364,6 +371,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.placeholderProgress.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.tvStreak.setTextColor(context.getResources().getColor(R.color.orange));
+        holder.placeholderStreak.setTextColor(context.getResources().getColor(R.color.orange));
         holder.ivStory.setImageDrawable(null);
         holder.btnReaction.setVisibility(View.GONE);
         holder.tvReaction.setVisibility(View.INVISIBLE);
@@ -591,6 +601,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         @BindView(R.id.rvGradient) View rvGradient;
         @BindView(R.id.ivCelebrate) ImageView ivCelebrate;
         @BindView(R.id.ivStar) ImageView ivStar;
+        @BindView(R.id.placeholder_progress) TextView placeholderProgress;
+        @BindView(R.id.ivCompleted) ImageView ivComplete;
+        @BindView(R.id.placeholder_streak) TextView placeholderStreak;
 
         public ViewHolder(View itemView) {
             super(itemView);

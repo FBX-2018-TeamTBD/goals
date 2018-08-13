@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btnFriends"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/quicksand_medium"
             android:textAlignment="center"
@@ -79,9 +79,22 @@
             android:id="@+id/layoutProgress"
             android:layout_width="85dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="6dp"
             android:layout_alignParentLeft="true">
+
+            <ImageView
+                android:id="@+id/ivCompleted"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dp"
+                android:visibility="invisible"
+                android:src="@drawable/goals_react"
+                android:tint="@color/white" />
+
             <TextView
                 android:id="@+id/tvProgress"
                 android:layout_width="wrap_content"
@@ -108,7 +121,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="68dp"
+            android:layout_width="70dp"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="6dp"
@@ -169,7 +182,7 @@
             android:id="@+id/ibAdd"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:layout_above="@+id/tvTitle"
+            android:layout_below="@+id/tvTitle"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:background="@drawable/add_circle"
@@ -193,14 +206,14 @@
             android:id="@+id/tvAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="44dp"
+            android:layout_marginBottom="60dp"
             android:fontFamily="@font/quicksand_medium"
             android:text="LET'S GET STARTED!"
             android:textAlignment="center"
             android:textColor="@color/orange"
-            android:textSize="24sp"
+            android:textSize="23sp"
             android:textStyle="bold"
             android:visibility="invisible" />
 
