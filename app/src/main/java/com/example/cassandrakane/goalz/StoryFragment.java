@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.transition.Transition;
+import android.support.transition.TransitionInflater;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -87,6 +89,7 @@ public class StoryFragment extends Fragment {
     public Goal mGoal;
     String type;
     boolean firstOpen = true;
+    private String mTransitionName;
 
     public StoryFragment() { }
 
@@ -161,6 +164,11 @@ public class StoryFragment extends Fragment {
 
                 Util.storyMode = false;
 
+                Transition slide = TransitionInflater.from(getActivity()).
+                        inflateTransition(android.R.transition.slide_bottom);
+
+                storyFragment.setExitTransition(slide);
+
                 getActivity().getSupportFragmentManager().beginTransaction().remove(storyFragment).commit();
                 if (getActivity().getClass().isAssignableFrom(FriendActivity.class)) {
                     FriendActivity friendActivity = (FriendActivity) getActivity();
@@ -191,11 +199,8 @@ public class StoryFragment extends Fragment {
         } else if (mIndex >= mStory.size()) {
             mIndex = 0;
         }
-//        try {
-            object = mStory.get(mIndex);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+
+        object = mStory.get(mIndex);
 
         ParseUser user = null;
         if (Util.isImage(object)){
@@ -217,6 +222,7 @@ public class StoryFragment extends Fragment {
             String caption = imageObject.getCaption();
             if (caption.length() != 0){
                 tvCaption.setText(caption);
+                tvCaption.setVisibility(View.VISIBLE);
             } else {
                 tvCaption.setVisibility(View.GONE);
             }

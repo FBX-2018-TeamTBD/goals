@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.support.transition.Transition;
+import android.support.transition.TransitionInflater;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -26,9 +28,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cassandrakane.goalz.CameraFragment;
+import com.example.cassandrakane.goalz.FeedFragment;
 import com.example.cassandrakane.goalz.FriendActivity;
 import com.example.cassandrakane.goalz.FriendsModalActivity;
 import com.example.cassandrakane.goalz.MainActivity;
+import com.example.cassandrakane.goalz.ProfileFragment;
 import com.example.cassandrakane.goalz.R;
 import com.example.cassandrakane.goalz.ReactionModalActivity;
 import com.example.cassandrakane.goalz.SearchFriendsActivity;
@@ -69,6 +73,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     private float endX = 0;
     private int startIndex = 0;
     private NavigationHelper navigationHelper;
+    private Transition slide;
 
     public GoalAdapter(List<Goal> gGoals, boolean personal) {
         this.goals = gGoals;
@@ -81,6 +86,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
+
+        slide = TransitionInflater.from(context).
+                inflateTransition(android.R.transition.slide_bottom);
+
 
         return new ViewHolder(inflater.inflate(R.layout.item_goal, parent, false));
     }
@@ -314,10 +323,15 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             public void onClick(View view) {
                 if (context.getClass().isAssignableFrom(FriendActivity.class)) {
                     FriendActivity activity = (FriendActivity) context;
+
+                    FeedFragment fragmentOne = new FeedFragment();
+                    fragmentOne.setExitTransition(slide);
+
                     final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                     FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                     StoryFragment fragmentTwo = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                    fragTransStory.add(R.id.root_layout, fragmentTwo).commit();
+                    fragmentTwo.setEnterTransition(slide);
+                    fragTransStory.replace(R.id.root_layout, fragmentTwo).commit();
 
                     activity.ivProfile.setVisibility(View.GONE);
                     activity.cardView.setVisibility(View.GONE);
@@ -385,24 +399,26 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                     if (personal) {
                         MainActivity activity = (MainActivity) context;
 
-//                        ProfileFragment current = (ProfileFragment) activity.getSupportFragmentManager().findFragmentById(R.id.root_layout);
-//                        current.setSharedElementReturnTransition(TransitionInflater.from(context).inflateTransition(R.transition.default_transition));
-//                        current.setExitTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.no_transition));
-//
-//                        StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-//                        frag.setSharedElementEnterTransition(TransitionInflater.from(context).inflateTransition(R.transition.default_transition));
-//                        frag.setEnterTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.no_transition));
+                        ProfileFragment current = new ProfileFragment();
+                        current.setExitTransition(slide);
 
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
-                        fragTransStory.add(R.id.main_central_fragment, frag).commit();
+                        frag.setEnterTransition(slide);
+                        fragTransStory.replace(R.id.main_central_fragment, frag).commit();
                     } else {
                         FriendActivity activity = (FriendActivity) context;
+
+                        ProfileFragment current = new ProfileFragment();
+                        current.setExitTransition(slide);
+
                         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
                         FragmentTransaction fragTransStory = fragmentManager.beginTransaction();
                         StoryFragment frag = StoryFragment.newInstance(story, startIndex, currentUser, goal);
+                        frag.setEnterTransition(slide);
                         fragTransStory.add(R.id.root_layout, frag).commit();
+
                         activity.ivProfile.setVisibility(View.INVISIBLE);
                         activity.cardView.setVisibility(View.INVISIBLE);
                         activity.btnBack.setVisibility(View.INVISIBLE);
