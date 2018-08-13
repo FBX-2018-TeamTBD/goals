@@ -277,7 +277,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.btnReaction.setOnClickListener(null);
                 Intent intent = new Intent(context, ReactionModalActivity.class);
                 intent.putExtra("reactions", (Serializable) reax);
                 intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
