@@ -1,9 +1,9 @@
 package com.example.cassandrakane.goalz;
 
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.ReactionAdapter;
+import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.Reaction;
 
 import org.parceler.Parcels;
@@ -22,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReactionModalActivity extends Activity {
+public class ReactionModalActivity extends AppCompatActivity {
 
     @BindView(R.id.rvReactions) RecyclerView rvReactions;
     @BindView(R.id.tvThumbCount) TextView tvThumbCount;
@@ -32,9 +33,11 @@ public class ReactionModalActivity extends Activity {
     @BindView(R.id.tvBumpCount) TextView tvBumpCount;
     @BindView(R.id.tvRockCount) TextView tvRockCount;
     @BindView(R.id.btnBack) Button btnBack;
+    @BindView(R.id.tvGoal) TextView tvGoal;
     ReactionAdapter reactionAdapter;
     List<Reaction> reactions;
     List<Integer> reactionCounts;
+    Goal goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class ReactionModalActivity extends Activity {
         ArrayList<Parcelable> parcelableReactions = getIntent().getParcelableArrayListExtra("reactions");
         reactions = getReactionsFromParcelable(parcelableReactions);
         reactionCounts = getIntent().getIntegerArrayListExtra("reactionCounts");
+        goal = Parcels.unwrap(getIntent().getParcelableExtra(Goal.class.getSimpleName()));
 
         if (reactions != null) {
             reactionAdapter = new ReactionAdapter(reactions);
@@ -71,6 +75,9 @@ public class ReactionModalActivity extends Activity {
             tvBumpCount.setText(Integer.toString(reactionCounts.get(4)));
             tvRockCount.setText(Integer.toString(reactionCounts.get(5)));
         }
+
+        tvGoal.setText(goal.getTitle());
+
     }
 
     public ArrayList<Reaction> getReactionsFromParcelable(ArrayList<Parcelable> parcelables) {

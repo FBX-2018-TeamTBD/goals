@@ -19,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -204,6 +206,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Animation pulse = AnimationUtils.loadAnimation(context, R.anim.anim_pulse);
+                    holder.btnFriends.startAnimation(pulse);
                     Intent i = new Intent(context, FriendsModalActivity.class);
                     i.putExtra(Goal.class.getSimpleName(), goal);
                     i.putExtra("personal", personal);
@@ -219,7 +223,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             holder.btnFriends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    holder.btnFriends.setOnClickListener(null);
+                    Animation pulse = AnimationUtils.loadAnimation(context, R.anim.anim_pulse);
+                    holder.btnFriends.startAnimation(pulse);
                     Intent i = new Intent(context, SearchFriendsActivity.class);
                     i.putExtra("requestActivity", FriendsModalActivity.class.getSimpleName());
                     i.putExtra(Goal.class.getSimpleName(), goal);
@@ -289,6 +294,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 Intent intent = new Intent(context, ReactionModalActivity.class);
                 ArrayList<Reaction> reactionArrayList = new ArrayList<>();
                 reactionArrayList.addAll(reax);
+                intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(goal));
                 intent.putExtra("reactions", getParcelableReactions(reactionArrayList));
                 intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
                 context.startActivity(intent);
