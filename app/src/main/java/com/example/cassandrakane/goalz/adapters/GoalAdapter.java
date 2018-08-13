@@ -397,7 +397,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
                 final List<ParseObject> story = goal.getStory();
 
                 if (story.size() > 0) {
-                    startIndex = getStartIndex(story);
+                    startIndex = story.size() - 1;
+//                    startIndex = getStartIndex(story);
+
                     if (personal) {
                         MainActivity activity = (MainActivity) context;
 
