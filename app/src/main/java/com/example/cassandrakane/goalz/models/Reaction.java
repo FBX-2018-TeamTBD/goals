@@ -1,12 +1,14 @@
 package com.example.cassandrakane.goalz.models;
 
+import android.os.Parcelable;
+
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 @ParseClassName("Reaction")
-public class Reaction extends ParseObject{
+public class Reaction extends ParseObject implements Parcelable {
 
     public Reaction() {
         super();

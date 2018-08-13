@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.transition.Transition;
 import android.support.transition.TransitionInflater;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,8 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.Serializable;
@@ -83,13 +86,12 @@ public class StoryFragment extends Fragment {
     private Integer bumpCount = 0;
     private Integer rockCount = 0;
 
-    private List<ParseObject> reactions;
+    private List<Reaction> reactions;
     private Integer reactionCount;
 
     public Goal mGoal;
     String type;
     boolean firstOpen = true;
-    private String mTransitionName;
 
     public StoryFragment() { }
 
@@ -313,7 +315,12 @@ public class StoryFragment extends Fragment {
         ivBmb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_round_thumb_up_24px));
         ivBmb.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
 
-        reactions = object.getList("reactions");
+        if (Util.isImage(object)) {
+            reactions = ((Image) object).getReactions();
+        } else {
+            reactions = ((Video) object).getReactions();
+        }
+
         if (reactions != null) {
             reactionCount = reactions.size();
             setReaction(reactions);
@@ -332,9 +339,7 @@ public class StoryFragment extends Fragment {
             }
 
             @Override
-            public void onBoomWillHide() {
-
-            }
+            public void onBoomWillHide() { }
 
             @Override
             public void onBoomDidHide() {
@@ -409,7 +414,7 @@ public class StoryFragment extends Fragment {
                         final ArrayList<Integer> reactionCounts = new ArrayList<>();
                         reactionCounts.addAll(Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount));
                         Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
-                        intent.putExtra("reactions", (Serializable) reactions);
+                        intent.putParcelableArrayListExtra("reactions", getParcelableReactions());
                         intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
                         if (mHandler != null) {
                             mHandler.removeCallbacks(runnable);
@@ -456,10 +461,9 @@ public class StoryFragment extends Fragment {
         );
     }
 
-    public void setReaction(List<ParseObject> reactions){
-        for (ParseObject reaction : reactions){
-            Reaction reactionObject = (Reaction) reaction;
-            String type = reactionObject.getType();
+    public void setReaction(List<Reaction> reactions){
+        for (Reaction reaction : reactions){
+            String type = reaction.getType();
 
             switch (type) {
                 case "thumbs":
@@ -484,7 +488,7 @@ public class StoryFragment extends Fragment {
                     break;
             }
 
-            if (reactionObject.getUser() == currentUser){
+            if (reaction.getUser() == currentUser){
                 ivBmb.clearColorFilter();
                 switch (type) {
                     case "thumbs":
@@ -572,5 +576,13 @@ public class StoryFragment extends Fragment {
                 }
             });
         }
+    }
+
+    public ArrayList<Parcelable> getParcelableReactions() {
+        ArrayList<Parcelable> parcelableReactions = new ArrayList<>();
+        for (Reaction reaction : reactions) {
+            parcelableReactions.add(Parcels.wrap(reaction));
+        }
+        return parcelableReactions;
     }
 }

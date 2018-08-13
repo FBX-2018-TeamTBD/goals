@@ -14,7 +14,6 @@ import com.example.cassandrakane.goalz.models.Reaction;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -24,10 +23,10 @@ import butterknife.ButterKnife;
 
 public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHolder> {
 
-    private List<ParseObject> mReactions;
+    private List<Reaction> mReactions;
     Context context;
 
-    public ReactionAdapter(List<ParseObject> reactions) { mReactions = reactions; }
+    public ReactionAdapter(List<Reaction> reactions) { mReactions = reactions; }
 
     @NonNull
     @Override
@@ -39,7 +38,7 @@ public class ReactionAdapter extends RecyclerView.Adapter<ReactionAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ReactionAdapter.ViewHolder viewHolder, int i) {
-        final Reaction reaction = (Reaction) mReactions.get(i);
+        final Reaction reaction = mReactions.get(i);
         ParseUser user = reaction.getUser();
         String username = "";
         ParseFile image = null;
