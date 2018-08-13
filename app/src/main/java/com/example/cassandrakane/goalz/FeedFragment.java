@@ -160,6 +160,7 @@ public class FeedFragment extends Fragment {
             if (friendGoals != null) {
                 for (int j = 0; j < friendGoals.size(); j++) {
                     Goal goal = friendGoals.get(j);
+                    // HARDCODE FOR DEMO
 //                if (goal.getStory().size() > 0 && !goal.getFriends().contains(ParseUser.getCurrentUser())
 //                        && goal.getUpdatedAt().compareTo(Util.yesterday()) >= 0 && !goals.contains(goal)) {
 //                    goals.add(goal);
