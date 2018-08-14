@@ -320,6 +320,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvStreak.setTextColor(context.getResources().getColor(R.color.white));
         holder.placeholderStreak.setTextColor(context.getResources().getColor(R.color.white));
         holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
+        holder.placeholderProgress.setTextColor(context.getResources().getColor(R.color.white));
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
         layoutParams.removeRule(14);
         layoutParams.removeRule(6);
