@@ -46,7 +46,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -287,23 +289,11 @@ public class StoryFragment extends Fragment {
             tvUsername.setText(user.getUsername());
         }
 
-        // HARDCODE FOR DEMO
-        String objectId = object.getObjectId();
-        if (objectId.equals("lYU8H3gNwB") || objectId.equals("W5FPGdH6kW") || objectId.equals("KFJGnMBn45")) {
-            tvDateAdded.setText("DAY 1");
-        } else if (objectId.equals("SAHHXjjdwL")) {
-            tvDateAdded.setText("DAY 3");
-        } else if (objectId.equals("vXaNQPEP18")) {
-            tvDateAdded.setText("DAY 4");
-        } else {
-            tvDateAdded.setText("DAY 2");
-        }
-
-//        Date createdGoal = mGoal.getCreatedAt();
-//        Date createdAt = object.getCreatedAt();
-//        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
-//        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
-//        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
+        Date createdGoal = mGoal.getCreatedAt();
+        Date createdAt = object.getCreatedAt();
+        int dateDiff = (int) createdAt.getTime() - (int) createdGoal.getTime();
+        int day = dateDiff / (int) TimeUnit.DAYS.toMillis(1);
+        tvDateAdded.setText("DAY " + Integer.toString(day + 1));
 
         pbProgress.setProgress((mIndex + 1) * 100 / mStory.size());
     }

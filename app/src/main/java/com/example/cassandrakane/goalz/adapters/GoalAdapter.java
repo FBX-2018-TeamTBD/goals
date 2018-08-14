@@ -181,20 +181,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         if (goal.getStreak() > 0) {
             holder.tvStreak.setText(String.format("%d", goal.getStreak()));
 
-            // HARDCODE FOR DEMO
-            if (goal.getObjectId().equals("jBsVVmXedF") && !goal.getItemAdded()) {
-                holder.ivStar.setVisibility(View.VISIBLE);
-            } else {
-                holder.ivStar.setVisibility(View.INVISIBLE);
-            }
-
-            // DISABLE FOR DEMO
-//          int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
-//          if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getItemAdded() && !goal.getCompleted()){
-//              holder.ivStar.setImageResource(R.drawable.clock);
-//          } else {
-//              holder.ivStar.setImageResource(R.drawable.star);
-//          }
+          int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
+          if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getItemAdded() && !goal.getCompleted()){
+              holder.ivStar.setImageResource(R.drawable.ic_outline_hourglass_empty_24px);
+          } else {
+              holder.ivStar.setImageResource(R.drawable.star);
+          }
         }
     }
 
@@ -271,24 +263,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             }
         }
 
-        // HARDCODE FOR DEMO
-        if (goal.getObjectId().equals("jBsVVmXedF")) {
-            holder.tvReaction.setText("7");
-        } else if (goal.getObjectId().equals("zkavo2ePKo")) {
-            holder.tvReaction.setText("4");
-        } else if (goal.getObjectId().equals("0rTN9QsSlk")) {
-            holder.tvReaction.setText("9");
-        } else if (goal.getObjectId().equals("NaWB0UjSWz")) {
-            holder.tvReaction.setText("3");
-        } else if (goal.getObjectId().equals("pcJ3yyYLGe")) {
-            holder.tvReaction.setText("5");
-        } else if (goal.getObjectId().equals("sHQB3KuqBT")) {
-            holder.tvReaction.setText("8");
-        } else {
-            holder.tvReaction.setText(String.valueOf(total));
-        }
-
-        // holder.tvReaction.setText(String.valueOf(total));
+         holder.tvReaction.setText(String.valueOf(total));
 
         final ArrayList<Integer> reactionCounts = new ArrayList<>();
         reactionCounts.addAll(Arrays.asList(thumbs, goaled, claps, oks, bumps, rocks));
@@ -310,9 +285,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     private void setStory(final Goal goal, final ViewHolder holder, final List<ParseObject> story) {
-        // HARDCODE FOR DEMO
-        startIndex = story.size() - 1;
-//        startIndex = getStartIndex(story);
+        startIndex = getStartIndex(story);
         holder.ibAdd.setVisibility(View.GONE);
         holder.tvAdd.setVisibility(View.GONE);
         holder.vGradient.setVisibility(View.VISIBLE);
