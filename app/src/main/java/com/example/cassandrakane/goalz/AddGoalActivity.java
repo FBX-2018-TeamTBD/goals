@@ -20,7 +20,6 @@ import com.example.cassandrakane.goalz.adapters.ShareFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.Reaction;
-import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -179,8 +178,9 @@ public class AddGoalActivity extends AppCompatActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                        notificationHelper.setReminder(finalGoal);
+                        // HARDCODE FOR DEMO
+//                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+//                        notificationHelper.setReminder(finalGoal);
                         Intent data = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(data);
                         progressBar.setVisibility(View.INVISIBLE);

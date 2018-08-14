@@ -59,7 +59,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:onClick="postGoal" />
+                android:onClick="autofill" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
