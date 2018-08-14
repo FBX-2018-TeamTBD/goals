@@ -32,10 +32,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGoalFriends"
-        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/btnBack"/>
+        android:layout_height="582dp"
+        android:layout_below="@id/btnBack"
+        android:layout_marginTop="32dp" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -46,6 +46,19 @@
         android:fontFamily="@font/quicksand_medium"
         android:text="@string/friend"
         android:textColor="@color/orange"
-        android:textSize="21sp" />
+        android:layout_marginTop="-7dp"
+        android:gravity="top"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/tvGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-1dp"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="TextView"
+        android:textSize="14sp" />
 
 </RelativeLayout>

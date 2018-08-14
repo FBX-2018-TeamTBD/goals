@@ -296,6 +296,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.btnReaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Animation pulse = AnimationUtils.loadAnimation(context, R.anim.anim_pulse);
+                holder.btnReaction.startAnimation(pulse);
                 Intent intent = new Intent(context, ReactionModalActivity.class);
                 ArrayList<Reaction> reactionArrayList = new ArrayList<>();
                 reactionArrayList.addAll(reax);
