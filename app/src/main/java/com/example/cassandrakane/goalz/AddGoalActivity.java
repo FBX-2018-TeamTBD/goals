@@ -204,14 +204,14 @@ public class AddGoalActivity extends AppCompatActivity {
         }
     }
 
-    public void autofill(View v) {
-        etTitle.setText("encourage others");
-        etTitle.setSelection(16);
-        sbDuration.setProgress(16);
-        rbDay.toggle();
-        rvShareFriends.findViewHolderForAdapterPosition(0).itemView.performClick();
-        rvShareFriends.findViewHolderForAdapterPosition(2).itemView.performClick();
-        postGoal(v);
-    }
+//    public void autofill(View v) {
+//        etTitle.setText("encourage others");
+//        etTitle.setSelection(16);
+//        sbDuration.setProgress(16);
+//        rbDay.toggle();
+//        rvShareFriends.findViewHolderForAdapterPosition(0).itemView.performClick();
+//        rvShareFriends.findViewHolderForAdapterPosition(2).itemView.performClick();
+//        postGoal(v);
+//    }
 
 }

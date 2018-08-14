@@ -101,8 +101,6 @@ public class GoalsListActivity extends AppCompatActivity {
     }
 
     public void addImage(View v) {
-        // ensures the confirm button is pressed only once
-        rvGoals.findViewHolderForAdapterPosition(0).itemView.performClick();
         btnConfirm.setOnClickListener(null);
         progressBar.setVisibility(ProgressBar.VISIBLE);
         if (file != null) {

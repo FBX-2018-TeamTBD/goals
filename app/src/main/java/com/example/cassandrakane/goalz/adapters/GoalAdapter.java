@@ -183,7 +183,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
             int timeRunningOutHours = context.getResources().getInteger(R.integer.TIME_RUNNING_OUT_HOURS);
             if (updateBy != null && (updateBy.getTime() - currentDate.getTime()) < TimeUnit.HOURS.toMillis(timeRunningOutHours) && !goal.getItemAdded() && !goal.getCompleted()){
-                holder.ivStar.setImageResource(R.drawable.clock);
+                holder.ivStar.setImageResource(R.drawable.ic_outline_hourglass_empty_24px);
             } else {
                 holder.ivStar.setImageResource(R.drawable.star);
             }
