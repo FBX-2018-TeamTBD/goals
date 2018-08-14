@@ -414,6 +414,7 @@ public class StoryFragment extends Fragment {
                         final ArrayList<Integer> reactionCounts = new ArrayList<>();
                         reactionCounts.addAll(Arrays.asList(thumbsCount, goalsCount, clapCount, okCount, bumpCount, rockCount));
                         Intent intent = new Intent(getActivity(), ReactionModalActivity.class);
+                        intent.putExtra(Goal.class.getSimpleName(), Parcels.wrap(mGoal));
                         intent.putParcelableArrayListExtra("reactions", getParcelableReactions());
                         intent.putIntegerArrayListExtra("reactionCounts", reactionCounts);
                         if (mHandler != null) {
