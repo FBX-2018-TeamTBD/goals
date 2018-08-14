@@ -72,6 +72,7 @@
             android:layout_height="30dp"
             android:layout_alignBottom="@id/btnReaction"
             android:layout_centerHorizontal="true"
+            android:visibility="invisible"
             android:tint="@color/white"
             android:src="@drawable/ic_outline_hourglass_empty_24px" />
 
