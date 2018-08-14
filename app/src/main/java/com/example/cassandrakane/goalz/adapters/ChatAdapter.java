@@ -27,7 +27,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context mContext;
     private ParseUser mUser;
 
-    public String lastMessageSent = "";
+    public String lastMessageSent = "bl";
 
     public ChatAdapter(Context context, ParseUser user, List<Message> messages) {
         mMessages = messages;
@@ -71,13 +71,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.ivMarginLeft.setVisibility(View.GONE);
         }
 
-        if (!lastMessageSent.equals("") && message.getFromUser().getUsername().equals(lastMessageSent)) {
+        if (!lastMessageSent.equals("bl") && message.getFromUser().getUsername().equals(lastMessageSent)) {
             if (isMe) {
                 holder.imageMe.setVisibility(View.GONE);
                 holder.ivMarginRight.setVisibility(View.VISIBLE);
             } else {
                 holder.imageOther.setVisibility(View.GONE);
                 holder.ivMarginLeft.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (isMe) {
+                holder.imageMe.setVisibility(View.VISIBLE);
+                holder.ivMarginRight.setVisibility(View.GONE);
+            } else {
+                holder.imageOther.setVisibility(View.VISIBLE);
+                holder.ivMarginLeft.setVisibility(View.GONE);
             }
         }
 
