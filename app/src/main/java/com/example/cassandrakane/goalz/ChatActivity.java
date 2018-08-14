@@ -158,10 +158,8 @@ public class ChatActivity extends AppCompatActivity {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
-        // HARDCODE DISABLE FOR DEMO
-//        parseQuery.whereEqualTo(FROM_USER_KEY, toUser);
-//        parseQuery.whereEqualTo(TO_USER_KEY, ParseUser.getCurrentUser());
-        parseQuery.whereNotEqualTo(FROM_USER_KEY, ParseUser.getCurrentUser());
+        parseQuery.whereEqualTo(FROM_USER_KEY, toUser);
+        parseQuery.whereEqualTo(TO_USER_KEY, ParseUser.getCurrentUser());
 
         // Connect to Parse server
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);

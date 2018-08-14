@@ -110,19 +110,26 @@ public class ProfileFragment extends Fragment {
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
-        ParseQuery<Goal> parseQuery = ParseQuery.getQuery(Goal.class);
-        // HARDCODE FOR DEMO
-        parseQuery.whereEqualTo("objectId", "jBsVVmXedF");
-        // Connect to Parse server
-        SubscriptionHandling<Goal> subscriptionHandling= parseLiveQueryClient.subscribe(parseQuery);
-        // Listen for CREATE events
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
-                SubscriptionHandling.HandleEventCallback<Goal>() {
-                    @Override
-                    public void onEvent(ParseQuery<Goal> query, Goal object) {
-                        networkPopulateProfile();
-                    }
-                });
+        List<ParseQuery<Goal>> queries = new ArrayList<ParseQuery<Goal>>();
+        for (Goal goal : goals) {
+            ParseQuery<Goal> parseQuery = ParseQuery.getQuery(Goal.class);
+            parseQuery.whereEqualTo("objectId", goal.getObjectId());
+            queries.add(parseQuery);
+        }
+
+        if (queries.size() > 0) {
+            ParseQuery<Goal> mainQuery = ParseQuery.or(queries);
+            // Connect to Parse server
+            SubscriptionHandling<Goal> subscriptionHandling = parseLiveQueryClient.subscribe(mainQuery);
+            // Listen for CREATE events
+            subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                    SubscriptionHandling.HandleEventCallback<Goal>() {
+                        @Override
+                        public void onEvent(ParseQuery<Goal> query, Goal object) {
+                            networkPopulateProfile();
+                        }
+                    });
+        }
 
         return view;
     }
