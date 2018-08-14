@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.cassandrakane.goalz.adapters.GoalFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
@@ -27,6 +28,7 @@ public class FriendsModalActivity extends AppCompatActivity {
 
     @BindView(R.id.rvGoalFriends) RecyclerView rvGoalFriends;
     @BindView(R.id.btnAdd) Button btnAdd;
+    @BindView(R.id.tvGoal) TextView tvGoal;
     GoalFriendAdapter goalFriendAdapter;
     List<ParseUser> goalFriends;
     Goal goal;
@@ -61,6 +63,8 @@ public class FriendsModalActivity extends AppCompatActivity {
         rvGoalFriends.setAdapter(goalFriendAdapter);
         DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
         rvGoalFriends.addItemDecoration(itemDecor);
+
+        tvGoal.setText(goal.getTitle());
 
         if (!personal) {
             btnAdd.setVisibility(View.GONE);
