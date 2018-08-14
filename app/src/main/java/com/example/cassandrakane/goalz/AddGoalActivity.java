@@ -20,6 +20,7 @@ import com.example.cassandrakane.goalz.adapters.ShareFriendAdapter;
 import com.example.cassandrakane.goalz.models.Goal;
 import com.example.cassandrakane.goalz.models.GoalRequests;
 import com.example.cassandrakane.goalz.models.Reaction;
+import com.example.cassandrakane.goalz.utils.NotificationHelper;
 import com.example.cassandrakane.goalz.utils.Util;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -178,9 +179,8 @@ public class AddGoalActivity extends AppCompatActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        // HARDCODE FOR DEMO
-//                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-//                        notificationHelper.setReminder(finalGoal);
+                        NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+                        notificationHelper.setReminder(finalGoal);
                         Intent data = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(data);
                         progressBar.setVisibility(View.INVISIBLE);
@@ -204,14 +204,14 @@ public class AddGoalActivity extends AppCompatActivity {
         }
     }
 
-    public void autofill(View v) {
-        etTitle.setText("encourage others");
-        etTitle.setSelection(16);
-        sbDuration.setProgress(16);
-        rbDay.toggle();
-        rvShareFriends.findViewHolderForAdapterPosition(0).itemView.performClick();
-        rvShareFriends.findViewHolderForAdapterPosition(2).itemView.performClick();
-        postGoal(v);
-    }
+//    public void autofill(View v) {
+//        etTitle.setText("encourage others");
+//        etTitle.setSelection(16);
+//        sbDuration.setProgress(16);
+//        rbDay.toggle();
+//        rvShareFriends.findViewHolderForAdapterPosition(0).itemView.performClick();
+//        rvShareFriends.findViewHolderForAdapterPosition(2).itemView.performClick();
+//        postGoal(v);
+//    }
 
 }

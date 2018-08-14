@@ -72,20 +72,6 @@ public class ChatActivity extends AppCompatActivity {
         ParseFile file = toUser.getParseFile("image");
         Util.setImage(file, getResources(), ivProfile, R.color.white);
 
-        toolbarTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etMessage.setText("keep it up!");
-            }
-        });
-
-        ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etMessage.setText("keep it up!");
-            }
-        });
-
         final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
             @Override
             public boolean onDown(MotionEvent motionEvent) {
