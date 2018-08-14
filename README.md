@@ -1,20 +1,30 @@
-#MVP FEATURES (3 screens, use activities)
+# Goals
 
-    * individual progress (home screen)
-        * add photos to goal as progress
-        * show current/completed goals
-        * card view????
-        * (from menu bar) add goal
-            * Title of goal
-            * Time duration (to complete goal)
-            * Check-in settings (daily, weekly, etc), how often to post
-    * take picture
-        * post progress picture
-        * (custom camera view)??
-    * friends feed (like chat screen on snapchat)
-        * card views
-        * see friends goals/progress
-        * support interaction (poke, comment)
-        * click on friend
-            * friend profile screen (reuse individual progress screen)
-    * login screen (Parse)
+...
+
+## Features
+
+* [ ] 
+
+## Walkthrough
+
+
+## Open-source libraries used
+
+- 
+
+## License
+
+    Copyright [2018] [Demar Edwards, Cassandra Kane, Carol Wang]
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
