@@ -322,6 +322,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.tvStreak.setTextColor(context.getResources().getColor(R.color.white));
         holder.placeholderStreak.setTextColor(context.getResources().getColor(R.color.white));
         holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.white));
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+        layoutParams.removeRule(14);
+        layoutParams.removeRule(6);
+        holder.btnFriends.setLayoutParams(layoutParams);
         holder.btnReaction.setVisibility(View.VISIBLE);
         holder.tvReaction.setVisibility(View.VISIBLE);
 
@@ -370,6 +374,10 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
 
     private void setEmptyGoal(final Goal goal, final ViewHolder holder) {
         holder.btnFriends.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.btnFriends.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+        layoutParams.addRule(RelativeLayout.ALIGN_TOP, RelativeLayout.TRUE);
+        holder.btnFriends.setLayoutParams(layoutParams);
         holder.tvFriends.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvTitle.setTextColor(context.getResources().getColor(R.color.orange));
         holder.tvProgress.setTextColor(context.getResources().getColor(R.color.orange));
