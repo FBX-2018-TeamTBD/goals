@@ -16,7 +16,7 @@
 * **Reacts** - Users may interact with and show their support for a goal by "reacting" to any individual post within a goal's story, choosing from a selection of six different reacts. Users may view the reacts for each post or the total sum of reacts for a goal as a whole.
 * **Streak** - The number of consecutive days/weeks/months (depending on the selected frequency for the goal) that the users in a shared goal post to the goal's story. If any user in a shared goal forgets to post on time, the streak is lost, thereby motivating all the users to keep up with their goal.
 
-###Home Screen
+### Home Screen
 * **Create Goals** - Users can create any number of goals for themselves.
 * **View Goals** - Users can see all their goals, as well as view a goal's story, view its remaining duration, view its streak, view whether the streak is about to run out, view its reacts, add reacts, view its friends, add friends, and remove the goal entirely.
 
