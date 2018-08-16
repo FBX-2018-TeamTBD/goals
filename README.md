@@ -40,7 +40,7 @@
 * **Parse** - All accounts and backend data are stored in Parse.
 
 ## Walkthrough
-[Video Walkthrough](https://drive.google.com/file/d/1ROYQaiLdi8tun4zL7pw0rk7eLhe6yMoP/view?usp=sharing)
+[Video Walkthrough](https://drive.google.com/file/d/1YJD0nQWVi55wjf3oa0zFzJ3hE9gbjspZ/view?usp=sharing)
 
 ## License
 
