@@ -42,10 +42,6 @@
 ## Walkthrough
 
 
-## Open-source libraries used
-
-- 
-
 ## License
 
     Copyright 2018 Demar Edwards, Cassandra Kane, Carol Wang
